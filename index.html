@@ -3090,7 +3090,7 @@ if(ty=='rank'){return infEv('皇上春秋已高，群臣紛紛上書請立儲君
 ['不表態，靜觀其變',()=>'你按兵不動，看各方出招。']])}
 return null}
 function dsTick(){if(!S||!S.me||S.reg||S.over||S.dying)return;dsInit();const d=S.dj,pr=dsPr(),m=S.me;if(S.eage<32||!pr.length){d.heat=Math.max(0,d.heat-1);return}
-const strong=pr.filter(x=>x.k.pow>=45).length;d.heat=cl(d.heat+strong*.35+(S.heir?0:.5)+(pr.length>=3?.3:0)-.55);
+const strong=pr.filter(x=>x.k.pow>=45).length;d.heat=cl(d.heat+strong*.35+(S.heir?0:.5)+(pr.length>=3?.3:0)-.55-d.heat/120);
 if(S.heir&&!S.heir.jin){const h=S.heir;h.sus=cl((h.sus||0)+(h.pow>70?.7:h.pow>55?.2:-.2)+(S.eage>=58?.2:0)-(h.de>=65&&h.chong>=60?.5:0));d.sus=h.sus;if(h.sus>=70&&P(.12)&&dsOk())return dsDepose(h)}else d.sus=0;
 if(d.cd>0)d.cd--;if(!dsOk()||d.cd>0)return;
 if(S.heir&&!S.heir.jin&&yr(S.heir)>=24&&S.eage>=52&&P(Math.min(.05,(amb(S.heir)-40)/1500+(yr(S.heir)-24)*.003+d.sus/2500))){d.cd=10;return dsCoup(S.heir)}
@@ -3105,6 +3105,10 @@ ACT.push(['奪嫡謀劃','為兒子結黨造勢，或打壓對手皇子',()=>{co
 /* 子嗣分頁：奪嫡局勢卡 */
 const _kapD=kidsAllPanel;kidsAllPanel=function(){let h=_kapD.apply(this,arguments);try{if(S.reg||S.over)return h;dsInit();const pr=dsPr();if(pr.length&&S.eage>=30){const d=S.dj;h=`<div class=cd data-open=1><h3>奪嫡局勢</h3><div class=m>皇子成年後會結黨、構陷；皇帝若久不傳位，儲君可能逼宮。</div>${abar('爭儲熱度',d.heat|0)}${S.heir&&!S.heir.jin?`<div class=m>儲君：${dsNm(S.heir)}　${ambTx(S.heir)}</div>${abar('皇上對儲君的猜忌',(S.heir.sus||0)|0)}`:'<div class=m>儲位虛懸，各方人馬都在觀望。</div>'}${pr.slice(0,4).map(x=>`<div class=k><b>${x.k.n}</b>（${on(x.o)}之子・${yr(x.k)}歲・${ambTx(x.k)}${x.k===S.heir?'・儲君':''}）<div class=kb style="display:block">${abar('聲勢',x.k.pow|0)}</div></div>`).join('')}</div>`+h}}catch(e){console.log('dsPanel',e)}return h};
 const _mdD=mend;mend=function(){const r=_mdD.apply(this,arguments);try{dsTick()}catch(e){console.log('dsTick',e)}return r};
+/* 皇子寵愛：面聖行動 + 緩慢自然變動 */
+ACT.push(['帶孩子面聖','帶孩子見皇上，皇上寵愛＋',()=>{const m=S.me;if(!m.kids.length)return L('你還沒有子嗣。');choose('帶哪位去見皇上？',m.kids.filter(k=>!k.jin).map(k=>({l:`${tag(k)}　寵${k.chong|0}・才${k.cai|0}・德${k.de|0}`,f(){if(yr(k)<2)return L(`${k.n}還太小，帶去御前怕驚了聖駕。`);const p=.45+m.favor/220+(k.cai+k.de)/500+(S.mood-40)/400;if(ckp(p)){const g=R(4,8);k.chong=cl(k.chong+g);m.favor+=1;L(`皇上見了${k.n}很是歡喜，賞了東西，皇上寵愛＋${g}（${k.chong|0}）。`)}else{k.chong=cl(k.chong+1);L(`皇上心緒不佳，只草草問了${k.n}幾句。`)}}})));return 1}]);
+{const c=ACTCAT.find(x=>x[0]=='子嗣');if(c)c[1].push(ACT.length-1)}
+const _mdK=mend;mend=function(){const r=_mdK.apply(this,arguments);try{if(S&&S.me&&!S.over&&!S.reg)S.me.kids.forEach(k=>{if(!k.jin&&yr(k)>=3)k.chong=cl(k.chong+(S.me.favor>=60?.3:S.me.favor<30?-.3:0)+(k.cai+k.de-100)/500)})}catch(e){}return r};
 
 /* ===== 編制人物多樣化：宮中執事・官女子有名字、性情、籍貫，會告老、調任、被選中 ===== */
 const OFS=['李','張','王','劉','趙','孫','錢','周','吳','鄭','馮','陳','褚','衛','蔣','沈','韓','楊','朱','秦','尤','許','何','呂','施','曹','嚴','華','金','魏'],
