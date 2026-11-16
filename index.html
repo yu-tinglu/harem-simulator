@@ -3259,6 +3259,10 @@ fxCard=function(){fxInit();const rows=[0,1,2,3,4].map(f=>{const l=facLead(f),ms=
 const list=[...(me?[`<b>你</b>（${RK[S.me.rank]||''}）${l===S.me?'　★領袖':''}`]:[]),...ms.map(n=>`${n.n}${(()=>{try{return'（'+RKN(n)+'）'}catch(e){return''}})()}${l===n?'　★領袖':''}`)];
 return`<details class=k style="margin:6px 0"><summary style="cursor:pointer"><b>${facName(f)}${me?'（你所屬）':''}</b>　領袖：${l?(l===S.me?'你':l.n):'無'}・後宮成員 ${ms.length+(me?1:0)} 人${al.length?'・盟：'+al.join('、'):''}${abar('勢力',S.fp[f])}</summary><div class=m style="padding:6px 0 2px">${list.length?list.join('　'):'目前沒有後宮成員。'}</div></details>`}).join('');
 return`<div class=cd data-open=0><h3>後宮派系</h3><div class=m>五個派系各有領袖與勢力，會結盟、反目、拉攏人。點開各派可看成員。</div>${rows}</div>`};
+/* 修正：兩條主線重複 */
+function plFix(){try{if(!S||!S.pl||!S.pl2||S.pl.id!==S.pl2.id)return;const g=['love','plot','heir','edict'].filter(x=>x!==S.pl.id);const np=plNew(g[R(0,g.length-1)],0);np.nx=S.t+R(6,12);S.pl2=np}catch(e){console.log('plFix',e)}}
+const _pf3=mend;mend=function(){const r=_pf3.apply(this,arguments);plFix();return r};
+const _pc3=plotCard;plotCard=function(){plFix();return _pc3.apply(this,arguments)};
 
 /* ===== 編制人物多樣化：宮中執事・官女子有名字、性情、籍貫，會告老、調任、被選中 ===== */
 const OFS=['李','張','王','劉','趙','孫','錢','周','吳','鄭','馮','陳','褚','衛','蔣','沈','韓','楊','朱','秦','尤','許','何','呂','施','曹','嚴','華','金','魏'],
