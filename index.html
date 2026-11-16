@@ -638,7 +638,7 @@ txt+=W.r();
 if(m.fac>=0){if(m.fac===W.w){m.favor+=3;m.fam.forEach(x=>x.pw+=4)}else if(m.fac===W.x){m.favor-=3;m.fam.forEach(x=>x.pw-=4)}}
 S.npcs.forEach(n=>{if(n.st||n.fac<0)return;if(n.fac===W.w){n.favor+=4;n.fam.forEach(x=>x.pw+=3)}else if(n.fac===W.x){n.favor-=4;n.fam.forEach(x=>x.pw-=3)}});
 L(txt);return txt}
-function stEv(){if(S.heir||S.eage<30)return false;const c=[];S.me.kids.forEach(k=>c.push([k,'me']));S.npcs.forEach((n,i)=>n.kids.forEach(k=>c.push([k,i])));const cs=c.filter(x=>x[0].sex=='男'&&yr(x[0])>=4).sort((a,b)=>sc(b[0])-sc(a[0])).slice(0,3);if(!cs.length)return false;
+function stEv(){if(S.heir||S.eage<30)return false;const c=[];S.me.kids.forEach(k=>c.push([k,'me']));S.npcs.forEach((n,i)=>n.kids.forEach(k=>c.push([k,i])));const cs=c.filter(x=>x[0].sex=='男'&&yr(x[0])>=4&&!x[0].jin).sort((a,b)=>sc(b[0])-sc(a[0])).slice(0,3);if(!cs.length)return false;
 const setH=(w,wo)=>{S.heir=w;w.chong=cl(w.chong+15);w.pow=cl(w.pow+10);if(wo==='me'){S.me.favor+=6;S.me.fam.forEach(x=>x.pw+=8)}else{S.npcs[wo].favor+=8;S.npcs[wo].fam.forEach(x=>x.pw+=6)}L(`皇上立${w.n}為儲君。`)};
 return{t:'朝臣聯名上疏，請皇上早立儲君，以安天下。',o:cs.map(([k,o])=>[`擁立${k.n}（${on(o)}之子・${yr(k)}歲）`,()=>{const mine=o==='me',p=cl(.25+(mine?S.me.favor/250:0)+(S.mood-50)/500,.1,.7);let w=k,wo=o;if(!P(mine?p:.45)){w=cs[0][0];wo=cs[0][1]}cs.forEach(x=>{if(x[0]!==w)x[0].chong-=5});setH(w,wo);return`${w.n}被立為太子（${on(wo)}之子）。`+(w===k?'你的擁立之議被採納。':'皇上另有屬意。')}]).concat([['袖手旁觀',()=>{setH(cs[0][0],cs[0][1]);return`皇上自行決定立${cs[0][0].n}為太子。`}]])}}
 const COURT=[()=>courtEv('邊關告急，朝議是否出兵北伐。',cO('主戰北伐',2,4,()=>{if(P(S.nat.mil/100+.1)){addN([2,8,4,3]);S.mood=cl(S.mood+10);return'大軍告捷，舉國振奮。'}addN([-8,-8,-6,-6]);S.mood=cl(S.mood-10);return'北伐受挫，損兵折將，朝野震動。'}),cO('議和安撫',1,2,()=>{addN([2,-2,2,2]);return'邊境暫時安寧，主戰派頗為不滿。'})),
@@ -694,7 +694,7 @@ function over(t,x){endMark(t);if(S.nk&&REGT.includes(t)&&!S.reg)return regStart(
 function fin(h,t,x,w){const m=S.me,o=[{l:'看結局',f(){over(t,x)}}],sons=m.kids.filter(k=>k.sex=='男'&&yr(k)>=1);
 if(w&&w.o!=='me'&&sons.length&&m.rank>=2){const s=sons.slice().sort((a,b)=>b.pow-a.pow)[0];o.push({l:`發動宮變，扶${s.n}登基（耗銀100，極兇險）`,f(){seize(s,w)}})}
 S.scn={h,o};render()}
-function succ(){const m=S.me;let c=[];m.kids.forEach(k=>c.push({k,o:'me'}));S.npcs.forEach((n,i)=>n.kids.forEach(k=>c.push({k,o:i})));c=c.filter(x=>x.k.sex=='男');
+function succ(){const m=S.me;let c=[];m.kids.forEach(k=>c.push({k,o:'me'}));S.npcs.forEach((n,i)=>n.kids.forEach(k=>c.push({k,o:i})));c=c.filter(x=>x.k.sex=='男'&&!x.k.jin);
 if(!c.length)return over('宗室入繼','皇帝駕崩，膝下無皇子，朝臣擁立宗室旁支入繼大統。你作為先帝'+(S.qi==='me'?'皇后':'太妃')+'，在寂靜的宮苑中安度餘年。');
 c.forEach(x=>x.s=sc(x.k)+R(0,18)+(x.o===S.qi?10:0)+(x.k===S.heir?(S.abd?90:25):0)+(S.dow&&x.o===S.dow.pet?8:0));c.sort((a,b)=>b.s-a.s);const w=c[0],a=yr(w.k);S.nk=w.k;S.nko=w.o;
 let h=`<p>${S.abd?'皇上禪位，尊為太上皇，':'皇帝駕崩，'}享年${S.eage}歲。${S.abd?'依制由儲君繼位：':'朝臣議立新君：'}</p>`+c.slice(0,4).map(x=>`<div class=k>${x.k.n}（${on(x.o)}之子，${yr(x.k)}歲）${x==w?'　【新君】':''}</div>`).join('')+`<p><b>${w.k.n}繼位，時年${a}歲。</b></p><p class=m>此時國力${natv()|0}${natv()<35?'，國勢衰微，新君一繼位就面臨內憂外患':natv()>70?'，國泰民安':''}。${S.dow?'太后仍在世，成了太皇太后。':''}</p>`;
@@ -3017,6 +3017,94 @@ ACT.push(['母國謀略','滲透皇朝或協助防範，影響母國滲透度',(
 const _frI=frCard;frCard=function(){let h=_frI.apply(this,arguments);try{const f=S.fr;if(h&&f){infInit();let x='';if(f.ann)x+='<div class=m><b>母國已併入皇朝版圖。</b></div>';else{x+=abar('母國滲透度',f.inf|0)+`<div class=m>滲透：${INFN[infLv(f.inf)]}。母國越強、你的商鋪與謀略越多，滲透越深；皇朝越強則越難。太深會招來猜忌，甚至引發政變。</div>`;if(f.sub>0)x+=abar('皇朝控制度',f.sub|0)+'<div class=m>皇朝若遠強於母國，會逐步蠶食，滿格時朝廷可能下旨併吞母國。</div>'}h=h.replace(/<\/div>$/,x+'</div>')}}catch(e){console.log('frI',e)}return h};
 const _gcI=goalChip;goalChip=function(){let h=_gcI.apply(this,arguments);try{if(S.me.fo&&S.fr&&!S.fr.dead){infInit();h=h.replace(/(邦誼 \d+)/,`$1　滲透 ${S.fr.inf|0}（${INFN[infLv(S.fr.inf)]}）`)}}catch(e){}return h};
 const _mdI=mend;mend=function(){const r=_mdI.apply(this,arguments);try{if(S&&S.me&&S.me.fo&&!S.over&&!S.reg)frInfMonth()}catch(e){console.log('infMonth',e)}return r};
+
+/* ===== 九龍奪嫡：皇子結黨、構陷、廢儲、逼宮 ===== */
+const dsOwn=()=>{const a=[];S.me.kids.forEach(k=>a.push({k,o:'me'}));S.npcs.forEach((n,i)=>n.kids.forEach(k=>a.push({k,o:i})));return a};
+const dsPr=()=>dsOwn().filter(x=>x.k.sex=='男'&&yr(x.k)>=14&&!x.k.jin).sort((a,b)=>sc(b.k)-sc(a.k));
+const dsOf=k=>S.me.kids.includes(k)?'me':S.npcs.findIndex(n=>n.kids.includes(k));
+const amb=k=>{if(k.am===undefined)k.am=cl(R(25,75)+(k.pow-50)/5-(k.de-50)/4);return k.am};
+const ambTx=k=>{const a=amb(k);return a>=70?'野心勃勃':a>=45?'頗有抱負':'與世無爭'};
+const dsOk=()=>!S.ev&&!S.ch&&!S.scn&&!(S.q&&S.q.length);
+const dsInit=()=>{if(!S.dj)S.dj={heat:0,cd:0,sus:0}};
+const dsNm=k=>`${k.n}（${on(dsOf(k))}之子）`;
+function dsDown(k,a,b){k.chong=cl(k.chong-(a||0));k.pow=cl(k.pow-(b||0))}
+function dsDepose(h){const m=S.me,mine=m.kids.includes(h),dep=()=>{S.heir=null;dsDown(h,25,20);h.sus=0;msPush&&msPush(`${h.n}被廢去儲君之位`)};
+infPush(infEv(mine?`皇上對儲君${h.n}猜忌日深，有意廢儲。`:`皇上疑心儲君${h.n}勢力過大，朝中傳出廢儲之議。`,mine?[
+['跪求皇上寬宥（看聖寵）',()=>{if(ckp(.25+m.favor/150)){h.sus=30;m.favor-=3;return'皇上嘆了口氣，收回成命，只是看你的眼神複雜了些。'}dep();m.favor-=8;return`皇上不為所動，${h.n}被廢去儲君之位，你也失了顏面。`}],
+['勸兒子自請就藩，保全性命',()=>{S.heir=null;h.chong=cl(h.chong+5);h.pow=cl(h.pow-15);h.sus=0;m.favor+=2;return`${h.n}上表自請就藩，皇上准了，兒子保住了性命和富貴。`}],
+['袖手旁觀',()=>{dep();if(P(.5)){h.jin=1;return`${h.n}被廢後又被圈禁高牆，你只能眼睜睜看著。`}return`${h.n}被廢，所幸只是被冷落。`}]]:[
+['趁機進言，推波助瀾（看聖寵）',()=>{if(ckp(.3+m.favor/200)){dep();const s=m.kids.filter(k=>k.sex=='男'&&yr(k)>=4).sort((a,b)=>sc(b)-sc(a))[0];if(s){s.chong=cl(s.chong+8);s.pow=cl(s.pow+6)}m.favor+=2;return`皇上聽了你的話，下旨廢去${h.n}的儲君之位。${s?s.n+'的前景看好了。':''}`}m.favor-=3;return'皇上不悅：「後宮不得妄議儲位。」'}],
+['替儲君說情',()=>{h.sus=cl(h.sus-20);m.ally+=2;const o=dsOf(h);if(o!=='me'&&o>=0)S.npcs[o].al=cl((S.npcs[o].al||0)+8);return`你替${h.n}說了話，皇上暫時按下了廢儲之議，儲君母子記了你的情。`}],
+['靜觀其變',()=>{if(P(.5)){dep();return`${h.n}終究被廢去儲君之位。`}h.sus=cl(h.sus-10);return'皇上猶豫再三，終究沒有動手。'}]]))}
+function dsCoupRes(h,sup){const m=S.me,mine=m.kids.includes(h),mil=Math.max(0,...m.fam.filter(x=>typeof MIL!=='undefined'&&MIL.test(x.job)).map(x=>x.pw));
+const p=.3+h.pow/250+h.chong/500+(sup&&mine?.2+mil/400:sup?.1:0)+(S.nat.mil<45?.05:0);
+if(ckp(p)){S.heir=h;S.abd=1;S.dying=1;msPush&&msPush(`${h.n}逼宮成功`);return`${h.n}率親兵控制宮禁，皇上被迫下詔禪位，尊為太上皇。${mine?'你的兒子即將登基。':'新君即將繼位。'}`}
+h.jin=1;h.pow=0;S.heir=null;msPush&&msPush(`${h.n}逼宮失敗`);
+if(mine){m.favor=0;m.rank=Math.max(0,m.rank-2);m.fam.forEach(x=>x.pw=Math.max(0,x.pw-30));if(P(.3)){over('謀逆伏誅',`你的兒子${h.n}逼宮失敗，皇上震怒，你被賜三尺白綾，母家滿門抄斬。`);return''}return`${h.n}逼宮失敗被圈禁，你被降位幽禁，母家元氣大傷。`}
+const o=dsOf(h);if(o!=='me'&&o>=0)S.npcs[o].favor=0;return`${h.n}逼宮失敗，被圈禁高牆，其母從此失勢。`}
+function dsCoup(h){const m=S.me,mine=m.kids.includes(h);
+infPush(infEv(mine?`儲君${h.n}遣人密信：「父皇遲遲不傳位，兒臣等不及了。」`:`宮中風聲鶴唳：儲君${h.n}久候帝位不得，似乎打算有所動作。`,mine?[
+['苦勸兒子隱忍（看德行）',()=>{if(ckp(.45+h.de/200)){h.sus=cl((h.sus||0)-10);h.am=cl(amb(h)-10);return`${h.n}聽了你的勸，暫時按兵不動。`}return`你的話沒能說服${h.n}。`+dsCoupRes(h,false)}],
+['傾全族之力暗中支持（耗銀100）',()=>{if(!pay(100))return'銀兩不足，只能眼睜睜看著他孤注一擲。'+dsCoupRes(h,false);return dsCoupRes(h,true)}],
+['密報皇上，大義滅親',()=>{if(ckp(.5+m.favor/300)){m.favor+=15;m.ally-=4;h.jin=1;h.pow=0;S.heir=null;return`皇上震怒又痛心，圈禁了${h.n}，卻對你的忠誠大為讚賞。`}m.favor-=5;return'皇上不信你的話，反疑你賊喊捉賊。'}]]:[
+['向皇上告密，揭發儲君',()=>{if(ckp(.5+m.favor/300)){m.favor+=10;h.jin=1;h.pow=0;S.heir=null;m.ally+=2;return`皇上先下手為強，圈禁了${h.n}，你立下大功。`}m.favor-=4;return'皇上不信，反而斥你挑撥。'}],
+['袖手旁觀',()=>dsCoupRes(h,false)],
+['暗中助儲君（耗銀80，成功日後有功）',()=>{if(!pay(80))return'銀兩不足。'+dsCoupRes(h,false);const r=dsCoupRes(h,true);if(S.abd){m.ally+=8;m.fam.forEach(x=>x.pw+=8)}return r}]]))}
+function dsEvent(pr){const m=S.me,mp=pr.filter(x=>x.o==='me'),op=pr.filter(x=>x.o!=='me'),A=pr[0],B=pr[R(1,Math.min(pr.length-1,3))]||pr[0];
+const types=[];
+if(pr.length>=1)types.push('party');
+if(pr.length>=2)types.push('frame','kill');
+if(!S.heir&&S.eage>=40)types.push('rank');
+const ty=pk(types),a=A.k,b=B.k;
+if(ty=='party'){const x=pk(pr).k,mine=m.kids.includes(x);return infEv(mine?`${x.n}近來頻頻結交朝臣，府上門庭若市。`:`${dsNm(x)}在朝中結黨營私，勢力日盛。`,mine?[
+['默許他拉攏朝臣（勢＋8，醜聞＋1）',()=>{x.pow=cl(x.pow+8);S.dj.heat=cl(S.dj.heat+4);m.scand=(m.scand||0)+1;return`${x.n}的勢力水漲船高，只是引來不少側目。`}],
+['嚴詞勸阻（德＋3、勢－4）',()=>{x.de=cl(x.de+3);x.pow=cl(x.pow-4);S.dj.heat=cl(S.dj.heat-3);return`${x.n}收斂了些，朝中對他的評價也好了。`}]]:[
+['密告皇上（皇子寵－10、勢－6，聖寵＋）',()=>{dsDown(x,10,6);m.favor+=3;const o=dsOf(x);if(o!=='me'&&o>=0)S.npcs[o].host=cl((S.npcs[o].host||0)+15);return`皇上將${x.n}叫去訓斥，其母從此恨上了你。`}],
+['結交其母妃（人脈＋3）',()=>{const o=dsOf(x);if(o!=='me'&&o>=0)S.npcs[o].al=cl((S.npcs[o].al||0)+8);m.ally+=3;return'你與對方母妃走得近了些，日後多條路。'}],
+['置之不理',()=>{x.pow=cl(x.pow+3);return'事情自己發酵。'}]])}
+if(ty=='frame'&&a!==b){const am=m.kids.includes(a),bm=m.kids.includes(b);
+if(bm)return infEv(`${dsNm(a)}在皇上面前構陷你的兒子${b.n}「結交外臣、圖謀不軌」。`,[
+['替兒子據理力爭（看聖寵）',()=>{if(ckp(.35+m.favor/200)){dsDown(a,8,0);return`皇上查明是誣告，${a.n}挨了訓斥。`}dsDown(b,10,0);m.favor-=3;return`皇上信了幾分，${b.n}受了冷落。`}],
+['暗中反擊（耗銀50，看心機）',()=>{if(!pay(50))return'銀兩不足。';if(ckp(.35+m.scheme/220)){dsDown(a,0,6);b.pow=cl(b.pow+2);S.dj.heat=cl(S.dj.heat+3);return`你的人手揭出${a.n}的把柄，局勢翻轉。`}m.scand=(m.scand||0)+2;return'反擊被識破，惹來新的非議。'}],
+['讓兒子隱忍（德＋3、勢－4）',()=>{b.de=cl(b.de+3);b.pow=cl(b.pow-4);return`${b.n}忍下這口氣，皇上反覺他有氣度。`}]]);
+if(am)return infEv(`你的兒子${a.n}在皇上面前構陷${dsNm(b)}。`,[
+['默許（勢＋5，對方記恨）',()=>{a.pow=cl(a.pow+5);dsDown(b,6,4);const o=dsOf(b);if(o!=='me'&&o>=0)S.npcs[o].host=cl((S.npcs[o].host||0)+12);return`${b.n}受了冷落，其母視你為死敵。`}],
+['勸他收手（德＋2、勢－3）',()=>{a.de=cl(a.de+2);a.pow=cl(a.pow-3);return`${a.n}聽勸收手，風波平息。`}]]);
+return infEv(`${dsNm(a)}構陷${dsNm(b)}，兩位皇子鬧到皇上面前。`,[
+[`倒向${a.n}`,()=>{a.pow=cl(a.pow+4);const o=dsOf(a);if(o!=='me'&&o>=0)S.npcs[o].al=cl((S.npcs[o].al||0)+6);dsDown(b,5,3);return`你表態支持${a.n}，${b.n}一方對你有了意見。`}],
+[`倒向${b.n}`,()=>{b.pow=cl(b.pow+4);const o=dsOf(b);if(o!=='me'&&o>=0)S.npcs[o].al=cl((S.npcs[o].al||0)+6);dsDown(a,5,3);return`你表態支持${b.n}，${a.n}一方對你有了意見。`}],
+['保持中立',()=>'你誰也沒幫，兩邊都沒得罪。']])}
+if(ty=='kill'&&a!==b){const am=m.kids.includes(a),bm=m.kids.includes(b);
+if(bm)return infEv(`你的兒子${b.n}遇刺受驚，刺客疑與${dsNm(a)}有關。`,[
+['徹查到底（看心機）',()=>{if(ckp(.3+m.scheme/220)){a.jin=1;a.pow=0;return`證據確鑿，${a.n}被皇上圈禁。`}b.chong=cl(b.chong-5);return'查無實據，不了了之，還讓人說你小題大做。'}],
+['忍氣吞聲',()=>{b.pow=cl(b.pow-8);return`${b.n}暫避鋒芒，勢力折損不少。`}]]);
+if(am)return infEv(`有人發現你的兒子${a.n}派人暗算${dsNm(b)}，風聲已經傳開。`,[
+['替兒子遮掩（耗銀60、醜聞＋2）',()=>{if(!pay(60))return'銀兩不足，事情敗露。'+(()=>{a.jin=1;a.pow=0;return`${a.n}被圈禁。`})();m.scand=(m.scand||0)+2;return'你上下打點，把事情壓了下去。'}],
+['責罰兒子，主動認錯',()=>{a.de=cl(a.de+4);a.pow=cl(a.pow-8);m.favor+=2;return`${a.n}挨了責罰，皇上見你知進退，沒有深究。`}]]);
+return infEv(`${dsNm(a)}派人暗算${dsNm(b)}，消息傳到你耳中。`,[
+['向皇上揭發（聖寵＋）',()=>{m.favor+=4;dsDown(a,12,8);const o=dsOf(a);if(o!=='me'&&o>=0)S.npcs[o].host=cl((S.npcs[o].host||0)+15);return`${a.n}被訓斥，其母恨你入骨。`}],
+['隔岸觀火',()=>'你冷眼旁觀，宮裡又添一樁懸案。']])}
+if(ty=='rank'){return infEv('皇上春秋已高，群臣紛紛上書請立儲君，朝堂上各路人馬吵成一團。',m.kids.some(k=>k.sex=='男'&&yr(k)>=8)?[
+['力薦自己的兒子（看聖寵與皇子聲勢）',()=>{const s=m.kids.filter(k=>k.sex=='男'&&yr(k)>=8).sort((a,b)=>sc(b)-sc(a))[0];if(ckp(.2+m.favor/250+sc(s)/300)){s.chong=cl(s.chong+8);s.pow=cl(s.pow+8);m.favor+=2;return`皇上對${s.n}多看了兩眼，立儲之議向他傾斜。`}m.favor-=4;return'皇上厭惡後宮干政，把你的話當了耳邊風。'}],
+['不表態，靜觀其變',()=>'你按兵不動，看各方出招。']]:[
+['不表態，靜觀其變',()=>'你按兵不動，看各方出招。']])}
+return null}
+function dsTick(){if(!S||!S.me||S.reg||S.over||S.dying)return;dsInit();const d=S.dj,pr=dsPr(),m=S.me;if(S.eage<32||!pr.length){d.heat=Math.max(0,d.heat-1);return}
+const strong=pr.filter(x=>x.k.pow>=45).length;d.heat=cl(d.heat+strong*.35+(S.heir?0:.5)+(pr.length>=3?.3:0)-.55);
+if(S.heir&&!S.heir.jin){const h=S.heir;h.sus=cl((h.sus||0)+(h.pow>70?.7:h.pow>55?.2:-.2)+(S.eage>=58?.2:0)-(h.de>=65&&h.chong>=60?.5:0));d.sus=h.sus;if(h.sus>=70&&P(.12)&&dsOk())return dsDepose(h)}else d.sus=0;
+if(d.cd>0)d.cd--;if(!dsOk()||d.cd>0)return;
+if(S.heir&&!S.heir.jin&&yr(S.heir)>=24&&S.eage>=52&&P(Math.min(.05,(amb(S.heir)-40)/1500+(yr(S.heir)-24)*.003+d.sus/2500))){d.cd=10;return dsCoup(S.heir)}
+if(d.heat>=22&&P(.08)){d.cd=7;const e=dsEvent(pr);if(e)infPush(e)}}
+/* 主動謀劃 */
+ACT.push(['奪嫡謀劃','為兒子結黨造勢，或打壓對手皇子',()=>{const m=S.me,ks=m.kids.filter(k=>k.sex=='男'&&yr(k)>=8&&!k.jin);if(!ks.length)return L('你還沒有成年的皇子可謀劃（八歲以上）。');dsInit();choose('為哪位皇子謀劃？',ks.map(k=>({l:`${tag(k)}　勢${k.pow|0}・寵${k.chong|0}・${ambTx(k)}`,f(){choose(`為${k.n}做什麼？`,[
+{l:'為子結黨（耗銀60，勢＋8、人脈＋2）',f(){if(!pay(60))return L('銀兩不足。');k.pow=cl(k.pow+8);m.ally+=2;S.dj.heat=cl(S.dj.heat+4);if(S.heir===k)k.sus=cl((k.sus||0)+5);L(`${k.n}的勢力升至${k.pow|0}。${S.heir===k?'只是皇上對儲君的猜忌也深了一分。':''}`)}},
+{l:'為子造勢（耗銀40，皇上寵＋6）',f(){if(!pay(40))return L('銀兩不足。');k.chong=cl(k.chong+6);L(`${k.n}在皇上跟前的分量重了些（寵${k.chong|0}）。`)}},
+{l:'打壓對手皇子（耗銀50，看心機）',f(){const rv=dsPr().filter(x=>x.o!=='me');if(!rv.length)return L('宮中沒有別的皇子可打壓。');choose('打壓誰？',rv.slice(0,5).map(x=>({l:`${dsNm(x.k)}　勢${x.k.pow|0}`,f(){if(!pay(50))return L('銀兩不足。');if(ckp(.4+m.scheme/250)){dsDown(x.k,5,7);S.dj.heat=cl(S.dj.heat+3);L(`${x.k.n}被你的人使了絆子，勢力降至${x.k.pow|0}。`)}else{m.scand=(m.scand||0)+2;const o=x.o;if(o!=='me')S.npcs[o].host=cl((S.npcs[o].host||0)+12);L(`手法被識破，${on(x.o)}對你恨之入骨。`)}}})))}},
+{l:'勸子隱忍（德＋4、勢－3、局勢降溫）',f(){k.de=cl(k.de+4);k.pow=cl(k.pow-3);k.am=cl(amb(k)-6);S.dj.heat=cl(S.dj.heat-3);if(S.heir===k)k.sus=cl((k.sus||0)-8);L(`${k.n}韜光養晦，名聲更好了。`)}}])}})));return 1}]);
+{const c=ACTCAT.find(x=>x[0]=='子嗣');if(c)c[1].push(ACT.length-1)}
+/* 子嗣分頁：奪嫡局勢卡 */
+const _kapD=kidsAllPanel;kidsAllPanel=function(){let h=_kapD.apply(this,arguments);try{if(S.reg||S.over)return h;dsInit();const pr=dsPr();if(pr.length&&S.eage>=30){const d=S.dj;h=`<div class=cd data-open=1><h3>奪嫡局勢</h3><div class=m>皇子成年後會結黨、構陷；皇帝若久不傳位，儲君可能逼宮。</div>${abar('爭儲熱度',d.heat|0)}${S.heir&&!S.heir.jin?`<div class=m>儲君：${dsNm(S.heir)}　${ambTx(S.heir)}</div>${abar('皇上對儲君的猜忌',(S.heir.sus||0)|0)}`:'<div class=m>儲位虛懸，各方人馬都在觀望。</div>'}${pr.slice(0,4).map(x=>`<div class=k><b>${x.k.n}</b>（${on(x.o)}之子・${yr(x.k)}歲・${ambTx(x.k)}${x.k===S.heir?'・儲君':''}）<div class=kb style="display:block">${abar('聲勢',x.k.pow|0)}</div></div>`).join('')}</div>`+h}}catch(e){console.log('dsPanel',e)}return h};
+const _mdD=mend;mend=function(){const r=_mdD.apply(this,arguments);try{dsTick()}catch(e){console.log('dsTick',e)}return r};
 
 /* ===== 編制人物多樣化：宮中執事・官女子有名字、性情、籍貫，會告老、調任、被選中 ===== */
 const OFS=['李','張','王','劉','趙','孫','錢','周','吳','鄭','馮','陳','褚','衛','蔣','沈','韓','楊','朱','秦','尤','許','何','呂','施','曹','嚴','華','金','魏'],
