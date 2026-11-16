@@ -3206,7 +3206,7 @@ const a2Base=ACT.length;ACT.push(ARMYACT);
 const _atk2=atkEv;atkEv=function(){const r=_atk2.apply(this,arguments);if(r&&S.me.gdm>0&&P(.65)){L('死士在暗處截下了一場針對你的暗算。');return null}return r};
 /* 皇帝對你的疑心 */
 function dsusParts(){const m=S.me,mil=Math.max(0,...(m.fam||[]).filter(x=>/兵|軍|統領|侯|參將/.test(x.job)).map(x=>x.pw||0));
-const army=Math.max(0,armyPow()-(m.lgd?40:0))/2.5,fam=Math.max(0,mil-50)*.6+Math.max(0,(m.clan||0)-60)*.5+Math.max(0,inlawMil()-55)*.4,base=army+fam;
+const army=Math.max(0,armyPow()-(m.lgd?40:0))/2.5,fam=Math.max(0,mil-50)*.6+Math.max(0,(m.clan||0)-60)*.5+Math.max(0,inlawMil()-55)*.4+Math.max(0,inlawCiv()-65)*.3,base=army+fam;
 let mu=Math.min(1.3,Math.max(.6,1.25-(m.favor||0)/200));if(S.eage>=45||S.ehp<55)mu*=1.25;if(S.heir&&m.kids&&m.kids.includes(S.heir)||S.qi==='me')mu*=1.2;
 return{army,fam,ctx:base*(mu-1),t:base*mu}}
 function dsusOf(){return dsusParts().t}
@@ -3242,8 +3242,6 @@ const _up3=uiPost;uiPost=function(){const r=_up3.apply(this,arguments);try{if(TA
 [['a50','擁兵自重','私兵戰力達100',()=>armyPow()>=100],['a51','千里馬','戰馬達50匹',()=>!!(S.me.army&&S.me.army.hs>=50)],['a52','死士三十','死士達30人',()=>!!(S.me.army&&S.me.army.sw>=30)],['a53','全身而退','疑心曾過40後降至10以下且已解散私兵',()=>!!(S.me.dsus<10&&S.me.army&&S.me.army.sw<1&&S.me.dsusSeen)],['a54','高處不勝寒','皇帝疑心達70',()=>(S.me.dsus||0)>=70]].forEach(a=>AL.push(a));
 [['兵變敗亡','a55','玩火自焚','結局：擁兵過盛被剷除']].forEach(x=>AL.push([x[1],x[2],x[3],()=>false]));
 HELP.push(['私兵與疑心','殺手樓訓練死士、牧場養馬，都會成為真實私兵；戰力＝死士×2＋戰馬，會加成宮變、逼宮、內應與奪嫡。私兵要付月錢，過大會令皇帝疑心上升，疑心高時會召你問話，甚至剷除你。疑心也看聖寵、皇帝年紀與儲位；到40會先有風聲預警，被降位兩次後仍不收斂才可能被剷除。可用「示忠表心」或禮佛慢慢降疑心，聖寵高時皇上可能賜你合法護衛。產業卡會列出疑心來源。']);
-/* 後宮搜尋 */
-const _up2=uiPost;uiPost=function(){const r=_up2.apply(this,arguments);try{if(TAB==1){const main=document.querySelector('main'),fb=main&&main.querySelector('.fbar');if(fb&&!main.querySelector('.srch')){const w=document.createElement('div');w.className='srch';w.style.cssText='margin:6px 0';w.innerHTML='<input placeholder="🔍 搜尋姓名／位份" style="width:100%;box-sizing:border-box;padding:8px 10px;border-radius:8px;border:1px solid rgba(128,128,128,.4);background:transparent;color:inherit;font-size:14px">';fb.after(w);const inp=w.firstElementChild;inp.oninput=()=>{const q=inp.value.trim();main.querySelectorAll(':scope>details').forEach(d=>{d.style.display=!q||d.textContent.includes(q)?'':'none'})}}}}catch(e){console.log('srch',e)}return r};
 
 /* ===== 第三輪：降母國猜忌、派系成員展開 ===== */
 const CLR=['澄清母國往來','降低皇上對你與母國的猜忌',()=>{const m=S.me,f=S.fr;if(!m.fo||!f||f.dead||f.ann){L('你沒有需要澄清的母國往來。');return}infInit();choose(`皇上猜忌 ${f.sus|0}／100，如何化解？`,[
@@ -3277,7 +3275,7 @@ if((m.scand||0)>=40)o.push([`醜聞值 ${m.scand|0}，隨時可能被揭發`,'�
 if(m.hp<35)o.push([`健康只剩 ${m.hp|0}`,'調養身子',actIx('調養身子')]);
 if(m.silver<30)o.push([`銀兩只剩 ${m.silver|0}，快見底了`,'',-1]);
 return o}
-const _up4=uiPost;uiPost=function(){const r=_up4.apply(this,arguments);try{if(TAB==0&&S&&S.me&&!S.over&&!S.reg&&!S.scn){const main=document.querySelector('main');if(main){main.querySelectorAll('.alertbar').forEach(e=>e.remove());const it=alertItems();if(it.length){const d=document.createElement('div');d.className='alertbar';d.style.cssText='margin:8px 0;padding:8px 10px;border-radius:10px;border:1px solid #c0392b;background:rgba(192,57,43,.12);font-size:13px;line-height:1.7';d.innerHTML='<b>⚠ 注意</b>'+it.map(x=>`<div>${x[0]}${x[2]>=0?`　<button style="${BTNS}" onclick="A(${x[2]})">${x[1]}</button>`:''}</div>`).join('');const first=main.querySelector(':scope>.cd');if(first)main.insertBefore(d,first);else main.appendChild(d)}}}}catch(e){console.log('alert',e)}return r};
+const _up4=uiPost;uiPost=function(){const r=_up4.apply(this,arguments);try{if(TAB==0&&S&&S.me&&!S.over&&!S.reg&&!S.scn){const main=document.querySelector('main');if(main){main.querySelectorAll('.alertbar').forEach(e=>e.remove());const it=alertItems();if(it.length){const d=document.createElement('div');d.className='alertbar';d.innerHTML='<b>⚠ 注意</b>'+it.map(x=>`<div>${x[0]}${x[2]>=0?`　<button style="${BTNS}" onclick="A(${x[2]})">${x[1]}</button>`:''}</div>`).join('');const first=main.querySelector(':scope>.cd');if(first)main.insertBefore(d,first);else main.appendChild(d)}}}}catch(e){console.log('alert',e)}return r};
 /* 子嗣分頁：孩子快捷鍵 */
 const _kap4=kidsAllPanel;kidsAllPanel=function(){let h=_kap4.apply(this,arguments);try{const mk='<div class=m style="margin-top:4px"><b>你的孩子</b></div>';if(h.includes(mk)){const b=['教養子女','為子籌謀','奪嫡謀劃','帶孩子面聖'].map(n=>[n,actIx(n)]).filter(x=>x[1]>=0).map(x=>`<button style="${BTNS}" onclick="A(${x[1]})">${x[0]}</button>`).join('');if(b)h=h.replace(mk,mk+`<div>${b}</div>`)}}catch(e){console.log('kap4',e)}return h};
 /* 中段節奏：第8～14年事件間隔縮短 */
@@ -3449,6 +3447,49 @@ HELP.push(['子女婚配','子女到15、16歲後，每年有機會跳出婚事�
 /* 姻親軍力：影響宮變、逼宮、奪嫡與皇帝疑心 */
 function inlawMil(){try{let v=0;(S.me.kids||[]).forEach(k=>{const s=k.sp;if(s&&!s.end&&s.fam&&/總兵|侯爵|將/.test(s.fam.job))v=Math.max(v,s.fam.pw||0)});return v}catch(e){return 0}}
 const _ar8=uiPost;uiPost=function(){const r=_ar8.apply(this,arguments);try{if(TAB==0&&S&&S.me&&!S.over&&!S.reg&&!S.scn){const v=inlawMil();const hero=document.querySelector('main .cd.hero');if(hero&&v>=40){hero.querySelectorAll('.inl').forEach(e=>e.remove());hero.insertAdjacentHTML('beforeend',`<div class="m inl" style="margin-top:4px">姻親兵權：最強的武將姻親勢力${v|0}（會加成宮變、逼宮、奪嫡，也會增加皇帝疑心）</div>`)}}}catch(e){console.log('inl',e)}return r};
+
+/* ===== 第九輪：文官姻親、介面精簡 ===== */
+function inlawCiv(){try{let v=0;(S.me.kids||[]).forEach(k=>{const s=k.sp;if(s&&!s.end&&s.fam&&/翰林|巡撫|尚書|御史|鹽運|書香|鉅商/.test(s.fam.job))v=Math.max(v,s.fam.pw||0)});return v}catch(e){return 0}}
+function civTick(){if(!S||!S.me||S.over||S.reg)return;const me=S.me;(me.kids||[]).forEach(k=>{const s=k.sp;if(!s||s.end||!s.fam||s.ty==='出家')return;const f=s.fam,j=f.job||'',w=(f.pw||0)/100;
+if(/御史/.test(j)&&f.pw>=50)me.scand=Math.max(0,(me.scand||0)-.12*w*2);
+if(/鹽運|鉅商/.test(j)){const g=f.pw/14;me.silver+=Math.round(g)}
+if(/翰林|尚書|書香/.test(j)&&me.fame!==undefined)me.fame=cl(me.fame+.12*w*2);
+if(/巡撫/.test(j)&&S.nat){S.nat.stab=cl(S.nat.stab+.03*w*2);me.ally+=.1*w}})}
+const _cv9=mend;mend=function(){const r=_cv9.apply(this,arguments);try{civTick()}catch(e){console.log('civ',e)}return r};
+/* 姻親說明行 */
+const _in9=uiPost;uiPost=function(){const r=_in9.apply(this,arguments);try{if(TAB==0&&S&&S.me&&!S.over&&!S.reg&&!S.scn){const c=inlawCiv(),hero=document.querySelector('main .cd.hero');if(hero&&c>=40){hero.querySelectorAll('.inc').forEach(e=>e.remove());hero.insertAdjacentHTML('beforeend',`<div class="m inc" style="margin-top:4px">姻親文官：最強勢力${c|0}（御史壓醜聞、鹽商添進項、翰林添賢名、巡撫穩朝局；過強亦招疑心）</div>`)}}}catch(e){console.log('inc',e)}return r};
+/* 通知：只顯示最近兩則 */
+ntfDraw=function(){let e=document.getElementById('ntf');if(e)e.remove();clearTimeout(_ntT);if(!S||!S.nt||!S.nt.length)return;const all=S.nt,show=all.slice(-2);e=document.createElement('div');e.id='ntf';
+e.innerHTML=show.map(n=>`<div class="nc ${n.k}">${n.t}</div>`).join('')+`<button onclick="S.nt=[];ntfDraw()">${all.length>2?'知道了（還有'+(all.length-2)+'則在紀事）':'知道了'}</button>`;document.body.appendChild(e);
+_ntT=setTimeout(()=>{if(!S||!S.nt)return;const now=Date.now();S.nt=S.nt.filter(n=>n.k=='me'||n.k=='medn'||(n.ts&&now-n.ts<12000));ntfDraw()},13000)};
+/* 結果卡：成就合併成一行 */
+const _ui9=uiPost;uiPost=function(){const r=_ui9.apply(this,arguments);try{document.querySelectorAll('.cd.res').forEach(c=>{const parts=c.innerHTML.split('<br>'),re=/^\s*🏆\s*成就達成[：:]?\s*/;const ach=parts.filter(x=>re.test(x));if(ach.length>1){const others=parts.filter(x=>!re.test(x));others.push('🏆 成就達成：'+ach.map(x=>x.replace(re,'').trim()).join('、'));c.innerHTML=others.join('<br>')}})}catch(e){console.log('ach9',e)}return r};
+/* 精簡樣式 */
+(function(){const st=document.createElement('style');st.id='ui9';st.textContent=`
+html body .cd{background:rgba(255,251,245,.95);border:1px solid rgba(196,138,112,.28);border-radius:14px;padding:12px 14px;margin:8px 0;box-shadow:0 2px 10px rgba(110,55,45,.1)}
+html body .cd::before,html body .cd::after{display:none}
+html body .cd h3{font-size:15.5px;letter-spacing:.05em;margin:0 0 6px;color:#8a3a30;font-weight:600}
+html body .cd.fold.closed{padding-top:9px;padding-bottom:9px}
+html body .cd.fold.closed>h3{margin:0}
+html body .cd .m{font-size:13.5px;line-height:1.65;color:#5a3a32}
+html body .chips{gap:6px;margin:8px 0 2px}
+html body .chip{font-size:12.5px;padding:3px 11px;border-radius:999px;background:rgba(255,255,255,.78);color:#6a3a30;border:1px solid rgba(196,138,112,.3)}
+html body .chip b{color:#a98274}
+html body .tip{font-size:12.5px;padding:7px 12px;margin:6px 0;opacity:.92}
+html body .alertbar{border-radius:12px;padding:7px 11px;font-size:12.5px;line-height:1.6;background:rgba(214,84,70,.09);border:1px solid rgba(200,70,60,.45);color:#7a2a24}
+html body .alertbar b{margin-right:6px}html body .alertbar div{display:inline}html body .alertbar div+div::before{content:'｜';opacity:.4;margin:0 4px}html body .alertbar button{padding:3px 10px;font-size:12px;margin:0 0 0 6px;border-radius:999px}
+html body .cd.res{padding:9px 12px}
+html body #ntf{gap:5px;top:max(8px,env(safe-area-inset-top,0px))}
+html body #ntf .nc{padding:7px 12px;border-radius:10px;font-size:13px;line-height:1.45;box-shadow:0 3px 10px rgba(120,50,40,.2)}
+html body #ntf button{padding:5px 12px;font-size:12.5px;align-self:flex-end;border-radius:999px}
+html body .stat-strip div{border-radius:12px}
+html body .tabs button{font-size:11.5px;letter-spacing:.08em}
+html body .tabs button i{width:28px;height:28px;font-size:15px}
+html body .g button{border-radius:11px;padding:9px 11px;font-size:14.5px}
+html body .g button small{font-size:11.5px;opacity:.75}
+html body .kid,html body .k{font-size:13.5px}
+`;document.head.appendChild(st)})();
+HELP.push(['姻親勢力','子女的配偶家世會影響你：武將姻親加成宮變、逼宮、奪嫡；文官姻親有各自好處（御史壓醜聞、鹽商增進項、翰林增賢名、巡撫穩朝局），但勢力過強也會招來皇帝疑心。']);
 
 /* ===== 編制人物多樣化：宮中執事・官女子有名字、性情、籍貫，會告老、調任、被選中 ===== */
 const OFS=['李','張','王','劉','趙','孫','錢','周','吳','鄭','馮','陳','褚','衛','蔣','沈','韓','楊','朱','秦','尤','許','何','呂','施','曹','嚴','華','金','魏'],
