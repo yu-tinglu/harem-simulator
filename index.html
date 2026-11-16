@@ -3015,7 +3015,7 @@ ACT.push(['母國謀略','滲透皇朝或協助防範，影響母國滲透度',(
 {const i=ACT.length-1;ACTCAT[1][1].push(i);const _agI=actGroups;actGroups=function(){let h=_agI.apply(this,arguments);try{if(!S.me.fo)h=h.replace(new RegExp(`<button onclick="A\\(${i}\\)">[\\s\\S]*?</button>`),'')}catch(e){}return h}}
 /* 母國卡顯示滲透度與控制度 */
 const _frI=frCard;frCard=function(){let h=_frI.apply(this,arguments);try{const f=S.fr;if(h&&f){infInit();let x='';if(f.ann)x+='<div class=m><b>母國已併入皇朝版圖。</b></div>';else{x+=abar('母國滲透度',f.inf|0)+`<div class=m>滲透：${INFN[infLv(f.inf)]}。母國越強、你的商鋪與謀略越多，滲透越深；皇朝越強則越難。太深會招來猜忌，甚至引發政變。</div>`;if(f.sub>0)x+=abar('皇朝控制度',f.sub|0)+'<div class=m>皇朝若遠強於母國，會逐步蠶食，滿格時朝廷可能下旨併吞母國。</div>'}h=h.replace(/<\/div>$/,x+'</div>')}}catch(e){console.log('frI',e)}return h};
-const _gcI=goalChip;goalChip=function(){let h=_gcI.apply(this,arguments);try{if(S.me.fo&&S.fr&&S.fr.inf>=10&&!S.fr.dead)h=h.replace(/(邦誼 \d+)/,`$1　滲透 ${S.fr.inf|0}`)}catch(e){}return h};
+const _gcI=goalChip;goalChip=function(){let h=_gcI.apply(this,arguments);try{if(S.me.fo&&S.fr&&!S.fr.dead){infInit();h=h.replace(/(邦誼 \d+)/,`$1　滲透 ${S.fr.inf|0}（${INFN[infLv(S.fr.inf)]}）`)}}catch(e){}return h};
 const _mdI=mend;mend=function(){const r=_mdI.apply(this,arguments);try{if(S&&S.me&&S.me.fo&&!S.over&&!S.reg)frInfMonth()}catch(e){console.log('infMonth',e)}return r};
 
 /* ===== 編制人物多樣化：宮中執事・官女子有名字、性情、籍貫，會告老、調任、被選中 ===== */
