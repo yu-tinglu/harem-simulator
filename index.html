@@ -2514,9 +2514,9 @@ function rosterJump(nm){const d=Array.from(document.querySelectorAll('[data-list
 function quotaPanel(){if(!S||!S.me||S.reg)return'';const rows=[];let tot=0;
 for(let r=8;r>=0;r--){const hs=rkHold(r).sort((a,b)=>b.favor-a.favor),cap=RKCAP[r];tot+=hs.length;const full=hs.length>=cap;
 rows.push(`<div class=qrow><b>${RK[r]}</b><span class="qp ${full?'full':hs.length?'':'vac'}">${hs.length}／${cap}</span>${full?'<span class="qp full">滿編</span>':`<span class="qp vac">空缺 ${cap-hs.length}</span>`}<div>${hs.length?hs.map(n=>`<span class="qn${n===S.me?' me':''}" onclick="rosterJump('${(n.name||n.n).replace(/'/g,'')}')">${n===S.me?'你（'+S.me.n+'）':n.n}</span>`).join(''):'<span class=m>無人在位</span>'}</div></div>`)}
-const gn=S.gn||[];rows.push(`<div class=qrow><b>官女子</b><span class="qp ${gn.length>=GN_CAP?'full':''}">${gn.length}／${GN_CAP}</span><span class=m>無品級，尚未侍寢的宮中女子，有機會被皇上看中冊為答應</span><div>${gn.length?gn.map(g=>`<span class=qn>${g.n}</span>`).join(''):'<span class=m>目前沒有</span>'}</div></div>`);
+const gn=S.gn||[];rows.push(`<div class=qrow><b>官女子</b><span class="qp ${gn.length>=GN_CAP?'full':''}">${gn.length}／${GN_CAP}</span><span class=m>無品級，尚未侍寢的宮中女子，有機會被皇上看中冊為答應</span><div>${gn.length?(ofcFix(),gn).map(g=>`<span class=qn>${g.n}<small>（${g.tr}・${g.o}人）</small></span>`).join(''):'<span class=m>目前沒有</span>'}</div></div>`);
 const dead=S.npcs.filter(n=>n.st);const sf=STAFF[S.me.rank]||[2,1];
-const of=(S.ofc||[]).map(([t,c,a])=>`<span class=qn>${t} ${a.length}／${c}：${a.join('、')}</span>`).join('<br>');
+ofcFix();const of=(S.ofc||[]).map(([t,c,a])=>`<span class=qn><b>${t}</b> ${a.length}／${c}</span><br>`+a.map(x=>`<span class=qn>${x.n}<small>（${x.tr}・${x.o}人・在任${Math.floor((S.t-x.y)/12)}年）</small></span>`).join('')).join('<br>');
 return`<div class=cd data-open=1><h3>後宮編制　在位 ${tot} 人</h3><div class=m>每個位份都有人數上限（皇后、皇貴妃只有 1 位，貴妃 2 位，妃 4 位……）。名額滿了，下面的人再有資歷也得等空缺。點名字可跳到她的詳細資料。</div>${rows.join('')}${dead.length?`<div class=qrow><b>已故／廢黜</b><div class=m>${dead.map(n=>`${n.n}（${n.st}）`).join('、')}</div></div>`:''}<div class=qrow><b>宮中執事</b><div class=m>${of}</div></div><div class=m style="margin-top:6px">你現在是${RKD(S.me)}，按例配宮女 ${sf[0]} 名、太監 ${sf[1]} 名。</div></div>`}
 /* --- 名冊每列：盟友度說明、升遷歷程 --- */
 const alLv=a=>a>=60?'肝膽相照':a>=45?'盟友':a>=25?'友善':a>=10?'點頭之交':'陌生';
@@ -2604,6 +2604,30 @@ try{avFix()}catch(e){}
 if(MSEC==='daily'){try{dailyLoad()}catch(e){}}}
 const _introV51=intro;intro=function(){if(MENU)return mainMenu();_introV51.apply(this,arguments);try{if(MENU===0&&!document.getElementById('mback'))$('app').insertAdjacentHTML('afterbegin','<p id=mback style="margin:8px 0 0"><button class="s mini" onclick="menuHome()">← 回主畫面</button></p>')}catch(e){}};
 function menuBackCard(){return`<div class=cd><h3>主畫面</h3><div class=m>回到主畫面可以開新局、讀檔、看成就。目前的進度會自動存檔，之後在主畫面按「繼續遊戲」就能接著玩。</div><p><button class=s onclick="menuLeave()">回主畫面</button></p></div>`}
+/* ===== 編制人物多樣化：宮中執事・官女子有名字、性情、籍貫，會告老、調任、被選中 ===== */
+const OFS=['李','張','王','劉','趙','孫','錢','周','吳','鄭','馮','陳','褚','衛','蔣','沈','韓','楊','朱','秦','尤','許','何','呂','施','曹','嚴','華','金','魏'],
+OFG1=['德','福','順','祿','喜','貴','安','全','進','忠','長','永','元','來','慶','得','寶','有','吉','連'],
+OFG2=['海','祥','慶','寶','才','良','泰','義','祿','喜','山','林','川','成','貴','春','勝'],
+STR=['圓滑世故','耿直寡言','貪財好利','忠心謹慎','多疑善妒','見風使舵','老成持重','心思細密','愛說閒話','寬厚念舊','刻板守規','城府極深'],
+GTR=['心靈手巧','能歌善舞','容貌清秀','沉默寡言','機靈多嘴','才思敏捷','體弱多病','性子剛烈','溫順怕事','愛慕虛榮','識文斷字','膽大心細'],
+OFP=['江南','京畿','塞北','蜀中','嶺南','關中','山東','閩地','湖廣','遼東'],
+MAMA=['姑姑','嬤嬤','姆姆'];
+function ofP(role){let n;const f=()=>pk(OFS);
+if(role==='敬事房總管太監'||role==='御前首領太監')n=f()+pk(OFG1)+(P(.7)?pk(OFG2):'');
+else if(role==='教引嬤嬤')n=f()+(P(.5)?'氏':'')+pk(MAMA);
+else n=pk(SUR)+pk(GIV)+(P(.4)?pk(GIV):'');
+return{n,tr:pk(STR),y:S.t,o:pk(OFP)}}
+function genOfc(){return[['敬事房總管太監',1,[ofP('敬事房總管太監')]],['御前首領太監',4,[0,1,2,3].map(()=>ofP('御前首領太監'))],['教引嬤嬤',2,[ofP('教引嬤嬤'),ofP('教引嬤嬤')]],['尚宮局尚宮',1,[ofP('尚宮局尚宮')]]]}
+function ofcFix(){if(!S||!S.ofc)return;S.ofc.forEach(r=>{r[2]=r[2].map(x=>typeof x==='string'?{n:x,tr:pk(STR),y:S.t,o:pk(OFP)}:x)});(S.gn||[]).forEach(g=>{if(!g.tr){g.tr=pk(GTR);g.o=pk(OFP)}})}
+function ofcTick(){if(!S||S.reg||!S.ofc)return;ofcFix();
+S.ofc.forEach(r=>{const [role,cap,arr]=r;for(let i=0;i<arr.length;i++){const p=arr[i],yrs=Math.floor((S.t-p.y)/12);
+if(yrs>=3&&P(.12+yrs*.02)){const np=ofP(role);arr[i]=np;const why=P(.5)?'告老出宮':P(.5)?'調往別處當差':'因故被罷';L(`${role}${p.n}${why}，由${np.n}接任（${np.tr}）。`)}}
+while(arr.length<cap)arr.push(ofP(role))});
+if(P(.35)&&S.gn&&S.gn.length){const g=pk(S.gn);const x=pk([`官女子${g.n}（${g.tr}）被調去御前當差。`,`官女子${g.n}（${g.tr}）病了一場，被送回家鄉養病。`,`官女子${g.n}（${g.tr}）與別的宮人起了爭執，被嬤嬤責罰。`]);if(/送回/.test(x))S.gn=S.gn.filter(k=>k!==g);L(x)}}
+function gnTick(){if(!S||S.reg||!S.gn)return;ofcFix();
+if(S.t>0&&S.t%12===0){const out=S.gn.filter(g=>S.t-g.y>=96&&P(.6));if(out.length){S.gn=S.gn.filter(g=>!out.includes(g));L(`宮中依例放出年滿的宮女 ${out.length} 人。`)}let add=0;for(let i=R(3,6);i>0&&S.gn.length<GN_CAP;i--){S.gn.push({n:nm2(),y:S.t,tr:pk(GTR),o:pk(OFP)});add++}if(add)L(`內務府新選入官女子 ${add} 人，來自${pk(OFP)}、${pk(OFP)}等地。`);ofcTick()}
+if(S.gn.length&&S.npcs.length<24&&P(.05)&&rkRoom(0,null)){const w=S.gn.map(g=>1+(/容貌|歌舞|才思|識文/.test(g.tr)?2:0)),tot=w.reduce((a,b)=>a+b,0);let r=Math.random()*tot,k=0;while(k<w.length-1&&r>w[k]){r-=w[k];k++}const g=S.gn.splice(k,1)[0],n=mkN(g.n,0,R(35,55),famFor(0));S.npcs.push(n);L(`官女子${g.n}（${g.tr}）偶得皇上青眼，冊為答應。`)}}
+
 deco();intro();
 
 
