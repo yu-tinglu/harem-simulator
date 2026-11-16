@@ -3323,6 +3323,17 @@ const nn=fnm(x.nm?x.nm[0]:'汗','男');f.stab=cl(f.stab-12);f.rel=cl(f.rel-4);f.
 const t=`${f.n}${ti}${x.nm}駕崩，膝下沒有成年兒子，宗室旁支${nn}奪得${ti}之位，你家這一支從此失勢。`;try{ntfAdd(t,'medn')}catch(e){}L(t);if(typeof msPush=='function')msPush(`${f.n}${ti}駕崩，旁支繼位`);
 infPush(infEv(t+'新君與你的父兄素有嫌隙。',[['送禮示好，保全母家（耗銀50）',()=>{if(!pay(50))return'銀兩不足。';me.fam.forEach(y=>y.pw=cl(y.pw+6));f.rel=cl(f.rel+4);return'新君收下厚禮，暫時沒有為難你的母家。'}],['請皇上出面施壓，替母家說話（看聖寵）',()=>{if(ckp(.35+me.favor/250)){me.fam.forEach(y=>y.pw=cl(y.pw+8));me.favor-=2;return'皇上遣使替你母家說話，新君不敢輕易動手。'}me.favor-=3;return'皇上不願為此事干預他國內政。'}],['認命，不再過問',()=>{me.fam.forEach(y=>y.pw=cl(y.pw-4));return'你只能看著母家日漸沒落。'}]]))}
 const _fy6=famYear;famYear=function(){const before=(S.me&&S.me.fam||[]).slice();const r=_fy6.apply(this,arguments);try{const me=S.me;before.filter(x=>!me.fam.includes(x)&&RULER_REL.test(x.rel)).forEach(x=>ruleSucc(x))}catch(e){console.log('ruleSucc',e)}return r};
+/* 國內母家：父親過世，長兄承襲家業 */
+function homeSucc(x){const me=S.me;if(me.fo)return;const sons=me.fam.filter(y=>y!==x&&/^(兄長|兄|大哥|二哥|幼弟|弟)/.test(y.rel)&&y.sx!='女').sort((a,b)=>fAge(b)-fAge(a));const adult=sons.filter(y=>fAge(y)>=18)[0];
+const job=x.job&&!/^(致仕|年幼|待字|嫁入|族學|稚子)/.test(x.job)?x.job:'家主';
+if(adult){const b=adult;b.job=job;if(b.gd!==undefined&&x.gd!==undefined)b.gd=Math.max(0,x.gd-1);b.pw=cl(Math.max(b.pw,x.pw-8));me.fam.forEach(y=>y.pw=cl(y.pw+3));
+const t=`你的父親${x.nm}病逝，你的${b.rel}${b.nm||b.rel}承襲家業，接任${job}。`;try{ntfAdd(t,'medn')}catch(e){}L(t);if(typeof msPush=='function')msPush('父親病逝，'+b.rel+'承襲家業');
+infPush(infEv(t+'母家上下都望向你這位宮裡的嬪妃。',[['送禮祝賀，並替兄長在皇上面前美言（耗銀30）',()=>{if(!pay(30))return'銀兩不足，只能寫信安慰。';me.fam.forEach(y=>y.pw=cl(y.pw+5));me.ally+=1;me.favor+=1;return`${b.nm||b.rel}在朝中站穩了腳跟，母家勢力回升。`}],['勸兄長守成低調，莫要出頭',()=>{me.clan=cl((me.clan||0)+2);me.scand=Math.max(0,(me.scand||0)-1);return'兄長聽了你的勸，母家安穩了些，卻也少了些進取。'}],['順其自然',()=>'家裡的事，你鞭長莫及。']]));return}
+if(sons.length){const b=sons[0];me.fam.forEach(y=>y.pw=cl(y.pw-4));b.job='年幼承嗣';const t=`你的父親${x.nm}病逝，你的${b.rel}${b.nm||b.rel}年紀尚小，母家由族叔暫代家主，勢力大不如前。`;try{ntfAdd(t,'medn')}catch(e){}L(t);if(typeof msPush=='function')msPush('父親病逝，幼弟承嗣');
+infPush(infEv(t,[['託人照看母家，打點族中長輩（耗銀30）',()=>{if(!pay(30))return'銀兩不足。';me.fam.forEach(y=>y.pw=cl(y.pw+5));return'族中長輩收了你的好處，答應好生照看幼弟。'}],['向皇上求一份恩蔭（看聖寵）',()=>{if(ckp(.35+me.favor/250)){me.fam.forEach(y=>y.pw=cl(y.pw+7));me.favor-=1;return'皇上念你孝心，賜了母家一份恩蔭。'}return'皇上沒有表態，此事不了了之。'}],['順其自然',()=>'你只能盼著幼弟快快長大。']]));return}
+me.fam.forEach(y=>y.pw=cl(y.pw-10));me.clan=cl((me.clan||0)-5);const t=`你的父親${x.nm}病逝，母家沒有男丁，旁支族人接手了家業，你在宮裡少了一份倚仗。`;try{ntfAdd(t,'medn')}catch(e){}L(t);if(typeof msPush=='function')msPush('父親病逝，母家無男丁');
+infPush(infEv(t,[['出銀扶持旁支，穩住母家（耗銀50）',()=>{if(!pay(50))return'銀兩不足。';me.fam.forEach(y=>y.pw=cl(y.pw+7));me.clan=cl((me.clan||0)+3);return'旁支族人感念你的接濟，母家才沒有散掉。'}],['請皇上賜恤，抬高母家門楣（看聖寵）',()=>{if(ckp(.3+me.favor/250)){me.fam.forEach(y=>y.pw=cl(y.pw+8));return'皇上賜了恤典，母家門楣暫時保住了。'}return'皇上只是慰問了幾句。'}],['認命',()=>'你把這份失落藏進了心裡。']]))}
+const _fy7=famYear;famYear=function(){const before=(S.me&&S.me.fam||[]).slice();const r=_fy7.apply(this,arguments);try{const me=S.me;if(!me.fo)before.filter(x=>!me.fam.includes(x)&&x.rel=='父親').forEach(x=>homeSucc(x))}catch(e){console.log('homeSucc',e)}return r};
 
 /* ===== 編制人物多樣化：宮中執事・官女子有名字、性情、籍貫，會告老、調任、被選中 ===== */
 const OFS=['李','張','王','劉','趙','孫','錢','周','吳','鄭','馮','陳','褚','衛','蔣','沈','韓','楊','朱','秦','尤','許','何','呂','施','曹','嚴','華','金','魏'],
