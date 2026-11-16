@@ -567,7 +567,7 @@ const PE=[()=>qo()&&{t:'皇后賜你一盞參茶，氣味似乎有些怪。',o:[
 ()=>({t:'宮中丟了一件貴重玉器，有人把矛頭指向你的宮人。',o:[['徹查到底',()=>{if(tf('insight')||P(.5)){S.me.scheme+=3;return'你揪出真正的賊人，反而立了威。'}S.me.favor-=5;return'查無結果，落了個辦事不力的名聲。'}],['息事寧人，賠銀了事（耗銀20）',()=>{if(!pay(20)){S.me.ally-=4;return'銀兩不足，只得硬扛。'}return'風波平息。'}],['推給旁人',()=>{S.me.scheme+=2;S.me.ally-=5;return'禍水東引，卻失了人心。'}]]}),
 ()=>qo()&&{t:'皇后以你「儀態不端」為由，罰你在殿外跪著。',o:[['默默受罰',()=>{S.me.hp-=tf('bear')?2:8;S.me.emp+=2;return'你忍了下來，皇后的氣消了些。'}],['裝暈博同情',()=>{if(P(.5)){S.me.favor+=6;return'皇上聽聞，心疼不已。'}S.me.favor-=4;S.me.emp-=6;return'被識破，皇后更加不悅。'}],['請皇上評理',()=>{S.me.favor+=2;S.me.emp-=8;return'皇上出面打了圓場，皇后顏面無光。'}]]},
 ()=>({t:'花朝節，皇上命嬪妃賞花作詩，拔得頭籌者有賞。',o:[['作詩',()=>{if(P(.4+tf('perf'))){S.me.favor+=9;S.me.silver+=15;return'你的詩句被皇上連連稱讚，得了賞賜。'}S.me.favor+=1;return'詩作平平，無功無過。'}],['作畫',()=>{if(P(.35+tf('perf')/2+S.me.scheme/300)){S.me.favor+=8;return'一幅春景圖博得滿堂彩。'}return'畫作中規中矩。'}],['稱病不去',()=>{S.me.favor-=2;return'你錯過了這次露臉的機會。'}]]}),
-()=>({t:'內務府剋扣了你這個月的份例，炭火、綢緞都短了一截。',o:[['忍氣吞聲',()=>{S.me.hp-=3;S.me.silver-=5;return'日子過得有些清苦。'}],['賄賂總管太監（耗銀15）',()=>{if(!pay(15))return'銀兩不足，反被奚落。';S.me.ally+=5;return'總管笑著賠了不是，往後對你多有照拂。'}],['向皇后告狀',()=>{if(!qo())return'中宮無人替你做主。';if(P(.5)){S.me.emp+=6;return'皇后處置了總管，賣了你一個人情。'}S.me.emp-=6;return'皇后嫌你小題大做。'}]]}),
+()=>({t:'內務府剋扣了你這個月的份例，炭火、綢緞都短了一截。',o:[['忍氣吞聲',()=>{S.me.hp-=3;S.me.silver-=5;return'日子過得有些清苦。'}],['賄賂總管太監（耗銀15）',()=>{if(!pay(15))return'銀兩不足，反被奚落。';S.me.ally+=5;return'總管笑著賠了不是，往後對你多有照拂。'}],[S.qi==='me'?'依宮規處置總管':'向皇后告狀',()=>{if(S.qi==='me'){S.me.ally+=2;return'你依宮規處置了刁難的總管，內務府從此安分。'}if(!qo())return'中宮無人替你做主。';if(P(.5)){S.me.emp+=6;return'皇后處置了總管，賣了你一個人情。'}S.me.emp-=6;return'皇后嫌你小題大做。'}]]}),
 ()=>{const i=rn(),n=S.npcs[i];return{t:`${n.n}被診出有孕，六宮前來道賀。`,o:[['備厚禮道賀（耗銀20）',()=>{if(!pay(20))return'銀兩不足，只送了些尋常物件。';n.al+=12;n.host-=8;return`${n.n}對你心存感激。`}],['暗中在她的飲食上動手腳',()=>{S.harm[i]=(S.harm[i]||0)+2;n.host+=15;if(P(cl(.3+S.me.scheme/200+tf('plot'),.1,.75))){L(`${n.n}小產，宮中人心惶惶。`);n.favor-=8;n.hp-=10;return'你的手腳做得乾淨，無人察覺。'}S.me.favor-=12;S.me.ally-=6;return'事情敗露，皇上對你怒目而視。'}],['置身事外',()=>{S.me.ally-=1;return'你只遞了句客套話。'}]]}},
 ()=>({t:'一位太醫私下找到你，願意為你效力，但要一筆「謝禮」。',o:[['給他三十兩銀',()=>{if(!pay(30))return'銀兩不足。';S.me.hp+=8;S.me.ally+=4;return'有了他的照拂，你的身子好了許多，也多了一雙耳目。'}],['婉拒',()=>{S.me.scheme+=1;return'你不願與太醫私下往來，免得落人口實。'}],['反過來試探其來歷',()=>{if(tf('insight')||P(.5)){S.me.scheme+=3;S.me.ally+=3;return'你察覺他是別宮派來的探子，將計就計用了他。'}S.me.ally-=4;return'你問不出什麼，他悻悻而去。'}]]}),
 ()=>{const f=pf();return{t:`${f.rel}（${f.job}）獲准入宮探視，你們只有一炷香的時間。`,o:[['厚賞並勉勵（耗銀15）',()=>{if(!pay(15))return'銀兩不足，只說了些體己話。';f.lo+=6;f.pw+=3;return`${f.rel}感念不已。`}],['託其在宮外辦事',()=>{S.me.ally+=Math.round(f.pw/12)+1;f.lo-=3;return`${f.rel}答應替你打點宮外人脈。`}],['叮囑小心行事',()=>{f.ab+=3;S.me.scheme+=1;return`${f.rel}連連點頭，行事更為謹慎。`}]]}},
@@ -1091,9 +1091,9 @@ const EARC=[
 const DARC=[
 {k:'婆媳之爭',st:[
 [6,20,c=>{const q=Q();if(q)q.favor-=3;return'太后在慈寧宮敲打中宮，說皇后「失於管教後宮」。'}],
-[6,16,c=>'太后召你。',c=>sEv('太后把你召到慈寧宮，旁敲側擊地問起皇后平日的為人。',[
-['順著太后的話，數說皇后的不是',()=>{S.me.dw+=10;S.me.emp-=8;return'太后頻頻點頭，皇后那邊卻得了風聲。'}],
-['替皇后美言幾句',()=>{S.me.emp+=8;S.me.dw-=6;return'太后臉色微沉，皇后對你多了幾分好感。'}],
+[6,16,c=>'太后召你。',c=>sEv(S.qi==='me'?'太后把你召到慈寧宮，旁敲側擊地問起後宮諸妃平日的為人。':'太后把你召到慈寧宮，旁敲側擊地問起皇后平日的為人。',[
+[S.qi==='me'?'順著太后的話，數說某位妃嬪的不是':'順著太后的話，數說皇后的不是',()=>{S.me.dw+=10;S.me.emp-=8;return'太后頻頻點頭，皇后那邊卻得了風聲。'}],
+[S.qi==='me'?'替她美言幾句':'替皇后美言幾句',()=>{S.me.emp+=8;S.me.dw-=6;return'太后臉色微沉，皇后對你多了幾分好感。'}],
 ['打太極，只說後宮和睦（看氣質）',()=>{if(ckp(.45+(S.me.at.qi-50)/200)){S.me.dw+=2;return'你滴水不漏，兩邊都沒得罪。'}S.me.dw-=3;return'太后嫌你說話含糊。'}]],'太后','后')],
 [10,26,c=>{S.mood=cl(S.mood-3);return'太后病了一場，臥床半月，宮中人心惶惶。'}],
 [12,30,c=>{const j=oth(-1);if(S.dow&&j!==null){S.dow.pet=j;return`太后對皇后的看法起了變化，近來對${S.npcs[j].n}另眼相看。`}return'太后對後宮的事漸漸淡了。'}]]},
@@ -2265,7 +2265,7 @@ fm:()=>({t:'朝中有人議論，皇上對你娘家的恩寵太過了。',o:[['�
 const FEST={0:()=>({t:'元宵燈會，皇上攜六宮賞燈，命各宮猜燈謎。',o:[['憑才智猜謎',()=>{if(P(.45+S.me.at.iq/250)){S.me.favor+=6;return'你連猜數謎，皇上頻頻點頭。'}S.me.favor-=1;return'你猜錯了幾個，鬧了個小笑話。'}],['獻上親手紮的花燈（耗銀8）',()=>{if(!pay(8))return'銀兩不足，只送了簡單的花燈。';S.me.favor+=3;S.me.emp+=3;return'你的花燈小巧別致，皇后也多看了兩眼。'}],['陪侍在側，不爭先',()=>{S.me.favor+=1;return'你安安靜靜陪著賞燈，倒也自在。'}]]}),
 4:()=>({t:'端午節，宮中賜下艾草香囊，太醫提醒夏日防疫。',o:[['親手縫香囊獻給皇上（耗銀5）',()=>{if(!pay(5))return'銀兩不足，香囊做得潦草了些。';S.me.favor+=4;S.me.kids.forEach(k=>k.bond+=3);return'皇上把香囊掛在腰間，孩子們也得了一份。'}],['犒賞宮人（耗銀20）',()=>{if(!pay(20))return'銀兩不足，只給了些許賞錢。';S.me.ally+=4;return'宮人們對你感恩戴德。'}],['照常過節',()=>'你按例領了份例，平平淡淡地過了節。']]}),
 6:()=>({t:'七夕乞巧，宮女們穿針祈願，御花園裡燈火通明。',o:[['邀皇上同遊銀河',()=>{if(S.me.favor>=50){S.me.favor+=5;return'皇上興致頗高，陪你坐了許久。'}S.me.favor+=1;return'皇上敷衍地應了一聲。'}],['獨自對月，靜心養性',()=>{S.me.hp=Math.min(100,S.me.hp+2);S.me.scheme+=2;return'月光下你想了很多事，心裡亮堂了。'}],['陪孩子們乞巧',()=>{if(!S.me.kids.length)return'你膝下無子，只好看著別人家歡聲笑語。';S.me.kids.forEach(k=>k.bond+=5);return'孩子們玩得很開心，與你更親了。'}]]}),
-8:()=>({t:'重陽登高，宮中設宴賞菊，各宮都在盤算。',o:[[S.dow?'邀太后登高賞菊（耗銀10）':'邀皇后登高賞菊（耗銀10）',()=>{if(!pay(10))return'銀兩不足，只送了盆尋常的菊花。';if(S.dow)S.me.dw=cl(S.me.dw+6);else S.me.emp+=5;return'對方很是受用。'}],['陪皇上登高',()=>{S.me.favor+=3;return'皇上與你並肩望遠，心情大好。'}],['在宮中賞菊靜養',()=>{S.me.hp=Math.min(100,S.me.hp+2);return'你賞菊品茗，神清氣爽。'}]]}),
+8:()=>({t:'重陽登高，宮中設宴賞菊，各宮都在盤算。',o:[[S.dow?'邀太后登高賞菊（耗銀10）':(S.qi==='me'?'邀妃嬪登高賞菊（耗銀10）':'邀皇后登高賞菊（耗銀10）'),()=>{if(!pay(10))return'銀兩不足，只送了盆尋常的菊花。';if(S.dow)S.me.dw=cl(S.me.dw+6);else S.me.emp+=5;return'對方很是受用。'}],['陪皇上登高',()=>{S.me.favor+=3;return'皇上與你並肩望遠，心情大好。'}],['在宮中賞菊靜養',()=>{S.me.hp=Math.min(100,S.me.hp+2);return'你賞菊品茗，神清氣爽。'}]]}),
 11:()=>({t:'除夕守歲，宮中家宴，年終賞賜要發下去了。',o:[['大賞宮人（耗銀40）',()=>{if(!pay(40))return'銀兩不足，只能小賞。';S.me.ally+=5;return'宮人們個個喜笑顏開，都說你寬厚。'}],['與皇上共守歲',()=>{S.me.favor+=S.me.favor>=40?6:2;return'爆竹聲中，你與皇上共度除夕。'}],['給娘家送年禮（耗銀30）',()=>{if(!pay(30))return'銀兩不足，只送了簡單的年禮。';S.me.fam.forEach(x=>x.pw+=3);return'娘家收到年禮，感念你的惦記。'}]]})};
 const SEV={
 冬:()=>({t:'嚴冬酷寒，宮中炭火不足，各宮都在省著用。',o:[['添炭取暖（耗銀20）',()=>{if(!pay(20))return'銀兩不足，只能硬撐。';S.me.hp=Math.min(100,S.me.hp+2);return'屋裡暖烘烘的，你睡得安穩。'}],['硬撐過去',()=>{S.me.hp=Math.max(3,S.me.hp-6);return'你凍得手腳冰涼，身子有些吃不消。'}],['把炭分給宮人（耗銀10）',()=>{if(!pay(10))return'銀兩不足，沒能幫上忙。';S.me.ally+=3;S.me.hp=Math.max(3,S.me.hp-2);return'宮人們感念你的體恤。'}]]}),
@@ -3382,7 +3382,7 @@ else if(k==1)infPush(infEv('京城時疫流行，宮中人心惶惶。',[['出�
 else infPush(infEv('一位商人託人遞話，想出重金求你為他的買賣說句話。',[['收下重金，幫他說話（醜聞＋）',()=>{m.silver+=120;m.scand=(m.scand||0)+3;m.fame=cl(m.fame-4);return'你收了他的銀子，卻也留下了把柄。'}],['婉拒，並勸他守法經營',()=>{m.fame=cl(m.fame+4);return'商人悻悻而去，卻到處傳你清廉的名聲。'}]]))}}
 /* 人物個人劇情線 */
 const STORY=[
-{k:'舊情',a:(n)=>`有宮人密報：${n.n}與一位年輕侍衛私下往來，似有舊情。`,o:(n,i)=>[['暗中蒐證，留作把柄',()=>{S.evid[i]=(S.evid[i]||0)+2;n.sto={k:'舊情',s:1,t:S.t,i};return`你悄悄蒐集了證據，${n.n}的罪證增至${S.evid[i]}。`}],['替她遮掩，賣個人情',()=>{n.al+=15;n.host=cl(n.host-10);n.sto={k:'舊情',s:2,t:S.t,i};return`${n.n}知道是你替她遮掩，對你感激不盡。`}],['密報皇后（看聖寵）',()=>{if(ckp(.4+ec().favor/300)){n.favor=cl(n.favor-15);ec().favor+=2;n.sto={k:'舊情',s:3,t:S.t,i};return`${n.n}被申斥，聖寵大減。`}ec().favor-=3;return'皇后不願多事，反說你多嘴。'}]],
+{k:'舊情',a:(n)=>`有宮人密報：${n.n}與一位年輕侍衛私下往來，似有舊情。`,o:(n,i)=>[['暗中蒐證，留作把柄',()=>{S.evid[i]=(S.evid[i]||0)+2;n.sto={k:'舊情',s:1,t:S.t,i};return`你悄悄蒐集了證據，${n.n}的罪證增至${S.evid[i]}。`}],['替她遮掩，賣個人情',()=>{n.al+=15;n.host=cl(n.host-10);n.sto={k:'舊情',s:2,t:S.t,i};return`${n.n}知道是你替她遮掩，對你感激不盡。`}],[S.qi==='me'?'依宮規處置（看聖寵）':'密報皇后（看聖寵）',()=>{if(ckp(.4+ec().favor/300)){n.favor=cl(n.favor-15);ec().favor+=2;n.sto={k:'舊情',s:3,t:S.t,i};return`${n.n}被申斥，聖寵大減。`}ec().favor-=3;return''+(S.qi==='me'?'你不願多事，反被說多嘴。':'皇后不願多事，反說你多嘴。')+''}]],
  n2:(n,i)=>n.sto.s==1?`${n.n}發現有人在查她的舊事，托人來探你口風。`:n.sto.s==2?`${n.n}想報答你的人情，願意幫你一件事。`:`${n.n}對你懷恨在心，在暗處盯著你。`,
  o2:(n,i)=>n.sto.s==1?[['矢口否認',()=>{n.host=cl(n.host+6);n.sto=null;return'她半信半疑，從此防著你。'}],['以此要挾她替你辦事',()=>{ec().scheme+=2;n.al+=6;n.sto=null;return`${n.n}被迫聽命，替你打探了不少消息。`}]]:n.sto.s==2?[['請她在皇上面前說好話',()=>{ec().favor+=4;n.sto=null;return`${n.n}果然在皇上跟前替你美言。`}],['請她替你牽線結盟',()=>{ec().ally+=5;n.sto=null;return`${n.n}替你牽上了幾條人脈。`}]]:[['先下手為強，設計她（險）',()=>{if(ckp(.35+ec().scheme/300)){n.favor=cl(n.favor-12);n.sto=null;return'你搶先一步，讓她吃了啞巴虧。'}ec().favor-=4;n.sto=null;return'你的設計被她看穿，反吃了虧。'}],['主動示好，化解仇怨（耗銀40）',()=>{if(!pay(40))return'銀兩不足。';n.host=cl(n.host-12);n.sto=null;return'一份厚禮化解了她的敵意。'}]]},
 {k:'病',a:(n)=>`${n.n}近來身子日漸虛弱，太醫束手無策。`,o:(n,i)=>[['送上名貴藥材（耗銀60）',()=>{if(!pay(60))return'銀兩不足。';n.hp=Math.min(100,n.hp+20);n.al+=12;n.sto=null;return`${n.n}病情好轉，記下了你這份情。`}],['去探望，聊表心意',()=>{n.al+=4;n.sto=null;return'你去看望了她，兩人說了許久的話。'}],['趁她病弱，奪她管事之權',()=>{n.pow=cl((n.pow||0)-5);ec().ally+=2;ec().fame=cl(ec().fame-4);n.sto=null;return'你趁虛而入，宮裡人看在眼裡，對你的觀感不一。'}]]}];
@@ -3503,18 +3503,23 @@ const v=pol.map(ok).filter(i=>i>=0);if(m.hp<45){const h=ACT.findIndex(a=>a[0]=='
 function evCritical(e){return /逼宮|駕崩|禪位|宮變|賜死|廢|立儲|儲君|謀逆|徹查|召你問話|降了|病危|求婚|婚事|選妃|冊封|和親|繼位|攝政|母國.*(政變|併吞)/.test(e.t||'')}
 function autoStop(){const m=S.me;return S.over||S.scn||S.reg||m.hp<28||(m.dsus||0)>=65||(S.fr&&S.fr.sus>=70)||(m.scand||0)>=60}
 let _AUTO=0;
+const AGOALS={'疑心降到40以下':m=>(m.dsus||0)<40,'銀兩達一萬':m=>m.silver>=10000,'健康回到80':m=>m.hp>=80,'晉升一級位份':m=>m.rank>_gb.rk,'有孩子成年':m=>m.kids.filter(k=>!k.dead&&yr(k)>=16).length>_gb.ad,'母國猜忌降到40以下':m=>!S.fr||S.fr.dead||(S.fr.sus||0)<40};
+let _gb={rk:0,ad:0},_AG=0;
+function goalHit(){try{const g=S.agoal;return!!(g&&g!=='無'&&AGOALS[g]&&AGOALS[g](S.me))}catch(e){return false}}
+function autoGoal(){if(!S||!S.agoal||S.agoal==='無')return;_gb={rk:S.me.rank,ad:S.me.kids.filter(k=>!k.dead&&yr(k)>=16).length};if(goalHit()){ntfAdd('目標「'+S.agoal+'」目前已經達成。','ti');ntfDraw();render();return}const gp={'疑心降到40以下':'守成','銀兩達一萬':'斂財','健康回到80':'養生','晉升一級位份':'固寵','有孩子成年':'育子','母國猜忌降到40以下':'守成'},op=S.pol;if(gp[S.agoal])S.pol=gp[S.agoal];_AG=1;try{autoRun(60)}finally{_AG=0;S.pol=op}}
+const _as11=autoStop;autoStop=function(){return _AG&&goalHit()?1:_as11()};
 function autoRun(months){if(_AUTO||!S||S.over||S.reg||S.scn||S.ev||S.ch){return}_AUTO=1;const m=S.me,b={fv:m.favor,sv:m.silver,hp:m.hp,rk:m.rank,t:S.t},target=S.t+months,rd=render;let why='',n=0,evN=0;
 try{render=function(){};let g=0;while(!autoStop()&&S.t<target&&g++<600){const t0=S.t;const i=polAct();try{A(i)}catch(e){console.log('auto',e);break}n++;let z=0;while(S.ch&&z++<6){const o=S.ch.o;let k=o.findIndex(x=>!/險|極兇險/.test(x.l));if(k<0)k=0;try{C(k)}catch(e){break}}
-let w=0;while(S.ev&&!S.over&&w++<12){if(evCritical(S.ev)){why='有重要的事要你決定';break}evN++;const o=S.ev.o;let k=o.findIndex(x=>!/險|極/.test(x[0]));if(k<0)k=0;try{V(k)}catch(e){console.log('autoV',e);break}}
+let w=0;while(S.ev&&!S.over&&w++<12){if(evCritical(S.ev)||S.apx==='ask'){why='有重要的事要你決定';break}evN++;const o=S.ev.o;let k=o.findIndex(x=>!/險|極/.test(x[0]));if(k<0)k=0;try{V(k)}catch(e){console.log('autoV',e);break}}
 if(why)break;if(S.ev||S.scn)break}}finally{render=rd;_AUTO=0}
-if(S.over){render();return}const m2=S.me;if(!why){if(S.scn)why='有重要的事要你決定';else if(S.ev)why='有事件等你決定';else if(autoStop())why='出現需要留意的狀況'}
+if(S.over){render();return}const m2=S.me;if(!why){if(S.scn)why='有重要的事要你決定';else if(S.ev)why='有事件等你決定';else if(_AG&&goalHit())why='已達成目標「'+S.agoal+'」';else if(autoStop())why='出現需要留意的狀況'}
 const d=(a,b2)=>{const x=Math.round(b2-a);return x>0?'＋'+x:x<0?'－'+(-x):'±0'};
 try{ntfAdd(`一鍵「${S.pol||'固寵'}」${S.t-b.t}個月：聖寵${d(b.fv,m2.favor)}・銀兩${d(b.sv,m2.silver)}・健康${d(b.hp,m2.hp)}${m2.rank>b.rk?'・晉位':''}${evN?'・自動處理'+evN+'件事':''}${why?'。已停下：'+why:''}`,'ti');ntfDraw()}catch(e){}
 render()}
 /* 主畫面：方針列、精簡 */
 const _ap10=uiPost;uiPost=function(){const r=_ap10.apply(this,arguments);try{if(TAB==0&&S&&S.me&&!S.over&&!S.reg&&!S.scn){const main=document.querySelector('main');if(main){
 if(!S.pol)S.pol='固寵';main.querySelectorAll('.autobar').forEach(e=>e.remove());const d=document.createElement('div');d.className='autobar';
-d.innerHTML=`<span class=al>方針</span><select onchange="S.pol=this.value;document.querySelector('.autobar .ad').textContent=POLD[S.pol]">${Object.keys(POLS).map(k=>`<option ${k==S.pol?'selected':''}>${k}</option>`).join('')}</select><span class=ad>${POLD[S.pol]}</span><span class=ab><button onclick="autoRun(1)">一鍵本月</button><button onclick="autoRun(12)">一鍵一年</button></span>`;
+d.innerHTML=`<span class=al>方針</span><select onchange="S.pol=this.value;document.querySelector('.autobar .ad').textContent=POLD[S.pol]">${Object.keys(POLS).map(k=>`<option ${k==S.pol?'selected':''}>${k}</option>`).join('')}</select><span class=ad>${POLD[S.pol]}</span><span class=ab><button onclick="autoRun(1)">一鍵本月</button><button onclick="autoRun(12)">一鍵一年</button></span><details class=am><summary>進階</summary><div>遇事：<select onchange="S.apx=this.value"><option value=auto ${S.apx!=='ask'?'selected':''}>小事自動處理</option><option value=ask ${S.apx==='ask'?'selected':''}>每件都讓我決定</option></select></div><div>目標：<select onchange="S.agoal=this.value;render()">${['無'].concat(Object.keys(AGOALS)).map(k=>`<option ${k==(S.agoal||'無')?'selected':''}>${k}</option>`).join('')}</select>${S.agoal&&S.agoal!=='無'?'<button onclick="autoGoal()">一鍵達成</button>':''}</div></details>`;
 const st=main.querySelector('.stat-strip');if(st)st.after(d);else main.prepend(d);
 if(S.t>=24)main.querySelectorAll(':scope>.tip').forEach(e=>e.remove());
 [...main.querySelectorAll(':scope>.cd')].forEach(c=>{if(!c.querySelector('h3')&&/^\s*母國/.test(c.textContent))c.classList.add('frs')});
@@ -3526,6 +3531,7 @@ html body .autobar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin
 html body .autobar .al{font-weight:700;color:#8a3a30}
 html body .autobar select{font:inherit;font-size:13px;padding:3px 6px;border-radius:8px;border:1px solid rgba(196,138,112,.4);background:#fff;color:#5a3a32}
 html body .autobar .ad{display:none}
+html body .autobar details.am{flex-basis:100%;font-size:12.5px}html body .autobar details.am summary{cursor:pointer;color:#8a3a30;opacity:.8}html body .autobar details.am div{margin-top:5px}
 html body .autobar .ab{display:flex;gap:6px;margin-left:auto}
 html body .autobar button{padding:5px 11px;font-size:12.5px;border-radius:999px;border:1px solid #c0584e;background:#c8465a;color:#fff;box-shadow:none}
 html body .cd.frs{padding:7px 12px;font-size:12.5px;line-height:1.55;margin:6px 0}html body .cd.frs *{font-size:12.5px}html body details.frc>summary{cursor:pointer;list-style:none;font-weight:700;font-size:14px;color:#8a3a30}
@@ -3535,6 +3541,22 @@ html body details.frc[open]>summary{margin-bottom:6px}
 html body details.frc .m,html body details.frc .r{font-size:13px}
 `;document.head.appendChild(st)})();
 HELP.push(['方針與一鍵','主畫面「方針」可選固寵、養生、斂財、人脈、育子、守成、謀位。按「一鍵本月」或「一鍵一年」，遊戲會依方針自動挑行動、遇到選項自動選較穩妥的，直到時間到，或遇到需要你決定的事件、健康過低、疑心或猜忌過高、醜聞過高才會停下，並顯示這段期間的變化摘要。']);
+
+/* ===== round11：事件稽核過濾、去重、後期節奏、通知位置 ===== */
+const EVCD=18;
+function evBad(e){const t=e.t||'';
+ if(S.dow||S.reg)return false;
+ if(/^太后|太后(鳳體|禮佛|召你|賜了|有意|的侄)/.test(t)&&!/先帝|皇太后|太妃/.test(t))return true;
+ return false}
+function evKey(e){return (e.o||[]).slice(0,3).map(x=>String(x[0]).replace(/[（(].*$/,'')).join('|')}
+const _nx11=next;next=function(){try{if(S&&S.q&&S.q.length){S.evK=S.evK||{};let g=0;while(S.q.length&&g++<30){const e=S.q[0];if(!e||!e.o)break;if(evBad(e)){S.q.shift();continue}
+ const k=evKey(e);if(e.o.length>=2&&!evCritical(e)&&S.q.length>=1&&S.evK[k]!==undefined&&S.t-S.evK[k]<EVCD&&!e.keep&&!e.story){S.q.shift();continue}
+ S.evK[k]=S.t;break}}}catch(er){console.log('next11',er)}return _nx11.apply(this,arguments)};
+/* 後期節奏：數值滿後拉長事件間隔 */
+const _md11=mend;mend=function(){const r=_md11.apply(this,arguments);try{const m=S&&S.me;if(m&&S.t>=180&&!S.reg&&m.favor>=88&&m.ally>=80&&m.scheme>=80&&S.gcd>=0&&P(.5))S.gcd++}catch(e){}return r};
+/* 通知條不蓋住方針列 */
+(function(){const st=document.createElement('style');st.id='ui11';st.textContent=`html body #ntf{top:auto!important;bottom:calc(86px + env(safe-area-inset-bottom,0px))!important}`;document.head.appendChild(st)})();
+HELP.push(['事件冷卻','同一類事件在約一年半內不會重複跳出，太后不在世時也不會再出現太后的事件。']);
 
 /* ===== 編制人物多樣化：宮中執事・官女子有名字、性情、籍貫，會告老、調任、被選中 ===== */
 const OFS=['李','張','王','劉','趙','孫','錢','周','吳','鄭','馮','陳','褚','衛','蔣','沈','韓','楊','朱','秦','尤','許','何','呂','施','曹','嚴','華','金','魏'],
