@@ -3558,6 +3558,39 @@ const _md11=mend;mend=function(){const r=_md11.apply(this,arguments);try{const m
 (function(){const st=document.createElement('style');st.id='ui11';st.textContent=`html body #ntf{top:auto!important;bottom:calc(86px + env(safe-area-inset-bottom,0px))!important}`;document.head.appendChild(st)})();
 HELP.push(['事件冷卻','同一類事件在約一年半內不會重複跳出，太后不在世時也不會再出現太后的事件。']);
 
+/* ===== round12：皇帝狀態卡與對皇帝的行動 ===== */
+const EMPACT=[
+['侍奉湯藥','皇上龍體欠安時親侍湯藥，聖寵＋、疑心－',()=>{const m=S.me;if(S.ehp>=88){L('皇上龍體康健，不需你侍疾，你只送了盅燕窩。');m.favor+=1;return}m.hp=Math.max(1,m.hp-3);S.ehp=cl(S.ehp+R(2,5));m.favor+=4;m.dsus=Math.max(0,(m.dsus||0)-3);S.mood=cl(S.mood+3);L('你衣不解帶侍奉湯藥，皇上的氣色好了些，對你多了幾分憐惜。')}],
+['進言政事','就朝政或邊事進言，看才智；得當則國事＋，失當則惹疑',()=>{const m=S.me;choose('向皇上進言什麼？',[
+{l:'穩妥：勸皇上體恤百姓、輕徭薄賦（成功率較高）',f(){if(ckp(.5+m.at.iq/300)){m.favor+=3;if(S.nat)S.nat.stab=cl(S.nat.stab+2);L('你的話說到了皇上心坎，皇上頷首稱許，近日朝局也平穩了些。')}else{m.favor-=1;L('皇上聽了淡淡一笑，只說「婦人之見」。')}}},
+{l:'進取：直陳某位大臣的不是（成功率低，易惹疑）',f(){if(ckp(.3+m.scheme/400+m.at.iq/500)){m.favor+=5;m.ally+=1;L('皇上察覺那位大臣確有不妥，對你另眼相看。')}else{m.favor-=4;m.dsus=Math.min(100,(m.dsus||0)+5);L('皇上不悅：「後宮不得干政。」疑心在眼底一閃而過。')}}},
+{l:'作罷，不多嘴',f(){L('你把話嚥了回去。')}}]);return 1}],
+['枕邊進言','趁皇上心情好為母家、子女或盟友說話',()=>{const m=S.me,ok=(S.mood>=45&&m.favor>=45);choose('趁皇上心情，說些什麼？',[
+{l:'為母家討個封賞（需聖寵與聖心不低）',f(){if(ok&&ckp(.35+m.favor/300)){m.fam.forEach(x=>x.pw+=7);m.dsus=Math.min(100,(m.dsus||0)+3);m.favor-=2;L('皇上允了你母家的封賞，只是看你的眼神多了一分思量。')}else{m.favor-=3;S.mood=cl(S.mood-4);L('皇上心情不佳，你的請求被擱置。')}}},
+{l:'為孩子求個恩典',f(){if(!m.kids.length)return L('你膝下尚無子女。');const k=pk(m.kids.filter(x=>!x.dead));if(!k)return L('你膝下尚無子女。');if(ok&&ckp(.45+m.favor/400)){k.chong=cl(k.chong+8);L(`皇上對${k.n}多了幾分關注。`)}else{m.favor-=2;L('皇上只說了句「來日方長」。')}}},
+{l:'替失寵的盟友說句好話（人脈＋）',f(){const a=ids().map(i=>S.npcs[i]).filter(n=>n.al>=35&&n.favor<45);if(!a.length||!ok)return L('此刻不是說情的時機。');const n=pk(a);n.favor=cl(n.favor+8);n.al=cl(n.al+10);m.ally+=2;L(`皇上去看了${n.n}一回，她對你感激不盡。`)}},
+{l:'算了',f(){L('你只是陪皇上說了會兒閒話。')}}]);return 1}],
+['勸皇上養生','勸皇上節制勞累、保重龍體；對昏庸或暴戾的皇帝效果較差',()=>{const m=S.me,bad=(S.ep==1||S.ep==6);if(ckp(bad?.3:.6)){S.ehp=cl(S.ehp+R(2,4));m.favor+=3;L('皇上聽進了你的勸，這幾日歇得早，氣色漸好。')}else{S.mood=cl(S.mood-5);m.favor-=2;L('皇上不耐煩地揮手：「朕自有分寸。」')}}],
+['進獻珍玩','獻上稀罕之物博皇上一笑（耗銀100）',()=>{const m=S.me;if(!pay(100))return L('銀兩不足。');S.mood=cl(S.mood+R(6,12));m.favor+=R(3,6);if(S.ep==4)m.favor+=2;L('皇上把玩著你獻上的珍玩，龍顏大悅。')}]];
+EMPACT.forEach(a=>{ACT.push(a)});
+(function(){const c=ACTCAT.find(x=>/恩寵/.test(x[0]));if(c)for(let i=ACT.length-EMPACT.length;i<ACT.length;i++)c[1].push(i)})();
+function empCard(){const m=S.me,eg=S.eage,pr=EPS[S.ep];const bar=(l,v,w)=>`<div class=r><span>${l}</span><i><b style="width:${Math.max(0,Math.min(100,v))}%;background:var(--gd)"></b></i><em>${v|0}</em></div>`;
+const fav=ids().map(i=>S.npcs[i]).filter(n=>!n.st).sort((a,b)=>b.favor-a.favor).slice(0,3);
+const myRank=1+ids().map(i=>S.npcs[i]).filter(n=>!n.st&&n.favor>m.favor).length;
+const sus=Math.round(m.dsus||0);const lv=sus>=70?'岌岌可危':sus>=55?'已遭猜忌':sus>=40?'有所耳聞':'平安';
+const nat=S.nat?`穩定${S.nat.stab|0}・經濟${S.nat.eco|0}・軍力${S.nat.mil|0}`:'';
+const heir=S.heir?`儲君：${S.heir.n}`:'尚未立儲';
+const warn=S.ehp<30?'<div class=m style="color:#b0382e">⚠ 龍體危殆，隨時可能駕崩，宜及早為子女謀劃。</div>':S.ehp<50?'<div class=m style="color:#a8642e">龍體欠安，需留意。</div>':'';
+const btn=(n,l)=>{const i=ACT.findIndex(a=>a[0]==n);return i<0?'':`<button onclick="A(${i})">${l||n}</button>`};
+return`<details class="cd emp"><summary><b>皇帝詳情</b><span class=m>${eg}歲・${pr[0]}・龍體${S.ehp|0}・疑心${sus}（${lv}）</span></summary>
+<div class=m>${pr[1]}</div>${bar('龍體',S.ehp)}${bar('聖心',S.mood)}${bar('對你寵愛',m.favor)}${bar('對你疑心',sus)}${warn}
+<div class=m>近來最受寵：${fav.map(n=>n.n+'('+(n.favor|0)+')').join('　')||'無'}　你排第 ${myRank}</div>
+<div class=m>${heir}　${nat}</div>
+<div class=eab>${btn('獻藝邀寵')}${btn('寬慰聖心')}${btn('侍奉湯藥')}${btn('進言政事')}${btn('枕邊進言')}${btn('勸皇上養生')}${btn('進獻珍玩')}${btn('示忠表心')}</div></details>`}
+const _up12=uiPost;uiPost=function(){const r=_up12.apply(this,arguments);try{if(TAB==0&&S&&S.me&&!S.over&&!S.reg&&!S.scn){const main=document.querySelector('main');if(main){main.querySelectorAll('.cd.emp').forEach(e=>e.remove());const ch=main.querySelector('.chips');const h=empCard();if(ch)ch.insertAdjacentHTML('afterend',h);else{const ab=main.querySelector('.autobar');if(ab)ab.insertAdjacentHTML('afterend',h)}const d=main.querySelector('.cd.emp');if(d&&S._empOpen)d.open=true;if(d)d.addEventListener('toggle',()=>{S._empOpen=d.open})}}}catch(e){console.log('ui12',e)}return r};
+(function(){const st=document.createElement('style');st.id='ui12';st.textContent=`html body details.cd.emp{padding:8px 12px;margin:6px 0}html body details.cd.emp>summary{cursor:pointer;list-style:none;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;font-size:14px;color:#8a3a30}html body details.cd.emp>summary::-webkit-details-marker{display:none}html body details.cd.emp>summary::after{content:'▾';opacity:.5;margin-left:auto}html body details.cd.emp[open]>summary{margin-bottom:6px}html body details.cd.emp .m{font-size:12.5px}html body .eab{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}html body .eab button{padding:5px 10px;font-size:12.5px;border-radius:999px}`;document.head.appendChild(st)})();
+HELP.push(['皇帝詳情','行動頁的「皇帝詳情」可展開查看龍體、聖心、對你寵愛、對你疑心、近來最受寵的嬪妃、儲君與國事，並直接對皇上做事：獻藝、寬慰、侍奉湯藥、進言政事、枕邊進言、勸養生、進獻珍玩、示忠。龍體過低時要及早為子女謀劃。']);
+
 /* ===== 編制人物多樣化：宮中執事・官女子有名字、性情、籍貫，會告老、調任、被選中 ===== */
 const OFS=['李','張','王','劉','趙','孫','錢','周','吳','鄭','馮','陳','褚','衛','蔣','沈','韓','楊','朱','秦','尤','許','何','呂','施','曹','嚴','華','金','魏'],
 OFG1=['德','福','順','祿','喜','貴','安','全','進','忠','長','永','元','來','慶','得','寶','有','吉','連'],
