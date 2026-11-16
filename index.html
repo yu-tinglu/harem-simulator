@@ -3491,6 +3491,51 @@ html body .kid,html body .k{font-size:13.5px}
 `;document.head.appendChild(st)})();
 HELP.push(['姻親勢力','子女的配偶家世會影響你：武將姻親加成宮變、逼宮、奪嫡；文官姻親有各自好處（御史壓醜聞、鹽商增進項、翰林增賢名、巡撫穩朝局），但勢力過強也會招來皇帝疑心。']);
 
+/* ===== 第十輪：方針與一鍵、主畫面再精簡 ===== */
+const POLS={'固寵':['獻藝邀寵','梳妝保養','寬慰聖心','結交宮人','研習技藝'],'養生':['調養身子','延醫問藥','梳妝保養','讀書習藝'],'斂財':['置產投資','獻藝邀寵','賞賜宮人','傳書母家'],'人脈':['結交宮人','結盟拉攏','賞賜宮人','串門走動'],'育子':['教養子女','為子籌謀','過問婚事','求子調理'],'守成':['示忠表心','澄清母國往來','調養身子','結交宮人'],'謀位':['奪嫡謀劃','為子籌謀','結盟拉攏','獻藝邀寵']};
+const POLD={'固寵':'聖寵為先，多邀寵梳妝','養生':'以健康為主，少折騰','斂財':'置產投資、廣結財源','人脈':'結交妃嬪、廣布人脈','育子':'專心教養子女、安排婚事','守成':'降疑心降猜忌，低調穩住','謀位':'為兒子謀劃奪嫡'};
+function polAct(){const m=S.me,pol=POLS[S.pol]||POLS['固寵'];const ok=n=>{const i=ACT.findIndex(a=>a[0]==n);if(i<0)return-1;
+if(n=='置產投資'&&(m.silver<250||(m.prop&&m.prop.farm>=5)))return-1;if(n=='賞賜宮人'&&m.silver<120)return-1;
+if(n=='求子調理'&&m.kids.length>=3)return-1;if((n=='教養子女'||n=='為子籌謀'||n=='奪嫡謀劃')&&!m.kids.length)return-1;
+if(n=='過問婚事'&&!m.kids.some(k=>yr(k)>=15&&!k.sp))return-1;if(n=='澄清母國往來'&&(!m.fo||!S.fr||S.fr.dead||S.fr.ann||(S.fr.sus||0)<20))return-1;
+if(n=='示忠表心'&&(m.dsus||0)<8)return-1;return i};
+const v=pol.map(ok).filter(i=>i>=0);if(m.hp<45){const h=ACT.findIndex(a=>a[0]=='調養身子');if(h>=0)return h}return v.length?pk(v):ACT.findIndex(a=>a[0]=='獻藝邀寵')}
+function evCritical(e){return /逼宮|駕崩|禪位|宮變|賜死|廢|立儲|儲君|謀逆|徹查|召你問話|降了|病危|求婚|婚事|選妃|冊封|和親|繼位|攝政|母國.*(政變|併吞)/.test(e.t||'')}
+function autoStop(){const m=S.me;return S.over||S.scn||S.reg||m.hp<28||(m.dsus||0)>=65||(S.fr&&S.fr.sus>=70)||(m.scand||0)>=60}
+let _AUTO=0;
+function autoRun(months){if(_AUTO||!S||S.over||S.reg||S.scn||S.ev||S.ch){return}_AUTO=1;const m=S.me,b={fv:m.favor,sv:m.silver,hp:m.hp,rk:m.rank,t:S.t},target=S.t+months,rd=render;let why='',n=0,evN=0;
+try{render=function(){};let g=0;while(!autoStop()&&S.t<target&&g++<600){const t0=S.t;const i=polAct();try{A(i)}catch(e){console.log('auto',e);break}n++;let z=0;while(S.ch&&z++<6){const o=S.ch.o;let k=o.findIndex(x=>!/險|極兇險/.test(x.l));if(k<0)k=0;try{C(k)}catch(e){break}}
+let w=0;while(S.ev&&!S.over&&w++<12){if(evCritical(S.ev)){why='有重要的事要你決定';break}evN++;const o=S.ev.o;let k=o.findIndex(x=>!/險|極/.test(x[0]));if(k<0)k=0;try{V(k)}catch(e){console.log('autoV',e);break}}
+if(why)break;if(S.ev||S.scn)break}}finally{render=rd;_AUTO=0}
+if(S.over){render();return}const m2=S.me;if(!why){if(S.scn)why='有重要的事要你決定';else if(S.ev)why='有事件等你決定';else if(autoStop())why='出現需要留意的狀況'}
+const d=(a,b2)=>{const x=Math.round(b2-a);return x>0?'＋'+x:x<0?'－'+(-x):'±0'};
+try{ntfAdd(`一鍵「${S.pol||'固寵'}」${S.t-b.t}個月：聖寵${d(b.fv,m2.favor)}・銀兩${d(b.sv,m2.silver)}・健康${d(b.hp,m2.hp)}${m2.rank>b.rk?'・晉位':''}${evN?'・自動處理'+evN+'件事':''}${why?'。已停下：'+why:''}`,'ti');ntfDraw()}catch(e){}
+render()}
+/* 主畫面：方針列、精簡 */
+const _ap10=uiPost;uiPost=function(){const r=_ap10.apply(this,arguments);try{if(TAB==0&&S&&S.me&&!S.over&&!S.reg&&!S.scn){const main=document.querySelector('main');if(main){
+if(!S.pol)S.pol='固寵';main.querySelectorAll('.autobar').forEach(e=>e.remove());const d=document.createElement('div');d.className='autobar';
+d.innerHTML=`<span class=al>方針</span><select onchange="S.pol=this.value;document.querySelector('.autobar .ad').textContent=POLD[S.pol]">${Object.keys(POLS).map(k=>`<option ${k==S.pol?'selected':''}>${k}</option>`).join('')}</select><span class=ad>${POLD[S.pol]}</span><span class=ab><button onclick="autoRun(1)">一鍵本月</button><button onclick="autoRun(12)">一鍵一年</button></span>`;
+const st=main.querySelector('.stat-strip');if(st)st.after(d);else main.prepend(d);
+if(S.t>=24)main.querySelectorAll(':scope>.tip').forEach(e=>e.remove());
+[...main.querySelectorAll(':scope>.cd')].forEach(c=>{if(!c.querySelector('h3')&&/^\s*母國/.test(c.textContent))c.classList.add('frs')});
+const fr=[...main.querySelectorAll(':scope>.cd')].find(c=>c.firstElementChild&&/^母國/.test(c.firstElementChild.textContent)&&c.firstElementChild.tagName=='H3'&&!c.querySelector('details.frc'));
+if(fr){const h=fr.firstElementChild,rest=[...fr.children].slice(1).map(x=>x.outerHTML).join('');const open=S.fr&&((S.fr.sus||0)>=60)?'open':'';fr.innerHTML=`<details class=frc ${open}><summary>${h.innerHTML}</summary>${rest}</details>`}
+main.querySelectorAll(':scope>.cd.fold').forEach(c=>{const h=c.firstElementChild;if(h&&/^上月回顧/.test(h.textContent)&&FOLDS[c.dataset.fk]===undefined)c.classList.add('closed')})}}}catch(e){console.log('ui10',e)}return r};
+(function(){const st=document.createElement('style');st.id='ui10';st.textContent=`
+html body .autobar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0;padding:7px 10px;border-radius:12px;background:rgba(255,255,255,.82);border:1px solid rgba(196,138,112,.3);font-size:13px;color:#5a3a32}
+html body .autobar .al{font-weight:700;color:#8a3a30}
+html body .autobar select{font:inherit;font-size:13px;padding:3px 6px;border-radius:8px;border:1px solid rgba(196,138,112,.4);background:#fff;color:#5a3a32}
+html body .autobar .ad{display:none}
+html body .autobar .ab{display:flex;gap:6px;margin-left:auto}
+html body .autobar button{padding:5px 11px;font-size:12.5px;border-radius:999px;border:1px solid #c0584e;background:#c8465a;color:#fff;box-shadow:none}
+html body .cd.frs{padding:7px 12px;font-size:12.5px;line-height:1.55;margin:6px 0}html body .cd.frs *{font-size:12.5px}html body details.frc>summary{cursor:pointer;list-style:none;font-weight:700;font-size:14px;color:#8a3a30}
+html body details.frc>summary::-webkit-details-marker{display:none}
+html body details.frc>summary::after{content:' ▾';opacity:.5}
+html body details.frc[open]>summary{margin-bottom:6px}
+html body details.frc .m,html body details.frc .r{font-size:13px}
+`;document.head.appendChild(st)})();
+HELP.push(['方針與一鍵','主畫面「方針」可選固寵、養生、斂財、人脈、育子、守成、謀位。按「一鍵本月」或「一鍵一年」，遊戲會依方針自動挑行動、遇到選項自動選較穩妥的，直到時間到，或遇到需要你決定的事件、健康過低、疑心或猜忌過高、醜聞過高才會停下，並顯示這段期間的變化摘要。']);
+
 /* ===== 編制人物多樣化：宮中執事・官女子有名字、性情、籍貫，會告老、調任、被選中 ===== */
 const OFS=['李','張','王','劉','趙','孫','錢','周','吳','鄭','馮','陳','褚','衛','蔣','沈','韓','楊','朱','秦','尤','許','何','呂','施','曹','嚴','華','金','魏'],
 OFG1=['德','福','順','祿','喜','貴','安','全','進','忠','長','永','元','來','慶','得','寶','有','吉','連'],
