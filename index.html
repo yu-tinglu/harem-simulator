@@ -3245,6 +3245,21 @@ HELP.push(['私兵與疑心','殺手樓訓練死士、牧場養馬，都會成�
 /* 後宮搜尋 */
 const _up2=uiPost;uiPost=function(){const r=_up2.apply(this,arguments);try{if(TAB==1){const main=document.querySelector('main'),fb=main&&main.querySelector('.fbar');if(fb&&!main.querySelector('.srch')){const w=document.createElement('div');w.className='srch';w.style.cssText='margin:6px 0';w.innerHTML='<input placeholder="🔍 搜尋姓名／位份" style="width:100%;box-sizing:border-box;padding:8px 10px;border-radius:8px;border:1px solid rgba(128,128,128,.4);background:transparent;color:inherit;font-size:14px">';fb.after(w);const inp=w.firstElementChild;inp.oninput=()=>{const q=inp.value.trim();main.querySelectorAll(':scope>details').forEach(d=>{d.style.display=!q||d.textContent.includes(q)?'':'none'})}}}}catch(e){console.log('srch',e)}return r};
 
+/* ===== 第三輪：降母國猜忌、派系成員展開 ===== */
+const CLR=['澄清母國往來','降低皇上對你與母國的猜忌',()=>{const m=S.me,f=S.fr;if(!m.fo||!f||f.dead||f.ann){L('你沒有需要澄清的母國往來。');return}infInit();choose(`皇上猜忌 ${f.sus|0}／100，如何化解？`,[
+{l:'上書表忠，宣示不忘皇恩（耗銀40，猜忌－10）',f(){if(!pay(40))return L('銀兩不足。');const a=f.sus|0;f.sus=cl((f.sus||0)-10);f.rel=cl(f.rel-2);m.favor+=2;L(`你上書表明心跡，皇上讀後沉默良久。猜忌 ${a}→${f.sus|0}。`)}},
+{l:'疏遠母國使者（滲透－8、邦誼－5、猜忌－14）',f(){const a=f.sus|0;f.inf=cl(f.inf-8);f.rel=cl(f.rel-5);f.sus=cl((f.sus||0)-14);L(`你婉拒了母國使者的來訪，與母國的往來冷了下來。猜忌 ${a}→${f.sus|0}，滲透 ${f.inf|0}。`)}},
+{l:'將母國貢品獻給皇上（耗銀60，猜忌－8、聖寵＋4）',f(){if(!pay(60))return L('銀兩不足。');const a=f.sus|0;f.sus=cl((f.sus||0)-8);m.favor+=4;L(`你把母國送來的珍品悉數獻給皇上，皇上龍心大悅。猜忌 ${a}→${f.sus|0}。`)}},
+{l:'靜待風頭（猜忌每月自然緩降）',f(){L('你決定暫時按兵不動，等風聲過去。')}}]);return 1}];
+const clrIdx=ACT.length;ACT.push(CLR);(function(){const c=ACTCAT.find(x=>/人脈/.test(x[0]));if(c)c[1].push(clrIdx)})();
+const _frR3=frCard;frCard=function(){let h=_frR3.apply(this,arguments);try{const f=S.fr;if(h&&f&&!f.dead&&!f.ann&&S.me.fo&&(f.sus||0)>=20){h=h.replace(/<\/div>$/,`<div class=m style="margin-top:6px"><button onclick="A(${clrIdx})" style="padding:6px 12px;border-radius:8px;border:1px solid currentColor;background:transparent;color:inherit;font-size:13px">降低猜忌：澄清母國往來</button></div></div>`)}}catch(e){console.log('frR3',e)}return h};
+HELP.push(['降低母國猜忌','主畫面「母國」卡的「皇上猜忌」是你與母國往來太密的後果。猜忌到60聖寵會受損，到80會被徹查。可按母國卡上的「降低猜忌：澄清母國往來」，或到行動→人脈勢力→「澄清母國往來」：表忠、疏遠使者或獻貢品。']);
+/* 派系：點開看成員 */
+fxCard=function(){fxInit();const rows=[0,1,2,3,4].map(f=>{const l=facLead(f),ms=facMem(f),me=S.me.fac===f,al=S.fx.ally.filter(p=>p[0]===f||p[1]===f).map(p=>facName(p[0]===f?p[1]:p[0]));
+const list=[...(me?[`<b>你</b>（${RK[S.me.rank]||''}）${l===S.me?'　★領袖':''}`]:[]),...ms.map(n=>`${n.n}${(()=>{try{return'（'+RKN(n)+'）'}catch(e){return''}})()}${l===n?'　★領袖':''}`)];
+return`<details class=k style="margin:6px 0"><summary style="cursor:pointer"><b>${facName(f)}${me?'（你所屬）':''}</b>　領袖：${l?(l===S.me?'你':l.n):'無'}・後宮成員 ${ms.length+(me?1:0)} 人${al.length?'・盟：'+al.join('、'):''}${abar('勢力',S.fp[f])}</summary><div class=m style="padding:6px 0 2px">${list.length?list.join('　'):'目前沒有後宮成員。'}</div></details>`}).join('');
+return`<div class=cd data-open=0><h3>後宮派系</h3><div class=m>五個派系各有領袖與勢力，會結盟、反目、拉攏人。點開各派可看成員。</div>${rows}</div>`};
+
 /* ===== 編制人物多樣化：宮中執事・官女子有名字、性情、籍貫，會告老、調任、被選中 ===== */
 const OFS=['李','張','王','劉','趙','孫','錢','周','吳','鄭','馮','陳','褚','衛','蔣','沈','韓','楊','朱','秦','尤','許','何','呂','施','曹','嚴','華','金','魏'],
 OFG1=['德','福','順','祿','喜','貴','安','全','進','忠','長','永','元','來','慶','得','寶','有','吉','連'],
