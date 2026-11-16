@@ -3179,8 +3179,8 @@ if(f.sus>=80&&P(.05)&&dsOk())infPush(infEv(`皇上下令徹查你與${f.n}的往
 ['坦然受查，自證清白（看聖寵）',()=>{if(ckp(.35+m.favor/200+(100-f.inf)/300)){f.sus=30;m.favor+=3;return'禁軍翻箱倒櫃，卻查無實據，皇上多少有些愧疚。'}m.rank=Math.max(0,m.rank-1);m.favor-=15;m.scand=(m.scand||0)+3;f.sus=50;return'查出了幾封往來書信，你被降了一級位份，皇上冷了心。'}],
 ['主動交代，求寬大處理',()=>{f.inf=cl(f.inf-15);f.rel=cl(f.rel-10);f.sus=35;m.favor-=6;return`你把與${f.n}的往來和盤托出，母國視你為叛徒，皇上卻饒了你。`}],
 ['反咬一口，說有人構陷（看心機）',()=>{if(ckp(.25+m.scheme/200)){f.sus=20;m.favor+=2;const c=ids();if(c.length)S.npcs[pk(c)].favor-=10;return'你抖出幾條對頭的把柄，皇上半信半疑，徹查不了了之。'}if(P(.4)){over('通敵伏誅',`你反咬他人的話被一一戳破，皇上認定你通敵，賜你三尺白綾，${f.n}與母家也一併受到清算。`);return''}m.favor=0;m.rank=Math.max(0,m.rank-2);return'你的狡辯惹怒了皇上，被降位幽禁。'}]]));}
-const _frS=frCard;frCard=function(){let h=_frS.apply(this,arguments);try{const f=S.fr;if(h&&f&&!f.dead&&!f.ann&&S.me.fo){infInit();h=h.replace(/(<div class=m>想增強母國)/,`${abar('皇上猜忌',(f.sus||0)|0)}<div class=m>猜忌來自滲透度上升；低於 60 無事，過 60 聖寵會受損，過 80 可能被徹查。多用「協助皇朝防範」與表忠選項降低。</div>$1`)}}catch(e){console.log('frS',e)}return h};
-const _gcS=goalChip;goalChip=function(){let h=_gcS.apply(this,arguments);try{if(S.me.fo&&S.fr&&!S.fr.dead&&(S.fr.sus||0)>=1)h=h.replace(/(滲透 \d+（[^）]*）)/,`$1　猜忌 ${S.fr.sus|0}`)}catch(e){}return h};
+const _frS=frCard;frCard=function(){let h=_frS.apply(this,arguments);try{const f=S.fr;if(h&&f&&!f.dead&&!f.ann&&S.me.fo){infInit();h=h.replace(/(<div class=m>想增強母國)/,`${abar('皇上疑心（母國往來部分，計入總疑心）',(f.sus||0)|0)}<div class=m>猜忌來自滲透度上升；低於 60 無事，過 60 聖寵會受損，過 80 可能被徹查。多用「協助皇朝防範」與表忠選項降低。</div>$1`)}}catch(e){console.log('frS',e)}return h};
+const _gcS=goalChip;goalChip=function(){let h=_gcS.apply(this,arguments);try{if(S.me.fo&&S.fr&&!S.fr.dead&&(S.fr.sus||0)>=1)h=h.replace(/(滲透 \d+（[^）]*）)/,`$1　母國疑心 ${S.fr.sus|0}`)}catch(e){}return h};
 const _mdS=mend;mend=function(){const r=_mdS.apply(this,arguments);try{susTick()}catch(e){console.log('susTick',e)}return r};
 /* 說明 */
 HELP.push(['下人與商鋪','<b>下人</b>：「後宮」分頁的「我的下人」列出你的宮女太監，各有特質、職務、忠誠與能力。到「行動→宮人差遣」可派他們打探、送禮、御前打點、散播流言，也能賞罰、調任、提拔、遣散或招募。忠誠太低會出賣你。<br><b>商鋪</b>：開鋪子、整頓、宣傳、擴建、查賬、賣官都在「產業」卡片裡。「特殊經營」有各鋪專屬操作：情報樓賣情報、殺手樓除對頭、青樓結交達官、賭坊放貸；外邦公主另有嫁妝商隊、牧場。這些會影響人脈、心機與醜聞。'],['外邦公主：母國、滲透與併吞','外邦公主出身有「母國」卡：國力、邦誼、<b>滲透度</b>、<b>皇上猜忌</b>。母國強、邦誼高、你的商隊情報樓越多，滲透越深，皇朝會被慢慢侵蝕，皇上也越猜忌你。滲透過高且皇朝衰弱時，母國可能找你當內應發動政變（可作內應、告發或閉宮）。反過來皇朝遠強於母國時，會逐步蠶食，滿格時可能併吞母國。想控制風險：用「母國謀略」協助防範、事件選表忠，並把聖寵維持高。<br>「資助母家／資助母國」可增強家人與母國實力。'],['九龍奪嫡','皇子成年後會結黨、構陷、暗殺；皇帝久不傳位，儲君可能逼宮；儲君勢大會被猜忌甚至廢掉。「子嗣」分頁頂部有「奪嫡局勢」。行動「奪嫡謀劃」可為兒子結黨、造勢、打壓對手；「帶孩子面聖」可提升皇子寵愛。被圈禁的皇子不再參與繼位。'],['事件頻率','「紀事」分頁最上方可調整新系統事件（滲透、奪嫡、下人背叛等）出現的頻繁程度：少／中／多。']);
@@ -3244,11 +3244,11 @@ const _up3=uiPost;uiPost=function(){const r=_up3.apply(this,arguments);try{if(TA
 HELP.push(['私兵與疑心','殺手樓訓練死士、牧場養馬，都會成為真實私兵；戰力＝死士×2＋戰馬，會加成宮變、逼宮、內應與奪嫡。私兵要付月錢，過大會令皇帝疑心上升，疑心高時會召你問話，甚至剷除你。疑心也看聖寵、皇帝年紀與儲位；到40會先有風聲預警，被降位兩次後仍不收斂才可能被剷除。可用「示忠表心」或禮佛慢慢降疑心，聖寵高時皇上可能賜你合法護衛。產業卡會列出疑心來源。']);
 
 /* ===== 第三輪：降母國猜忌、派系成員展開 ===== */
-const CLR=['澄清母國往來','降低皇上對你與母國的猜忌',()=>{const m=S.me,f=S.fr;if(!m.fo||!f||f.dead||f.ann){L('你沒有需要澄清的母國往來。');return}infInit();choose(`皇上猜忌 ${f.sus|0}／100，如何化解？`,[
-{l:'上書表忠，宣示不忘皇恩（耗銀40，猜忌－10）',f(){if(!pay(40))return L('銀兩不足。');const a=f.sus|0;f.sus=cl((f.sus||0)-10);f.rel=cl(f.rel-2);m.favor+=2;L(`你上書表明心跡，皇上讀後沉默良久。猜忌 ${a}→${f.sus|0}。`)}},
-{l:'疏遠母國使者（滲透－8、邦誼－5、猜忌－14）',f(){const a=f.sus|0;f.inf=cl(f.inf-8);f.rel=cl(f.rel-5);f.sus=cl((f.sus||0)-14);L(`你婉拒了母國使者的來訪，與母國的往來冷了下來。猜忌 ${a}→${f.sus|0}，滲透 ${f.inf|0}。`)}},
-{l:'將母國貢品獻給皇上（耗銀60，猜忌－8、聖寵＋4）',f(){if(!pay(60))return L('銀兩不足。');const a=f.sus|0;f.sus=cl((f.sus||0)-8);m.favor+=4;L(`你把母國送來的珍品悉數獻給皇上，皇上龍心大悅。猜忌 ${a}→${f.sus|0}。`)}},
-{l:'靜待風頭（猜忌每月自然緩降）',f(){L('你決定暫時按兵不動，等風聲過去。')}}]);return 1}];
+const CLR=['澄清母國往來','降低皇上對你與母國的猜忌',()=>{const m=S.me,f=S.fr;if(!m.fo||!f||f.dead||f.ann){L('你沒有需要澄清的母國往來。');return}infInit();choose(`母國往來疑心 ${f.sus|0}／100（計入總疑心），如何化解？`,[
+{l:'上書表忠，宣示不忘皇恩（耗銀40，疑心－10）',f(){if(!pay(40))return L('銀兩不足。');const a=f.sus|0;f.sus=cl((f.sus||0)-10);f.rel=cl(f.rel-2);m.favor+=2;L(`你上書表明心跡，皇上讀後沉默良久。猜忌 ${a}→${f.sus|0}。`)}},
+{l:'疏遠母國使者（滲透－8、邦誼－5、疑心－14）',f(){const a=f.sus|0;f.inf=cl(f.inf-8);f.rel=cl(f.rel-5);f.sus=cl((f.sus||0)-14);L(`你婉拒了母國使者的來訪，與母國的往來冷了下來。猜忌 ${a}→${f.sus|0}，滲透 ${f.inf|0}。`)}},
+{l:'將母國貢品獻給皇上（耗銀60，疑心－8、聖寵＋4）',f(){if(!pay(60))return L('銀兩不足。');const a=f.sus|0;f.sus=cl((f.sus||0)-8);m.favor+=4;L(`你把母國送來的珍品悉數獻給皇上，皇上龍心大悅。猜忌 ${a}→${f.sus|0}。`)}},
+{l:'靜待風頭（疑心每月自然緩降）',f(){L('你決定暫時按兵不動，等風聲過去。')}}]);return 1}];
 const clrIdx=ACT.length;ACT.push(CLR);(function(){const c=ACTCAT.find(x=>/人脈/.test(x[0]));if(c)c[1].push(clrIdx)})();
 const _frR3=frCard;frCard=function(){let h=_frR3.apply(this,arguments);try{const f=S.fr;if(h&&f&&!f.dead&&!f.ann&&S.me.fo&&(f.sus||0)>=20){h=h.replace(/<\/div>$/,`<div class=m style="margin-top:6px"><button onclick="A(${clrIdx})" style="padding:6px 12px;border-radius:8px;border:1px solid currentColor;background:transparent;color:inherit;font-size:13px">降低猜忌：澄清母國往來</button></div></div>`)}}catch(e){console.log('frR3',e)}return h};
 HELP.push(['降低母國猜忌','主畫面「母國」卡的「皇上猜忌」是你與母國往來太密的後果。猜忌到60聖寵會受損，到80會被徹查。可按母國卡上的「降低猜忌：澄清母國往來」，或到行動→人脈勢力→「澄清母國往來」：表忠、疏遠使者或獻貢品。']);
@@ -3269,7 +3269,7 @@ const actIx=n=>ACT.findIndex(a=>a[0]==n);
 const BTNS='padding:5px 10px;border-radius:8px;border:1px solid currentColor;background:transparent;color:inherit;font-size:13px;margin:4px 6px 0 0';
 /* 警示欄 */
 function alertItems(){const m=S.me,o=[];
-if(m.fo&&S.fr&&!S.fr.dead&&!S.fr.ann&&(S.fr.sus||0)>=60)o.push([`母國猜忌 ${S.fr.sus|0}，皇上已起疑`,'澄清往來',actIx('澄清母國往來')]);
+if(m.fo&&S.fr&&!S.fr.dead&&!S.fr.ann&&(S.fr.sus||0)>=60)o.push([`母國往來引起的疑心 ${S.fr.sus|0}，皇上已起疑`,'澄清往來',actIx('澄清母國往來')]);
 if((m.dsus||0)>=55)o.push([`皇帝疑心 ${m.dsus|0}，恐被召見問罪`,'示忠降疑心',actIx('示忠表心')]);
 if((m.scand||0)>=40)o.push([`醜聞值 ${m.scand|0}，隨時可能被揭發`,'打點賄賂',actIx('打點賄賂')]);
 if(m.hp<35)o.push([`健康只剩 ${m.hp|0}`,'調養身子',actIx('調養身子')]);
@@ -3339,7 +3339,7 @@ const CONDS=[['皇帝好色','每月常有新寵分走聖眷'],['國庫空虛','
 const _st7=start0;start0=function(){const r=_st7.apply(this,arguments);try{if(S&&!S.cond)S.cond=pk(CONDS)[0]}catch(e){}return r};
 const fam7=()=>{const m=S.me;return (m.fam||[]).filter(x=>x.sx!='女'&&fAge(x)>=18&&!/流亡|軟禁/.test(x.job||''))};
 const BUYACT=['買官賄賂','花銀打點，替母家謀官或壓下風聲',()=>{const m=ec();const o=[];
-if(m.fo){o.push({l:'重金結交母國權貴（耗銀80，滲透＋5、邦誼＋3、猜忌＋2）',f(){if(!pay(80))return L('銀兩不足。');const f=S.fr;if(!f||f.dead||f.ann)return L('母國已無人可結交。');infInit();f.inf=cl(f.inf+5);f.rel=cl(f.rel+3);f.sus=cl((f.sus||0)+2);L('你託人打點母國權貴，往來更密了。')}})}
+if(m.fo){o.push({l:'重金結交母國權貴（耗銀80，滲透＋5、邦誼＋3、疑心＋2）',f(){if(!pay(80))return L('銀兩不足。');const f=S.fr;if(!f||f.dead||f.ann)return L('母國已無人可結交。');infInit();f.inf=cl(f.inf+5);f.rel=cl(f.rel+3);f.sus=cl((f.sus||0)+2);L('你託人打點母國權貴，往來更密了。')}})}
 else{o.push({l:'重金疏通，替兄弟謀升遷（耗銀100，有風險）',f(){const c=fam7();if(!c.length)return L('母家沒有適合謀官的男丁。');choose('替誰謀官？',c.map(x=>({l:`${x.rel}${x.nm}（${x.job}）`,f(){if(!pay(100))return L('銀兩不足。');const p=cl(.55-(m.scand||0)/200+m.scheme/300,.2,.85);m.dsus=(m.dsus||0)+2;if(P(p)){x.pw=cl(x.pw+10);if(x.gd!==undefined)x.gd=Math.min(5,x.gd+1);m.clan=cl((m.clan||0)+3);L(`銀子遞到了關鍵人手裡，${x.nm}得了升遷，母家勢力漲了一截。`)}else{m.scand=(m.scand||0)+6;m.favor-=4;m.dsus=(m.dsus||0)+6;L('買官的事走漏了風聲，被御史聞到了味道，你被皇上敲打了一番。')}}})));return 1}})}
 o.push({l:'買通御史，壓下一則風聲（耗銀60，醜聞－6）',f(){if(!pay(60))return L('銀兩不足。');m.scand=Math.max(0,(m.scand||0)-6);L('一筆銀子送出去，那封彈章便沒了下文。')}});
 choose('如何打點？',o);return 1}];
@@ -3853,14 +3853,17 @@ HELP.push(['公主攝政','和親公主若在外邦喪夫，可選擇暗助她�
 
 /* ===== round23：皇帝疑心——顯示實際變動、抑制暴漲、增加降疑心選項 ===== */
 (function(){
-function dsFix(b,r){const m=S&&S.me;if(!m||S.reg)return r;let a=m.dsus||0,d=a-b;
+const frv=()=>{const f=S&&S.fr;return f&&!f.dead&&!f.ann&&S.me&&S.me.fo?(f.sus||0):0};
+function dsFix(b,r,bf){const m=S&&S.me;if(!m||S.reg)return r;let a=m.dsus||0,d=a-b;bf=bf||0;const fd=frv()-bf;
  if(d>0){let al=d<=3?d:3+(d-3)*.6;if(b>=60)al*=.6;m.dsus=cl(b+al);d=m.dsus-b}
+ if(Math.abs(fd)>.01&&Math.abs(d)<.01){m.dsus=cl((m.dsus||0)+fd*.5);d=m.dsus-b}
+ else if(Math.abs(d)>.01&&Math.abs(fd)<.01&&S.fr&&frv()>0){S.fr.sus=cl((S.fr.sus||0)+(d<0?d*.7:d*.3))}
  const n=Math.round(d);
  if(Math.abs(d)>=.5&&n!==0){const sfx=`（皇帝疑心${n>0?'＋':'－'}${Math.abs(n)}，現為${Math.round(m.dsus)}）`;if(typeof r==='string'&&r)return r+sfx;L(sfx)}
  return r}
-const _V=V;V=function(i){const e=S&&S.ev;if(!e||!e.o||!e.o[i]||!S.me)return _V(i);const b=S.me.dsus||0,orig=e.o[i][1];e.o[i][1]=function(){return dsFix(b,orig.apply(this,arguments))};return _V(i)};
-const _C=C;C=function(i){const h=S&&S.ch;if(!h||!h.o||!h.o[i]||!S.me)return _C(i);const b=S.me.dsus||0,o=h.o[i],orig=o.f;o.f=function(){const r=orig.apply(this,arguments);dsFix(b,'');return r};return _C(i)};
-const _A=A;A=function(i){const a=S&&!S.reg?ACT[i]:null;if(!a||!S.me)return _A(i);const b=S.me.dsus||0,f=a[2];a[2]=function(){const r=f.apply(this,arguments);dsFix(b,'');return r};try{return _A(i)}finally{a[2]=f}};
+const _V=V;V=function(i){const e=S&&S.ev;if(!e||!e.o||!e.o[i]||!S.me)return _V(i);const b=S.me.dsus||0,bf=frv(),orig=e.o[i][1];e.o[i][1]=function(){return dsFix(b,orig.apply(this,arguments),bf)};return _V(i)};
+const _C=C;C=function(i){const h=S&&S.ch;if(!h||!h.o||!h.o[i]||!S.me)return _C(i);const b=S.me.dsus||0,bf=frv(),o=h.o[i],orig=o.f;o.f=function(){const r=orig.apply(this,arguments);dsFix(b,'',bf);return r};return _C(i)};
+const _A=A;A=function(i){const a=S&&!S.reg?ACT[i]:null;if(!a||!S.me)return _A(i);const b=S.me.dsus||0,bf=frv(),f=a[2];a[2]=function(){const r=f.apply(this,arguments);dsFix(b,'',bf);return r};try{return _A(i)}finally{a[2]=f}};
 /* 事件：若有選項會抬高疑心而沒有任何降疑心選項，補一個穩妥選項 */
 function addSafe(e){if(!e||!e.o||e._s23||e.story||e.o.length>=5||!S||!S.me||S.reg)return;e._s23=1;
  const src=e.o.map(x=>String(x[1]));const up=src.some(s=>/dsus\s*\|\|\s*0\)\s*\+|dsus\s*\+=|dsus\+\+/.test(s));
@@ -3874,6 +3877,7 @@ if(si>=0){const f=ACT[si][2];ACT[si][2]=function(){const r=f.apply(this,argument
  S.ch.o.push({l:'主動稟報母家近況，請皇上指點（疑心－6，母家勢力－3）',f(){m.dsus=Math.max(0,(m.dsus||0)-6);m.fam.forEach(x=>x.pw=cl(x.pw-3));L('你把母家的動向一五一十稟報了皇上，皇上讚你坦蕩。')}});
  S.ch.o.push({l:'捐出私產充作公用（耗銀100，疑心－10）',f(){if(!pay(100))return L('銀兩不足。');m.dsus=Math.max(0,(m.dsus||0)-10);m.fame=cl((m.fame||0)+2);L('你捐出私產賑濟，皇上看在眼裡，疑心大減。')}});
  S.ch.o.push({l:'稱病閉門，謝絕外客（疑心－5，人脈－2）',f(){m.dsus=Math.max(0,(m.dsus||0)-5);m.ally-=2;L('你閉門謝客，宮裡宮外都少了你的消息。')}})}return r}}
+const _u23=uiPost;uiPost=function(){const r=_u23.apply(this,arguments);try{if(S&&S.me&&!S.reg&&!S.over){const c=document.querySelector('details.cd.emp');if(c){c.querySelectorAll('.dsc23').forEach(e=>e.remove());const fr=Math.round(frv()),own=Math.round(dsusParts().t),tot=Math.round(S.me.dsus||0);const tx=`疑心組成：私兵與母家勢力的壓力約${own}`+(S.me.fo?`・母國往來${fr}`:'')+`（總疑心${tot}；兩邊會互相連動，降一邊另一邊也會跟著降一些）`;const d=c.querySelector('div.m');if(d)d.insertAdjacentHTML('afterend','<div class="m dsc23">'+tx+'</div>')}}}catch(e){console.log('r23u',e)}return r};
 window.dsFix23=dsFix;
 HELP.push(['皇帝疑心','選擇之後，結果文字會寫出疑心實際增減與目前數值；單次暴漲會被緩和，疑心高時漲得更慢。事件若會抬高疑心，常會多一個「低調謹慎」的選項；「示忠表心」另有陪伴、稟報母家、捐私產、閉門謝客等降疑心辦法。']);
 })();
