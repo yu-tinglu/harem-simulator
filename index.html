@@ -3263,6 +3263,8 @@ return`<div class=cd data-open=0><h3>後宮派系</h3><div class=m>五個派系�
 function plFix(){try{if(!S||!S.pl||!S.pl2||S.pl.id!==S.pl2.id)return;const g=['love','plot','heir','edict'].filter(x=>x!==S.pl.id);const np=plNew(g[R(0,g.length-1)],0);np.nx=S.t+R(6,12);S.pl2=np}catch(e){console.log('plFix',e)}}
 const _pf3=mend;mend=function(){const r=_pf3.apply(this,arguments);plFix();return r};
 const _pc3=plotCard;plotCard=function(){plFix();return _pc3.apply(this,arguments)};
+/* 奪嫡局勢：列出我的孩子的處境 */
+const _kap3=kidsAllPanel;kidsAllPanel=function(){let h=_kap3.apply(this,arguments);try{const key='<div class=m>皇子成年後會結黨、構陷；皇帝若久不傳位，儲君可能逼宮。</div>';if(!S.reg&&!S.over&&h.includes(key)&&S.me.kids&&S.me.kids.length){const pr=dsPr();const rows=S.me.kids.filter(k=>!k.dead&&!k.died&&k.alive!==false).map(k=>{let st;if(k.sex!='男')st='公主不參與奪嫡，可聯姻拉攏勢力';else if(k.jin)st='已被圈禁，退出奪嫡';else if(yr(k)<14)st=`尚未成年，滿14歲才會加入奪嫡（還差${14-yr(k)}年）`;else{const i=pr.findIndex(x=>x.k===k);st=i<0?'已成年':`競爭中，聲勢排第${i+1}${i>=4?'（下方只列前4名）':''}・聲勢${k.pow|0}`}return`<div class=m>・${k.n}（${yr(k)}歲${k.sex=='男'?'皇子':'公主'}）：${st}</div>`}).join('');if(rows)h=h.replace(key,key+`<div class=m style="margin-top:4px"><b>你的孩子</b></div>`+rows)}}catch(e){console.log('kap3',e)}return h};
 
 /* ===== 編制人物多樣化：宮中執事・官女子有名字、性情、籍貫，會告老、調任、被選中 ===== */
 const OFS=['李','張','王','劉','趙','孫','錢','周','吳','鄭','馮','陳','褚','衛','蔣','沈','韓','楊','朱','秦','尤','許','何','呂','施','曹','嚴','華','金','魏'],
