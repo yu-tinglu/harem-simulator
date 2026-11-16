@@ -696,8 +696,8 @@ if(w&&w.o!=='me'&&sons.length&&m.rank>=2){const s=sons.slice().sort((a,b)=>b.pow
 S.scn={h,o};render()}
 function succ(){const m=S.me;let c=[];m.kids.forEach(k=>c.push({k,o:'me'}));S.npcs.forEach((n,i)=>n.kids.forEach(k=>c.push({k,o:i})));c=c.filter(x=>x.k.sex=='男');
 if(!c.length)return over('宗室入繼','皇帝駕崩，膝下無皇子，朝臣擁立宗室旁支入繼大統。你作為先帝'+(S.qi==='me'?'皇后':'太妃')+'，在寂靜的宮苑中安度餘年。');
-c.forEach(x=>x.s=sc(x.k)+R(0,18)+(x.o===S.qi?10:0)+(x.k===S.heir?25:0)+(S.dow&&x.o===S.dow.pet?8:0));c.sort((a,b)=>b.s-a.s);const w=c[0],a=yr(w.k);S.nk=w.k;S.nko=w.o;
-let h=`<p>皇帝駕崩，享年${S.eage}歲。朝臣議立新君：</p>`+c.slice(0,4).map(x=>`<div class=k>${x.k.n}（${on(x.o)}之子，${yr(x.k)}歲）${x==w?'　【新君】':''}</div>`).join('')+`<p><b>${w.k.n}繼位，時年${a}歲。</b></p><p class=m>此時國力${natv()|0}${natv()<35?'，國勢衰微，新君一繼位就面臨內憂外患':natv()>70?'，國泰民安':''}。${S.dow?'太后仍在世，成了太皇太后。':''}</p>`;
+c.forEach(x=>x.s=sc(x.k)+R(0,18)+(x.o===S.qi?10:0)+(x.k===S.heir?(S.abd?90:25):0)+(S.dow&&x.o===S.dow.pet?8:0));c.sort((a,b)=>b.s-a.s);const w=c[0],a=yr(w.k);S.nk=w.k;S.nko=w.o;
+let h=`<p>${S.abd?'皇上禪位，尊為太上皇，':'皇帝駕崩，'}享年${S.eage}歲。${S.abd?'依制由儲君繼位：':'朝臣議立新君：'}</p>`+c.slice(0,4).map(x=>`<div class=k>${x.k.n}（${on(x.o)}之子，${yr(x.k)}歲）${x==w?'　【新君】':''}</div>`).join('')+`<p><b>${w.k.n}繼位，時年${a}歲。</b></p><p class=m>此時國力${natv()|0}${natv()<35?'，國勢衰微，新君一繼位就面臨內憂外患':natv()>70?'，國泰民安':''}。${S.dow?'太后仍在世，成了太皇太后。':''}</p>`;
 if(w.o=='me')return mine(w,a,h);
 const wm=S.npcs[w.o],h2=S.harm[w.o]||0,sons=m.kids.filter(k=>k.sex=='男'),fate=sons.length?sons.map(k=>(k.de+k.chong+k.pow)/3>45?`${k.n}受封親王，安享富貴`:`${k.n}被圈禁高牆，抑鬱終身`).join('；')+'。':'';
 let t,x;
@@ -2569,6 +2569,7 @@ const HELP_V50=[
 ['子嗣與奪嫡','有孩子後可在「子嗣」分頁看他們的才、德、寵、勢、孝。皇子聲勢高才有機會被立為儲君。<br>「教養子女」提升才德孝，「為子籌謀」拉攏朝臣或為公主聯姻。<br>母族勢力會加到皇子聲勢上，所以母家越強越有利。皇帝駕崩後，新帝若是你的孩子，你就能臨朝稱制。'],
 ['前朝、母家與升遷歷程','「朝堂」分頁可以看前朝官員、他們在後宮的女兒、你的母家族人。前朝的升貶、科舉、黨爭都會牽連後宮，你的母家也會跟著起落。<br><b>官職編制：</b>每種官職都有人數上限（例如首輔 2、尚書各 2、大學士 4……），朝堂分頁的「官職編制」列出每個官職現在有幾個人、是誰、還缺幾個。<br><b>升遷歷程：</b>後宮每位妃嬪展開後，最下方有她的位份升降紀錄；母家族人名字後面會列出歷任官職；「前朝官員履歷」點開可看每位官員的升降原因。'],
 ['主線劇情','「行動」分頁會顯示目前的主線劇情，每條有 5～6 幕。每一幕到時間會跳出事件，讓你做選擇，你的選擇會記在卡片裡，之後還能回頭看。<br>卡片會顯示簡介、每一幕的標題、你當時的選擇與結果，以及下一幕大約幾個月後出現。<br>主線共有九條：宮外舊情、家族疑雲、皇子之路（需有子嗣）、先帝遺詔，以及依你出身才會出現的沉冤待雪（罪臣之女）、異國和親（公主）、商號風雲（商賈）、舊主恩仇（宮女）、才名之累（書香／評彈）。遊戲中期會有第二條主線同時進行，結局還會回顧你走過的主線。'],
+['記憶、派系、皇帝與缺額','<b>往事</b>：你施恩或加害過的人會記得，多年後可能報恩或報復，在名冊展開可看到「往事」。<br><b>派系</b>：「朝堂」分頁最下方有五個派系的領袖與勢力，會結盟、反目、拉攏你。<br><b>皇帝人生</b>：「史冊」分頁看皇帝的健康、儲君與大事，皇帝可能重病、立儲、禪位或駕崩。<br><b>謀缺</b>：高官出缺時，你可以舉薦朝臣或母家族人去補缺，名額有限，要和別人競爭。<br><b>年表</b>：「史冊」分頁有本局大事年表，結局時會完整列出。'],
 ['通知、紀事、存檔與結局','晉封、降位、母家與前朝的變動都會跳通知，也都記在「紀事」分頁。<br>遊戲會自動存檔（回到首頁會看到「繼續遊戲」），另有 4 個手動存檔格，只存在這個瀏覽器裡。換檔案或換瀏覽器前，請在「讀取存檔」或「紀事」分頁使用「完整備份」，之後用「還原」帶回全部紀錄。<br>結局很多種，終局會依存活年數、位份、子嗣、成就等計分，也可以先在開局選一個人生目標，達成有獎勵。']];
 
 HELP=HELP_V50;
@@ -2632,7 +2633,7 @@ const _ciR=cInit;cInit=function(){_ciR.apply(this,arguments);if(S&&S.cr&&!S.cx2)
 /* --- 蕃國：母家不在皇朝任官，並有自己的國力 --- */
 const FRD={暹羅:{mil:50,eco:70,stab:60,rel:65,k:'暹羅'},高麗:{mil:55,eco:65,stab:70,rel:70,k:'高麗'},蒙古:{mil:75,eco:50,stab:60,rel:60,k:'蒙古'},吐蕃:{mil:55,eco:45,stab:65,rel:55,k:'吐蕃'},安南:{mil:45,eco:55,stab:55,rel:60,k:'安南'},準噶爾:{mil:80,eco:55,stab:45,rel:35,k:'準噶爾'}};
 const frPw=f=>Math.round(f.mil*.4+f.eco*.3+f.stab*.3);
-function initFr(){if(!S||!S.me||!S.me.fo||S.fr)return;const d=FRD[S.me.fo];if(!d)return;S.fr={n:S.me.fo,mil:cl(d.mil+R(-6,6)),eco:cl(d.eco+R(-6,6)),stab:cl(d.stab+R(-6,6)),rel:cl(d.rel+R(-8,8)),dead:0};S.fr.pw=frPw(S.fr)}
+function initFr(){if(S&&S.me&&S.me.fo&&!S.pb&&typeof pbInit==='function')pbInit();if(!S||!S.me||!S.me.fo||S.fr)return;const d=FRD[S.me.fo];if(!d)return;S.fr={n:S.me.fo,mil:cl(d.mil+R(-6,6)),eco:cl(d.eco+R(-6,6)),stab:cl(d.stab+R(-6,6)),rel:cl(d.rel+R(-8,8)),dead:0};S.fr.pw=frPw(S.fr)}
 function frFix(){const m=S.me;if(!m||!m.fo)return;initFr();
 const gs=GS.find(g=>g[2].fo===m.fo);m.fam.forEach(x=>{x.fr=1;if(x.of){x.of=0}});
 if(m.kf){const f=S.cr&&S.cr.find(c=>c.id===m.kf);m.kf=0;m.kold=undefined}
@@ -2643,7 +2644,7 @@ const _fyR=famYear;famYear=function(){const r=_fyR.apply(this,arguments);try{con
 const _ftR=famTxt;famTxt=function(x){let r=_ftR.apply(this,arguments);try{if(x&&x.fr)r=r.replace(/（(白身|[從正][一二三四五六七八九]品)）/,'')}catch(e){}return r};
 const _fpR=famPanel;famPanel=function(){let h=_fpR.apply(this,arguments);try{h=h.replace(/（(白身|[從正][一二三四五六七八九]品)）/g,'');if(S.me.fo&&S.fr)h=frCard()+h}catch(e){}return h};
 const frLv=p=>p>=75?'國勢強盛':p>=55?'國力中等':p>=35?'國勢衰微':'風雨飄搖';
-function frCard(){const f=S.fr;if(!f)return'';return`<div class=cd data-open=1><h3>母國「${f.n}」　國力 ${f.pw}（${f.dead?'已亡':frLv(f.pw)}）</h3>${abar('軍力',f.mil)}${abar('經濟',f.eco)}${abar('穩定',f.stab)}${abar('與皇朝邦誼',f.rel)}${f.war?`<div class=m><b>戰事：</b>${f.war.k=='civil'?'母國內戰':'皇朝與母國交戰'}，已持續 ${f.war.m} 個月</div>`:''}<div class=m>${f.n}是獨立的藩屬國，你的父兄在本國當官，不佔皇朝的官職編制。母國強盛，皇上會籠絡你、母家勢力也更穩；母國衰微，宮中人瞧你不起；母國若亡，母家就沒了依靠。</div></div>`}
+function frCard(){const f=S.fr;if(!f)return'';return`<div class=cd data-open=1><h3>母國「${f.n}」　國力 ${f.pw}（${f.dead?'已亡':frLv(f.pw)}）</h3>${abar('軍力',f.mil)}${abar('經濟',f.eco)}${abar('穩定',f.stab)}${abar('與皇朝邦誼',f.rel)}${pbHTML()}${f.war?`<div class=m><b>戰事：</b>${f.war.k=='civil'?'母國內戰':'皇朝與母國交戰'}，已持續 ${f.war.m} 個月</div>`:''}<div class=m>${f.n}是獨立的藩屬國，你的父兄在本國當官，不佔皇朝的官職編制。母國強盛，皇上會籠絡你、母家勢力也更穩；母國衰微，宮中人瞧你不起；母國若亡，母家就沒了依靠。</div></div>`}
 const FRE=[()=>({t:`母國${S.fr.n}遣使來朝，帶了一批貢物，也帶來王室的家書。`,o:[['託使臣帶禮物回國（耗銀30）',()=>{if(!pay(30))return'銀兩不足。';S.fr.rel=cl(S.fr.rel+4);S.fr.stab=cl(S.fr.stab+2);S.me.fam.forEach(x=>x.pw=cl(x.pw+2));return'家人收到你的心意，母國上下對你更加敬重。'}],['請使臣在皇上面前為本國美言',()=>{if(P(.5+S.fr.pw/250)){S.fr.rel=cl(S.fr.rel+6);S.me.favor+=3;return'皇上對使臣頗為禮遇，也多看了你兩眼。'}S.me.favor-=2;return'皇上淡淡地應付了使臣。'}]]}),
 ()=>({t:`${S.fr.n}與鄰邦起了邊釁，國內人心浮動，家書催你想辦法。`,o:[['懇請皇上出兵相助',()=>{if(S.fr.rel>=55&&P(.5)){S.fr.mil=cl(S.fr.mil+6);S.fr.stab=cl(S.fr.stab+4);S.fr.rel=cl(S.fr.rel+3);S.me.favor-=3;return'皇上派兵協防，邊釁平息，但你欠下了人情。'}S.me.favor-=6;S.fr.rel=cl(S.fr.rel-3);return'皇上不願捲入，認為你干預軍國之事。'}],['籌銀接濟軍需（耗銀60）',()=>{if(!pay(60))return'銀兩不足。';S.fr.mil=cl(S.fr.mil+5);S.fr.eco=cl(S.fr.eco-2);return'你的銀兩運回母國，軍心稍穩。'}],['袖手旁觀',()=>{S.fr.mil=cl(S.fr.mil-6);S.fr.stab=cl(S.fr.stab-4);S.me.fam.forEach(x=>x.lo=Math.max(0,(x.lo||50)-4));return'母國兵敗失地，家人對你十分失望。'}]]}),
 ()=>({t:`${S.fr.n}王室發生王位之爭，你的父兄被捲了進去。`,o:[['寫信勸父兄支持正統',()=>{if(P(.5)){S.fr.stab=cl(S.fr.stab+6);S.me.fam.forEach(x=>x.pw=cl(x.pw+3));return'王位平穩交接，你的家族更受倚重。'}S.fr.stab=cl(S.fr.stab-8);S.me.fam.forEach(x=>x.pw=cl(x.pw-6));return'你的勸告沒有奏效，家族在爭鬥中損兵折將。'}],['暗中資助父兄一方（耗銀50）',()=>{if(!pay(50))return'銀兩不足。';if(P(.55)){S.fr.stab=cl(S.fr.stab-3);S.me.fam.forEach(x=>x.pw=cl(x.pw+8));return'你支持的一方勝出，母家聲勢大漲，但國內元氣受損。'}S.fr.stab=cl(S.fr.stab-8);S.me.fam.forEach(x=>x.pw=cl(x.pw-10));return'你押錯了寶，母家一落千丈。'}]]}),
@@ -2655,7 +2656,7 @@ S.me.fam.forEach(x=>{x.pw=cl(x.pw+Math.round((f.pw-x.pw)*.12))});
 if(f.pw>=72){S.me.ally=(S.me.ally||0)+2;L(`${f.n}國勢強盛，皇上對你頗為籠絡。`)}else if(f.pw<=32){S.me.favor-=1;S.me.ally=Math.max(0,(S.me.ally||0)-2);L(`${f.n}國勢衰微，宮中有人暗地裡瞧你不起。`)}
 if(!f.war&&(f.cd||0)<=0){if(f.stab<=32&&P(.35)){f.war={k:'civil',m:0,s:0,sc:0,pend:0};L(`${f.n}王室諸派兵戎相見，母國陷入內戰。`)}else if(f.rel<=26&&P(.4)||f.mil>=72&&f.rel<=40&&P(.2)){f.war={k:'imp',m:0,s:0,sc:0,pend:0};L(`皇朝與${f.n}交惡，邊境爆發戰事。`)}}if(f.cd>0)f.cd-=12;
 if(f.pw<=12&&P(.5)){f.dead=1;S.me.favor-=8;S.me.ally=Math.max(0,(S.me.ally||0)-8);S.me.fam.forEach(x=>{x.pw=Math.max(0,x.pw-35);x.job='流亡'});L(`${f.n}國破家亡，你的父兄流亡異鄉，從此你在宮中再無母國可依。`);msPush&&msPush(f.n+'亡國')}}
-const _mdR=mend;mend=function(){const r=_mdR.apply(this,arguments);try{if(S&&S.me&&S.me.fo&&!S.over&&!S.reg){initFr();const f=S.fr;if(f&&!f.dead){if(S.t>0&&S.t%12===6)frYear();if(f.war)frWarTick();if(S.t>5&&P(.07)){const e=FRE[R(0,FRE.length-1)]();S.q.push(e);if(!S.ev&&!S.ch&&!S.scn)next();else render()}}}}catch(e){console.log('frTick',e)}return r};
+const _mdR=mend;mend=function(){const r=_mdR.apply(this,arguments);try{if(S&&S.me&&S.me.fo&&!S.over&&!S.reg){initFr();const f=S.fr;if(f&&!f.dead){if(S.t>0&&S.t%12===6)frYear();if(f.war)frWarTick();if(S.t>5&&P(.07)){const e=FRE[R(0,FRE.length-1)]();if(e){S.q.push(e);if(!S.ev&&!S.ch&&!S.scn)next();else render()}}}}}catch(e){console.log('frTick',e)}return r};
 const _mgR=migrate;migrate=function(){_mgR.apply(this,arguments);try{if(S&&S.me&&S.me.fo)frFix()}catch(e){console.log('frFix',e)}};
 const _paR=plAdv;plAdv=function(p,d,end,res,sc){const r=_paR.apply(this,arguments);try{if(S&&S.fr&&p&&p.id==='envoy'&&res){if(/成功|友好|鞏固|修好/.test(res)){S.fr.rel=cl(S.fr.rel+10);S.fr.pw=cl(S.fr.pw+3)}else if(/破裂|僵局|談崩|不歡/.test(res))S.fr.rel=cl(S.fr.rel-12)}}catch(e){}return r};
 
@@ -2675,6 +2676,143 @@ if(adv>0.1||r==2){f.mil=cl(f.mil-8);f.eco=cl(f.eco-8);f.stab=cl(f.stab-4);f.rel=
 else if(r==1){f.mil=cl(f.mil-3);f.eco=cl(f.eco-4);f.rel=cl(f.rel+16);S.me.favor+=3;f.pw=frPw(f)}
 else{f.mil=cl(f.mil+4);S.nat.mil=cl(S.nat.mil-6);f.rel=cl(f.rel+10);S.me.favor-=3;f.pw=frPw(f)}
 frWarEnd('皇朝與'+f.n+'戰事結束')}
+
+/* ===== 擴充A：長期記憶・派系戰・皇帝人生線・官職謀缺 ===== */
+const QADD=e=>{if(!e)return;S.q.push(e)};
+const QGO=()=>{if(S.q.length){if(!S.ev&&!S.ch&&!S.scn)next();else render()}};
+const yrs=t=>Math.floor((S.t-t)/12)+1;
+/* A1 宮中人物長期記憶 */
+function relOf(nm){S.rel=S.rel||{};return S.rel[nm]=S.rel[nm]||{f:0,g:0,l:[]}}
+const _mpA=memPush;memPush=function(n,x){_mpA.apply(this,arguments);try{const r=relOf(n);let w=0;if(/加害/.test(x)){r.g+=3;w=-1}else if(/施恩/.test(x)){r.f+=3;w=1}r.l.push({t:S.t,x,w});if(r.l.length>20)r.l.shift()}catch(e){}};
+const _roA=ROW;ROW=function(n,i){let r=_roA.apply(this,arguments);try{if(n!==S.me&&S.rel&&S.rel[n.n]&&S.rel[n.n].l.length){const q=S.rel[n.n];r=r.replace(/<\/div><\/details>$/,`<br><b>往事</b>　恩 ${q.f|0}・怨 ${q.g|0}${q.l.slice(-3).map(e=>`<br>・第${Math.floor(e.t/12)+1}年　${e.x}`).join('')}</div></details>`)}}catch(e){}return r};
+function relTick(){if(!S||S.reg||S.over)return;S.rel=S.rel||{};
+if(S.t>0&&S.t%12===0)Object.values(S.rel).forEach(r=>{r.f=+(r.f*.88).toFixed(1);r.g=+(r.g*.9).toFixed(1)});
+if(S.relCd>0){S.relCd--;return}let done=0;ids().forEach(i=>{if(done)return;const n=S.npcs[i],r=S.rel[n.n];if(!r)return;
+if(r.g>=6&&P(.005+r.g*.002)){done=1;S.relCd=6;QADD({t:`${n.n}一直記著你當年加害她的舊事，近來在背後動作頻頻，宮中風聲漸緊。`,o:[['先發制人，截斷她的門路（看心機）',()=>{if(P(.4+S.me.scheme/220)){n.favor-=8;r.g=Math.max(0,r.g-4);memPush(n.n,'你再次出手壓制她');return'你搶先一步，她的盤算落了空。'}S.me.favor-=6;r.g+=2;return'你的反擊被她看破，反讓她抓到新把柄。'}],['登門賠禮，化解舊怨（耗銀40）',()=>{if(!pay(40))return'銀兩不足，賠禮的誠意打了折扣。';r.g=Math.max(0,r.g-5);n.al=Math.min(100,(n.al||0)+6);memPush(n.n,'你登門賠禮');return'她收下賠禮，神色緩和了不少，舊怨消了大半。'}],['不理會，靜觀其變',()=>{S.me.favor-=3;S.me.scand=(S.me.scand||0)+2;return'她的小動作沒有停，宮裡有些閒話傳到了皇上耳中。'}]]})}
+else if(r.f>=6&&P(.004+r.f*.002)){done=1;S.relCd=6;QADD({t:`${n.n}沒忘記你曾施恩於她，悄悄遞來一個消息。`,o:[['道謝並回禮',()=>{n.al=Math.min(100,(n.al||0)+4);S.me.favor+=2;const a=ids();if(a.length)S.evid[a[R(0,a.length-1)]]=(S.evid[a[R(0,a.length-1)]]||0)+1;return'她告訴你近來宮中有人想對你不利，你得以先作防範，還多了一條把柄。'}],['請她在皇上面前替你美言',()=>{if(P(.6)){S.me.favor+=6;r.f=Math.max(0,r.f-2);return'她在皇上面前說了你不少好話，皇上對你多了幾分好感。'}S.me.favor+=2;return'她盡力說了，皇上只淡淡應了一聲。'}],['婉拒，免得結黨惹疑',()=>{S.me.ally=Math.max(0,S.me.ally-1);return'她有些失落，但理解你的謹慎。'}]]})}})}
+/* A2 派系戰 */
+const FXN=()=>FAC;
+function fxInit(){if(!S.fx)S.fx={ally:[],ld:{},cd:0}}
+function facMem(f){return S.npcs.filter(n=>!n.st&&n.fac===f)}
+function facLead(f){const m=facMem(f).concat(S.me.fac===f&&!S.reg?[S.me]:[]);if(!m.length)return null;return m.sort((a,b)=>(b.rank*6+b.favor*.3+(b.pow||b.clan||0)*.2)-(a.rank*6+a.favor*.3+(a.pow||a.clan||0)*.2))[0]}
+const isAl=(a,b)=>S.fx.ally.some(p=>(p[0]===a&&p[1]===b)||(p[0]===b&&p[1]===a));
+const facName=f=>FAC[f]||'無派系';
+function fxTick(){if(!S||S.reg||S.over)return;fxInit();const fx=S.fx;
+for(let f=0;f<5;f++){const l=facLead(f),nm=l?(l===S.me?'你':l.n):'';if(fx.ld[f]!==undefined&&fx.ld[f]!==nm&&nm){L(`${facName(f)}派易主，${nm}成了新的領袖。`);msPush&&msPush(`${facName(f)}派領袖易主：${nm}`)}fx.ld[f]=nm}
+fx.ally.forEach(p=>{S.fp[p[0]]=cl(S.fp[p[0]]+.25);S.fp[p[1]]=cl(S.fp[p[1]]+.25)});
+if(fx.cd>0){fx.cd--;return}if(!P(.07))return;fx.cd=4;
+const k=R(0,2),mine=S.me.fac;const fs=[0,1,2,3,4].sort(()=>Math.random()-.5);
+if(k==0){let a=fs[0],b=fs[1];if(isAl(a,b)){QADD(fxBreak(a,b));QGO();return}QADD(fxPact(a,b))}
+else if(k==1)QADD(fxClash(fs[0],fs[1]));
+else{const f=fs.find(x=>x!==mine);if(f===undefined||mine<0)return;QADD(fxLure(f))}QGO()}
+function fxPact(a,b){const c=[0,1,2,3,4].find(x=>x!==a&&x!==b);const inv=S.me.fac===a||S.me.fac===b;return{t:`${facName(a)}與${facName(b)}兩派暗中結盟，要共同壓過${facName(c)}。`,o:[[inv?'順勢加入結盟':'向結盟兩派示好',()=>{S.fx.ally.push([a,b]);S.fp[a]=cl(S.fp[a]+4);S.fp[b]=cl(S.fp[b]+4);S.me.ally+=inv?5:2;facMem(a).concat(facMem(b)).forEach(n=>n.al=Math.min(100,(n.al||0)+(inv?3:1)));return'結盟已成，兩派的人對你多了幾分親近。'}],['暗中離間，破壞結盟（看心機）',()=>{if(P(.35+S.me.scheme/260)){S.fp[a]=cl(S.fp[a]-3);S.fp[b]=cl(S.fp[b]-3);S.me.scheme+=2;return'你的離間奏了效，結盟還沒成就散了。'}S.fx.ally.push([a,b]);S.me.ally=Math.max(0,S.me.ally-3);return'離間被人察覺，結盟反而更牢，你得罪了雙方。'}],['置身事外',()=>{S.fx.ally.push([a,b]);return'兩派結了盟，局勢又添一分變數。'}]]}}
+function fxBreak(a,b){return{t:`${facName(a)}與${facName(b)}的盟約出現裂痕，雙方領袖鬧得不可開交。`,o:[['居中調停（看人脈）',()=>{if(P(.4+S.me.ally/250)){S.me.ally+=4;S.me.favor+=2;return'你的調停暫時穩住了盟約，兩邊都欠你一個人情。'}S.me.favor-=2;return'你的話沒人聽，盟約終究是破裂了。'}],['順水推舟，落井下石',()=>{S.fx.ally=S.fx.ally.filter(p=>!((p[0]===a&&p[1]===b)||(p[0]===b&&p[1]===a)));S.fp[a]=cl(S.fp[a]-3);S.fp[b]=cl(S.fp[b]-3);S.me.scheme+=2;return'盟約破裂，兩派元氣各有損傷。'}]]}}
+function fxClash(a,b){const la=facLead(a),lb=facLead(b),na=la?(la===S.me?'你':la.n):'某人',nb=lb?(lb===S.me?'你':lb.n):'某人';return{t:`${facName(a)}的${na}與${facName(b)}的${nb}為了協理宮務之權當面爭執，各自拉人表態。`,o:[[`助${facName(a)}一臂之力（耗銀40）`,()=>{if(!pay(40))return'銀兩不足，只能作壁上觀。';S.fp[a]=cl(S.fp[a]+6);S.fp[b]=cl(S.fp[b]-4);facMem(a).forEach(n=>n.al=Math.min(100,(n.al||0)+4));facMem(b).forEach(n=>n.host=cl((n.host||0)+3));return`${facName(a)}一派占了上風，${facName(b)}的人記下了你的名字。`}],[`助${facName(b)}一臂之力（耗銀40）`,()=>{if(!pay(40))return'銀兩不足，只能作壁上觀。';S.fp[b]=cl(S.fp[b]+6);S.fp[a]=cl(S.fp[a]-4);facMem(b).forEach(n=>n.al=Math.min(100,(n.al||0)+4));facMem(a).forEach(n=>n.host=cl((n.host||0)+3));return`${facName(b)}一派占了上風，${facName(a)}的人記下了你的名字。`}],['出面調停（看人脈）',()=>{if(P(.35+S.me.ally/260)){S.me.ally+=4;return'兩邊各退一步，你成了雙方都敬重的人。'}S.me.favor-=2;return'你的調停被兩邊都看作多事。'}],['袖手旁觀',()=>'你不聲不響，看著兩派一爭高下。']]}}
+function fxLure(f){const l=facLead(f),nm=l?l.n:'一位領袖';return{t:`${facName(f)}派的${nm}遞來橄欖枝，希望你轉投門下。`,o:[['轉投該派',()=>{const old=S.me.fac;S.me.fac=f;S.fp[f]=cl(S.fp[f]+3);facMem(f).forEach(n=>n.al=Math.min(100,(n.al||0)+6));if(old>=0)facMem(old).forEach(n=>n.host=cl((n.host||0)+5));S.me.ally+=3;msPush&&msPush('轉投'+facName(f)+'派');return`你轉投${facName(f)}一派，新同伴熱情接納，舊同伴卻對你冷了臉。`}],['婉言謝絕',()=>{S.me.ally+=1;return'你客氣地謝過，對方也不以為意。'}],['假意周旋，打探虛實（看心機）',()=>{if(P(.4+S.me.scheme/220)){const a=ids();if(a.length)S.evid[a[R(0,a.length-1)]]=(S.evid[a[R(0,a.length-1)]]||0)+1;S.me.scheme+=2;return'你從對方的話裡套出了一條把柄。'}facMem(f).forEach(n=>n.host=cl((n.host||0)+2));return'你的心思被看穿，對方有些惱怒。'}]]}}
+function fxCard(){fxInit();const rows=[0,1,2,3,4].map(f=>{const l=facLead(f),mem=facMem(f).length+(S.me.fac===f?1:0),al=S.fx.ally.filter(p=>p[0]===f||p[1]===f).map(p=>facName(p[0]===f?p[1]:p[0]));return`<div class=k><b>${facName(f)}${S.me.fac===f?'（你所屬）':''}</b>　領袖：${l?(l===S.me?'你':l.n):'無'}・後宮成員 ${mem} 人${al.length?'・盟：'+al.join('、'):''}${abar('勢力',S.fp[f])}</div>`}).join('');
+return`<div class=cd data-open=0><h3>後宮派系</h3><div class=m>五個派系各有領袖與勢力，會結盟、反目、拉攏人。你的選擇會左右他們的消長。</div>${rows}</div>`}
+/* A3 皇帝人生線 */
+function emLog(x){S.el=S.el||[];S.el.unshift({t:S.t,x});if(S.el.length>12)S.el.pop();msPush&&msPush(x)}
+const ILL0=()=>({t:'皇上突發重病，太醫會診後面色凝重，宮中人心惶惶。',o:[['衣不解帶，日夜侍疾',()=>{S.me.favor+=8;S.me.hp=Math.max(3,S.me.hp-8);S.ill.act=1;return'你在榻前侍奉湯藥，皇上燒退時握著你的手，說了句「難為你」。'}],['薦一位民間名醫',()=>{if(P(.5)){S.ehp=cl(S.ehp+8);S.me.favor+=5;S.ill.act=1;return'名醫用了藥，皇上的病情有了起色。'}S.me.favor-=4;S.me.scand=(S.me.scand||0)+2;return'名醫的藥沒見效，有人說你「別有居心」。'}],['暗中打探病情與儲位',()=>{S.me.scheme+=3;if(P(.3)){S.me.favor-=3;return'你打探得太明顯，被人在背後議論。'}const a=ids();if(a.length)S.evid[a[R(0,a.length-1)]]=(S.evid[a[R(0,a.length-1)]]||0)+1;return'你摸清了各方動向，也多了一條把柄。'}]]});
+const ILL1=()=>({t:`皇上的病情反覆，${S.heir?'儲君'+S.heir.n+'日夜侍疾，':'儲位未定，'}朝野上下暗潮洶湧。`,o:[['率六宮祈福禳災',()=>{S.mood=cl(S.mood+3);if(P(.35)){S.ehp=cl(S.ehp+4);return'祈福之後，皇上的精神似乎好了些。'}return'祈福儀式辦得隆重，病情卻不見大起色。'}],[S.heir?'勸皇上交代後事，安定人心':'請皇上早定儲君',()=>{if(!S.heir){const all=S.me.kids.map(k=>[k,'me']).concat(...S.npcs.map((n,i)=>n.kids.map(k=>[k,i])));const c=all.filter(x=>x[0].sex=='男'&&yr(x[0])>=3).sort((a,b)=>sc(b[0])-sc(a[0]))[0];if(c&&P(.5)){S.heir=c[0];c[0].chong=cl(c[0].chong+12);if(c[1]==='me'){S.me.favor+=5}L(`病中的皇上下旨立${c[0].n}為儲君。`);emLog('皇上病中立儲：'+c[0].n);return'皇上強撐病體，立了儲君。朝局稍穩。'}}S.me.favor-=3;return'皇上不悅你在病中提起此事。'}],['靜候消息，不敢多言',()=>'你謹守本分，什麼也沒做。']]});
+const ILLEND=()=>({t:'皇上已是彌留之際，召皇后與重臣入殿，宮裡的燈火徹夜未熄。',o:[['守在殿外，靜候遺詔',()=>{S.dying=1;return'遺詔宣讀之時，滿宮縞素。'}],['趁亂為自己和子女謀劃',()=>{S.dying=1;S.me.scheme+=3;S.me.kids.forEach(k=>{k.pow=cl(k.pow+3)});if(P(.3)){S.me.favor-=5;return'你的小動作被人察覺，殿外的人看你的眼神變了。'}return'你在混亂中穩住了自己的人手。'}]]});
+const ABD=()=>({t:`皇上年事已高，有意禪位於儲君${S.heir.n}，自己退居太上皇。`,o:[['贊成禪位，為新君鋪路',()=>{S.abd=1;S.dying=1;const mine=S.me.kids.includes(S.heir);S.me.favor+=mine?8:2;S.me.ally+=2;return'皇上頷首，擇吉日傳位，朝野一片稱頌。'}],['勸皇上再主政幾年',()=>{S.me.favor+=1;S.ehp=cl(S.ehp+2);return'皇上笑說你這是捨不得他，禪位之事便擱下了。'}],['不表態',()=>{S.abd=1;S.dying=1;return'皇上自行決斷，傳位於儲君。'}]]});
+function emTick(){if(!S||S.reg||S.over)return;if(S.dying)return;
+if(S.illCd>0)S.illCd--;
+if(!S.ill){if(!(S.illCd>0)){const p=.002+(S.eage>=40?(S.eage-38)*.0012:0)+(S.ehp<55?.008:0);if(P(p)){S.ill={m:0,len:R(4,9),act:0};S.ehp=cl(S.ehp-12);emLog('皇上突發重病');QADD(ILL0());QGO();return}}
+if(S.eage>=58&&S.heir&&P(.01)){emLog('皇上有意禪位');QADD(ABD());QGO()}}
+else{const il=S.ill;il.m++;S.ehp=cl(S.ehp-2+(il.act?1:0));if(il.m%3==0&&il.m<il.len){QADD(ILL1());QGO()}
+if(il.m>=il.len){if(S.ehp<=8+R(0,14)){emLog('皇上病危');QADD(ILLEND());QGO()}else{S.ill=null;S.illCd=60;S.ehp=cl(S.ehp+14);emLog('皇上大病痊癒，重新臨朝');L('皇上病體漸愈，重新臨朝。')}}}}
+function emCard(){const age=S.eage,ry=(S.ry0||0)+Math.floor(S.t/12);return`<div class=cd data-open=0><h3>皇帝人生</h3><div class=m>${S.eage}歲・登基第 ${ry||1} 年・${EPS[S.ep][0]}</div>${abar('龍體',S.ehp)}<div class=m>儲君：${S.heir?S.heir.n+'（'+yr(S.heir)+'歲）':'尚未冊立'}${S.ill?'　<b>現正重病</b>':''}</div>${(S.el||[]).slice(0,6).map(e=>`<div class=k>第${Math.floor(e.t/12)+1}年　${e.x}</div>`).join('')||'<div class=m>目前沒有特別的大事。</div>'}</div>`}
+function edeath(){if(S.dying)return 0;const b=cl(Math.max(.0004,(S.eage-38)*.0008)+(60-S.ehp)/8000,0,.12);return S.ill?b+.01:b}
+/* A4 官職謀缺 */
+function vacEv(){if(!S.cr)return null;const sc=S.cr.filter(f=>f.gd>=4&&!f.yg&&POSTCAP[canon(f.role)]!==undefined&&POSTCAP[canon(f.role)]<=18);if(!sc.length)return null;const f=pk(sc),role=f.role,why=P(.5)?'年邁致仕':P(.5)?'病逝任上':'因事去職';
+const cs=S.cr.filter(g=>g!==f&&g.role!==role&&g.gd>=3&&g.gd<=f.gd+1).sort(()=>Math.random()-.5).slice(0,2).map(g=>({k:'c',g,l:`${g.role}${g.n}`,gd:g.gd,fac:g.fac}));
+const me=S.me;famInit(me);const fm=(me.fam||[]).filter(x=>!x.fr&&x.sx!=='女'&&x.bt!==undefined&&fAge(x)>=26&&fAge(x)<=60&&x.pw>=36&&!(x.job&&canon(x.job)===canon(role))).sort((a,b)=>b.pw-a.pw)[0];if(fm)cs.push({k:'f',x:fm,l:`你的${fm.rel}${fm.nm||''}`,gd:Math.min(7,Math.floor(fm.pw/13)),fac:me.fac});
+if(cs.length<2)return null;
+const cost=40,mk=c=>[`舉薦${c.l}（耗銀${cost}）`,()=>{if(!pay(cost))return'銀兩不足，沒人肯替你說話。';let best=null,bs=-1;const all=cs.concat([{k:'x',l:'朝中另一位資深大員',gd:f.gd,fac:R(0,4)}]);all.forEach(a=>{const bk=a===c?20+S.me.ally/6+S.me.favor/10+(a.fac===S.me.fac?8:0)+(a.k==='f'?-4:0):0;a.s=a.gd*8+R(0,26)+bk+(S.fp[a.fac]-50)/6;if(a.s>bs){bs=a.s;best=a}});
+const old=role+f.n;
+if(best===c){if(c.k==='c'){S.cr.splice(S.cr.indexOf(f),1);c.g.role=role;c.g.gd=Math.max(c.g.gd,f.gd);c.g.lo=cl(c.g.lo+8);S.fp[c.g.fac]=cl(S.fp[c.g.fac]+3);S.me.ally+=3;S.chl&&S.chl.unshift({t:S.t,x:`${old}${why}，${c.l}接任${role}`});L(`前朝・${old}${why}，${c.l}在你舉薦下接任${role}。`);return`你舉薦的${c.l}拔得頭籌，${role}之位落入他手，他欠了你一份人情。`}
+else{if(!jobRoom(role,c.x)){return`${c.l}眼看就要得缺，卻因${role}名額已滿作罷。`}S.cr.splice(S.cr.indexOf(f),1);c.x.job=role;c.x.gd=Math.min(7,Math.max(c.x.gd||0,f.gd));c.x.pw=cl(c.x.pw+8);me.fam.forEach(y=>y.pw=cl(y.pw+3));msPush&&msPush(`${c.l}出任${role}`);L(`前朝・${old}${why}，你的${c.x.rel}${c.x.nm||''}補了${role}之缺。`);return`${c.l}終於補上${role}一缺，母家聲勢為之一振。`}}
+S.me.favor-=1;if(best.k==='c'){S.cr.splice(S.cr.indexOf(f),1);best.g.role=role;best.g.gd=Math.max(best.g.gd,f.gd);L(`前朝・${old}${why}，${best.l}接任${role}。`);return`${best.l}得了這個缺，你舉薦的人落了空。`}
+swapHolder(f,Math.max(3,f.gd-1),'（'+why+'）');L(`前朝・${old}${why}，皇上另擢${f.n}接任${role}。`);return`皇上另擢了一位大員補缺，你舉薦的人落了空。`}];
+return{t:`${old(f)}${why}，${role}一缺出，朝中各方都在爭。`,o:cs.map(mk).concat([['不插手，靜觀其變',()=>{swapHolder(f,Math.max(3,f.gd-1),'（'+why+'）');L(`前朝・${role}${why}，皇上另擢${f.n}接任。`);return`${role}缺由皇上另行擢補。`}]])};function old(f){return f.role+f.n}}
+function vacTick(){if(!S||S.reg||S.over||!S.cr)return;if(S.t>6&&P(.035)){const e=vacEv();if(e){QADD(e);QGO()}}}
+const _mdA=mend;mend=function(){const r=_mdA.apply(this,arguments);try{if(S&&S.me&&!S.over){if(S.dying&&!S.reg){S.dying=0;S.ill=null;if(S.abd)S.eage+=0;if(!S.scn){succ();return r}}relTick();fxTick();emTick();vacTick()}}catch(e){console.log('bigA',e)}return r};
+
+/* ===== 擴充B：名冊排序篩選・新手提示・大事年表 ===== */
+try{document.head.insertAdjacentHTML('beforeend','<style>.rbar{display:flex;gap:8px;align-items:center;margin:6px 0}.rbar select{flex:0 0 auto;padding:8px 10px;border-radius:12px;border:1px solid #e8c9b8;background:#fffaf5;color:inherit;font-size:13px}.rbar input{flex:1;min-width:0}.rcnt{font-size:12px;opacity:.7;margin:2px 2px 6px}.cscr{display:flex;gap:6px;overflow-x:auto;white-space:nowrap;padding-bottom:4px;-webkit-overflow-scrolling:touch}.cscr .chip{flex:0 0 auto}.tip{position:relative;margin:8px 0;padding:10px 12px;border-radius:14px;background:rgba(255,246,222,.92);border:1px solid rgba(214,170,90,.55);font-size:13px;line-height:1.6;color:#5b4120}.tip b{color:#8a5a12}.tip .tb{display:flex;gap:8px;margin-top:6px}.tip button{padding:4px 12px;font-size:12px;min-height:30px}.tl{font-size:13px;line-height:1.7}.tl .y{font-weight:700;margin-top:6px;opacity:.85}.tl .e{padding-left:8px;border-left:2px solid rgba(190,120,90,.4)}.tl .i{display:inline-block;min-width:22px;text-align:center;font-size:11px;border-radius:99px;background:rgba(190,120,90,.18);margin-right:6px;padding:0 4px}</style>')}catch(e){}
+/* 名冊：排序＋篩選 */
+function rowT(n){const me=n===S.me,q=S.rel&&S.rel[n.n];return `${n.name||n.n} ${me?'你 主角':''} ${n.st||RK[n.rank]} ${me&&S.reg?S.reg.title:RKD(n)} ${FAC[n.fac]} ${n.rank>=5?'高位':n.rank>=3?'中位':'低位'} ${n.preg?'有孕':''} ${n.kids.length?'有子嗣':''} ${n.kf&&kfOf(n)?'官家之女 '+kfOf(n).role+kfOf(n).n:''} ${!me&&(n.al||0)>=40?'盟友':''} ${!me&&((n.host||0)>=55||(q&&q.g>=6))?'對頭':''} ${!me&&(n.favor||0)>=65?'得寵':''} ${!me&&(n.favor||0)<=20&&!n.st?'失寵':''} ${n.st?'已故廢黜':''}`}
+const SORTS=[['位份高低',(a,b)=>b.rank-a.rank||b.favor-a.favor],['聖寵',(a,b)=>b.favor-a.favor],['盟友度',(a,b)=>(b.al||0)-(a.al||0)],['敵意',(a,b)=>(b.host||0)-(a.host||0)],['年齡（長→幼）',(a,b)=>(nAge(b)||0)-(nAge(a)||0)],['母族勢力',(a,b)=>((b.pow===undefined?b.clan:b.pow)||0)-((a.pow===undefined?a.clan:a.pow)||0)],['子女數',(a,b)=>b.kids.length-a.kids.length]];
+function rosSort(v){(FQ.roster=FQ.roster||{q:'',c:''}).s=+v;render()}
+function rosterHTML(){const m=S.me,all=S.npcs.map((n,i)=>[n,i]).concat([[m,'me']]),f=FQ.roster||{q:'',c:''},sx=SORTS[f.s||0];
+all.sort((a,b)=>(!!a[0].st-!!b[0].st)||sx[1](a[0],b[0]));
+const chips=['你','有孕','有子嗣','高位','中位','低位','官家之女','盟友','對頭','得寵','失寵'].concat(FAC);
+return`<div class=fbar data-fk=roster><div class=rbar><input type=search placeholder="搜尋姓名／位份／派系" value="${(f.q||'').replace(/"/g,'')}" oninput="fq('roster','q',this.value)"><select onchange="rosSort(this.value)" aria-label="排序">${SORTS.map((s,i)=>`<option value=${i}${(f.s||0)===i?' selected':''}>${s[0]}</option>`).join('')}</select></div><div class=cscr>${chips.map(c=>`<button class="chip${f.c===c?' on':''}" onclick="fqc('roster','${c}')">${c}</button>`).join('')}</div></div><div class=rcnt id=rcnt></div><div data-list=roster>`+all.map(([n,i])=>ROW(n,i)).join('')+`</div>`}
+const _faB=fApply;fApply=function(){_faB.apply(this,arguments);try{const b=document.querySelector('[data-list=roster]'),c=document.getElementById('rcnt');if(b&&c){const it=b.querySelectorAll(':scope>[data-i]');let v=0;it.forEach(x=>{if(x.style.display!=='none')v++});c.textContent=`顯示 ${v}／${it.length} 人`}}catch(e){}};
+/* 年表 */
+const TLK=/你晉封|你被降|你的位份|入宮為|誕下|生下|冊為|皇上立|立.{0,6}為儲君|儲君|病逝|駕崩|登基|禪位|病危|痊癒|國破|亡國|內戰|戰事|抄家|賜死|流亡|廢為|打入冷宮|晉為皇|晉為貴|晉為妃|派系|轉投|主線/;
+const _lbB=lbSync;lbSync=function(){const before=S._ll,rr=S._lr;_lbB.apply(this,arguments);try{const add=[];for(const s of S.log){if(s===before)break;add.push(s)}add.reverse().forEach(x=>tlAdd(x));if(S.res&&S.res!==rr)tlAdd(S.res)}catch(e){}};
+function tlAdd(x){if(typeof x!=='string'||!TLK.test(x))return;x=x.replace(/<[^>]+>/g,'').slice(0,80);S.tl=S.tl||[];if(S.tl.some(e=>e.t===S.t&&e.x===x))return;S.tl.push({t:S.t,x});if(S.tl.length>160)S.tl.splice(1,1)}
+const tlIc=x=>/晉|位份|冊為|降|冷宮|廢/.test(x)?'位':/誕下|生下|皇子|公主|儲君|夭折/.test(x)?'嗣':/駕崩|登基|禪位|病危|痊癒|皇上/.test(x)?'帝':/戰|亡國|內戰|國破|流亡/.test(x)?'邦':/派系|轉投/.test(x)?'派':'事';
+function tlList(){const a=(S.tl||[]).slice();(S.ms||[]).forEach(e=>{if(!a.some(y=>y.x===e.x))a.push({t:e.t,x:e.x})});a.sort((p,q)=>p.t-q.t);return a}
+function tlHTML(lim){const a=tlList();if(!a.length)return'<div class=m>目前還沒有大事。</div>';const sh=lim?a.slice(-lim):a;let y=-1,h='<div class=tl>';sh.forEach(e=>{const yy=Math.floor(e.t/12)+1;if(yy!==y){y=yy;h+=`<div class=y>第 ${yy} 年</div>`}h+=`<div class=e><span class=i>${tlIc(e.x)}</span>${e.x.replace(/[。！]$/,'')}</div>`});return h+'</div>'}
+function tlCard(){return`<div class=cd data-open=0><h3>本局大事年表　${tlList().length} 件</h3>${tlHTML(24)}${tlList().length>24?'<div class=m style="margin-top:4px">僅顯示最近 24 件，完整年表會出現在結局頁。</div>':''}</div>`}
+const _ecB=endCard;endCard=function(){let r=_ecB.apply(this,arguments);try{const a=tlList();if(a.length)r+=`<div class=m style="margin:8px 0 4px"><b>本局年表</b></div>`+tlHTML(0)}catch(e){}return r};
+/* 新手提示 */
+const TIPS=[['act',0,s=>s.t===0,'每個月有 <b>4 次行動</b>，點分組標題可展開或收起。4 次用完，這個月就過去了。'],['stat',0,s=>s.t>=1,'<b>聖寵</b>歸零會被打入冷宮。先顧好聖寵、人脈與健康，再想晉位。'],['roster',1,s=>true,'名冊可以<b>搜尋、排序、篩選</b>；最上面的「後宮編制」會顯示各位份的名額，滿編就晉不上去。'],['kids',2,s=>s.me.kids.length>0,'孩子的才、德、寵、勢、孝決定能否被立為儲君，記得多花心思教養。'],['court',3,s=>true,'前朝官員與後宮息息相關：官員之女在宮中，盛衰會牽動父族。'],['fac',3,s=>s.t>=6,'五個派系會結盟、反目、拉攏人。遇到相關事件時，你的選擇會左右它們的消長。'],['save',0,s=>s.t>=12,'遊戲會自動存檔。換檔案或換瀏覽器前，記得到「紀事」分頁做<b>完整備份</b>。']];
+function tipSeen(){try{return JSON.parse(stg.get('hg_tips')||'[]')}catch(e){return[]}}
+function tipOk(id){const a=tipSeen();if(id==='*')TIPS.forEach(t=>{if(!a.includes(t[0]))a.push(t[0])});else if(!a.includes(id))a.push(id);stg.set('hg_tips',JSON.stringify(a));render()}
+function tipHTML(){if(!S||S.over||S.ev||S.scn)return'';const a=tipSeen(),t=TIPS.find(x=>x[1]===TAB&&!a.includes(x[0])&&x[2](S));if(!t)return'';return`<div class=tip><b>小提示</b>　${t[3]}<div class=tb><button class=s onclick="tipOk('${t[0]}')">知道了</button><button class="s" onclick="tipOk('*')">不再提示</button></div></div>`}
+/* 掛入各分頁 */
+const _rdB=render;render=function(){const r=_rdB.apply(this,arguments);try{if(!S||!S.me||S.over)return r;const mn=document.querySelector('#app main');if(!mn)return r;const tp=tipHTML();if(tp)mn.insertAdjacentHTML('afterbegin',tp);
+if(TAB==3&&!S.reg)mn.insertAdjacentHTML('beforeend',fxCard());
+if(TAB==4)mn.insertAdjacentHTML('afterbegin',(S.reg?'':emCard())+tlCard());
+}catch(e){console.log('bigB',e)}return r};
+
+/* ===== 擴充C：蕃國陪嫁・省親・王子來朝；四種新出身與專屬主線 ===== */
+const PBR=[['譯官','通曉母國與漢語，替你傳話'],['貼身侍女','自小服侍你，一路陪嫁來朝'],['護衛長','母國勇士，負責護衛你的安全'],['乳母','看著你長大，是你最信任的人']],PBT=['忠心耿耿','思鄉情切','精明能幹','沉默寡言','貪圖小利','性情剛烈'];
+function pbInit(){if(!S||!S.me||!S.me.fo||S.pb)return;S.pb=[0,1,2].map(i=>{const r=PBR[i===0?0:pk([1,2,3])];return{n:SUR[R(0,SUR.length-1)]+pk(GIV),r:r[0],d:r[1],tr:pk(PBT),lo:R(55,90)}});const u=[];S.pb=S.pb.filter(x=>{if(u.includes(x.r))return false;u.push(x.r);return true});S.pb.forEach(x=>{x.n=S.me.fo+'人'+x.n.slice(-1)+pk(['娜','雅','蘭','珠','布','拉'])})}
+function pbHTML(){const a=S.pb;if(!a||!a.length)return'';return`<div class=m style="margin-top:6px"><b>陪嫁隨從</b></div>`+a.map(x=>`<div class=k>${x.n}・${x.r}（${x.tr}）<span class=m style="float:right">忠誠 ${x.lo|0}</span><br><span class=m>${x.d}</span></div>`).join('')}
+const pbE=()=>{const a=(S.pb||[]);if(!a.length)return null;return a[R(0,a.length-1)]};
+FRE.push(()=>{const x=pbE();if(!x)return null;return{t:`陪嫁來的${x.r}${x.n}近來悶悶不樂，${x.tr==='思鄉情切'?'整日望著母國的方向發呆':'做事也有些心不在焉'}。`,o:[['賞銀撫慰，好言相勸（耗銀20）',()=>{if(!pay(20))return'銀兩不足。';x.lo=cl(x.lo+8);return`${x.n}收下賞賜，眼眶發紅，說會一輩子跟著你。`}],['放她回母國，成全思鄉之情',()=>{S.pb=S.pb.filter(y=>y!==x);S.fr.rel=cl(S.fr.rel+2);S.me.ally=Math.max(0,S.me.ally-1);return`你放${x.n}回母國，她哭著跪謝。你身邊少了一個可信的人。`}],['嚴詞責備，要她收斂',()=>{x.lo=cl(x.lo-10);return`${x.n}低頭認錯，但臉上有些怨色。`}]]}});
+FRE.push(()=>{const x=pbE();if(!x||x.lo>=70)return null;return{t:`宮裡有人買通了你的${x.r}${x.n}，打探你與母國往來的書信。`,o:[['查明並嚴辦',()=>{S.pb=S.pb.filter(y=>y!==x);S.me.scheme+=2;S.me.silver+=30;return`你查出此事，將${x.n}逐出，順藤摸瓜還抄得一筆銀子。`}],['將計就計，餵她假消息（看心機）',()=>{if(P(.4+S.me.scheme/200)){x.lo=cl(x.lo-5);S.me.favor+=3;const a=ids();if(a.length)S.evid[a[R(0,a.length-1)]]=(S.evid[a[R(0,a.length-1)]]||0)+1;return'假消息傳了出去，對方露出馬腳，你抓到一條把柄。'}S.me.favor-=3;S.me.scand=(S.me.scand||0)+2;return'你的圈套被識破，反倒傳出你與母國私通的閒話。'}],['訓誡一番，既往不咎',()=>{x.lo=cl(x.lo+3);return`${x.n}痛哭流涕，保證再不敢了。`}]]}});
+FRE.push(()=>{if(!S.pb||!S.pb.length)return null;const x=S.pb.find(y=>y.r==='護衛長');if(!x)return null;return{t:`護衛長${x.n}在宮中與侍衛起了衝突，雙方都要你給個說法。`,o:[['護短，說是侍衛無禮',()=>{x.lo=cl(x.lo+6);S.me.ally=Math.max(0,S.me.ally-2);return'你維護了自己人，但宮中侍衛對你頗有微詞。'}],['公開責罰，賠禮道歉',()=>{x.lo=cl(x.lo-6);S.me.favor+=2;S.me.ally+=2;return'你的公正贏得了不少好感，護衛長卻有些委屈。'}],['私下調解（耗銀20）',()=>{if(!pay(20))return'銀兩不足。';S.me.ally+=1;return'雙方各退一步，事情平息了。'}]]}});
+FRE.push(()=>{if(S.fr.dead||S.fr.war)return null;return{t:`母國${S.fr.n}的王子隨使團來朝，私下求見你，想求娶皇朝的一位郡主，以結秦晉之好。`,o:[['在皇上面前促成這門親事',()=>{if(P(.4+S.fr.rel/250+S.me.favor/400)){S.fr.rel=cl(S.fr.rel+12);S.fr.pw=cl(S.fr.pw+2);S.me.favor+=3;S.me.silver+=80;msPush&&msPush('促成了與'+S.fr.n+'的聯姻');return'皇上准了這門親事，母國王子歡天喜地，厚厚地謝了你。'}S.fr.rel=cl(S.fr.rel-4);S.me.favor-=2;return'皇上認為門第不配，婉拒了求親，王子悻悻而歸。'}],['委婉勸王子打消念頭',()=>{S.fr.rel=cl(S.fr.rel-3);S.me.favor+=1;return'王子有些失望，但理解你的難處。'}],['只轉達，不表態',()=>{if(P(.5)){S.fr.rel=cl(S.fr.rel+3);return'皇上自有主張，親事沒有下文，也沒傷了和氣。'}return'此事不了了之。'}]]}});
+FRE.push(()=>{const m=S.me;if(S.fr.dead||S.fr.war||m.rank<4||S.t<24||(S.fr.vis&&S.t-S.fr.vis<60))return null;return{t:`母國${S.fr.n}來信，說母后思女成疾，盼你能回國省親一趟。`,o:[['請旨省親（需皇上恩准）',()=>{if(P(.35+m.favor/220+S.fr.pw/400)){S.fr.vis=S.t;m.favor=Math.max(0,m.favor-8);S.fr.rel=cl(S.fr.rel+8);S.fr.stab=cl(S.fr.stab+3);m.fam.forEach(x=>x.pw=cl(x.pw+8));m.silver+=100;msPush&&msPush('回母國省親');return'皇上准你回國省親。你在母國受到盛大歡迎，帶回不少禮物，但離宮數月，皇上對你冷淡了些。'}m.favor-=3;return'皇上以「後宮無出京之例」為由婉拒，你只好寫信安慰母親。'}],['送禮與家書，不回國',()=>{if(!pay(30))return'銀兩不足，只寄了一封家書。';S.fr.rel=cl(S.fr.rel+2);return'你備了厚禮，連同家書一併送回，母親回信說已安心。'}]]}});
+/* ----- 四種新出身 ----- */
+GS.push(['宗室郡主','親王之女，身份尊貴，被指婚入宮。起始即為妃，但宗室人情與皇權猜忌如影隨形。聖寵＋2、人脈＋10。起始位份：妃',{s:140,a:10,sc:4,r:5,f:2,e:4},[['父王','和碩親王',75,60,70],['母親','親王福晉',30,55,90],['兄長','貝勒',50,60,75],['妹妹','待字郡主',20,50,90]],3,4]);
+GS.push(['女官出身','原是尚宮局女官，識字明理、長於宮務，被皇上看中。心機＋12。起始位份：常在',{s:25,a:14,sc:12,hp:3,r:1,f:6},[['父親','舉人',10,60,85],['母親','織戶',3,40,95]],3,1]);
+GS.push(['女醫出身','醫官世家之女，被召入宮為醫女，因救治有功得皇上留意。健康＋10，通曉藥理。起始位份：答應',{s:30,a:8,sc:10,hp:10,r:0,f:6},[['父親','太醫院院判',35,70,80],['兄長','藥鋪掌櫃',10,55,85]],3,1]);
+GS.push(['江湖女子','江湖賣藝的俠女，被微服出巡的皇上所救，帶回宮中。健康＋15、心機＋8，毫無家世，宮中人視你為異類。起始位份：常在',{s:20,a:2,sc:8,hp:15,r:1,f:12,e:-8,jn:1},[['師父','江湖鏢頭',8,55,70],['義兄','鏢師',5,50,85]],3,-1]);
+Object.assign(PLN,{clan:'宗室暗流',career:'尚宮之路',heal:'醫案風波',wander:'江湖舊事'});
+Object.assign(PLD,{clan:{k:'宗室暗流',d:'宗室與朝臣的角力牽動你的娘家，每一步都要小心。',a:['宗室家書','宗人府問案','堂弟求官','郡主指婚','表態之時']},career:{k:'尚宮之路',d:'從女官到執掌宮務，你的才幹與出身都在被人審視。',a:['掌事之爭','帳目疑雲','內務府刁難','舊同僚相求','六宮總管']},heal:{k:'醫案風波',d:'你的醫術救人，也招來猜忌，宮中人人想借你的手。',a:['救治嬪妃','藥材被換','鳳體違和','被誣用藥','為帝診脈']},wander:{k:'江湖舊事',d:'江湖與宮牆之間，你的過去終究要有個交代。',a:['師父病重','身手被疑','宮中鬧賊','仇家尋來','身世揭曉']}});
+function plOrg(){const n=(GS[G]||[''])[0]||'';return/公主/.test(n)?'envoy':n=='罪臣之女'?'revenge':n=='宮女出身'?'maid':/商賈|鹽商/.test(n)?'trade':/評彈|書香/.test(n)?'art':n=='宗室郡主'?'clan':n=='女官出身'?'career':n=='女醫出身'?'heal':n=='江湖女子'?'wander':null}
+PLT.clan=[
+p=>EV(p,'親王府送來家書，說兄長與幾位貝勒走得很近，皇上似有耳聞。',[O('寫信勸兄長低調','ally:2','兄長回信答應收斂。',{}),O('藉機結交宗室女眷','ally:4,scand:2','你與幾位宗室女眷往來更密。',{}),O('主動向皇上說明','favor:3','皇上對你的坦誠頗為滿意。',{})]),
+p=>EV(p,'宗人府查到有人私議皇位繼承，風聲牽扯到你的娘家。',[O('主動與娘家切割','favor:5,fam:-8','皇上讚你識大體，母家卻有些寒心。',{f:{c:1}}),O('替娘家說情','',`皇上聽了你的陳情，沒有再追究。`,{pr:()=>.4+S.me.favor/250,be:'favor:-8,scand:6',bt:'皇上冷冷地說後宮不得干預宗室事務。'}),O('暗中調查源頭','scheme:3,ev:1','你查到了一些線索。',{})]),
+p=>EV(p,'你的堂弟向你求助，想在朝中謀個差事。',[O('舉薦他（耗銀30）','fam:4,ally:2','他謝你提攜，也記下了這份人情。',{c:30}),O('婉拒','favor:1','你不願捲入，堂弟有些失望。',{}),O('推給皇上定奪','favor:2','皇上沒有表態，卻記得你的分寸。',{})]),
+p=>EV(p,'皇上有意將一位郡主指婚給藩王，名單裡有你的妹妹。',[O('設法讓妹妹免於遠嫁（耗銀50）','','皇上收回了成命，妹妹留在京中。',{c:50,pr:.55,be:'favor:-4',bt:'皇上不肯收回成命，妹妹仍要遠嫁。'}),O('順從聖意，換取皇上好感','favor:6,fam:-3','皇上滿意你的懂事，妹妹卻要遠赴他鄉。',{}),O('暗中替妹妹物色良配','ally:3','你為妹妹尋了個可靠的人家。',{})]),
+p=>EV(p,'宗室與朝中重臣的矛盾終於擺上檯面，皇上要你表態。',[O('站在皇上這一邊','favor:10','皇上很滿意你的忠心。',{end:1,res:'忠於皇上',sc:8}),O('為宗室請命','ally:8,fam:12','宗室對你感激不盡。',{pr:.4,be:'favor:-12,scand:8',bt:'皇上認為你與宗室過從太密。',end:1,res:'宗室為重',bres:'引來猜忌',sc:5,bsc:1}),O('明哲保身，不發一言','hp:2','你選擇置身事外。',{end:1,res:'置身事外',sc:4})])];
+PLT.career=[
+p=>EV(p,'尚宮局缺一名掌事，你被推舉，但有人說你「出身不正」。',[O('憑實績自薦','scheme:2','你拿出過往的帳目與差事，眾人無話可說。',{pr:.6,be:'favor:-2',bt:'你的資歷還不夠，這次落選了。'}),O('私下託人說項（耗銀30）','ally:3','幾位老嬤嬤替你說了話。',{c:30}),O('謙讓不爭','favor:1','你婉拒了推舉，反得了一個好名聲。',{})]),
+p=>EV(p,'內務府的帳目對不上，有人想把虧空推到你頭上。',[O('連夜查帳，找出真兇','scheme:4,ev:1','你查出了帳目作假的人，順手抓到一條把柄。',{pr:()=>.45+S.me.at.iq/250,be:'favor:-6,scand:6',bt:'你沒能查清，反被人抓了把柄。'}),O('稟告上司，請求徹查','favor:2','上司記下了你的坦蕩。',{}),O('悄悄補上虧空（耗銀50）','','你默默填了窟窿，事情不了了之。',{c:50})]),
+p=>EV(p,'內務府總管有意刁難你，派了一堆苦差事給你。',[O('忍氣吞聲，把差事辦漂亮','scheme:2,hp:-3','你的差事辦得滴水不漏，總管也挑不出毛病。',{}),O('向皇后或太后告狀','ally:-1','上頭只說讓你們自己協調。',{pr:.4,e:'favor:3',be:'favor:-4',bt:'上頭嫌你多事，反責備了你。'}),O('送上厚禮（耗銀40）','ally:3','總管收下禮物，態度緩和了不少。',{c:40})]),
+p=>EV(p,'昔日同僚來求你，想託你調去輕鬆些的差事。',[O('盡力幫她（耗銀20）','ally:4','她感激涕零，成了你的人脈。',{c:20}),O('秉公拒絕','favor:2','你不徇私情，同僚雖有怨言，上司卻很欣賞。',{}),O('藉機收她為心腹','ally:2,scheme:2','你將她收在身邊，多了一雙耳目。',{})]),
+p=>EV(p,'皇上有意讓你協理六宮事務，朝中有人反對「女官出身掌宮」。',[O('立下規矩，以事證人','favor:8,scheme:3','你的章程條理分明，連反對的人也服氣。',{pr:.55,be:'favor:-6,scand:4',bt:'你的章程被人挑出毛病，皇上有些失望。',end:1,res:'協理六宮',bres:'功虧一簣',sc:8,bsc:2}),O('謙辭，保持低調','hp:3','你婉拒了這份重責。',{end:1,res:'功成身退',sc:4}),O('聯合眾人推舉','ally:6','你拉攏了足夠多的人，皇上順水推舟。',{end:1,res:'眾望所歸',sc:6})])];
+PLT.heal=[
+p=>EV(p,'一位低位嬪妃病重，太醫束手無策，聽說你懂醫理，求你一試。',[O('全力救治','hp:-3','你熬了幾個通宵，她終於脫險。',{pr:()=>.55+S.me.hp/300,be:'scand:6',bt:'她的病情沒有起色，有人說是你延誤了。',f:{h:1}}),O('推薦太醫院的人','ally:1','你把人推薦給了太醫院，不沾這份麻煩。',{}),O('婉拒，說自己不敢逾矩','','你不想落人口實。',{})]),
+p=>EV(p,'你發現一味藥被人換成了相剋的藥材，有人想借你之手害人。',[O('暗中查明真相','scheme:3,ev:1','你順著藥渣查到了動手的人。',{}),O('稟報皇上','favor:4,ally:-2','皇上下令徹查，你贏得了信任，也得罪了人。',{}),O('裝作不知，不聲張','','你把藥偷偷換了回來，沒有聲張。',{})]),
+p=>EV(p,'皇后（或太后）鳳體違和，傳你入內診治。',[O('如實診治，據實稟告','favor:3,ally:2','你的診斷準確，贏得了她的信任。',{pr:.6,be:'favor:-4',bt:'你的診斷與太醫相左，一時被人質疑。'}),O('只開溫補的方子，求穩','ally:1','方子平穩，沒有功過。',{}),O('趁機示好，結下恩情','ally:4,favor:2','你細心照料，她記下了這份情。',{})]),
+p=>EV(p,'有人誣你用藥害人，要你當眾自證清白。',[O('當面驗藥，以理服人','scheme:2','你當眾驗明了藥材，洗清了嫌疑。',{pr:()=>.5+S.me.hp/250,be:'favor:-8,scand:8',bt:'你沒能自證清白，被禁足數日。'}),O('請太醫院公斷（耗銀40）','ally:2','太醫們一致認為你無過。',{c:40}),O('反查誣告之人','scheme:3,ev:2','你反查出了誣告者的把柄。',{pr:.45,be:'favor:-4',bt:'你的反擊被人看破，局面更被動。'})]),
+p=>EV(p,'皇上龍體欠安，召你入殿診脈。',[O('獻上祖傳方，大膽一試','favor:12','皇上服下藥後精神大振，賞賜豐厚。',{pr:()=>.45+S.me.at.iq/300,be:'favor:-10,scand:8',bt:'藥效不如預期，你被指「冒進」。',end:1,res:'名醫入宮',bres:'冒進受挫',sc:9,bsc:1}),O('如實稟告病情，不敢妄動','favor:6','你的直言讓皇上多了一分敬重。',{end:1,res:'直言不諱',sc:6}),O('推薦太醫院聖手，自己退居其次','ally:3','你保全了自己，也成全了他人。',{end:1,res:'功成身退',sc:4})])];
+PLT.wander=[
+p=>EV(p,'昔日江湖舊友託人遞話，說你的師父病重。',[O('派人送銀兩（耗銀30）','ally:2','師父收到銀兩，託人回話說他很欣慰。',{c:30}),O('寫一封家書','','你寫了封信，說自己在宮中一切安好。',{}),O('不理會，斬斷過往','scheme:2','你告訴自己，過去的已經過去了。',{})]),
+p=>EV(p,'宮中有人察覺你身手不凡，暗中盤問你的來歷。',[O('坦然相告江湖出身','favor:1','你直言不諱，對方反倒不好再追問。',{pr:.6,be:'scand:6',bt:'你的坦白被人添油加醋傳了出去。'}),O('隱瞞身世，含糊其辭','scheme:2','你把話題岔開，對方起了疑心。',{pr:.5,be:'scand:5',bt:'你的含糊讓人更加懷疑。'}),O('反問對方的來意','scheme:1','你反客為主，對方有些尷尬。',{})]),
+p=>EV(p,'深夜宮裡鬧賊，你本能地察覺了動靜。',[O('出手制住賊人','hp:-4','你一出手便制住了賊人，侍衛們目瞪口呆。',{pr:.6,e:'favor:6,ally:2',be:'scand:4,hp:-6',bt:'賊人逃脫，你反倒被人問你為何深夜在外。'}),O('通知侍衛，自己不出面','favor:2','你只提醒了侍衛，保持低調。',{}),O('裝作沒聽見','','你翻了個身，繼續睡去。',{})]),
+p=>EV(p,'江湖仇家尋到京城，傳話要你出宮一見。',[O('單刀赴會','hp:-5','你赴了約，把恩怨了結。',{pr:()=>.5+S.me.hp/250,be:'hp:-10,scand:6',bt:'你受了傷，還被人看到偷偷出宮。'}),O('告知侍衛，借朝廷之力','favor:4,ally:-2','仇家被侍衛拿下，但江湖上有人說你背信。',{}),O('置之不理','','你不予理會，仇家也不敢闖宮。',{})]),
+p=>EV(p,'你的江湖身世被人翻了出來，皇上召你問話。',[O('如實相告，坦蕩面對','favor:8','你一五一十地說了過往，皇上反而更欣賞你的真性情。',{pr:.6,be:'favor:-8,scand:6',bt:'皇上對你的出身心存芥蒂。',end:1,res:'坦蕩做人',bres:'嫌隙難平',sc:8,bsc:1}),O('請皇上念在救命之恩','favor:4','皇上想起舊事，神色柔和了些。',{pr:.5,be:'favor:-6',bt:'皇上說恩是恩，法是法。',end:1,res:'恩義為憑',bres:'恩情不再',sc:6,bsc:1}),O('以退為進，自請降位','favor:3,scheme:2','你自請降位，皇上反而不忍。',{end:1,res:'以退為進',sc:4})])];
 
 /* ===== 編制人物多樣化：宮中執事・官女子有名字、性情、籍貫，會告老、調任、被選中 ===== */
 const OFS=['李','張','王','劉','趙','孫','錢','周','吳','鄭','馮','陳','褚','衛','蔣','沈','韓','楊','朱','秦','尤','許','何','呂','施','曹','嚴','華','金','魏'],
