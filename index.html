@@ -2946,6 +2946,17 @@ if(document.addEventListener)document.addEventListener('click',e=>{const h=e.tar
 /* 動作按鈕簡短說明 */
 const SHORT={'經營產業':'開鋪子、整頓、賣官','獻藝邀寵':'聖寵＋＋','結交外臣':'結交前朝官員','資助母家':'資助家人，增母族勢力','差遣下人':'打探、送禮、打點','管教下人':'賞罰、調任、遣散','招募宮人':'向內務府要人','暗中設計':'流言、蒐證、下毒','結盟拉攏':'贈禮化敵為友','傳書母家':'資助或差遣家人'};
 ACT.forEach(a=>{if(SHORT[a[0]])a[1]=SHORT[a[0]]});
+/* ===== 產業卡片內直接操作 ===== */
+ACTCAT[1][1]=ACTCAT[1][1].filter(i=>i!==0);
+function BZ(i){if(!S||S.ch||S.over||S.scn||S.ev)return;const m=S.me;if([1,2,3,4,6].includes(i)&&!m.shops.length){S.res='你還沒有鋪子，先「開設新鋪」。';render();return}
+S.res=null;const b=m.favor;bizAct();const o=S.ch&&S.ch.o[i];S.ch=null;if(!o)return render();o.f();adj(b);fix();if(S.over)return;S.ch?render():spend()}
+const BZB=[['開設新鋪','本錢40兩起，有風險'],['整頓經營','提升經營度'],['宣傳造勢','耗銀15，熱度＋'],['擴建升級','最高5級'],['查賬防弊','耗銀5，防貪墨'],['賣官鬻爵','聖寵≥50，風險高'],['特殊經營','情報、殺手、通商']];
+const _upU=uiPost;uiPost=function(){_upU.apply(this,arguments);try{if(TAB!=0||!S||S.over||S.reg||S.scn)return;const main=document.querySelector('#app main');if(!main)return;const c=[...main.querySelectorAll(':scope>.cd')].find(x=>x.firstElementChild&&/^產業/.test(x.firstElementChild.textContent));if(!c||c.querySelector('.bzg'))return;
+c.classList.add('actcat');const hero=main.querySelector('.cd.hero');if(hero)main.insertBefore(c,hero);
+const g=document.createElement('div');g.className='g bzg';g.style.marginTop='10px';g.innerHTML=BZB.map((b,i)=>`<button onclick="BZ(${i})">${b[0]}<small>${b[1]}</small></button>`).join('');c.appendChild(g);
+const h=c.firstElementChild;if(!h.querySelector('em')){const e=document.createElement('em');e.textContent=S.me.shops.length+'間鋪子';h.insertBefore(e,h.querySelector('.fa'))}}catch(e){console.log('uiPost2',e)}};
+(function(){try{const add=[];for(const ss of document.styleSheets){let rs;try{rs=ss.cssRules}catch(e){continue}const walk=rs=>{for(const r of rs){if(r.cssRules&&r.type!==1){const mq=[];walk(r.cssRules)}else if(r.selectorText&&r.selectorText.includes('button[onclick^="A("]')){add.push([ss,r])}}};walk(rs)}
+add.forEach(([ss,r])=>{const sel=r.selectorText.replace(/button\[onclick\^="A\("\]/g,'button[onclick^="BZ("]');try{ss.insertRule(sel+'{'+r.style.cssText+'}',ss.cssRules.length)}catch(e){}})}catch(e){console.log('cssclone',e)}})();
 
 /* ===== 編制人物多樣化：宮中執事・官女子有名字、性情、籍貫，會告老、調任、被選中 ===== */
 const OFS=['李','張','王','劉','趙','孫','錢','周','吳','鄭','馮','陳','褚','衛','蔣','沈','韓','楊','朱','秦','尤','許','何','呂','施','曹','嚴','華','金','魏'],
