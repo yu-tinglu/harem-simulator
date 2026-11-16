@@ -2910,6 +2910,8 @@ o.push({l:'遠赴母國通商（耗銀40）',f(){if(!pay(40))return L('銀兩不
 o.push({l:'走私貨物（高利潤，醜聞＋）',f(){if(ckp(.55)){const g=R(100,200);m.silver+=g;m.scand=(m.scand||0)+2;L(`走私得手，得銀${g}兩。`)}else{m.silver=Math.max(0,m.silver-60);m.scand=(m.scand||0)+3;L('商隊被邊關扣下，損失六十兩，還惹來閒話。')}}})}
 else if(nm=='牧場馬場'){
 o.push({l:'進獻良馬（耗銀30，聖寵＋、邦誼＋）',f(){if(!pay(30))return L('銀兩不足。');m.favor+=6;if(f){f.rel=cl(f.rel+3);f.mil=cl(f.mil+2);f.pw=frPw(f)}S.nat.mil=cl(S.nat.mil+1);L('你進獻的母國良馬神駿非凡，皇上龍心大悅。')}})}
+o.push({l:'招待貴客（耗銀20，人脈＋3、熱度＋5）',f(){if(!pay(20))return L('銀兩不足。');m.ally+=3;s.pop=cl(s.pop+5);L(`你在${nm}設席招待貴客，人脈與名聲都添了幾分。`)}});
+o.push({l:'推出新品（耗銀30，經營度＋6、熱度＋6）',f(){if(!pay(30))return L('銀兩不足。');s.mg=cl(s.mg+6);s.pop=cl(s.pop+6);L(`${nm}推出新品，經營度${s.mg|0}、熱度${s.pop|0}。`)}});
 return o}
 const _bizU=bizAct;bizAct=function(){const r=_bizU.apply(this,arguments);try{if(S.ch&&S.ch.o){S.ch.o[0].f=shopOpenList;S.ch.o.push({l:'商鋪特殊經營（情報、殺手、通商等）',f(){const m=S.me,L2=m.shops.map(s=>({s,o:shopSpecials(s)})).filter(x=>x.o.length);if(!L2.length)return L('你的鋪子沒有特殊經營可做，試試開情報樓、殺手樓、青樓等。');choose('哪間鋪子？',L2.map(x=>({l:`${SHT[x.s.t][0]}・Lv${x.s.lv}`,f(){choose('做什麼？',x.o)}})))}})}}catch(e){console.log('biz',e)}return r};
 function shopFx(){const m=S&&S.me;if(!m||S.over||S.reg||!m.shops)return;const f=S.fr&&!S.fr.dead?S.fr:null;m.shops.forEach(s=>{const nm=SHT[s.t]&&SHT[s.t][0],lv=s.lv||1;
@@ -2948,8 +2950,8 @@ const SHORT={'經營產業':'開鋪子、整頓、賣官','獻藝邀寵':'聖寵
 ACT.forEach(a=>{if(SHORT[a[0]])a[1]=SHORT[a[0]]});
 /* ===== 產業卡片內直接操作 ===== */
 ACTCAT[1][1]=ACTCAT[1][1].filter(i=>i!==0);
-function BZ(i){if(!S||S.ch||S.over||S.scn||S.ev)return;const m=S.me;if([1,2,3,4,6].includes(i)&&!m.shops.length){S.res='你還沒有鋪子，先「開設新鋪」。';render();return}
-S.res=null;const b=m.favor;bizAct();const o=S.ch&&S.ch.o[i];S.ch=null;if(!o)return render();o.f();adj(b);fix();if(S.over)return;S.ch?render():spend()}
+function BZ(i){if(!S||S.ch||S.over||S.scn||S.ev)return;const m=S.me;if([1,2,3,4,6].includes(i)&&!m.shops.length){L('你還沒有鋪子，先「開設新鋪」。');return}
+S.res=null;const b=m.favor;bizAct();const o=S.ch&&S.ch.o[i];S.ch=null;if(!o)return render();o.f();if(!S.ch&&!S.res&&i==6){}adj(b);fix();if(S.over)return;S.ch?render():spend()}
 const BZB=[['開設新鋪','本錢40兩起，有風險'],['整頓經營','提升經營度'],['宣傳造勢','耗銀15，熱度＋'],['擴建升級','最高5級'],['查賬防弊','耗銀5，防貪墨'],['賣官鬻爵','聖寵≥50，風險高'],['特殊經營','情報、殺手、通商']];
 const _upU=uiPost;uiPost=function(){_upU.apply(this,arguments);try{if(TAB!=0||!S||S.over||S.reg||S.scn)return;const main=document.querySelector('#app main');if(!main)return;const c=[...main.querySelectorAll(':scope>.cd')].find(x=>x.firstElementChild&&/^產業/.test(x.firstElementChild.textContent));if(!c||c.querySelector('.bzg'))return;
 c.classList.add('actcat');const hero=main.querySelector('.cd.hero');if(hero)main.insertBefore(c,hero);
@@ -2957,6 +2959,11 @@ const g=document.createElement('div');g.className='g bzg';g.style.marginTop='10p
 const h=c.firstElementChild;if(!h.querySelector('em')){const e=document.createElement('em');e.textContent=S.me.shops.length+'間鋪子';h.insertBefore(e,h.querySelector('.fa'))}}catch(e){console.log('uiPost2',e)}};
 (function(){try{const add=[];for(const ss of document.styleSheets){let rs;try{rs=ss.cssRules}catch(e){continue}const walk=rs=>{for(const r of rs){if(r.cssRules&&r.type!==1){const mq=[];walk(r.cssRules)}else if(r.selectorText&&r.selectorText.includes('button[onclick^="A("]')){add.push([ss,r])}}};walk(rs)}
 add.forEach(([ss,r])=>{const sel=r.selectorText.replace(/button\[onclick\^="A\("\]/g,'button[onclick^="BZ("]');try{ss.insertRule(sel+'{'+r.style.cssText+'}',ss.cssRules.length)}catch(e){}})}catch(e){console.log('cssclone',e)}})();
+/* 行動結果即時顯示在頂部 */
+function resShow(f0){try{if(!S||S.over||S.res||S.ch||S.ev||S.scn||!S.log)return;const ls=[];for(const l of S.log){if(l===f0)break;ls.push(l);if(ls.length>=3)break}if(ls.length){S.res=ls.reverse().join('<br>');render()}}catch(e){console.log('resShow',e)}}
+const _AU=A;A=function(){const f0=S&&S.log&&S.log[0];_AU.apply(this,arguments);resShow(f0)};
+const _CU=C;C=function(){const f0=S&&S.log&&S.log[0];_CU.apply(this,arguments);resShow(f0)};
+const _BZU=BZ;BZ=function(){const f0=S&&S.log&&S.log[0];_BZU.apply(this,arguments);resShow(f0)};
 
 /* ===== 編制人物多樣化：宮中執事・官女子有名字、性情、籍貫，會告老、調任、被選中 ===== */
 const OFS=['李','張','王','劉','趙','孫','錢','周','吳','鄭','馮','陳','褚','衛','蔣','沈','韓','楊','朱','秦','尤','許','何','呂','施','曹','嚴','華','金','魏'],
