@@ -430,7 +430,7 @@ const qo=()=>S.qi!=='me'&&Q();
 const rn=()=>{const a=ids().filter(i=>i!==S.qi);return a.length?a[R(0,a.length-1)]:ids()[0]};
 const yr=k=>Math.floor((S.t-k.b)/12),on=o=>o==='me'?S.me.n:S.npcs[o].n,tag=k=>`${k.n}（${S.reg&&S.reg.k===k?'皇帝':k.sex=='男'?(S.reg?'親王':'皇子'):'公主'}${yr(k)}歲・${KT[k.t][0]}）`;
 const sc=k=>k.cai*.25+k.de*.2+k.chong*.3+k.pow*.35+(yr(k)<3?-30:yr(k)<6?-15:yr(k)<12?-5:0);
-const L=s=>{S.log.unshift(s);S.log.length=Math.min(S.log.length,18)},pay=n=>S.me.silver>=n?(S.me.silver-=n,1):0;
+const L=s=>{if(typeof bgL==='function'&&bgL(s))return;S.log.unshift(s);S.log.length=Math.min(S.log.length,18)},pay=n=>S.me.silver>=n?(S.me.silver-=n,1):0;
 function kid(n,sex,b,mom,o){const me=mom==='me',t=R(0,KT.length-1),q=KT[t][2],nm=(typeof mom=='number'&&S&&S.npcs&&S.npcs[mom])||0;
 const at=kidAt(mom);return Object.assign({n,sex,b,mom,t,at,cai:R(30,60)+((at.iq-50)/6|0)+(q.cai||0)+(me?tf('kc'):0),de:R(30,60)+(q.de||0)+(me?tf('kd'):0),chong:R(25,55)+(q.chong||0),pow:R(5,25)+(q.pow||0)+(me?(S.me.clan/3|0)+tf('kp'):0)+(nm?nm.pow/6|0:0),bond:40+(q.bond||0)+(me?tf('kb'):0)},o||{})}
 function mkN(n,rank,favor,fam,kids){const g=R(0,TS.length-1),q=TS[g][2],o={n,rank,favor:cl(favor+(q.f||0)),fam:mkF(fam),kids:kids||[],g,at:applyTb(mkAt(),TS[g][0]),arc:newArc(),pb:(q.a||0)/2|0,sc:cl(R(30,60)+(q.sc||0)),hp:70,al:0,host:R(10,40),st:'',preg:0,fac:R(0,4)};o.fam.forEach(x=>x.pw=cl(x.pw+(q.c||0)));o.pow=cl(cc(o.fam)+o.pb);return o}
@@ -612,7 +612,7 @@ c=>yr(c)>=16&&c.sex=='男'&&{t:`${c.n}已成年，請旨出宮建府。`,o:[['�
 const MILC=/兵|軍|統領|侯|參將|汗|統帥|將/;
 const natv=()=>{const n=S.nat;return(n.eco+n.mil+n.pop+n.stab)/4};
 function addN(a){const n=S.nat;n.eco+=a[0];n.mil+=a[1];n.pop+=a[2];n.stab+=a[3]}
-function edeath(){return cl(Math.max(.0004,(S.eage-38)*.0008)+(60-S.ehp)/8000,0,.12)}
+function edeath(){return cl(Math.max(.0004,emH(S.eage)/12)+(60-S.ehp)/8000,0,.12)}
 function court(){const n=S.nat,ep=EPS[S.ep][2],m=S.me;
 ['eco','mil','pop','stab'].forEach(k=>{n[k]=cl(n[k]+R(-1,1)+ep.nd+(52-n[k])*.04)});
 S.ehp=cl(S.ehp+R(-1,1)-(S.eage>=40?(S.eage-38)*.04:0));
@@ -671,7 +671,7 @@ function spend(){S.w--;fix();if(S.over)return;if(!S.reg){const ne=nightEv();if(n
 function mend(){const m=S.me;S.t++;S.w=4;S.eage=S.ea0+Math.floor(S.t/12);
 if(m.preg&&--m.preg==0)S.q.unshift(labourEv());
 {const f=dfx(m),a=m.at;m.hp=Math.min(100,m.hp+1-f.hp*.7);a.sp=cl(a.sp+(60-a.sp)*.08-f.sp);if(P(.004+(a.sp<30?.006:0))&&a.ds.length<4){const d=ONSET[R(0,ONSET.length-1)];if(!a.ds.includes(d)){a.ds.push(d);L(`你染上了「${DS[d][0]}」。`)}}}
-ids().forEach(i=>{const n=S.npcs[i],q=TS[n.g][2];n.hp=Math.min(100,n.hp+2-dfx(n).hp*.7);{const a=n.at;if(P(.5)){const s=R(0,13);a.sk[s]=cl(a.sk[s]+(P(.7)?1:-1)*R(0,2))}a.sp=cl(a.sp+R(-3,3)+(60-a.sp)*.05);a.wt=+(a.wt+R(-3,3)/10).toFixed(1);a.hr=cl(a.hr+R(-1,1));if(S.t%12==0){a.lk=cl(a.lk+(S.t>96?-R(0,2):R(-1,1)));a.sf=cl(a.sf+R(-2,1));a.iq=cl(a.iq+R(0,1));n.sc=cl(n.sc+R(-2,3))}}if(P(.003)&&n.at.ds.length<3){const d=ONSET[R(0,ONSET.length-1)];if(!n.at.ds.includes(d)){n.at.ds.push(d);L(`${n.n}染上了「${DS[d][0]}」。`)}}if(P(.012)){n.hp-=R(15,35);L(`${n.n}病了一場。`)}n.host=cl(n.host-1);n.favor=cl(n.favor+R(-3,3)+(q.perf||0)*3+(q.f||0)/20+cb(n)*.4);if(n.preg){n.preg--;if(n.preg==0){n.hp-=R(0,8);birth(n.kids,i)}}else if(n.kids.length<4&&P(Math.max(.002,.008+n.favor/4000+(q.fert||0)/10+dfx(n).fert/8))){n.preg=10;if(P(.7))L(`${n.n}被診出有孕。`)}});
+ids().forEach(i=>{const n=S.npcs[i],q=TS[n.g][2];n.hp=Math.min(100,n.hp+2-dfx(n).hp*.7);{const a=n.at;if(P(.5)){const s=R(0,13);a.sk[s]=cl(a.sk[s]+(P(.7)?1:-1)*R(0,2))}a.sp=cl(a.sp+R(-3,3)+(60-a.sp)*.05);a.wt=+(a.wt+R(-3,3)/10).toFixed(1);a.hr=cl(a.hr+R(-1,1));if(S.t%12==0){a.lk=cl(a.lk+(S.t>96?-R(0,2):R(-1,1)));a.sf=cl(a.sf+R(-2,1));a.iq=cl(a.iq+R(0,1));n.sc=cl(n.sc+R(-2,3))}}if(P(.003)&&n.at.ds.length<3){const d=ONSET[R(0,ONSET.length-1)];if(!n.at.ds.includes(d)){n.at.ds.push(d);L(`${n.n}染上了「${DS[d][0]}」。`)}}if(P(.012)){n.hp-=R(15,35);L(`${n.n}病了一場。`)}n.host=cl(n.host-1);n.favor=cl(n.favor+R(-3,3)+(q.perf||0)*3+(q.f||0)/20+cb(n)*.4);if(n.preg){n.preg--;if(n.preg==0){n.hp-=R(0,8);if(P(.012))n.hp=0;birth(n.kids,i)}}else if(n.kids.length<4&&fertOK(n)&&P(Math.max(.002,.008+n.favor/4000+(q.fert||0)/10+dfx(n).fert/8)*fertMul(n))){n.preg=10;S.cyc=(S.cyc||0)+1;if(P(.7))L(`${n.n}被診出有孕。`)}});
 {const ep=EPS[S.ep][2];S.mood=cl(Math.round(S.mood+R(-ep.vol,ep.vol)+(50+(natv()-50)*.3-S.mood)*.12))}const qn=Q();if(qn&&S.t>36&&P(.0012))qn.hp=0;
 if(P(.5))courtFight();court();if(S.over)return;
 m.kids=m.kids.filter(k=>{const q=KT[k.t][2];if(yr(k)<3&&P(0*(.004+(q.weak?.012:0)+(k.at&&k.at.ds.includes(12)?.012:0))*((q.luck||tf('kh'))?.5:1))){L(`${k.n}不幸夭折，你肝腸寸斷。`);m.hp-=10;return false}return true});
@@ -689,7 +689,7 @@ if(P(.32)){const f=COURT.map(f=>f()).filter(Boolean);if(f.length)ev.push(f[R(0,f
 if(S.dow&&P(.3)){const f=DOW.map(f=>f()).filter(Boolean);if(f.length)ev.push(f[R(0,f.length-1)])}
 if(P(.55)){const f=PE.map(f=>f()).filter(Boolean);ev.push(f[R(0,f.length-1)])}
 if(m.kids.length&&P(.55)){const c=m.kids[R(0,m.kids.length-1)],f=KE.map(f=>f(c)).filter(Boolean);if(f.length)ev.push(f[R(0,f.length-1)])}
-ev.sort(()=>Math.random()-.5);S.q=S.q.concat((a?[a]:[]).concat(ev).slice(0,4)).concat(se).concat(mxMonth()).concat(playMonth());next()}
+ev.sort(()=>Math.random()-.5);S.q=S.q.concat((a?[a]:[]).concat(ev).slice(0,(typeof evCap==='function'?evCap():4))).concat(se).concat(mxMonth()).concat(playMonth());next()}
 function over(t,x){endMark(t);if(S.nk&&REGT.includes(t)&&!S.reg)return regStart(t,x);S.over={t,x};render()}
 function fin(h,t,x,w){const m=S.me,o=[{l:'看結局',f(){over(t,x)}}],sons=m.kids.filter(k=>k.sex=='男'&&yr(k)>=1);
 if(w&&w.o!=='me'&&sons.length&&m.rank>=2){const s=sons.slice().sort((a,b)=>b.pow-a.pow)[0];o.push({l:`發動宮變，扶${s.n}登基（耗銀100，極兇險）`,f(){seize(s,w)}})}
@@ -2724,7 +2724,7 @@ if(S.eage>=58&&S.heir&&P(.01)){emLog('皇上有意禪位');QADD(ABD());QGO()}}
 else{const il=S.ill;il.m++;S.ehp=cl(S.ehp-2+(il.act?1:0));if(il.m%3==0&&il.m<il.len){QADD(ILL1());QGO()}
 if(il.m>=il.len){if(S.ehp<=8+R(0,14)){emLog('皇上病危');QADD(ILLEND());QGO()}else{S.ill=null;S.illCd=60;S.ehp=cl(S.ehp+14);emLog('皇上大病痊癒，重新臨朝');L('皇上病體漸愈，重新臨朝。')}}}}
 function emCard(){const age=S.eage,ry=(S.ry0||0)+Math.floor(S.t/12);return`<div class=cd data-open=0><h3>皇帝人生</h3><div class=m>${S.eage}歲・登基第 ${ry||1} 年・${EPS[S.ep][0]}</div>${abar('龍體',S.ehp)}<div class=m>儲君：${S.heir?S.heir.n+'（'+yr(S.heir)+'歲）':'尚未冊立'}${S.ill?'　<b>現正重病</b>':''}</div>${(S.el||[]).slice(0,6).map(e=>`<div class=k>第${Math.floor(e.t/12)+1}年　${e.x}</div>`).join('')||'<div class=m>目前沒有特別的大事。</div>'}</div>`}
-function edeath(){if(S.dying)return 0;const b=cl(Math.max(.0004,(S.eage-38)*.0008)+(60-S.ehp)/8000,0,.12);return S.ill?b+.01:b}
+function edeath(){if(S.dying)return 0;const b=cl(Math.max(.0004,emH(S.eage)/12)+(60-S.ehp)/8000,0,.12);return S.ill?b+.01:b}
 /* A4 官職謀缺 */
 function vacEv(){if(!S.cr)return null;const sc=S.cr.filter(f=>f.gd>=4&&!f.yg&&POSTCAP[canon(f.role)]!==undefined&&POSTCAP[canon(f.role)]<=18);if(!sc.length)return null;const f=pk(sc),role=f.role,why=P(.5)?'年邁致仕':P(.5)?'病逝任上':'因事去職';
 const cs=S.cr.filter(g=>g!==f&&g.role!==role&&g.gd>=3&&g.gd<=f.gd+1).sort(()=>Math.random()-.5).slice(0,2).map(g=>({k:'c',g,l:`${g.role}${g.n}`,gd:g.gd,fac:g.fac}));
@@ -3936,6 +3936,60 @@ function rsYear(){if(!S||!S.me||S.over||S.reg||S.t%12!==3)return;regKids().forEa
 const _my=mend;mend=function(){const r=_my.apply(this,arguments);try{rsYear()}catch(e){console.log('r24',e)}return r};
 window.rsYear24=rsYear;
 HELP.push(['攝政公主','和親公主在外邦喪夫、你暗助她扶立兒子成功後，她成為攝政太后。行動→子嗣→「過問攝政」可賜禮、派心腹、請漢師、助兵、接來省親，影響「攝政穩固」與幼主「親漢」。每年可能有部族叛亂、幼主染病、鄰部犯境等事件。穩固太低會被權臣奪權；幼主16歲親政，親漢高則朝貢加倍、邦誼大增，親漢低則疏遠。穩固越高朝貢越多，過低則停止朝貢。']);
+})();
+
+/* ===== round25：合理壽命與孕率、中後期後台化（宮闈年報） ===== */
+(function(){
+const gs=(k)=>{try{return localStorage.getItem(k)}catch(e){return null}},ss=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+window.bgMode=()=>gs('hg_bgm')||'auto';
+window.bgOn=()=>{try{if(!S||!S.me||S.over||S.reg)return false;const m=bgMode();return m==='on'||(m==='auto'&&S.t>=120)}catch(e){return false}};
+window.evCap=()=>bgOn()?2:4;
+/* --- 年齡曲線 --- */
+const ageF=a=>a<15?0:a<20?.85:a<30?1:a<35?.8:a<40?.5:a<45?.15:a<50?.02:0;
+const empF=()=>{const e=S.eage||30;let f=e<=40?1:e<=50?.85:e<=60?.5:e<=70?.2:.05;if((S.ehp||70)<40)f*=.6;return f};
+const HZ=a=>a<1?.07:a<5?.025:a<15?.005:a<40?.003:a<50?.008:a<60?.02:a<70?.05:a<80?.11:.22;
+window.emH=e=>e<40?.006:e<50?.015:e<60?.035:e<70?.07:e<80?.13:.24;
+window.fertOK=n=>{try{if(typeof n.bt!=='number')return true;const a=Math.floor((S.t-n.bt)/12);if(ageF(a)<=0)return false;const cap=Math.round(1.6*empF());return (S.cyc||0)<cap||(cap===0&&(S.cyc||0)<1&&P(.1))}catch(e){return true}};
+window.fertMul=n=>{try{const a=typeof n.bt==='number'?Math.floor((S.t-n.bt)/12):28;return Math.max(.01,ageF(a))*empF()*.6}catch(e){return .6}};
+const _pr=pregRate;pregRate=function(){let v=_pr.apply(this,arguments);try{const a=typeof yr0==='function'?yr0():25;v=cl(v*Math.max(.02,ageF(a))*(.6+.4*empF()),.01,.85)}catch(e){}return v};
+/* --- 後台攔截日誌 --- */
+const npcOf=s=>(S.npcs||[]).find(n=>n&&n.n&&s.startsWith(n.n));
+const minor=n=>n&&(n.rank||0)<=4&&(n.al||0)<45&&(n.host||0)<60&&S.npcs.indexOf(n)!==S.qi;
+window.bgL=function(s){try{if(typeof s!=='string'||!s||!bgOn())return false;const me=S.me.n||'';
+ if(s.startsWith('你')||s.startsWith('恭喜')||s.startsWith('宮闈年報')||(me&&s.includes(me))||(S.heir&&S.heir.n&&s.includes(S.heir.n)))return false;
+ const c=S.bgc=S.bgc||{born:[],died:[],ill:0,promo:[],preg:0,gk:0,kd:[]};let m;
+ if(/有了孫輩/.test(s)){c.gk++;return true}
+ const n=npcOf(s);if(!n||!minor(n))return false;
+ if(/被診出有孕/.test(s)){c.preg++;return true}
+ if((m=s.match(/^(.+?)誕下(皇子|公主)/))){c.born.push(m[1]+(m[2]=='皇子'?'(子)':'(女)'));return true}
+ if(/病了一場|染上了「/.test(s)){c.ill++;return true}
+ if(/晉封為/.test(s)){c.promo.push(n.n);return true}
+ if(/(病逝|病故|難產)/.test(s)){c.died.push(n.n);return true}
+}catch(e){}return false};
+function flush(){const c=S.bgc;if(!c)return;const p=[],sl=(a,k)=>a.slice(0,3).join('、')+(a.length>3?'等':'');
+ if(c.born.length)p.push(`添丁${c.born.length}（${sl(c.born)}）`);if(c.preg)p.push(`${c.preg}人有孕`);if(c.died.length)p.push(`病故${c.died.length}（${sl(c.died)}）`);if(c.kd.length)p.push(`幼童夭折${c.kd.length}`);if(c.promo.length)p.push(`晉封${c.promo.length}人`);if(c.ill)p.push(`${c.ill}人患病`);if(c.gk)p.push(`孫輩添${c.gk}`);
+ S.bgc=null;if(!p.length)return;const yy=Math.floor(S.t/12),txt=`宮闈年報（第${yy}年）：${p.join('・')}。`;(S.yrep=S.yrep||[]).unshift({y:yy,t:txt});S.yrep.length=Math.min(S.yrep.length,12);L(txt);try{ntfAdd(txt,'ti');msPush(txt)}catch(e){}}
+/* --- 生老病死（每年年初） --- */
+function mort(){if(!S||!S.me||S.over||S.reg||S.t<=0||S.t%12!==0)return;const m=S.me;
+ S.cyc=0;
+ S.npcs.forEach((n,i)=>{if(n.st||typeof n.bt!=='number')return;const a=Math.floor((S.t-n.bt)/12),h=HZ(a)*(1+Math.max(0,50-(n.hp||50))/60)*(a<40?.6:1);if(P(h)){try{kill(i,a>=60?'年邁病故，宮中舉哀':'病逝，宮中舉哀')}catch(e){console.log('r25 kill',e)}}});
+ const dieKid=(k,mine,own)=>{if(k===(S.reg&&S.reg.k)||k===S.nk)return false;const a=yr(k),q=(KT[k.t]||[])[2]||{};let h=HZ(a);if(q.weak)h*=1.6;if(q.luck)h*=.6;if(!P(h))return false;
+  const w=k.sex=='男'?'皇子':'公主';if(S.heir===k)S.heir=null;
+  if(mine){const t=`${k.n}（${a}歲）因病${a<16?'夭折':'離世'}，你肝腸寸斷。`;m.hp=Math.max(1,m.hp-(a<16?10:6));L(t);try{ntfAdd(t,'medn');msPush(`${k.n}${a<16?'夭折':'離世'}`)}catch(e){}}
+  else{if(bgOn()){const c=S.bgc=S.bgc||{born:[],died:[],ill:0,promo:[],preg:0,gk:0,kd:[]};c.kd.push(k.n)}else L(`${on(own)}所出的${w}${k.n}（${a}歲）不幸${a<16?'夭折':'病逝'}。`)}return true};
+ m.kids=m.kids.filter(k=>!dieKid(k,1,'me'));
+ S.npcs.forEach((n,i)=>{n.kids=n.kids.filter(k=>!dieKid(k,0,i))});
+ try{const a=typeof yr0==='function'?yr0():30;if(a>=60&&P(HZ(a)*(1+Math.max(0,50-m.hp)/80)))over('壽終正寢',`你在宮中度過了漫長的一生，${a}歲這年安然辭世。回首這些年的恩怨榮辱，終究都歸於平靜。`)}catch(e){}
+}
+const _m25=mend;mend=function(){const r=_m25.apply(this,arguments);try{if(S&&!S.over&&S.t%12===0){mort();if(!S.over)flush()}
+ if(S&&S.t===120&&bgMode()==='auto'&&!S.bgn){S.bgn=1;ntfAdd('宮中日常（嬪妃有孕、生子、病故、晉封）已轉入後台，每年年底會有一份「宮闈年報」；與你、儲君、高位嬪妃有關的事仍會即時通知。可在「紀事」頁調整。','ti')}}catch(e){console.log('r25',e)}return r};
+/* --- 設定卡 --- */
+window.bgSet=v=>{ss('hg_bgm',v);render()};
+const _u25=uiPost;uiPost=function(){const r=_u25.apply(this,arguments);try{if(typeof TAB!=='undefined'&&TAB===5&&S&&S.me){const main=document.querySelector('main');if(main&&!main.querySelector('.bg25')){const md=bgMode(),op=(v,l)=>`<option value="${v}"${md===v?' selected':''}>${l}</option>`;const yr_=(S.yrep||[]).map(x=>`<div class=m>${x.t}</div>`).join('')||'<div class=m>尚無年報。</div>';
+ const h=`<details class="cd bg25"><summary><b>後台與年報</b>　<span class=m>${bgOn()?'目前：已後台化':'目前：未後台化'}</span></summary><div class=m style="margin:6px 0">後台化後，低位嬪妃的有孕、生子、患病、晉封與病故不再逐條彈出，每年年底合成一份年報；與你、儲君、高位嬪妃、盟友或仇敵有關的仍會即時通知；每月事件上限也降為2件。</div><select onchange="bgSet(this.value)">${op('auto','自動（第10年起）')}${op('on','一律後台化')}${op('off','不後台化')}</select><div style="margin-top:8px"><b class=m>宮闈年報</b>${yr_}</div></details>`;
+ const s=[...main.querySelectorAll('.sec15')].find(x=>/存檔與設定/.test(x.textContent));if(s)s.insertAdjacentHTML('afterend',h);else main.insertAdjacentHTML('afterbegin',h)}}}catch(e){console.log('u25',e)}return r};
+window.mort25=mort;
+HELP.push(['壽命與後台','每個人依年齡有合理的病故機率（嬰幼兒、難產、老年較高），皇帝與你也會老。嬪妃生育看年齡與皇帝年紀，全後宮每年受孕數有上限。第10年起日常事務轉入後台，年底出「宮闈年報」。']);
 })();
 
 deco();intro();
