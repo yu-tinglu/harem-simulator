@@ -440,7 +440,7 @@ function birth(arr,mom){const sex=P(.55)?'男':'女',n=sex=='男'?SN[S.sn++%SN.l
 function start0(){const g=GS[G][2],q=TS[T][2],m={n:N||'沈氏',g:T,rank:g.r,favor:35+(g.f||0),scheme:30,ally:15,hp:75,emp:30+(g.e||0),silver:30,clan:10,preg:0,kids:[],fo:g.fo||'',jn:g.jn||0,cr:g.cr||0,dw:35,fac:GS[G][5],at:(AT&&AT.g===G?applyTb(JSON.parse(JSON.stringify(AT.a)),TS[T][0]):newAt(G,TS[T][0]))};AT=null;m.shops=initShops(GS[G][0],GS[G][4],G,TS[T][0]);m.scand=0;
 m.fam=mkF(GS[G][3]);m.fam.forEach(x=>x.pw=cl(x.pw+(q.c||0)));m.clan=cc(m.fam);
 m.ally+=(g.a||0)+(q.a||0);m.silver+=(g.s||0)+(q.s||0);m.scheme+=(g.sc||0)+(q.sc||0);m.hp+=(g.hp||0)+(q.hp||0);m.favor+=q.f||0;m.emp+=q.e||0;
-const ea=R(20,48),ep=R(0,EPS.length-1),ka=f=>-(Math.round((ea-18)*f)*12+R(0,11)),dow=P(cl(.8-(ea-20)*.025,.15,.8))?{age:ea+R(18,26),pet:P(.5)?0:R(1,7)}:null;
+const ea=R(20,48),ep=R(0,EPS.length-1),ka=f=>-(Math.round((ea-18)*f)*12+R(0,11)),dow=(()=>{const ma=ea+R(17,30);return P(.97*(1-Math.pow(Math.max(0,ma-38)/50,1.7)))?{age:ma,pet:P(.5)?0:R(1,7)}:null})();
 S=null;
 const npcs=genHarem(ka,ea,ep);
 npcs[0].host=cl(npcs[0].host+10);
