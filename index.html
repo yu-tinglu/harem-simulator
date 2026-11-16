@@ -4036,7 +4036,7 @@ const CA=['管教皇后','皇后不敬時敲打、禁足、奪權、申飭母家
  {l:'收回皇后協理六宮之權（家勢－10、好感－4、權柄＋3）',f(){e.cd=S.t+2;e.pw=cl(e.pw-10);e.gl=cl(e.gl-4);R_.pw+=3;L('你收回了鳳印，六宮諸事重歸慈寧宮。（家勢－10、好感－4、權柄＋3）')}},
  {l:'申飭皇后母家，敲打外戚（家勢－8、好感－8、朝局－1）',f(){e.cd=S.t+2;e.pw=cl(e.pw-8);e.gl=cl(e.gl-8);S.nat.stab-=1;R_.pw+=1;L('你下旨申飭了皇后的母家，朝臣們心裡都有了數。（家勢－8、好感－8、朝局－1、權柄＋1）')}},
  {l:'賞賜安撫，緩和婆媳關係（耗銀30，好感＋12）',f(){if(!pay(30))return L('銀兩不足。');e.cd=S.t+2;e.gl=cl(e.gl+12);L('你賞了皇后一份厚禮，她對你恭敬了許多。（好感＋12）')}},
- {l:'蒐集過失，上疏廢后（極險）',f(){e.cd=S.t+3;const fault=(cbs().length?.03:0),p=cl(.1+R_.pw/260+(55-e.gl)/250-(e.fv-40)/300-(k.bond-45)/450+fault,.03,.7);
+ {l:'蒐集過失，上疏廢后（極險）',f(){e.cd=S.t+3;const fault=(cbs().length?.03:0)+((e.flt||0)*.04),p=cl(.1+R_.pw/260+(55-e.gl)/250-(e.fv-40)/300-(k.bond-45)/450+fault,.03,.7);
    if(ckp(p)){rx().emp=null;R_.wed=0;k.bond=cl(k.bond-6);R_.pw+=3;S.nat.stab-=2;try{msPush(`太后廢黜皇后${e.n}`);jot('宮',e.n,`皇后${e.n}被廢，遷出中宮。`)}catch(x){}L(`你羅列罪狀，朝臣附議，皇后${e.n}被廢，遷出中宮。皇帝心中怨你，朝局也受震動。（孝心－6、朝局－2、權柄＋3；日後須另擇皇后）`)}
    else{R_.pw-=12;k.bond=cl(k.bond-15);e.gl=cl(e.gl-5);e.fv=cl(e.fv+8);R_.rv=cl(R_.rv+5);L('廢后之議功敗垂成，皇帝護著皇后，朝臣也不肯附和。（權柄－12、孝心－15、對手勢力＋5）')}}},
  {l:'暫且忍耐',f(){L('你按下火氣，只在心裡記了一筆。')}}]);return 1}];
@@ -4077,6 +4077,44 @@ const _u27=uiPost;uiPost=function(){const r=_u27.apply(this,arguments);try{if(ty
  anchor.insertAdjacentHTML('afterend',`<div class="cd cb27"><h3>皇帝身邊的人</h3>${st}${lines}<div style="margin-top:6px"><button onclick="A(${ia})">管教皇后</button> <button onclick="A(${ib})">選人侍君</button></div></div>`)}}}catch(e){console.log('u27',e)}return r};
 window.cbTick27=cbTick;
 HELP.push(['管教皇后與選人侍君','太后模式「皇室」類新增兩個行動。管教皇后：訓誡、禁足、奪鳳印、申飭母家、賞賜、上疏廢后，每項都有明確數值與風險。選人侍君：把母族女子、才貌秀女、美貌宮女或皇后宿敵之女送到皇帝身邊，分皇后的帝寵、添你的耳目；之後會有皇后與新人爭鬥、新寵恃寵而驕等事件可處理。']);
+})();
+
+/* ===== round28：太后暗算皇后（陷害・下藥・收買宮人・離間）與敗露風險 ===== */
+(function(){
+const cbs=()=>{const x=rx();if(!x.cb)x.cb=[];return x.cb};
+const DA=['暗算皇后','對皇后下暗手：陷害、慢性下藥、收買宮人、離間帝后（有敗露風險）',()=>{
+ const R_=S.reg,e=rx().emp;if(!e||e.gone){L('目前沒有皇后可暗算。');return}
+ if(S.t<(e.cd2||0)){L('才剛動過手，近期風聲緊，過三個月再說。');return}
+ const k=R_.k,sc=S.me.scheme;
+ const trace=(src,n)=>{R_.trace={src,n:n||12}};
+ const bust=(msg,b,pw,rv)=>{k.bond=cl(k.bond-b);R_.pw-=pw;R_.rv=cl(R_.rv+(rv||0));e.fv=cl(e.fv+8);L(msg+`（孝心－${b}、權柄－${pw}${rv?`、對手勢力＋${rv}`:''}、皇后帝寵＋8）`)};
+ choose(`暗算皇后${e.n}（好感${e.gl|0}・家勢${e.pw|0}・帝寵${e.fv|0}${e.ill?'・抱病中':''}${e.nb?'・難有身孕':''}${e.flt?'・已有'+e.flt+'條把柄':''}）`,[
+ {l:'設計陷害，栽贓巫蠱（耗銀60，看心機；成功則廢后，失敗反噬）',f(){if(!pay(60))return L('銀兩不足。');e.cd2=S.t+3;const p=cl(.18+sc/250+R_.pw/450-e.fv/400-(k.bond-45)/500+(e.flt||0)*.05,.05,.7);
+   if(ckp(p)){rx().emp=null;R_.wed=0;k.bond=cl(k.bond-8);R_.pw+=2;S.nat.stab-=2;trace('陷害',14);try{msPush(`皇后${e.n}以巫蠱罪被廢`);jot('宮',e.n,`皇后${e.n}牽涉巫蠱案被廢，遷出中宮。`)}catch(x){}L(`宮裡搜出了巫蠱人偶，皇后${e.n}百口莫辯，被廢出中宮。（孝心－8、朝局－2、權柄＋2；日後須另擇皇后，但此事恐有後患）`)}
+   else bust('栽贓的破綻被皇帝看出，他疑心到了你頭上。',12,5,4)}},
+ {l:'慢性下藥，使其久病難孕（耗銀50，極險；成功則皇后病弱、難有身孕）',f(){if(!pay(50))return L('銀兩不足。');e.cd2=S.t+3;const p=cl(.28+sc/250,.08,.75);
+   if(ckp(p)){e.ill=6;e.nb=1;e.fv=cl(e.fv-4);e.gl=cl(e.gl-2);trace('下藥',12);L(`皇后${e.n}近來日漸憔悴，太醫也診不出所以然，更難有身孕。（皇后帝寵－4、將抱病數月；有被查出的風險）`)}
+   else bust('下藥的事險些敗露，太醫起了疑，皇帝震怒。',18,8,5)}},
+ {l:'收買皇后宮人，掌握把柄（耗銀40；日後廢后成功率＋）',f(){if(!pay(40))return L('銀兩不足。');e.cd2=S.t+3;if(ckp(.55+sc/400)){e.flt=Math.min(5,(e.flt||0)+1);e.gl=cl(e.gl-2);L(`你買通了皇后宮裡的人，從此皇后一舉一動都在你掌握中。（把柄＋1，現${e.flt}條；上疏廢后成功率＋）`)}else{e.gl=cl(e.gl-4);L('那宮人轉頭向皇后告了密，皇后對你更加戒備。（皇后好感－4）')}}},
+ {l:'離間帝后，進讒言（耗銀20，看心機；皇后帝寵－12）',f(){if(!pay(20))return L('銀兩不足。');e.cd2=S.t+3;if(ckp(.35+sc/300)){e.fv=cl(e.fv-12);L(`你在皇帝耳邊說了幾句，皇帝對皇后漸漸冷淡。（皇后帝寵－12）`)}else{k.bond=cl(k.bond-6);L('皇帝反問你為何總與皇后過不去，母子有些不快。（孝心－6）')}}},
+ {l:'暫且作罷',f(){L('你把這些念頭按了下去。')}}]);return 1}];
+RACT.push(DA);RAC_ORDER[1][1].push('暗算皇后');
+/* 皇后難孕、抱病 */
+if(typeof EMPE!=='undefined'&&EMPE[1]){const f=EMPE[1];EMPE[1]=()=>{const e=rx().emp;return e&&e.nb?false:f()}}
+/* 每月：抱病、敗露 */
+function darkTick(){if(!S||!S.reg||S.over)return;const R_=S.reg,x=rx(),e=x.emp,k=R_.k;
+ if(e&&!e.gone&&e.ill>0){e.ill--;e.fv=cl(e.fv+1);if(e.ill===0){if(P(.4)){const n=e.n;x.emp=null;R_.wed=0;k.bond=cl(k.bond-3);try{msPush(`皇后${n}病逝`);jot('宮',n,`皇后${n}久病不治，薨於中宮。`)}catch(z){}L(`皇后${n}久病不治，薨逝了。皇帝悲痛，你面上哀戚。（日後須另擇皇后）`);return}else L(`皇后${e.n}的病竟慢慢好了。`)}}
+ const t=R_.trace;if(!t)return;t.n--;if(t.n<=0){R_.trace=null;return}
+ if(S.gcd>0||!P(.045))return;R_.trace=null;
+ infPush(infEv(`${t.src==='陷害'?'有宮人向皇帝遞話，說巫蠱案另有隱情':t.src==='下藥'?'太醫私下向皇帝稟報，說皇后的病似乎是人為':'風聲傳到皇帝耳中'}，矛頭隱隱指向慈寧宮。`,[
+  ['重金封口，滅掉知情人（耗銀80，看心機）',()=>{if(!pay(80))return'銀兩不足，風聲越傳越廣。（權柄－6、孝心－8）';if(ckp(.5+S.me.scheme/300)){return'知情的人一夜之間都閉了嘴，此事不了了之。（耗銀80）'}k.bond=cl(k.bond-18);R_.pw-=10;return'滅口的事也被查出，皇帝對你寒了心。（孝心－18、權柄－10）'}],
+  ['嫁禍身邊的內侍（看心機）',()=>{if(ckp(.45+S.me.scheme/300)){return'你推出一名內侍頂罪，皇帝信了。（無損失）'}k.bond=cl(k.bond-12);R_.pw-=6;return'嫁禍的漏洞被看穿，皇帝疑心更重。（孝心－12、權柄－6）'}],
+  ['鎮定自若，親自向皇帝解釋（看聖望）',()=>{if(ckp(.4+R_.pw/300+k.bond/400)){k.bond=cl(k.bond+1);return'你一番話說得從容，皇帝只覺是旁人構陷。（孝心＋1）'}k.bond=cl(k.bond-10);R_.pw-=4;return'你的解釋沒能說服皇帝。（孝心－10、權柄－4）'}]]))}
+const _rm2=rmend;rmend=function(){const r=_rm2.apply(this,arguments);try{darkTick()}catch(e){console.log('r28',e)}return r};
+/* 顯示：「皇帝身邊的人」卡加按鈕 */
+const _u28=uiPost;uiPost=function(){const r=_u28.apply(this,arguments);try{const c=document.querySelector('.cd.cb27');if(c&&!c.querySelector('.dk28')){const i=RACT.findIndex(a=>a[0]=='暗算皇后'),e=rx().emp;const b=c.querySelector('div[style*="margin-top"]');if(b&&i>=0)b.insertAdjacentHTML('beforeend',` <button class="dk28" onclick="A(${i})">暗算皇后</button>`);if(e&&(e.ill||e.nb||e.flt)){const m=c.querySelector('div.m');if(m)m.insertAdjacentHTML('beforeend',`<div class=m>${e.ill?'皇后抱病中。':''}${e.nb?'皇后難有身孕。':''}${e.flt?'你握有她'+e.flt+'條把柄。':''}</div>`)}}}catch(x){console.log('u28',x)}return r};
+window.darkTick28=darkTick;
+HELP.push(['暗算皇后','太后模式「皇室」類的高風險行動：陷害（成功廢后）、慢性下藥（皇后抱病、難孕，可能病逝）、收買宮人（累積把柄，提高廢后成功率）、離間帝后。做這些事之後有一段時間可能被查出，須處理以免皇帝對你寒心。']);
 })();
 
 deco();intro();
