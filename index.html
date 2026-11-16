@@ -436,7 +436,7 @@ const at=kidAt(mom);return Object.assign({n,sex,b,mom,t,at,cai:R(30,60)+((at.iq-
 function mkN(n,rank,favor,fam,kids){const g=R(0,TS.length-1),q=TS[g][2],o={n,rank,favor:cl(favor+(q.f||0)),fam:mkF(fam),kids:kids||[],g,at:applyTb(mkAt(),TS[g][0]),arc:newArc(),pb:(q.a||0)/2|0,sc:cl(R(30,60)+(q.sc||0)),hp:70,al:0,host:R(10,40),st:'',preg:0,fac:R(0,4)};o.fam.forEach(x=>x.pw=cl(x.pw+(q.c||0)));o.pow=cl(cc(o.fam)+o.pb);return o}
 function newbie(){if(S.npcs.length>=HMAX||!S.nn.length)return null;const e0=S.nn.splice(R(0,S.nn.length-1),1)[0].split('|'),nm=e0[0],r=+e0[1],n=mkN(nm,r,R(35,60),famFor(r));S.npcs.push(n);return n}
 function kinIn(lab){const m=S.me;if(S.npcs.length>=HMAX||!S.nn.length)return null;let x=m.fam.find(f=>f.sx=='女'&&!f.pal&&typeof fAge=='function'&&fAge(f)>=14&&fAge(f)<=24&&/妹/.test(f.rel||''));const n=newbie();if(!n)return null;n.al=62;if(x){n.n=x.nm||n.n;if(x.bt!=null)n.bt=x.bt;n.kin='你的'+(x.rel||lab);m.fam.splice(m.fam.indexOf(x),1)}else{const sn=(m.n||'沈')[0];if(n.n[0]!==sn)n.n=sn+n.n.slice(1);n.kin='你的'+lab}if(typeof ensureAges=='function')ensureAges();msPush&&msPush(n.kin+n.n+'入宮');return n}
-function birth(arr,mom){const sex=P(.55)?'男':'女',n=sex=='男'?SN[S.sn++%SN.length]:DN[S.dn++%DN.length];arr.push(kid(n,sex,S.t,mom));S.mood=cl(S.mood+(sex=='男'?5:2)+(mom==='me'?4:0));if(mom==='me')S.me.favor+=6;L(mom==='me'?`你誕下${sex=='男'?'皇子':'公主'}「${n}」！`:`${on(mom)}誕下${sex=='男'?'皇子':'公主'}「${n}」。`)}
+function birth(arr,mom){const sex=P(.55)?'男':'女',n=sex=='男'?kidNm('男'):kidNm('女');arr.push(kid(n,sex,S.t,mom));S.mood=cl(S.mood+(sex=='男'?5:2)+(mom==='me'?4:0));if(mom==='me')S.me.favor+=6;L(mom==='me'?`你誕下${sex=='男'?'皇子':'公主'}「${n}」！`:`${on(mom)}誕下${sex=='男'?'皇子':'公主'}「${n}」。`)}
 function start0(){const g=GS[G][2],q=TS[T][2],m={n:N||'沈氏',g:T,rank:g.r,favor:35+(g.f||0),scheme:30,ally:15,hp:75,emp:30+(g.e||0),silver:30,clan:10,preg:0,kids:[],fo:g.fo||'',jn:g.jn||0,cr:g.cr||0,dw:35,fac:GS[G][5],at:(AT&&AT.g===G?applyTb(JSON.parse(JSON.stringify(AT.a)),TS[T][0]):newAt(G,TS[T][0]))};AT=null;m.shops=initShops(GS[G][0],GS[G][4],G,TS[T][0]);m.scand=0;
 m.fam=mkF(GS[G][3]);m.fam.forEach(x=>x.pw=cl(x.pw+(q.c||0)));m.clan=cc(m.fam);
 m.ally+=(g.a||0)+(q.a||0);m.silver+=(g.s||0)+(q.s||0);m.scheme+=(g.sc||0)+(q.sc||0);m.hp+=(g.hp||0)+(q.hp||0);m.favor+=q.f||0;m.emp+=q.e||0;
@@ -861,7 +861,7 @@ function nm2(){let n,c=0;do{n=SUR[R(0,SUR.length-1)]+GIV[R(0,GIV.length-1)]+(P(.
 function famFor(rank){const T=rank>=7?0:rank>=5?1:rank>=3?2:3,J=TIERJ[T],J2=TIERJ[Math.min(3,T+1)],pb=[75,55,32,10][T],f=[['父親',J[R(0,J.length-1)],cl(pb+R(-8,12)),R(40,75),R(40,90)]];if(P(.7))f.push(['兄長',J2[R(0,J2.length-1)],cl(pb-15+R(-5,10)),R(35,70),R(35,85)]);if(T<2&&P(.4))f.push(['侄子',J2[R(0,J2.length-1)],cl(pb-30+R(0,10)),R(35,70),R(40,85)]);return f}
 function genHarem(ka){gsn=0;gdn=0;HU.clear();const rk=[8].concat([7,6,6,5,5,4,3,3,2,1].sort(()=>Math.random()-.5).slice(0,7)),out=[];
 rk.forEach((r,i)=>{const name=nm2(),fam=famFor(r),kids=[],nk=r<3?(P(.2)?1:0):(P(.7)?1:0)+(P(.3)?1:0)+(i==0&&P(.4)?1:0);
-for(let j=0;j<nk;j++){const sex=P(.55)?'男':'女';kids.push(kid(sex=='男'?SN[gsn++%SN.length]:DN[gdn++%DN.length],sex,ka(R(15,90)/100),i,i==0&&j==0&&sex=='男'?{cai:55,de:65,chong:45,pow:45}:{}))}
+for(let j=0;j<nk;j++){const sex=P(.55)?'男':'女';kids.push(kid(sex=='男'?kidNm('男'):kidNm('女'),sex,ka(R(15,90)/100),i,i==0&&j==0&&sex=='男'?{cai:55,de:65,chong:45,pow:45}:{}))}
 out.push(mkN(name,r,i==0?R(25,45):R(30,65),fam,kids))});return out}
 function genNN(){const o=[];for(let i=0;i<48;i++)o.push(nm2()+'|'+[0,0,0,1,1,2][R(0,5)]);return o}
 /* --- 產業 --- */
@@ -1185,7 +1185,7 @@ const NAT6=['暹羅','高麗','蒙古','吐蕃','安南','準噶爾'];
 const NTR={暹羅:['海商富庶、象兵威名'],高麗:['禮儀之邦、文教昌盛'],蒙古:['騎射無雙、草原霸主'],吐蕃:['高原佛國、民風淳厚'],安南:['南疆近鄰、叛服不定'],準噶爾:['部落強悍、野心勃勃']};
 const pk=a=>a[R(0,a.length-1)];
 const MG=['明','遠','徵','承','昭','鴻','澤','衡','庭','川','珩','策'];
-const pnm=sex=>pk(SUR)+(sex=='男'?pk(MG):pk(GIV));
+const pnm=sex=>pnmU(sex);
 const ntr=()=>{if(!S.ntr){S.ntr={};NAT6.forEach(k=>S.ntr[k]=R(35,65));if(S.me&&S.me.fo&&S.ntr[S.me.fo]!==undefined)S.ntr[S.me.fo]=cl(S.dip||50)}return S.ntr};
 function RKN(n){if(n.st)return n.st;if(!S||!S.reg||!n.tf)return RKD(n);const wi=S.reg.wmi,w=typeof wi=='number'?S.npcs[wi]:null;if(w===n)return n===Q()?'生母皇太后':'生母太妃';if(n===Q())return S.reg.title==='西太后'?'東太后':'嫡母皇太后';return n.rank>=5?'太妃':n.rank>=3?'太嬪':'太貴人'}
 function rx(){const R_=S.reg;if(!R_.x)R_.x={pj:[],emp:null,lv:null,sx:0,gs:0,cc:0,tal:0,dp:0,sec:0,hl:0};if(S.cr)S.cr.forEach(f=>{if(f.lo===undefined)f.lo=R(30,60)});ntr();return R_.x}
@@ -2618,7 +2618,7 @@ for(let i=0;i<low;i++){let r=pk([2,2,2,1,1,1,0,0,0,2]);let g=0;while(c2[r]>=cap[
 return out.slice(0,1).concat(out.slice(1).sort(()=>Math.random()-.5))}
 function genHarem(ka,ea,ep){gsn=0;gdn=0;HU.clear();ea=ea||30;ep=ep||0;const n=hSize(ea,ep),rk=hRanks(n,HRY.ry),out=[];let budget=Math.max(1,Math.round(HRY.ry*.7+1));
 rk.forEach((r,i)=>{const name=nm2(),fam=famFor(r),kids=[];let nk=r<3?(P(.2)?1:0):(P(.7)?1:0)+(P(.3)?1:0)+(i==0&&P(.4)?1:0);nk=Math.min(nk,budget);budget-=nk;
-for(let j=0;j<nk;j++){const sex=P(.55)?'男':'女';kids.push(kid(sex=='男'?SN[gsn++%SN.length]:DN[gdn++%DN.length],sex,ka(R(15,90)/100),i,i==0&&j==0&&sex=='男'?{cai:55,de:65,chong:45,pow:45}:{}))}
+for(let j=0;j<nk;j++){const sex=P(.55)?'男':'女';kids.push(kid(sex=='男'?kidNm('男'):kidNm('女'),sex,ka(R(15,90)/100),i,i==0&&j==0&&sex=='男'?{cai:55,de:65,chong:45,pow:45}:{}))}
 out.push(mkN(name,r,i==0?R(25,45):R(30,65),fam,kids))});return out}
 const _s0R=start0;start0=function(){_s0R.apply(this,arguments);try{const h=HRY;if(S){S.ry0=h.ry;S.log[0]+=`皇上登基${h.ry>0?h.ry+'年':'未久'}（${h.acc}歲即位），${EPS[S.ep][0]}，後宮現有皇后以下妃嬪 ${S.npcs.length+1} 人。`;initFr()}}catch(e){console.log('start0R',e)}};
 /* --- 前朝補齊（比照清代實際員額） --- */
@@ -3287,6 +3287,20 @@ function replaySame(){try{const g=G,t=T,n=N;S=null;G=g;T=t;N=n;start();render()}
 const _ec4=endCard;endCard=function(){let h=_ec4.apply(this,arguments);try{const ms=(S.ms||[]).slice(-14),pf=(S.pf||[]).map(x=>({t:x.t,x:'主線「'+((typeof PLD!='undefined'&&PLD[x.id])?PLD[x.id].k:x.id)+'」：'+(x.res||'落幕')}));const all=ms.concat(pf).sort((a,b)=>(a.t||0)-(b.t||0)).slice(-16);if(all.length)h+=`<div class=m style="margin-top:8px"><b>這一局的關鍵時刻</b></div>`+all.map(x=>`<div class=m>第${Math.floor((x.t||0)/12)+1}年${(x.t||0)%12+1}月・${x.x}</div>`).join('');h+=`<button class=s style="margin-top:8px" onclick="replaySame()">用同樣的開局再玩一次</button>`}catch(e){console.log('ec4',e)}return h};
 HELP.push(['警示欄','主畫面最上方的紅色「注意」欄，會在母國猜忌、皇帝疑心、醜聞、健康或銀兩接近危險線時出現，並附上直接處理的按鈕。']);
 
+/* ===== 第五輪：姓名不重複 ===== */
+'容蔣馮程唐袁盧傅鍾姜郭梁范段尹龍宋霍楊羅何邵冷薛吳連祝聞魯左柏舒藺'.split('').forEach(c=>{if(!SUR.includes(c))SUR.push(c)});
+'蓉慧瀾青蕙琳珊婧筠瑩媛蓮梅蝶萱翎絮紈綺翠璇檀柔倩雅蕊語漪伶珞澄旎蔓苒笙婕舒緋'.split('').forEach(c=>{if(!GIV.includes(c))GIV.push(c)});
+const BKC='祜煜瑾琰璋瑜琮昭祺禛璟琬祐瑞琪琛珩琥璘琳璿玨璵珅瑄瑢珂琅璞瑛瓚琦璐珣璇琨玘珺玹'.split('');
+const GK1='靜端長淑永榮和固溫安嘉慧純敦恪悼昌貞憲'.split(''),GK2='和敏寧慎安嘉怡碩倫恪淑懿婉惠順康樂貞'.split('');
+const KU=new Set();
+function namesUsed(){const u=new Set(KU);try{if(typeof HU!='undefined')HU.forEach(x=>u.add(x));if(S){if(S.me&&S.me.n)u.add(S.me.n);(S.npcs||[]).forEach(n=>{u.add(n.n);(n.kids||[]).forEach(k=>u.add(k.n))});(S.me&&S.me.kids||[]).forEach(k=>u.add(k.n));(S.gn||[]).forEach(g=>u.add(g.n));(S.srv||[]).forEach(x=>u.add(x.n));try{allKids().forEach(k=>u.add(k.n))}catch(e){}}}catch(e){}return u}
+function kidNm(sex){const u=namesUsed();let n,c=0;do{n=sex=='男'?'承'+BKC[R(0,BKC.length-1)]:GK1[R(0,GK1.length-1)]+GK2[R(0,GK2.length-1)];if(c>60&&sex=='男')n+=BKC[R(0,BKC.length-1)];if(c>60&&sex!='男')n+=GK2[R(0,GK2.length-1)]}while(u.has(n)&&c++<200);KU.add(n);return n}
+nm2=function(){const u=namesUsed();let n,c=0;do{const a=GIV[R(0,GIV.length-1)];let b='';if(P(.6)){do{b=GIV[R(0,GIV.length-1)]}while(b===a)}n=SUR[R(0,SUR.length-1)]+a+b}while(u.has(n)&&c++<80);HU.add(n);return n};
+function pnmU(sex){const u=namesUsed();let n,c=0;do{n=pk(SUR)+(sex=='男'?pk(MG)+(P(.5)?pk(MG):''):pk(GIV))}while(u.has(n)&&c++<50);KU.add(n);return n}
+const _st5=start0;start0=function(){KU.clear();return _st5.apply(this,arguments)};
+/* 既有存檔：一次性去重 */
+const _nf5=mend;mend=function(){const r=_nf5.apply(this,arguments);try{if(S&&!S.nmFix&&S.npcs){S.nmFix=1;const seen=new Set([S.me.n]);let ch=0;S.npcs.forEach(n=>{if(seen.has(n.n)){const o=n.n;n.n=nm2();ch++}seen.add(n.n)});const ks=[];S.npcs.forEach(n=>(n.kids||[]).forEach(k=>ks.push(k)));(S.me.kids||[]).forEach(k=>ks.push(k));const ksn=new Set();ks.forEach(k=>{if(ksn.has(k.n)){k.n=kidNm(k.sex);ch++}ksn.add(k.n)});if(ch)L(`宮中人事整理，${ch}人因重名而改了名字。`)}}catch(e){console.log('nmFix',e)}return r};
+
 /* ===== 編制人物多樣化：宮中執事・官女子有名字、性情、籍貫，會告老、調任、被選中 ===== */
 const OFS=['李','張','王','劉','趙','孫','錢','周','吳','鄭','馮','陳','褚','衛','蔣','沈','韓','楊','朱','秦','尤','許','何','呂','施','曹','嚴','華','金','魏'],
 OFG1=['德','福','順','祿','喜','貴','安','全','進','忠','長','永','元','來','慶','得','寶','有','吉','連'],
@@ -3298,7 +3312,7 @@ MAMA=['姑姑','嬤嬤','姆姆'];
 function ofP(role){let n;const f=()=>pk(OFS);
 if(role==='敬事房總管太監'||role==='御前首領太監')n=f()+pk(OFG1)+(P(.7)?pk(OFG2):'');
 else if(role==='教引嬤嬤')n=f()+(P(.5)?'氏':'')+pk(MAMA);
-else n=pk(SUR)+pk(GIV)+(P(.4)?pk(GIV):'');
+else n=nm2();
 return{n,tr:pk(STR),y:S.t,o:pk(OFP)}}
 function genOfc(){return[['敬事房總管太監',1,[ofP('敬事房總管太監')]],['御前首領太監',4,[0,1,2,3].map(()=>ofP('御前首領太監'))],['教引嬤嬤',2,[ofP('教引嬤嬤'),ofP('教引嬤嬤')]],['尚宮局尚宮',1,[ofP('尚宮局尚宮')]]]}
 function ofcFix(){if(!S||!S.ofc)return;S.ofc.forEach(r=>{r[2]=r[2].map(x=>typeof x==='string'?{n:x,tr:pk(STR),y:S.t,o:pk(OFP)}:x)});(S.gn||[]).forEach(g=>{if(!g.tr){g.tr=pk(GTR);g.o=pk(OFP)}})}
