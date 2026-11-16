@@ -2969,7 +2969,8 @@ const _BZU=BZ;BZ=function(){const f0=S&&S.log&&S.log[0];_BZU.apply(this,argument
 const INFN=['零星往來','漸有耳目','盤根錯節','暗中掌控'];
 const infLv=v=>v>=75?3:v>=50?2:v>=25?1:0;
 function infInit(){const f=S&&S.fr;if(f&&f.inf===undefined){f.inf=0;f.sub=0;f.icd=0}}
-const infPush=e=>{if(!e)return;S.q.push(e);if(!S.ev&&!S.ch&&!S.scn)next();else render()};
+const EVG=()=>({1:5,2:3,3:1})[(typeof EVF!=='undefined'&&EVF)||2];
+const infPush=e=>{if(!e)return;S.gcd=EVG();S.q.push(e);if(!S.ev&&!S.ch&&!S.scn)next();else render()};
 const infEv=(t,o)=>({t,o});
 const FIE=[
 ()=>infEv(`${S.fr.n}的商人與使節頻頻入京，在市井和衙門裡四處打點，有人悄悄來求你行個方便。`,[
@@ -2994,11 +2995,11 @@ function frInfMonth(){const m=S&&S.me,f=S&&S.fr;if(!m||!m.fo||!f||f.dead||S.over
 let d=0;if(f.pw>=55&&f.rel>=30)d+=(f.pw-50)/70;if(f.war)d-=.4;(m.shops||[]).forEach(s=>{const nm=SHT[s.t]&&SHT[s.t][0],lv=s.lv||1;d+=nm=='嫁妝商隊'?.15*lv:nm=='情報樓'?.1*lv:nm=='青樓'?.05*lv:0});d-=.1+natv()/400;f.inf=cl(f.inf+d);
 const lv=infLv(f.inf);if(lv>=2)S.nat.eco=cl(S.nat.eco-.05*lv);if(lv>=3){S.nat.mil=cl(S.nat.mil-.08);S.nat.stab=cl(S.nat.stab-.1)}
 if(lv>=2&&P(.04)){m.favor-=2;L(`皇上對${f.n}多了幾分猜忌，看你的眼神有些複雜。`)}
-f.icd=(f.icd||0)-1;if(!S.ev&&!S.ch&&!S.scn&&f.icd<=0&&f.pw>=48&&S.t>12&&P(.06)){f.icd=8;infPush(FIE[R(0,FIE.length-1)]())}
+f.icd=(f.icd||0)-1;if(!S.ev&&!S.ch&&!S.scn&&!(S.gcd>0)&&f.icd<=0&&f.pw>=48&&S.t>12&&P(.06)){f.icd=8;infPush(FIE[R(0,FIE.length-1)]())}
 if(S.t%12==3)frInfYear()}
 function frInfYear(){const m=S.me,f=S.fr;if(!f||f.dead||S.reg||S.over)return;
 if(f.inf>=70&&f.mil>=58&&natv()<50&&P(.4)&&!S.ev&&!S.ch&&!S.scn)return infPush(infEv(`${f.n}的使者在深夜叩開你的宮門：大軍已集結邊關，只待內應開門。「娘娘，您是${f.n}的公主，這是您的時候了。」`,[
-['作內應，開門迎立',()=>{if(ckp(.35+f.mil/250+f.inf/300+m.ally/500)){over('皇朝易主',`${f.n}大軍長驅入關，城門洞開。皇朝一夕易主，你因獻門之功，被新主奉為「${f.n}王妃」，榮寵一時，只是午夜夢回，總聽見故國舊臣的哭聲。`);return''}over('通敵伏誅',`內應之事敗露，禁軍包圍了你的宮殿。你被當作${f.n}的細作，以通敵罪賜死，母家也一併獲罪。`);return''}],
+['作內應，開門迎立',()=>{if(ckp(.35+f.mil/250+f.inf/300+m.ally/500)){over('皇朝易主',`那一夜，你親手為${f.n}的先鋒抽開了城門的門閂。天亮時，皇朝的旗幟已被換下，皇上被請出了養心殿，宮人們跪了一地。${f.n}的新主論功行賞，封你為「${f.n}王妃」，母家父兄也都得了封賞。往後的日子榮寵尚在，只是每逢深夜，你總會想起舊日的姐妹、被你背叛的宮人，以及那個曾經握過你手的人。史書上對你只有一句：「某氏開門納敵，皇朝遂亡。」是功是罪，後人各有說法。`);return''}over('通敵伏誅',`內應之事在最後一刻敗露。禁軍踹開宮門時，你正伏案寫著給${f.n}的最後一封密信。你被當作細作押上殿前，皇上看了你很久，什麼也沒說，只留下一句「賜死」。母家被牽連，父兄流放，你的名字從玉牒上被抹去。宮牆之外，${f.n}的使者連夜離京，沒有人記得你曾為他們冒過什麼險。`);return''}],
 ['連夜告發，力挽狂瀾（看心機與聖寵）',()=>{if(ckp(.3+m.scheme/250+m.favor/300)){f.inf=10;f.rel=cl(f.rel-25);m.favor+=10;m.ally+=5;S.nat.stab=cl(S.nat.stab+4);if(!f.war)f.war={k:'imp',m:0,s:0,sc:0,pend:0};return`你連夜面聖，禁軍星夜增援邊關，政變消弭於無形。皇朝與${f.n}就此交惡，你卻成了救駕功臣。`}f.inf=cl(f.inf+5);m.favor-=15;m.scand=(m.scand||0)+4;return'沒人信你的話，皇上反疑你賊喊捉賊，把你軟禁了幾日。'}],
 ['稱病閉宮，兩不相幫',()=>{m.favor-=8;f.icd=12;f.inf=cl(f.inf-5);return'你閉門謝客，兩邊都沒有再來找你，但這件事並沒有真的過去。'}]]));
 const dom=natv()>f.pw+15&&S.nat.mil>f.mil+12;f.sub=cl((f.sub||0)+(dom?(f.rel<55?7:4):-3));
@@ -3024,7 +3025,7 @@ const dsPr=()=>dsOwn().filter(x=>x.k.sex=='男'&&yr(x.k)>=14&&!x.k.jin).sort((a,
 const dsOf=k=>S.me.kids.includes(k)?'me':S.npcs.findIndex(n=>n.kids.includes(k));
 const amb=k=>{if(k.am===undefined)k.am=cl(R(25,75)+(k.pow-50)/5-(k.de-50)/4);return k.am};
 const ambTx=k=>{const a=amb(k);return a>=70?'野心勃勃':a>=45?'頗有抱負':'與世無爭'};
-const dsOk=()=>!S.ev&&!S.ch&&!S.scn&&!(S.q&&S.q.length);
+const dsOk=()=>!S.ev&&!S.ch&&!S.scn&&!(S.q&&S.q.length)&&!(S.gcd>0);
 const dsInit=()=>{if(!S.dj)S.dj={heat:0,cd:0,sus:0}};
 const dsNm=k=>`${k.n}（${on(dsOf(k))}之子）`;
 function dsDown(k,a,b){k.chong=cl(k.chong-(a||0));k.pow=cl(k.pow-(b||0))}
@@ -3038,9 +3039,9 @@ infPush(infEv(mine?`皇上對儲君${h.n}猜忌日深，有意廢儲。`:`皇上
 ['靜觀其變',()=>{if(P(.5)){dep();return`${h.n}終究被廢去儲君之位。`}h.sus=cl(h.sus-10);return'皇上猶豫再三，終究沒有動手。'}]]))}
 function dsCoupRes(h,sup){const m=S.me,mine=m.kids.includes(h),mil=Math.max(0,...m.fam.filter(x=>typeof MIL!=='undefined'&&MIL.test(x.job)).map(x=>x.pw));
 const p=.3+h.pow/250+h.chong/500+(sup&&mine?.2+mil/400:sup?.1:0)+(S.nat.mil<45?.05:0);
-if(ckp(p)){S.heir=h;S.abd=1;S.dying=1;msPush&&msPush(`${h.n}逼宮成功`);return`${h.n}率親兵控制宮禁，皇上被迫下詔禪位，尊為太上皇。${mine?'你的兒子即將登基。':'新君即將繼位。'}`}
+if(ckp(p)){S.heir=h;S.abd=1;S.dying=1;msPush&&msPush(`${h.n}逼宮成功`);return`${h.n}率親兵一夜之間控制了宮禁。次日清晨，皇上在重臣的簇擁下，被迫下詔禪位，尊為太上皇，宮中人人噤若寒蟬。${mine?'你的兒子即將登基，而你終於等到了這一天，卻也明白，這一步踩著多少人的血。':'新君即將繼位，朝野上下都在看風向。'}`}
 h.jin=1;h.pow=0;S.heir=null;msPush&&msPush(`${h.n}逼宮失敗`);
-if(mine){m.favor=0;m.rank=Math.max(0,m.rank-2);m.fam.forEach(x=>x.pw=Math.max(0,x.pw-30));if(P(.3)){over('謀逆伏誅',`你的兒子${h.n}逼宮失敗，皇上震怒，你被賜三尺白綾，母家滿門抄斬。`);return''}return`${h.n}逼宮失敗被圈禁，你被降位幽禁，母家元氣大傷。`}
+if(mine){m.favor=0;m.rank=Math.max(0,m.rank-2);m.fam.forEach(x=>x.pw=Math.max(0,x.pw-30));if(P(.3)){over('謀逆伏誅',`${h.n}逼宮的那一夜，宮城裡火光沖天。天亮時，叛軍潰散，你的兒子被押至御前，皇上老淚縱橫，卻仍下了圈禁的旨意。而你，作為「教子無方、縱子謀逆」的生母，被賜三尺白綾。母家滿門抄斬，史書只記了一句：「某氏縱子謀逆，伏誅。」`);return''}return`${h.n}逼宮失敗被圈禁，你被降位幽禁，母家元氣大傷。`}
 const o=dsOf(h);if(o!=='me'&&o>=0)S.npcs[o].favor=0;return`${h.n}逼宮失敗，被圈禁高牆，其母從此失勢。`}
 function dsCoup(h){const m=S.me,mine=m.kids.includes(h);
 infPush(infEv(mine?`儲君${h.n}遣人密信：「父皇遲遲不傳位，兒臣等不及了。」`:`宮中風聲鶴唳：儲君${h.n}久候帝位不得，似乎打算有所動作。`,mine?[
@@ -3109,6 +3110,32 @@ const _mdD=mend;mend=function(){const r=_mdD.apply(this,arguments);try{dsTick()}
 ACT.push(['帶孩子面聖','帶孩子見皇上，皇上寵愛＋',()=>{const m=S.me;if(!m.kids.length)return L('你還沒有子嗣。');choose('帶哪位去見皇上？',m.kids.filter(k=>!k.jin).map(k=>({l:`${tag(k)}　寵${k.chong|0}・才${k.cai|0}・德${k.de|0}`,f(){if(yr(k)<2)return L(`${k.n}還太小，帶去御前怕驚了聖駕。`);const p=.45+m.favor/220+(k.cai+k.de)/500+(S.mood-40)/400;if(ckp(p)){const g=R(4,8);k.chong=cl(k.chong+g);m.favor+=1;L(`皇上見了${k.n}很是歡喜，賞了東西，皇上寵愛＋${g}（${k.chong|0}）。`)}else{k.chong=cl(k.chong+1);L(`皇上心緒不佳，只草草問了${k.n}幾句。`)}}})));return 1}]);
 {const c=ACTCAT.find(x=>x[0]=='子嗣');if(c)c[1].push(ACT.length-1)}
 const _mdK=mend;mend=function(){const r=_mdK.apply(this,arguments);try{if(S&&S.me&&!S.over&&!S.reg)S.me.kids.forEach(k=>{if(!k.jin&&yr(k)>=3)k.chong=cl(k.chong+(S.me.favor>=60?.3:S.me.favor<30?-.3:0)+(k.cai+k.de-100)/500)})}catch(e){}return r};
+
+/* ===== 收尾：猜忌值、說明、成就、事件頻率、分頁收合 ===== */
+let EVF=2;try{EVF=+(localStorage.getItem('hg_evf')||2)||2}catch(e){}
+function setEvf(n){EVF=n;try{localStorage.setItem('hg_evf',String(n))}catch(e){}L(`事件頻率改為「${['','少','中','多'][n]}」。`);render()}
+const _mdPre=mend;mend=function(){try{if(S&&S.gcd>0)S.gcd--}catch(e){}return _mdPre.apply(this,arguments)};
+/* 皇上猜忌：由滲透度變化推動 */
+function susTick(){const f=S&&S.fr,m=S&&S.me;if(!m||!m.fo||!f||f.dead||S.reg||S.over)return;infInit();if(f.sus===undefined){f.sus=0;f.ip=f.inf}
+const dl=f.inf-f.ip;f.ip=f.inf;f.sus=cl(f.sus+Math.max(0,dl)*1.5-Math.max(0,-dl)*.4+(f.inf>=60?.5:f.inf>=40?.25:0)+(f.war&&f.war.k=='imp'?.2:0)-.2-m.favor/500);
+if(f.sus>=60&&P(.06)){m.favor-=3;L(`皇上對你與${f.n}的猜忌，已經擺到了臉上。`)}
+if(f.sus>=80&&P(.05)&&dsOk())infPush(infEv(`皇上下令徹查你與${f.n}的往來，禁軍已包圍你的宮殿。`,[
+['坦然受查，自證清白（看聖寵）',()=>{if(ckp(.35+m.favor/200+(100-f.inf)/300)){f.sus=30;m.favor+=3;return'禁軍翻箱倒櫃，卻查無實據，皇上多少有些愧疚。'}m.rank=Math.max(0,m.rank-1);m.favor-=15;m.scand=(m.scand||0)+3;f.sus=50;return'查出了幾封往來書信，你被降了一級位份，皇上冷了心。'}],
+['主動交代，求寬大處理',()=>{f.inf=cl(f.inf-15);f.rel=cl(f.rel-10);f.sus=35;m.favor-=6;return`你把與${f.n}的往來和盤托出，母國視你為叛徒，皇上卻饒了你。`}],
+['反咬一口，說有人構陷（看心機）',()=>{if(ckp(.25+m.scheme/200)){f.sus=20;m.favor+=2;const c=ids();if(c.length)S.npcs[pk(c)].favor-=10;return'你抖出幾條對頭的把柄，皇上半信半疑，徹查不了了之。'}if(P(.4)){over('通敵伏誅',`你反咬他人的話被一一戳破，皇上認定你通敵，賜你三尺白綾，${f.n}與母家也一併受到清算。`);return''}m.favor=0;m.rank=Math.max(0,m.rank-2);return'你的狡辯惹怒了皇上，被降位幽禁。'}]]));}
+const _frS=frCard;frCard=function(){let h=_frS.apply(this,arguments);try{const f=S.fr;if(h&&f&&!f.dead&&!f.ann&&S.me.fo){infInit();h=h.replace(/(<div class=m>想增強母國)/,`${abar('皇上猜忌',(f.sus||0)|0)}<div class=m>猜忌來自滲透度上升；低於 60 無事，過 60 聖寵會受損，過 80 可能被徹查。多用「協助皇朝防範」與表忠選項降低。</div>$1`)}}catch(e){console.log('frS',e)}return h};
+const _gcS=goalChip;goalChip=function(){let h=_gcS.apply(this,arguments);try{if(S.me.fo&&S.fr&&!S.fr.dead&&(S.fr.sus||0)>=1)h=h.replace(/(滲透 \d+（[^）]*）)/,`$1　猜忌 ${S.fr.sus|0}`)}catch(e){}return h};
+const _mdS=mend;mend=function(){const r=_mdS.apply(this,arguments);try{susTick()}catch(e){console.log('susTick',e)}return r};
+/* 說明 */
+HELP.push(['下人與商鋪','<b>下人</b>：「後宮」分頁的「我的下人」列出你的宮女太監，各有特質、職務、忠誠與能力。到「行動→宮人差遣」可派他們打探、送禮、御前打點、散播流言，也能賞罰、調任、提拔、遣散或招募。忠誠太低會出賣你。<br><b>商鋪</b>：開鋪子、整頓、宣傳、擴建、查賬、賣官都在「產業」卡片裡。「特殊經營」有各鋪專屬操作：情報樓賣情報、殺手樓除對頭、青樓結交達官、賭坊放貸；外邦公主另有嫁妝商隊、牧場。這些會影響人脈、心機與醜聞。'],['外邦公主：母國、滲透與併吞','外邦公主出身有「母國」卡：國力、邦誼、<b>滲透度</b>、<b>皇上猜忌</b>。母國強、邦誼高、你的商隊情報樓越多，滲透越深，皇朝會被慢慢侵蝕，皇上也越猜忌你。滲透過高且皇朝衰弱時，母國可能找你當內應發動政變（可作內應、告發或閉宮）。反過來皇朝遠強於母國時，會逐步蠶食，滿格時可能併吞母國。想控制風險：用「母國謀略」協助防範、事件選表忠，並把聖寵維持高。<br>「資助母家／資助母國」可增強家人與母國實力。'],['九龍奪嫡','皇子成年後會結黨、構陷、暗殺；皇帝久不傳位，儲君可能逼宮；儲君勢大會被猜忌甚至廢掉。「子嗣」分頁頂部有「奪嫡局勢」。行動「奪嫡謀劃」可為兒子結黨、造勢、打壓對手；「帶孩子面聖」可提升皇子寵愛。被圈禁的皇子不再參與繼位。'],['事件頻率','「紀事」分頁最上方可調整新系統事件（滲透、奪嫡、下人背叛等）出現的頻繁程度：少／中／多。']);
+/* 成就 */
+[['a40','手眼通天','下人達八名以上',()=>(S.srv||[]).length>=8],['a41','死士如雲','開設殺手樓',()=>S.me.shops.some(s=>SHT[s.t][0]=='殺手樓')],['a42','耳目靈通','開設情報樓',()=>S.me.shops.some(s=>SHT[s.t][0]=='情報樓')],['a43','母國靠山','母國國力達80',()=>!!(S.me.fo&&S.fr&&S.fr.pw>=80)],['a44','暗度陳倉','母國滲透度達50',()=>!!(S.fr&&S.fr.inf>=50)],['a45','母儀天下之子','你的兒子被立為儲君',()=>!!(S.heir&&S.me.kids.includes(S.heir))],['a46','忠心耿耿','滲透度達50但猜忌低於30',()=>!!(S.fr&&S.fr.inf>=50&&(S.fr.sus||0)<30)]].forEach(a=>AL.push(a));
+[['皇朝易主','a47','裡應外合','結局：作內應讓母國入主皇朝'],['通敵伏誅','a48','功虧一簣','結局：通敵之事敗露'],['宮變奪位','a49','扶龍之功','結局：宮變扶子登基']].forEach(x=>AL.push([x[1],x[2],x[3],()=>false]));
+const _emU=endMark;endMark=function(t){const r=_emU.apply(this,arguments);try{({'皇朝易主':'a47','通敵伏誅':'a48','宮變奪位':'a49'})[t]&&unlock(({'皇朝易主':'a47','通敵伏誅':'a48','宮變奪位':'a49'})[t])}catch(e){}return r};
+/* 介面：長分頁預設收合、紀事頁事件頻率 */
+const _upP=uiPost;uiPost=function(){_upP.apply(this,arguments);try{if(!S||!S.me||S.over||S.scn)return;const main=document.querySelector('#app main');if(!main)return;
+if(TAB==1||TAB==3){let i=0;main.querySelectorAll(':scope>.cd').forEach(c=>{const h=c.firstElementChild;if(!h||h.tagName!=='H3')return;if(i++>=2&&FOLDS[c.dataset.fk]===undefined)c.classList.add('closed')})}
+if(TAB==5&&!main.querySelector('.evf')){main.insertAdjacentHTML('afterbegin',`<div class="cd evf"><h3>事件頻率</h3><div class=m>調整新系統事件（滲透、奪嫡、下人背叛等）出現的頻繁程度。</div><div class=g>${[1,2,3].map(n=>`<button onclick="setEvf(${n})" style="${EVF==n?'outline:2px solid #d9546b':''}">${['','少','中','多'][n]}</button>`).join('')}</div></div>`)}}catch(e){console.log('uiPost3',e)}};
 
 /* ===== 編制人物多樣化：宮中執事・官女子有名字、性情、籍貫，會告老、調任、被選中 ===== */
 const OFS=['李','張','王','劉','趙','孫','錢','周','吳','鄭','馮','陳','褚','衛','蔣','沈','韓','楊','朱','秦','尤','許','何','呂','施','曹','嚴','華','金','魏'],
