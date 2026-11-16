@@ -2814,6 +2814,113 @@ p=>EV(p,'深夜宮裡鬧賊，你本能地察覺了動靜。',[O('出手制住�
 p=>EV(p,'江湖仇家尋到京城，傳話要你出宮一見。',[O('單刀赴會','hp:-5','你赴了約，把恩怨了結。',{pr:()=>.5+S.me.hp/250,be:'hp:-10,scand:6',bt:'你受了傷，還被人看到偷偷出宮。'}),O('告知侍衛，借朝廷之力','favor:4,ally:-2','仇家被侍衛拿下，但江湖上有人說你背信。',{}),O('置之不理','','你不予理會，仇家也不敢闖宮。',{})]),
 p=>EV(p,'你的江湖身世被人翻了出來，皇上召你問話。',[O('如實相告，坦蕩面對','favor:8','你一五一十地說了過往，皇上反而更欣賞你的真性情。',{pr:.6,be:'favor:-8,scand:6',bt:'皇上對你的出身心存芥蒂。',end:1,res:'坦蕩做人',bres:'嫌隙難平',sc:8,bsc:1}),O('請皇上念在救命之恩','favor:4','皇上想起舊事，神色柔和了些。',{pr:.5,be:'favor:-6',bt:'皇上說恩是恩，法是法。',end:1,res:'恩義為憑',bres:'恩情不再',sc:6,bsc:1}),O('以退為進，自請降位','favor:3,scheme:2','你自請降位，皇上反而不忍。',{end:1,res:'以退為進',sc:4})])];
 
+/* ===== 下人系統・母國國力・更多行動・介面整理 ===== */
+const SVT=[['機靈',8,0],['忠厚',-2,12],['貪財',2,-10],['多嘴',0,-4],['能幹',12,0],['膽小',-4,4],['野心',6,-8],['老練',10,2]];
+const SVJ=['貼身伺候','打探消息','跑腿傳話','試毒守門','管理庫房'];
+const SVNF=['春','秋','香','翠','玉','紅','碧','靈','月','雲','蓮','杏','雪','錦','綠'],SVNS=['兒','蘭','桃','巧','柳','喜','荷','梅','玲','珠'];
+const SVNM=['小順子','小祿子','小福子','小貴子','小安子','小德子','小喜子','小全子','李德全','張福海','王進喜','趙安','錢多','孫得祿','周有福','吳長順'];
+function svMk(k,b){const t=pk(SVT);let n;for(let i=0;i<30;i++){n=k=='宮女'?pk(SVNF)+pk(SVNS):pk(SVNM);if(!(S.srv||[]).some(x=>x.n==n))break}
+return{n,k,tr:t[0],lo:cl(R(45,78)+t[2]+(b||0)),ab:cl(R(25,58)+t[1]+(b||0)),job:pk(SVJ),y:S.t}}
+function svNeed(){return STAFF[S.me.rank]||[2,1]}
+function svInit(){if(!S||!S.me||S.srv)return;S.srv=[];const [a,b]=svNeed();for(let i=0;i<a;i++)S.srv.push(svMk('宮女'));for(let i=0;i<b;i++)S.srv.push(svMk('太監'));S.srv.forEach((x,i)=>{x.job=i<2&&x.k=='宮女'?'貼身伺候':pk(SVJ)})}
+function svSync(){svInit();if(!S.srv)return;const nd=svNeed();['宮女','太監'].forEach((k,i)=>{let c=S.srv.filter(x=>x.k==k).length;while(c<nd[i]&&S.srv.length<14){const x=svMk(k);S.srv.push(x);c++;L(`內務府撥來${k}${x.n}供你使喚。`)}})}
+function svBox(x){return`${x.k}${x.n}（${x.tr}・${x.job}・忠${x.lo|0} 能${x.ab|0}）`}
+function svDo(x,p,okf,failf){const m=S.me;if(ckp(p+(x.lo-50)/400-(x.tr=='膽小'?.06:0)+(x.tr=='老練'?.05:0))){x.ab=cl(x.ab+.6);x.lo=cl(x.lo+1);okf()}else{x.lo=cl(x.lo-2);failf()}}
+function svPickN(t,fn){choose(t,ids().map(i=>{const n=S.npcs[i];return{l:`${n.n}（${RKN(n)}・盟${n.al|0} 怨${n.host|0}）`,f(){fn(n)}}}))}
+function svTasks(x){const m=S.me;const T=[
+{l:'打探妃嬪動靜',f(){svPickN('打探誰？',n=>svDo(x,.42+x.ab/200,()=>{m.ally+=2;m.scheme+=1;L(`${x.n}回報：${n.n}聖寵${n.favor|0}、對你怨氣${n.host|0}、與你盟友度${n.al|0}${n.scheme>=60?'，聽說很有心機':''}${n.preg?'，而且有了身孕':''}。`)},()=>{n.host=cl(n.host+6);L(`${x.n}被${n.n}的人撞破，對方對你更加戒備。`)}))}},
+{l:'送禮籠絡（耗銀15）',f(){svPickN('送禮給誰？',n=>{if(!pay(15))return L('銀兩不足。');svDo(x,.6+x.ab/250,()=>{n.al+=R(6,12);n.host-=R(3,7);L(`${x.n}把禮送到，${n.n}笑納了，對你親近不少。`)},()=>{n.al+=2;L(`${x.n}笨嘴拙舌，禮雖收下，${n.n}卻不太領情。`)})})}},
+{l:'御前打點（耗銀20）',f(){if(!pay(20))return L('銀兩不足。');svDo(x,.5+x.ab/220+(x.k=='太監'?.1:0),()=>{m.favor+=R(5,9)+(x.k=='太監'?3:0);L(`${x.n}在御前替你說了好話，皇上近來常提起你。`)},()=>{m.favor-=2;L(`${x.n}被御前總管攔在門外，白白送了禮。`)})}},
+{l:'散播流言（宮鬥，耗銀10）',f(){svPickN('對誰下手？',n=>{if(!pay(10))return L('銀兩不足。');svDo(x,.3+x.ab/220+m.scheme/500,()=>{n.favor-=R(5,10);L(`${x.n}在宮人間悄悄傳話，${n.n}的名聲壞了一截。`)},()=>{n.host=cl(n.host+10);m.favor-=2;x.lo=cl(x.lo-5);L(`${x.n}說漏了嘴，流言查到你頭上，${n.n}恨你入骨。`)})})}},
+{l:'外出採買（耗銀10，賺差價）',f(){if(!pay(10))return L('銀兩不足。');svDo(x,.7+x.ab/300,()=>{const g=R(14,28)+(x.ab/6|0);m.silver+=g;L(`${x.n}精打細算，採買回來還賺了${g}兩。`)},()=>{L(`${x.n}被商販騙了，這趟白跑。`)})}},
+{l:'給母家送信',f(){const f=pk(m.fam);const a=f.pw|0;f.pw+=R(2,5);f.lo=cl((f.lo||50)+2);if(m.fo&&S.fr&&!S.fr.dead){S.fr.rel=cl(S.fr.rel+3)}L(`${x.n}把信帶到，${f.rel}勢力 ${a}→${f.pw|0}${m.fo&&S.fr?'，母國邦誼也回暖':''}。`)}}];return T}
+const SVACT=[
+['差遣下人','派宮人打探、送禮、打點、散播流言',()=>{svSync();choose('差遣哪位下人？',S.srv.map(x=>({l:svBox(x),f(){choose(`派${x.n}去做什麼？`,svTasks(x))}})));return 1}],
+['管教下人','賞賜、責罰、調任、提拔、遣散',()=>{svSync();choose('管教哪位下人？',S.srv.map(x=>({l:svBox(x),f(){choose(`如何處置${x.n}？`,[
+{l:'賞賜（耗銀15，忠誠大增）',f(){if(!pay(15))return L('銀兩不足。');const a=x.lo|0;x.lo=cl(x.lo+R(10,16));L(`${x.n}叩頭謝恩，忠誠 ${a}→${x.lo|0}。`)}},
+{l:'責罰（忠誠降，能力略升）',f(){const a=x.lo|0;x.lo=cl(x.lo-R(5,9));x.ab=cl(x.ab+R(1,3));if(x.tr=='多嘴'&&P(.5)){x.tr='老練';L(`${x.n}吃了教訓，從此謹言慎行。`)}else L(`${x.n}挨了板子，忠誠 ${a}→${x.lo|0}，做事卻更謹慎了。`)}},
+{l:'調任職務',f(){choose(`${x.n}調任為？`,SVJ.map(j=>({l:j+(x.job==j?'（現任）':''),f(){x.job=j;L(`${x.n}改任「${j}」。`)}})))}},
+{l:'提拔為掌事（忠誠需≥60，能力＋8）',f(){if(x.top)return L(`${x.n}已是掌事。`);if(x.lo<60)return L(`${x.n}的資歷與忠心都還不夠。`);x.top=1;x.ab=cl(x.ab+8);x.lo=cl(x.lo+6);L(`${x.n}升為掌事，辦事更得力了。`)}},
+{l:'遣出宮去',f(){S.srv=S.srv.filter(y=>y!==x);if(x.lo>=60&&P(.4)){S.me.ally+=2;L(`${x.n}含淚拜別，日後或許還會念你的好。`)}else if(x.lo<30&&P(.4)){S.me.scheme+=1;L(`${x.n}走時怨氣沖天，不知會在外頭說些什麼。`)}else L(`${x.n}被遣出宮去。`)}}])}})));return 1}],
+['招募宮人','向內務府要人，耗銀25',()=>{svSync();if(S.srv.length>=14){L('你宮裡已經人滿為患。');return}choose('要什麼人？',['宮女','太監'].map(k=>({l:`${k}（耗銀25）`,f(){if(!pay(25))return L('銀兩不足。');const x=svMk(k,R(0,8));S.srv.push(x);L(`你向內務府要了${k}${x.n}，${x.tr}。`)}})));return 1}]];
+const OTHACT=[
+['親制衣物','看女紅，聖寵＋',()=>{const m=S.me;if(ckp(.35+xs(m,'女紅')/150)){m.favor+=R(6,10);L('你親手縫製的衣物針腳細密，皇上穿上很是歡喜。')}else{m.favor+=1;L('衣物做得平平，皇上客氣地道了謝。')}}],
+['籌辦宴席','耗銀40，人脈、聖寵＋',()=>{const m=S.me;if(!pay(40))return L('銀兩不足。');m.ally+=6;m.favor+=3;const c=ids();for(let i=0;i<3&&c.length;i++){const n=S.npcs[pk(c)];n.al+=R(4,8);n.host-=R(1,4)}L('你設宴款待各宮，席間賓主盡歡，人緣更好了。')}],
+['串門走動','隨機一位妃嬪好感＋',()=>{const c=ids();if(!c.length)return L('宮中無人可走動。');const n=S.npcs[pk(c)];n.al+=R(4,9);n.host-=R(2,5);S.me.ally+=1;L(`你到${n.n}宮中坐了半日，兩人說得投緣。`)}],
+['打聽前朝','耗銀10，探知派系強弱',()=>{if(!pay(10))return L('銀兩不足。');const f=S.fp.map((v,i)=>[v,i]).sort((a,b)=>b[0]-a[0]);S.me.scheme+=2;S.me.ally+=1;L(`你託人打探前朝：${FAC[f[0][1]]}勢力最盛（${f[0][0]|0}），${FAC[f[4][1]]}最弱（${f[4][0]|0}）。`)}],
+['禮佛祈福','耗銀10，健康、精神＋',()=>{const m=S.me;if(!pay(10))return L('銀兩不足。');m.hp=Math.min(100,m.hp+4);m.at.sp=cl(m.at.sp+6);m.favor+=1;if(S.dow)m.dw+=4;if(P(.15)){m.ally+=2;L('住持說你有福相，這話傳了出去，宮人對你多了幾分敬畏。')}else L('你在佛前靜坐祈福，心緒平和了許多。')}],
+['資助母國','耗銀，增強母國軍力／經濟／邦誼',()=>{const m=S.me,f=S.fr;if(!m.fo||!f)return L('你的母家不在外邦。');if(f.dead)return L('母國已亡，無從資助。');choose(`資助母國「${f.n}」（現國力${f.pw|0}）`,[
+{l:'撥軍費（耗銀60，軍力＋9）',f(){if(!pay(60))return L('銀兩不足。');const a=f.pw|0;f.mil=cl(f.mil+9);f.pw=frPw(f);L(`軍費送到母國，${f.n}軍力${f.mil|0}，國力 ${a}→${f.pw|0}。`)}},
+{l:'賑濟興農（耗銀50，經濟＋6、穩定＋4）',f(){if(!pay(50))return L('銀兩不足。');const a=f.pw|0;f.eco=cl(f.eco+6);f.stab=cl(f.stab+4);f.pw=frPw(f);L(`母國年景好轉，國力 ${a}→${f.pw|0}。`)}},
+{l:'遣使修好（耗銀30，與皇朝邦誼＋8）',f(){if(!pay(30))return L('銀兩不足。');f.rel=cl(f.rel+8);S.me.favor+=2;L(`你的使者往返兩國，邦誼升至${f.rel|0}，皇上對你多了幾分客氣。`)}}]);return 1}]];
+const svBase=ACT.length;SVACT.concat(OTHACT).forEach(a=>ACT.push(a));
+const IDX=n=>svBase+SVACT.length+OTHACT.findIndex(a=>a[0]==n);
+ACTCAT[0][1].push(IDX('親制衣物'));ACTCAT[1][1].push(IDX('籌辦宴席'),IDX('串門走動'),IDX('打聽前朝'),IDX('資助母國'));ACTCAT[4][1].push(IDX('禮佛祈福'));
+ACTCAT.splice(2,0,['宮人差遣',[svBase,svBase+1,svBase+2],1]);
+/* 資助母家：更明顯的效果與數字回饋 */
+ACT[7]=['資助母家','資助、差遣母家，影響母族勢力',()=>{const m=S.me;famInit(m);choose('聯絡哪位家人？',[{l:`整個母族（耗銀60，全族勢力＋4）`,f(){if(!pay(60))return L('銀兩不足。');m.fam.forEach(f=>{f.pw+=4;f.lo=cl((f.lo||50)+2)});L(`你周濟全族，母族勢力升至${m.clan|0}，族人都念你的好。`)}}].concat(m.fam.map(f=>({l:`${f.rel}・${f.job}（權${f.pw|0} 才${f.ab|0} 忠${f.lo|0}）`,f(){choose(`對${f.rel}做什麼？`,[
+{l:'小額資助（耗銀30，權＋6 忠＋4 才＋2）',f(){if(!pay(30))return L('銀兩不足。');const a=f.pw|0;f.pw+=6;f.lo+=4;f.ab+=2;L(`${f.rel}收到銀兩，權勢 ${a}→${f.pw|0}，感念不已。`)}},
+{l:'大筆資助（耗銀80，權＋15 才＋4 忠＋8）',f(){if(!pay(80))return L('銀兩不足。');const a=f.pw|0;f.pw+=15;f.lo+=8;f.ab+=4;L(`${f.rel}得此巨資，上下打點，權勢 ${a}→${f.pw|0}。`)}},
+{l:'差遣出力（得銀兩與人脈，耗其忠誠）',f(){m.silver+=Math.round(f.ab/2+f.pw/4);m.ally+=Math.round(f.pw/10)+1;f.lo-=3;L(`${f.rel}為你奔走，母家替你打點了一番。`)}}])}})))); return 1}];
+/* 介面：母國國力放到顯眼處、修 undefined */
+const _gcU=goalChip;goalChip=function(){let h=_gcU.apply(this,arguments);try{if(S.me.fo&&S.fr){const f=S.fr;h=`<div class="cd"><div class=m><b>母國${f.n}</b>　國力 <b>${f.pw|0}</b>（${f.dead?'已亡':frLv(f.pw)}）　邦誼 ${f.rel|0}${f.war?'　⚔ 戰事中':''}</div></div>`+h}}catch(e){}return h};
+const _frC=frCard;frCard=function(){let h=_frC.apply(this,arguments);try{if(h)h=h.replace(/<\/div>$/,'<div class=m>想增強母國：行動→人脈勢力→「資助母國」；母家的人則用「資助母家」。</div></div>')}catch(e){}return h};
+const _npU=natPanel;natPanel=function(){let h=_npU.apply(this,arguments);try{if(S.me.fo&&S.fr)h=frCard()+h}catch(e){}return h};
+const _fpU=famPanel;famPanel=function(){let h=_fpU.apply(this,arguments);try{if(!S.reg&&S.me.fo&&S.fr){const c=frCard();if(c&&h.startsWith(c))h=h.slice(c.length)}h=h.replace(/你屬「undefined」/g,'你不屬任何派系').replace(/「undefined」/g,'「無派系」')}catch(e){}return h};
+const _agU=actGroups;actGroups=function(){let h=_agU.apply(this,arguments);try{if(!S.me.fo){const i=IDX('資助母國');h=h.replace(new RegExp(`<button onclick="A\\(${i}\\)">[\\s\\S]*?</button>`),'')}}catch(e){}return h};
+function svPanel(){if(!S||!S.me||S.reg||S.over)return'';svSync();const f=S.srv.filter(x=>x.k=='宮女').length,t=S.srv.length-f;
+return`<div class=cd data-open=0><h3>我的下人　宮女${f}・太監${t}</h3><div class=m>到「行動→宮人差遣」派他們辦事、賞罰或補人。忠誠太低的下人會出賣你。</div>`+S.srv.map(x=>`<div class=k><b>${x.n}</b>・${x.k}${x.top?'・掌事':''}・${x.tr}・${x.job}<div class=kb style="display:block">${abar("忠誠",x.lo)}${abar("能力",x.ab)}</div></div>`).join('')+(S.me.fo&&typeof pbHTML=='function'?pbHTML():'')+'</div>'}
+const _qpU=quotaPanel;quotaPanel=function(){let h=_qpU.apply(this,arguments);try{h=svPanel()+h}catch(e){console.log('svPanel',e)}return h};
+/* 每月：下人忠誠、職務效果、背叛事件 */
+function svTick(){if(!S||!S.me||S.over||S.reg)return;svSync();const m=S.me;
+S.srv.forEach(x=>{x.lo=cl(x.lo+(x.tr=='忠厚'?0:-.25)+(m.favor>=60?.3:0)-(x.tr=='貪財'&&m.silver<10?.5:0));const a=x.ab;
+if(x.job=='貼身伺候')m.hp=Math.min(100,m.hp+a/60);
+else if(x.job=='打探消息'){m.scheme+=.3;if(P(.2+a/400)){const c=ids();if(c.length){const n=S.npcs[pk(c)];L(`${x.n}打探到：${n.n}${n.favor>=65?'近來頗得聖寵':n.host>=60?'對你頗有怨氣':n.scheme>=60?'似乎在暗中謀劃什麼':'近況平平'}。`);m.ally+=.5}}}
+else if(x.job=='跑腿傳話')m.ally+=a/90;
+else if(x.job=='試毒守門'){m.hp=Math.min(100,m.hp+a/100);if(P(.03)){m.hp=Math.min(100,m.hp+3);L(`${x.n}試出膳食有異，替你擋下一劫。`)}}
+else if(x.job=='管理庫房'){if(x.tr=='貪財'&&P(.2)){m.silver=Math.max(0,m.silver-3);L(`${x.n}手腳不乾淨，庫房少了幾兩銀子。`)}else m.silver+=a/28}
+if(P(.002)){S.srv=S.srv.filter(y=>y!==x);L(`${x.k}${x.n}染病，不治而亡。`)}});
+const bad=S.srv.filter(x=>x.lo<22);if(bad.length&&P(.08)&&!S.ev&&!S.ch){const x=pk(bad);S.q.push({t:`${x.k}${x.n}近來與別宮走得很近，你察覺${x.k=='宮女'?'她':'他'}在向外傳遞你的消息。`,o:[
+['杖責逐出，殺雞儆猴',()=>{S.srv=S.srv.filter(y=>y!==x);m.scheme+=2;m.ally-=1;S.srv.forEach(y=>y.lo=cl(y.lo+3));return`${x.n}被逐出宮，其餘下人噤若寒蟬。`}],
+['敲打警告並加以賞賜（耗銀20）',()=>{if(!pay(20))return'銀兩不足，只能口頭警告，效果有限。';x.lo=cl(x.lo+25);return`${x.n}惶恐叩謝，似乎真心悔過。`}],
+['將計就計，餵假消息（看心機）',()=>{if(ckp(.3+m.scheme/250)){const c=ids();if(c.length)S.npcs[pk(c)].favor-=8;m.ally+=3;return'假消息傳了出去，對頭上了當，你暗中得利。'}m.favor-=4;return'對方識破了你的把戲，反而抓到你的把柄。'}]]})}}
+const _mdSv=mend;mend=function(){const r=_mdSv.apply(this,arguments);try{svTick();if(S&&S.q&&S.q.length&&!S.ev&&!S.ch&&!S.scn)next()}catch(e){console.log('svTick',e)}return r};
+/* ===== 商鋪擴充：外邦專屬、情報樓、殺手樓、青樓、賭坊 ===== */
+const SHX0=SHT.length;
+[['嫁妝商隊',120,9,'fo'],['牧場馬場',100,6,'fo'],['情報樓',150,4],['殺手樓',220,3],['青樓',160,10],['賭坊',180,12]].forEach(a=>SHT.push(a));
+const SHI=n=>SHT.findIndex(s=>s[0]==n);
+const shFo=s=>s[3]=='fo';
+const shNote={'嫁妝商隊':'往返母國通商，利潤高，也拉近邦誼','牧場馬場':'母國良馬，可進獻皇上、補強母國軍力','情報樓':'蒐集宮廷與朝堂消息，增人脈心機，可出售情報','殺手樓':'養死士，可暗中除掉對頭，但風險極高','青樓':'日進斗金，結交達官，醜聞風險大','賭坊':'暴利，但極易惹來彈劾'};
+function shopOpenList(){const m=S.me;choose('開哪種鋪子？',SHT.map((s,i)=>[s,i]).filter(([s])=>!shFo(s)||m.fo).map(([s,i])=>({l:`${s[0]}（本錢${s[1]}兩，月入約${s[2]}兩起）${shNote[s[0]]?'　'+shNote[s[0]]:''}`,f(){if(!pay(s[1]))return L('本錢不足。');const risk=['殺手樓','賭坊','青樓'].includes(s[0])?.12:0;if(ckp(.6-risk+(m.at.sk[8]-40)/200+m.ally/400)){m.shops.push({t:i,lv:1,pop:R(15,35),mg:cl(R(25,45)+(m.at.sk[8]-40)/4),dw:0});if(risk)m.scand=(m.scand||0)+1.5;L(`你托心腹在宮外開了一間${s[0]}。`)}else{m.silver+=Math.floor(s[1]/2);L('選址不佳，鋪子沒開成，折了一半本錢。')}}})))}
+function shopSpecials(s){const m=S.me,nm=SHT[s.t][0],f=S.fr&&!S.fr.dead?S.fr:null;const o=[];
+if(nm=='情報樓'){
+o.push({l:'出售情報（得銀，醜聞＋）',f(){const g=R(40,90)+s.lv*15;m.silver+=g;m.scand=(m.scand||0)+1.5;L(`你把打探來的消息賣給有心人，得銀${g}兩。`)}});
+o.push({l:'收買宮人（耗銀30，人脈＋6）',f(){if(!pay(30))return L('銀兩不足。');m.ally+=6;L('你的暗樁又安插進幾處宮室。')}});
+o.push({l:'刺探後宮（心機＋，看各宮動靜）',f(){const c=ids().map(i=>S.npcs[i]).sort((a,b)=>b.favor-a.favor).slice(0,3);m.scheme+=3;L(`暗樁回報：最得寵的是${c.map(n=>`${n.n}（聖寵${n.favor|0}）`).join('、')}。`)}})}
+else if(nm=='殺手樓'){
+o.push({l:'派出殺手除去一人（耗銀60，風險極高）',f(){svPickN('目標是誰？',n=>{if(!pay(60))return L('銀兩不足。');if(ckp(.22+s.lv*.08+s.mg/400)){n.hp=Math.max(5,n.hp-R(20,35));n.favor-=5;m.scand=(m.scand||0)+3;L(`${n.n}忽然"病倒"了，太醫查不出緣由，沒人懷疑到你頭上。`)}else{n.host=cl(n.host+20);m.scand=(m.scand||0)+5;m.favor-=4;L(`殺手失手被擒，雖咬舌自盡，仍惹來${n.n}與朝中的懷疑。`)}})}});
+o.push({l:'訓練死士（耗銀50，經營度＋8）',f(){if(!pay(50))return L('銀兩不足。');s.mg=cl(s.mg+8);m.scheme+=2;L('一批新死士訓練完畢，殺手樓更加得力。')}})}
+else if(nm=='青樓'){
+o.push({l:'招攬名妓（耗銀40，熱度＋10、人脈＋3）',f(){if(!pay(40))return L('銀兩不足。');s.pop=cl(s.pop+10);m.ally+=3;L('名妓入樓，達官貴人紛紛前來捧場。')}});
+o.push({l:'結交達官（人脈＋4，隨機派系＋）',f(){m.ally+=4;const i=R(0,4);S.fp[i]=cl(S.fp[i]+2);m.scand=(m.scand||0)+.8;L(`席間結識了${FAC[i]}的幾位大人，他們對你多了幾分善意。`)}})}
+else if(nm=='賭坊'){
+o.push({l:'放貸收賬（得銀、醜聞＋）',f(){const g=R(50,120)+s.lv*15;m.silver+=g;m.scand=(m.scand||0)+2;L(`你放出去的印子錢收回${g}兩。`)}})}
+else if(nm=='嫁妝商隊'){
+o.push({l:'遠赴母國通商（耗銀40）',f(){if(!pay(40))return L('銀兩不足。');const g=R(30,80)+s.lv*10;m.silver+=g;if(f){f.eco=cl(f.eco+5);f.rel=cl(f.rel+4);f.pw=frPw(f)}L(`商隊滿載而歸，賺了${g}兩${f?`，母國經濟也活絡起來（國力${f.pw|0}）`:''}。`)}});
+o.push({l:'走私貨物（高利潤，醜聞＋）',f(){if(ckp(.55)){const g=R(100,200);m.silver+=g;m.scand=(m.scand||0)+2;L(`走私得手，得銀${g}兩。`)}else{m.silver=Math.max(0,m.silver-60);m.scand=(m.scand||0)+3;L('商隊被邊關扣下，損失六十兩，還惹來閒話。')}}})}
+else if(nm=='牧場馬場'){
+o.push({l:'進獻良馬（耗銀30，聖寵＋、邦誼＋）',f(){if(!pay(30))return L('銀兩不足。');m.favor+=6;if(f){f.rel=cl(f.rel+3);f.mil=cl(f.mil+2);f.pw=frPw(f)}S.nat.mil=cl(S.nat.mil+1);L('你進獻的母國良馬神駿非凡，皇上龍心大悅。')}})}
+return o}
+const _bizU=bizAct;bizAct=function(){const r=_bizU.apply(this,arguments);try{if(S.ch&&S.ch.o){S.ch.o[0].f=shopOpenList;S.ch.o.push({l:'商鋪特殊經營（情報、殺手、通商等）',f(){const m=S.me,L2=m.shops.map(s=>({s,o:shopSpecials(s)})).filter(x=>x.o.length);if(!L2.length)return L('你的鋪子沒有特殊經營可做，試試開情報樓、殺手樓、青樓等。');choose('哪間鋪子？',L2.map(x=>({l:`${SHT[x.s.t][0]}・Lv${x.s.lv}`,f(){choose('做什麼？',x.o)}})))}})}}catch(e){console.log('biz',e)}return r};
+function shopFx(){const m=S&&S.me;if(!m||S.over||S.reg||!m.shops)return;const f=S.fr&&!S.fr.dead?S.fr:null;m.shops.forEach(s=>{const nm=SHT[s.t]&&SHT[s.t][0],lv=s.lv||1;
+if(nm=='情報樓'){m.ally+=.4*lv;m.scheme+=.15*lv;if(P(.08*lv)){const c=ids();if(c.length){const n=S.npcs[pk(c)];L(`情報樓傳來消息：${n.n}${n.preg?'有孕在身':n.favor>=65?'正得聖寵':'近況平平'}，${n.host>=60?'且對你頗有敵意':'與你無甚過節'}。`)}}}
+else if(nm=='殺手樓'){m.scand=(m.scand||0)+.05*lv;m.scheme+=.2*lv}
+else if(nm=='青樓'){m.ally+=.3*lv;m.scand=(m.scand||0)+.04*lv}
+else if(nm=='賭坊'){m.scand=(m.scand||0)+.06*lv}
+else if(nm=='嫁妝商隊'&&f){f.rel=cl(f.rel+.3);f.eco=cl(f.eco+.2*lv);if(P(.02)){const l=R(20,50);m.silver=Math.max(0,m.silver-l);L(`商隊在途中遇劫，損失${l}兩。`)}}
+else if(nm=='牧場馬場'&&f){f.mil=cl(f.mil+.15*lv)}})}
+const _mdSh=mend;mend=function(){const r=_mdSh.apply(this,arguments);try{shopFx()}catch(e){console.log('shopFx',e)}return r};
+
 /* ===== 編制人物多樣化：宮中執事・官女子有名字、性情、籍貫，會告老、調任、被選中 ===== */
 const OFS=['李','張','王','劉','趙','孫','錢','周','吳','鄭','馮','陳','褚','衛','蔣','沈','韓','楊','朱','秦','尤','許','何','呂','施','曹','嚴','華','金','魏'],
 OFG1=['德','福','順','祿','喜','貴','安','全','進','忠','長','永','元','來','慶','得','寶','有','吉','連'],
