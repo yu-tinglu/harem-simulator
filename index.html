@@ -603,7 +603,7 @@ c=>yr(c)>=8&&{t:`${c.n}與一位兄弟在書房起了衝突，被先生告到皇
 c=>yr(c)>=10&&c.sex=='男'&&{t:'秋獮圍獵，皇上讓皇子們一展身手。',o:[['讓他全力表現',()=>{if(P(.5+(KT[c.t][2].pow||0)/60)){c.pow+=6;c.chong+=8;return'他獵得頭彩，朝臣側目。'}c.chong-=3;c.pow-=2;return'他墜馬受傷，鬧了笑話。'}],['教他藏拙',()=>{c.de+=4;c.chong+=3;return'皇上讚他穩重。'}]]},
 c=>yr(c)>=12&&{t:`${c.n}的詩文被傳誦宮外，引來朝臣關注。`,o:[['低調壓下',()=>{c.de+=3;return'風頭漸息，孩子更為沉穩。'}],['順勢揚名',()=>{c.pow+=8;c.chong+=5;S.me.emp-=3;return'朝臣爭相結交，其他皇子的母妃也有警覺。'}]]},
 c=>c.chong<60&&{t:`有人在皇上面前誣陷${c.n}品行不端。`,o:[['動用人脈替他洗清',()=>{if(S.me.ally<25){c.chong-=6;return'人脈不夠，無力迴天。'}S.me.ally-=6;c.chong+=4;return'事情真相大白。'}],['讓他自己辯白',()=>{if(P(c.de/110)){c.chong+=4;return'他言辭誠懇，皇上信了。'}c.chong-=8;return'他百口莫辯。'}],['重金打點（耗銀30）',()=>{if(!pay(30))return'銀兩不足，只得作罷。';c.chong+=6;return'風波被壓了下去。'}]]},
-c=>yr(c)>=14&&{t:c.sex=='男'?`皇上要為${c.n}選妃。`:`皇上要為${c.n}選駙馬。`,o:[['選重臣之家',()=>{c.pow+=12;S.me.emp-=4;return'結下高門姻親，其他勢力有些不安。'}],['選寒門才俊',()=>{c.de+=5;c.bond+=8;c.pow+=3;return'孩子歡喜，母子更加親近。'}],['請皇上自行決斷',()=>{c.chong+=5;return'皇上滿意你的識大體。'}]]},
+c=>false&&{t:c.sex=='男'?`皇上要為${c.n}選妃。`:`皇上要為${c.n}選駙馬。`,o:[['選重臣之家',()=>{c.pow+=12;S.me.emp-=4;return'結下高門姻親，其他勢力有些不安。'}],['選寒門才俊',()=>{c.de+=5;c.bond+=8;c.pow+=3;return'孩子歡喜，母子更加親近。'}],['請皇上自行決斷',()=>{c.chong+=5;return'皇上滿意你的識大體。'}]]},
 c=>yr(c)>=2&&yr(c)<8&&{t:`${c.n}鬧著要你陪著，不肯睡。`,o:[['放下手邊事陪伴',()=>{c.bond+=8;return'母子倆說了一夜的話。'}],['讓乳母哄睡',()=>{c.bond-=3;return'孩子有些委屈。'}]]},
 c=>c.sex=='女'&&yr(c)>=12&&{t:`邊關求和，朝臣提議以${c.n}和親。`,o:[['以死相諫',()=>{if(P(.5)){c.bond+=10;S.me.favor-=6;return'皇上收回成命，卻對你不滿。'}c.chong-=4;return'皇上不為所動，此事暫且擱置。'}],['動用人脈換人頂替',()=>{if(S.me.ally<30)return'人脈不足，無力迴天。';S.me.ally-=12;c.chong+=3;return'你保住了女兒。'}],['接受，換取母家封賞',()=>{c.bond-=20;S.me.fam.forEach(x=>x.pw+=8);return'母家因此得了封賞，女兒對你心生怨懟。'}]]},
 c=>yr(c)>=12&&c.sex=='男'&&{t:`有朝臣主動結交${c.n}，欲結為黨羽。`,o:[['順水推舟',()=>{c.pow+=10;c.de-=4;S.me.emp-=4;return'他羽翼漸豐，卻也招了猜忌。'}],['嚴令他謹守本分',()=>{c.de+=5;c.bond+=3;return'他聽了你的話，朝臣漸漸疏遠。'}]]},
@@ -2445,7 +2445,7 @@ const _rhS=rosterHTML;rosterHTML=function(){let a='';try{a=castPanel()}catch(e){
 const kAge=k=>Math.floor((S.t-k.b)/12);
 function kidEv(k){const a=kAge(k),nm=k.n,boy=k.sex=='男',c=x=>Math.max(0,Math.min(100,x));
 if(a>=24&&!k.ar[24]){k.ar[24]=1;return boy?{t:`${nm}在朝中歷練多年，有了自己的政績，也闖過一些禍。`,o:[['替他在皇上面前美言',()=>{if(P(.6)){k.pow=c(k.pow+8);S.me.ally+=4;return`${nm}受到皇上嘉許。`}S.me.favor-=3;k.pow=c(k.pow-4);return'皇上對你的偏袒有些不悅。'}],['讓他自己承擔',()=>{k.de=c(k.de+5);k.bond=c(k.bond-3);return`${nm}經歷了磨練，更穩重了。`}]]}:{t:`公主${nm}婚後的日子，有人來告訴你一些閒話。`,o:[['親自召她回宮問話',()=>{if(P(.6+k.bond/300)){k.bond=c(k.bond+6);return`${nm}笑著說一切都好，母女說了很久的話。`}k.bond=c(k.bond-4);return`${nm}含糊其辭，似乎有難言之隱。`}],['相信她自己會處理',()=>{k.de=c(k.de+3);return'你選擇相信女兒。'}]]}}
-if(a>=16&&!k.ar[16]){k.ar[16]=1;msPush(boy?`${nm}到了封王之齡`:`公主${nm}到了婚嫁之齡`);return boy?{t:`皇上提起${nm}的封王與婚事，問你有何想法。`,o:[['求他留在京中',()=>{k.pow=c(k.pow+4);S.me.ally-=1;return`${nm}留在京中，母子相伴。`}],['請封富庶封地',()=>{k.pow=c(k.pow+2);k.bond=c(k.bond-4);S.me.fam.forEach(f=>f.pw=cl(f.pw+2));return`${nm}被封為郡王，遠赴封地。`}],['為他挑一位名門之女（耗銀50）',()=>{if(!pay(50))return'銀兩不足，婚事暫緩。';k.pow=c(k.pow+6);S.me.ally+=6;return`${nm}迎娶了名門之女，你多了一門助力。`}]]}:{t:`皇上有意為公主${nm}指婚，詢問你的意見。`,o:[['求嫁名門（耗銀50）',()=>{if(!pay(50))return'銀兩不足，婚事暫緩。';k.chong=c(k.chong+3);S.me.ally+=6;return`${nm}嫁入名門，你的人脈更廣了。`}],['隨她心意擇才子',()=>{k.bond=c(k.bond+8);k.de=c(k.de+3);return`${nm}挑了位才子，兩人情投意合。`}],['請求和親遠嫁',()=>{S.me.favor+=6;S.me.ally+=4;k.bond=c(k.bond-10);return`${nm}為國遠嫁，皇上深感欣慰，你卻心如刀割。`}]]}}
+if(false&&a>=16&&!k.ar[16]){k.ar[16]=1;msPush(boy?`${nm}到了封王之齡`:`公主${nm}到了婚嫁之齡`);return boy?{t:`皇上提起${nm}的封王與婚事，問你有何想法。`,o:[['求他留在京中',()=>{k.pow=c(k.pow+4);S.me.ally-=1;return`${nm}留在京中，母子相伴。`}],['請封富庶封地',()=>{k.pow=c(k.pow+2);k.bond=c(k.bond-4);S.me.fam.forEach(f=>f.pw=cl(f.pw+2));return`${nm}被封為郡王，遠赴封地。`}],['為他挑一位名門之女（耗銀50）',()=>{if(!pay(50))return'銀兩不足，婚事暫緩。';k.pow=c(k.pow+6);S.me.ally+=6;return`${nm}迎娶了名門之女，你多了一門助力。`}]]}:{t:`皇上有意為公主${nm}指婚，詢問你的意見。`,o:[['求嫁名門（耗銀50）',()=>{if(!pay(50))return'銀兩不足，婚事暫緩。';k.chong=c(k.chong+3);S.me.ally+=6;return`${nm}嫁入名門，你的人脈更廣了。`}],['隨她心意擇才子',()=>{k.bond=c(k.bond+8);k.de=c(k.de+3);return`${nm}挑了位才子，兩人情投意合。`}],['請求和親遠嫁',()=>{S.me.favor+=6;S.me.ally+=4;k.bond=c(k.bond-10);return`${nm}為國遠嫁，皇上深感欣慰，你卻心如刀割。`}]]}}
 if(a>=12&&!k.ar[12]){k.ar[12]=1;return{t:`宮宴上，皇上命皇子公主們展示才藝，${nm}也被點了名。`,o:[['鼓勵她/他大展身手',()=>{if(P(.4+k.cai/200)){S.me.favor+=4;k.chong=c(k.chong+6);return`${nm}表現出色，皇上龍顏大悅。`}k.chong=c(k.chong-3);return`${nm}有些怯場，沒能發揮好。`}],['叮囑低調行事',()=>{k.de=c(k.de+3);return`${nm}安安穩穩地完成了。`}]]}}
 if(a>=6&&!k.ar[6]){k.ar[6]=1;return{t:`${nm}到了啟蒙的年紀，該請哪位師傅教導？`,o:[['請名儒啟蒙（耗銀40）',()=>{if(!pay(40))return'銀兩不足，只能請尋常先生。';k.cai=c(k.cai+8);k.de=c(k.de+3);return`${nm}的學問進境神速。`}],['請武師教騎射（耗銀20）',()=>{if(!pay(20))return'銀兩不足。';k.pow=c(k.pow+4);k.bond=c(k.bond+2);return`${nm}練得有模有樣。`}],['親自教導',()=>{S.me.hp=Math.max(3,S.me.hp-1);k.cai=c(k.cai+4);k.bond=c(k.bond+6);return`母子朝夕相伴，感情更深了。`}]]}}
 return null}
@@ -3264,7 +3264,7 @@ function plFix(){try{if(!S||!S.pl||!S.pl2||S.pl.id!==S.pl2.id)return;const g=['l
 const _pf3=mend;mend=function(){const r=_pf3.apply(this,arguments);plFix();return r};
 const _pc3=plotCard;plotCard=function(){plFix();return _pc3.apply(this,arguments)};
 /* 奪嫡局勢：列出我的孩子的處境 */
-const _kap3=kidsAllPanel;kidsAllPanel=function(){let h=_kap3.apply(this,arguments);try{const key='<div class=m>皇子成年後會結黨、構陷；皇帝若久不傳位，儲君可能逼宮。</div>';if(!S.reg&&!S.over&&h.includes(key)&&S.me.kids&&S.me.kids.length){const pr=dsPr();const rows=S.me.kids.filter(k=>!k.dead&&!k.died&&k.alive!==false).map(k=>{let st;if(k.sex!='男')st='公主不參與奪嫡，可聯姻拉攏勢力';else if(k.jin)st='已被圈禁，退出奪嫡';else if(yr(k)<14)st=`尚未成年，滿14歲才會加入奪嫡（還差${14-yr(k)}年）`;else{const i=pr.findIndex(x=>x.k===k);st=i<0?'已成年':`競爭中，聲勢排第${i+1}${i>=4?'（下方只列前4名）':''}・聲勢${k.pow|0}`}return`<div class=m>・${k.n}（${yr(k)}歲${k.sex=='男'?'皇子':'公主'}）：${st}</div>`}).join('');if(rows)h=h.replace(key,key+`<div class=m style="margin-top:4px"><b>你的孩子</b></div>`+rows)}}catch(e){console.log('kap3',e)}return h};
+const _kap3=kidsAllPanel;kidsAllPanel=function(){let h=_kap3.apply(this,arguments);try{const key='<div class=m>皇子成年後會結黨、構陷；皇帝若久不傳位，儲君可能逼宮。</div>';if(!S.reg&&!S.over&&h.includes(key)&&S.me.kids&&S.me.kids.length){const pr=dsPr();const rows=S.me.kids.filter(k=>!k.dead&&!k.died&&k.alive!==false).map(k=>{let st;if(k.sex!='男')st='公主不參與奪嫡，可聯姻拉攏勢力';else if(k.jin)st='已被圈禁，退出奪嫡';else if(yr(k)<14)st=`尚未成年，滿14歲才會加入奪嫡（還差${14-yr(k)}年）`;else{const i=pr.findIndex(x=>x.k===k);st=i<0?'已成年':`競爭中，聲勢排第${i+1}${i>=4?'（下方只列前4名）':''}・聲勢${k.pow|0}`}return`<div class=m>・${k.n}（${yr(k)}歲${k.sex=='男'?'皇子':'公主'}）：${st}${(k.sp||yr(k)>=(k.sex=='男'?16:15))?'<br>　婚配：'+spBrief(k):''}</div>`}).join('');if(rows)h=h.replace(key,key+`<div class=m style="margin-top:4px"><b>你的孩子</b></div>`+rows)}}catch(e){console.log('kap3',e)}return h};
 
 /* ===== 第四輪：警示欄、孩子快捷鍵、中段節奏、結局回顧與重玩 ===== */
 const actIx=n=>ACT.findIndex(a=>a[0]==n);
@@ -3399,6 +3399,52 @@ function m_title(){const t=titleOf();if(t!==S.me.ttl){S.me.ttl=t;if(t)L(`宮裡�
 const _up7=uiPost;uiPost=function(){const r=_up7.apply(this,arguments);try{if(TAB==0&&S&&S.me&&!S.over&&!S.reg&&!S.scn){const hero=document.querySelector('main .cd.hero');if(hero){hero.querySelectorAll('.fml').forEach(e=>e.remove());const m=ec(),cd=CONDS.find(x=>x[0]==S.cond);hero.insertAdjacentHTML('beforeend',`<div class="m fml" style="margin-top:6px">賢名 ${m.fame|0}・面子 ${m.face|0}${m.ttl?'・名號「'+m.ttl+'」':''}${cd?'<br>本局時局：'+cd[0]+'（'+cd[1]+'）':''}${(m.prop.farm+m.prop.lend+m.prop.cargo)?'<br>產業外收入：田莊'+m.prop.farm+'・放貸'+m.prop.lend+'・商隊'+m.prop.cargo:''}${m.items.length?'<br>珍藏：'+m.items.map(x=>x.n).join('、'):''}</div>`)}}}catch(e){console.log('fml',e)}return r};
 [['a56','腰纏萬貫','銀兩達5000',()=>S.me.silver>=5000],['a57','賢名遠播','賢名達80',()=>(S.me.fame||0)>=80],['a58','三路財源','田莊、放貸、商隊各至少一處',()=>{const p=S.me.prop;return !!(p&&p.farm&&p.lend&&p.cargo)}],['a59','收藏家','購置珍寶達6件',()=>(S.me.itn||0)>=6],['a60','賭神','宮中賭局贏五次',()=>(S.me.bwin||0)>=5],['a61','名號響亮','獲得宮中名號',()=>!!S.me.ttl]].forEach(a=>AL.push(a));
 HELP.push(['金錢用途','「行動→財貨運用」：買官賄賂（替母家謀官、壓風聲）、賞賜宮人（換人心與耳目）、置產投資（田莊穩定、放貸高利可能被告發、商隊盈虧不定）、行善積德（累積賢名，賢名高聖寵與疑心都受益）、買通消息、珍寶收藏（贈禮、獻上、變賣）、宮中賭局。主畫面角色卡會顯示賢名、面子、名號與本局時局。']);
+
+/* ===== 第八輪：子女婚配（連動姻親） ===== */
+const WJOB=['翰林學士','總兵','巡撫','禮部尚書','世襲侯爵','江南鉅商','書香世家','鹽運使','御史大夫'];
+const wAge=k=>k.sex=='男'?16:15;
+function wedK(k,tier,nt){const me=S.me,boy=k.sex=='男';const nm=boy?nm2():pnmU('男');
+const pw=tier=='high'?R(62,85):tier=='low'?R(22,40):tier=='foreign'?R(50,75):R(40,72);
+const fam={sur:nm[0],job:pk(WJOB),pw,fac:R(0,4)};const ty=tier=='foreign'?'和親':'聯姻';
+const o={fam};if(tier=='foreign'){o.nt=nt}
+const s=mkSp(k,ty,o);k.sp.fam=fam;if(tier=='foreign'){k.out=nt;try{ntr()[nt]=cl(ntr()[nt]+8)}catch(e){}}
+k.pow=cl(k.pow+Math.round(pw/9));me.ally+=Math.round(pw/14);S.fp[fam.fac]=cl(S.fp[fam.fac]+2);k.wq=S.t;
+if(typeof msPush=='function')msPush(`${k.n}${boy?'迎娶':'下嫁'}${fam.sur}氏`+(tier=='foreign'?'（'+nt+'和親）':''));return{s,fam}}
+function wedOpts(k){const boy=k.sex=='男',w=(t,p,txt,x)=>()=>{if(p&&!pay(p))return'銀兩不足，婚事暫緩。';const nt=t=='foreign'?pk(NAT6):0;const r=wedK(k,t,nt);if(x)x(r);return txt(r,nt)};
+return boy?[
+['為他挑一位名門之女（耗銀50）',w('high',50,r=>`${k.n}迎娶${r.s.n}，岳家是${r.fam.sur}氏（${r.fam.job}，勢力${r.fam.pw}），你多了一門助力。`)],
+['選寒門才女（耗銀10）',w('low',10,r=>`${k.n}娶了${r.s.n}，岳家${r.fam.sur}氏（${r.fam.job}）門第不高，夫妻倒是和睦。`,r=>{k.bond=cl(k.bond+8);k.de=cl(k.de+4);k.sp.hap=cl(k.sp.hap+15)})],
+['迎娶外邦公主，結好鄰邦（耗銀80）',w('foreign',80,(r,nt)=>`${k.n}迎娶${nt}公主${r.s.n}，兩國邦交添了一層姻親。`)],
+['請皇上指婚',w('emp',0,r=>`皇上為${k.n}指了${r.s.n}，岳家${r.fam.sur}氏（${r.fam.job}）。`,r=>{k.chong=cl(k.chong+5)})]]
+:[
+['求嫁名門（耗銀50）',w('high',50,r=>`${k.n}下嫁${r.s.n}，夫家${r.fam.sur}氏（${r.fam.job}，勢力${r.fam.pw}）。`)],
+['隨她心意擇才子（耗銀10）',w('low',10,r=>`${k.n}挑了才子${r.s.n}，夫家${r.fam.sur}氏門第不高，兩人情投意合。`,r=>{k.bond=cl(k.bond+8);k.de=cl(k.de+3);k.sp.hap=cl(k.sp.hap+15)})],
+['請求和親遠嫁（聖寵＋）',w('foreign',0,(r,nt)=>`${k.n}為國遠嫁${nt}，皇上深感欣慰，你卻心如刀割。`,r=>{S.me.favor+=8;k.bond=cl(k.bond-10)})],
+['請皇上指婚',w('emp',0,r=>`皇上為${k.n}指了${r.s.n}，夫家${r.fam.sur}氏（${r.fam.job}）。`,r=>{k.chong=cl(k.chong+5)})]]}
+function spBrief(k){const s=k.sp;if(!s)return yr(k)>=wAge(k)?'尚未婚配':'';if(s.ty==='出家')return'入道觀為女冠';const f=s.fam;return`配${s.n}${f?'（'+f.sur+'家・'+f.job+'・勢力'+(f.pw|0)+'）':''}・感情${s.hap|0}・子嗣${s.gk}${s.end?'・'+s.end:''}${k.out?'・遠在'+k.out:''}`}
+const _spl8=spLine;spLine=function(k){let h=_spl8.apply(this,arguments);try{const s=k.sp;if(s&&s.fam&&s.ty!=='出家')h=h.replace('</span>',`・姻親${s.fam.sur}家（${s.fam.job}・勢力${s.fam.pw|0}）</span>`)}catch(e){}return h};
+function wedTick(){if(!S||!S.me||S.over||S.reg)return;const me=S.me;me.kids.forEach(k=>{
+if(!k.sp&&k.ar&&k.ar[16]&&!k.mig){k.mig=1;if(yr(k)>=wAge(k)){try{wedK(k,'emp');L(`${k.n}的婚事補登：配${k.sp.n}（${k.sp.fam.sur}家・${k.sp.fam.job}）。`)}catch(e){console.log('mig',e)}}}
+if(!k.sp&&yr(k)>=wAge(k)&&!(S.gcd>0)&&(!k.wq||S.t-k.wq>=12)&&P(.05)){k.wq=S.t;infPush(infEv(`${k.n}已到婚嫁之齡，皇上問起你對這門婚事的想法。`,wedOpts(k)));return}
+const s=k.sp;if(!s||s.end||s.ty==='出家'||!s.fam)return;
+s.hap=cl(s.hap+(s.q-s.hap)*.03+R(-1,1));
+if(P(.012)&&yr(k)>=17){s.gk++;L(`${k.n}與${s.n}添了一個孩子，你有了孫輩。`);me.favor+=1}
+const f=s.fam;me.ally+=.04*(f.pw/50);S.fp[f.fac]=cl(S.fp[f.fac]+.02);k.pow=cl(k.pow+(f.pw/9-k.pow*.0+0)*.0)});
+}
+function wedEvTick(){if(!S||!S.me||S.over||S.reg||S.gcd>0||!P(.02))return;const me=S.me,c=me.kids.filter(k=>k.sp&&!k.sp.end&&k.sp.fam&&k.sp.ty!=='出家');if(!c.length)return;const k=pk(c),s=k.sp,f=s.fam;
+const T=pk(['help','rift','trouble','rise']);
+if(T=='help')infPush(infEv(`${k.n}的姻親${f.sur}家託人來信，想請你在皇上面前為他們說句話。`,[['出面說情，賣個人情',()=>{if(ckp(.4+me.favor/300)){f.pw=cl(f.pw+6);me.ally+=4;return`${f.sur}家得了皇上賞識，對你感激不盡。`}me.favor-=2;return'皇上沒有鬆口，你的面子也折了一點。'}],['送上銀兩，不插手朝政（耗銀40）',()=>{if(!pay(40))return'銀兩不足。';f.pw=cl(f.pw+3);s.hap=cl(s.hap+6);return`${f.sur}家收了銀兩，也不好再多求。`}],['婉言謝絕',()=>{s.hap=cl(s.hap-6);me.ally-=2;return`${f.sur}家頗為不快，小夫妻也受了牽連。`}]]));
+else if(T=='rift'&&s.hap<55)infPush(infEv(`${k.n}與${s.n}近來鬧得不可開交，傳到了你耳中。`,[['召二人入宮，勸和（看氣質）',()=>{if(ckp(.5+me.at.qi/300)){s.hap=cl(s.hap+20);return'你一番話說到了心坎上，二人重歸於好。'}s.hap=cl(s.hap+4);return'你勸了半日，效果有限。'}],['替孩子撐腰，敲打對方',()=>{s.hap=cl(s.hap-6);f.pw=cl(f.pw-4);k.bond=cl(k.bond+6);return`${f.sur}家顏面無光，${k.n}對你更親近了。`}],['准其和離（有損皇家體面）',()=>{s.end='和離';me.favor-=2;me.ally-=3;k.bond=cl(k.bond-3);return`${k.n}與${s.n}和離，兩家就此生分。`}]]));
+else if(T=='trouble'&&f.pw>=55)infPush(infEv(`${k.n}的姻親${f.sur}家被人彈劾，牽連到了你。`,[['劃清界線，保全自己',()=>{f.pw=cl(f.pw-12);s.hap=cl(s.hap-10);me.ally-=3;return`${f.sur}家失了倚仗，夫妻情分也冷了。`}],['出面保他（看聖寵）',()=>{if(ckp(.3+me.favor/250)){f.pw=cl(f.pw+3);me.ally+=3;return`你替${f.sur}家說了話，皇上網開一面。`}me.favor-=4;me.dsus=(me.dsus||0)+4;me.scand=(me.scand||0)+3;return'皇上對你「結黨」的猜疑更深了。'}],['袖手旁觀',()=>{f.pw=cl(f.pw-6);return`${f.sur}家自行處理，結果不太好看。`}]]));
+else if(T=='rise')infPush(infEv(`${k.n}的姻親${f.sur}家近來步步高升。`,[['趁勢結好，多走動（耗銀30）',()=>{if(!pay(30))return'銀兩不足。';f.pw=cl(f.pw+4);me.ally+=4;k.pow=cl(k.pow+3);return`${f.sur}家與你往來更密，你在朝中多了一條路。`}],['低調以對，免遭猜忌',()=>{me.dsus=Math.max(0,(me.dsus||0)-1);return'你與親家保持著不遠不近的距離。'}]]))}
+const _mw8=mend;mend=function(){const r=_mw8.apply(this,arguments);try{wedTick();wedEvTick()}catch(e){console.log('wed',e)}return r};
+/* 行動：過問子女婚姻 */
+const WEDACT=['過問婚事','賞賜新人、召見親家、勸和或為子女議婚',()=>{const me=S.me;if(!me.kids.length){L('你還沒有子女。');return}choose('過問哪位子女的婚事？',me.kids.filter(k=>yr(k)>=wAge(k)).map(k=>({l:`${k.n}（${spBrief(k)}）`,f(){if(!k.sp){choose(`為${k.n}議婚`,wedOpts(k).map(([l,fn])=>({l,f(){L(fn())}})));return}const s=k.sp,f=s.fam;choose(`${k.n}與${s.n}`,[
+{l:'賞賜新人（耗銀40，感情＋、親家好感）',f(){if(!pay(40))return L('銀兩不足。');s.hap=cl(s.hap+10);if(f)f.pw=cl(f.pw+1);me.ally+=1;L('你賞了小夫妻一份厚禮，夫妻和睦，親家也臉上有光。')}},
+{l:'召親家入宮敘話（人脈＋）',f(){if(!f)return L('無親家可召。');me.ally+=3;f.pw=cl(f.pw+2);if(P(.25)){me.scheme+=1;L(`${f.sur}家在席間透露了一些朝中消息。`)}else L(`你與${f.sur}家談得投契。`)}},
+{l:'勸和（感情＋）',f(){s.hap=cl(s.hap+8);L('你好言勸慰，夫妻關係和緩了些。')}}])}})));return 1}];
+const w8=ACT.length;ACT.push(WEDACT);(function(){const c=ACTCAT.find(x=>/子嗣/.test(x[0]));if(c)c[1].push(w8)})();
+HELP.push(['子女婚配','子女到15、16歲後，每年有機會跳出婚事選擇（名門、寒門、外邦聯姻、請皇上指婚）。婚後會有配偶與姻親家世，姻親會增加你的人脈與子女聲勢，也會有求助、失和、被彈劾等後續事件。子嗣頁「你的孩子」與子女卡片會顯示配偶；行動→子嗣→「過問婚事」可賞賜新人、召親家或勸和。']);
 
 /* ===== 編制人物多樣化：宮中執事・官女子有名字、性情、籍貫，會告老、調任、被選中 ===== */
 const OFS=['李','張','王','劉','趙','孫','錢','周','吳','鄭','馮','陳','褚','衛','蔣','沈','韓','楊','朱','秦','尤','許','何','呂','施','曹','嚴','華','金','魏'],
