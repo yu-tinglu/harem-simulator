@@ -3842,11 +3842,11 @@ if(i>=0)MXE[i]=(k,o)=>wid(k)&&!k.sp.reg&&!(k.sp.wd&&S.t-k.sp.wd<60)&&k.out&&REGN
 ['遣使接回公主（邦誼受損）',()=>{const nt=k.sp.nt;k.sp.wd=S.t;k.out=0;k.sp.end='寡居歸國';k.sp.hap=cl(k.sp.hap+15);ntr()[nt]-=14;return`你不顧舊俗，派人接回了${k.n}，${nt}君臣面上無光，邦交轉冷。`}],
 ['依舊俗，讓她再嫁（邦誼＋）',()=>{const nt=k.sp.nt;k.sp.wd=S.t;ntr()[nt]+=12;k.sp.hap=cl(k.sp.hap-25);k.sp.n=pnm('男');k.bond=cl(k.bond-10);return`${k.n}含淚改嫁新首領，邦誼穩固，但她在給你的信裡再無一句溫言。`}],
 ['暗助她扶立自己的兒子（看心機）',()=>{const nt=k.sp.nt,hus=k.sp.n;k.sp.wd=S.t;if(ckp(.3+S.me.scheme/250+S.me.ally/400)){const son=pnm('男');k.sp.hus=hus;k.sp.son=son;k.sp.reg=1;k.sp.regT=S.t;k.sp.gk=Math.max(1,k.sp.gk||0);ntr()[nt]=cl(ntr()[nt]+22);k.sp.hap=cl(k.sp.hap+12);k.pow=cl((k.pow||0)+10);k.bond=cl(k.bond+6);S.nat.mil+=3;S.nat.stab+=2;const t=`${k.n}扶立幼子${son}為${nt}之主，自己攝政，${nt}自此與你同氣連枝。`;try{jot('宮',k.n,t);msPush(`${k.n}在${nt}攝政`)}catch(e){}return`在你的暗中謀劃下，${t}（此後每年${nt}會朝貢，邊防也更穩；可在「朝堂」的六國邦誼看到攝政狀態。）`}ntr()[nt]-=12;k.sp.hap=cl(k.sp.hap-15);k.sp.hus=hus;k.sp.n=pnm('男');return`謀劃敗露，${k.n}被迫改嫁新首領，在異鄉的處境更加艱難，邦誼受損。`}]]};
-const _sl=spLine;spLine=function(k){const s=k&&k.sp;if(s&&s.reg&&!s.end)return`<span class=m>和親${s.nt}・夫${s.hus||'前任首領'}已逝・${k.n}攝政太后，扶立幼子${s.son||'繼位者'}・感情${s.hap|0}・子嗣${s.gk}・遠在${k.out||s.nt}</span>`;return _sl.apply(this,arguments)};
+const _sl=spLine;spLine=function(k){const s=k&&k.sp;if(s&&s.reg&&!s.end)return`<span class=m>和親${s.nt}・夫${s.hus||'前任首領'}已逝・${k.n}攝政太后，扶立幼子${s.son||'繼位者'}・感情${s.hap|0}${window.rsTxt23?window.rsTxt23(s):''}・遠在${k.out||s.nt}</span>`;return _sl.apply(this,arguments)};
 const _sb=spBrief;spBrief=function(k){const s=k&&k.sp;if(s&&s.reg&&!s.end)return`攝政${s.nt}（扶立${s.son||'幼子'}）`;return _sb.apply(this,arguments)};
-function regTick(){if(!S||!S.me||S.over||S.t%12!==7)return;(S.me.kids||[]).forEach(k=>{const s=k.sp;if(!s||!s.reg||s.end)return;const nt=s.nt,r=ntr();r[nt]=cl(r[nt]+2);S.nat.mil+=.3;const g=Math.round(20+r[nt]/4);S.me.silver+=g;try{msPush(`${nt}攝政的${k.n}遣使朝貢，進獻銀${g}兩`)}catch(e){}})}
+function regTick(){if(!S||!S.me||S.over||S.t%12!==7)return;(S.me.kids||[]).forEach(k=>{const s=k.sp;if(!s||!s.reg||s.end)return;const nt=s.nt,r=ntr();r[nt]=cl(r[nt]+2);S.nat.mil+=.3;const q=window.rsMul23?window.rsMul23(s):1;if(q<=0)return;const g=Math.round((20+r[nt]/4)*q);S.me.silver+=g;try{msPush(`${nt}攝政的${k.n}遣使朝貢，進獻銀${g}兩`)}catch(e){}})}
 const _m22=mend;mend=function(){const r=_m22.apply(this,arguments);try{regTick()}catch(e){console.log('r22',e)}return r};
-const _u22=uiPost;uiPost=function(){const r=_u22.apply(this,arguments);try{if(typeof TAB!=='undefined'&&TAB===3&&S&&S.me&&!S.over&&!S.reg&&!S.scn){document.querySelectorAll('.cd.nat22').forEach(e=>e.remove());const anchor=[...document.querySelectorAll('main .cd')].find(c=>/天下大勢/.test((c.querySelector('h3')||{}).textContent||''));if(anchor){const rel=ntr(),rg={};(S.me.kids||[]).forEach(k=>{if(k.sp&&k.sp.reg&&!k.sp.end)rg[k.sp.nt]=k});const h=`<div class="cd nat22"><h3>六國邦誼</h3>`+NAT6.map(n=>abar(`${n}（${relT(n)}）`,rel[n])+(rg[n]?`<div class="m" style="margin:-2px 0 6px">└ ${rg[n].n}在此攝政，幼主${rg[n].sp.son||''}在位，每年朝貢</div>`:'')).join('')+`<div class="m">邦誼過低會引發邊釁；和親、聯姻、遣使、通商都能影響。</div></div>`;anchor.insertAdjacentHTML('afterend',h)}}}catch(e){console.log('r22u',e)}return r};
+const _u22=uiPost;uiPost=function(){const r=_u22.apply(this,arguments);try{if(typeof TAB!=='undefined'&&TAB===3&&S&&S.me&&!S.over&&!S.reg&&!S.scn){document.querySelectorAll('.cd.nat22').forEach(e=>e.remove());const anchor=[...document.querySelectorAll('main .cd')].find(c=>/天下大勢/.test((c.querySelector('h3')||{}).textContent||''));if(anchor){const rel=ntr(),rg={};(S.me.kids||[]).forEach(k=>{if(k.sp&&k.sp.reg&&!k.sp.end)rg[k.sp.nt]=k});const h=`<div class="cd nat22"><h3>六國邦誼</h3>`+NAT6.map(n=>abar(`${n}（${relT(n)}）`,rel[n])+(rg[n]?`<div class="m" style="margin:-2px 0 6px">└ ${rg[n].n}在此攝政，幼主${rg[n].sp.son||''}在位${window.rsTxt23?window.rsTxt23(rg[n].sp):''}</div>`:'')).join('')+`<div class="m">邦誼過低會引發邊釁；和親、聯姻、遣使、通商都能影響。</div></div>`;anchor.insertAdjacentHTML('afterend',h)}}}catch(e){console.log('r22u',e)}return r};
 window.regTick22=regTick;
 HELP.push(['公主攝政','和親公主若在外邦喪夫，可選擇暗助她扶立自己的兒子；成功後她成為攝政太后，每年朝貢、邦誼上升、邊防更穩，狀態顯示在子女卡片與朝堂的六國邦誼。']);
 })();
@@ -3880,6 +3880,62 @@ if(si>=0){const f=ACT[si][2];ACT[si][2]=function(){const r=f.apply(this,argument
 const _u23=uiPost;uiPost=function(){const r=_u23.apply(this,arguments);try{if(S&&S.me&&!S.reg&&!S.over){const c=document.querySelector('details.cd.emp');if(c){c.querySelectorAll('.dsc23').forEach(e=>e.remove());const fr=Math.round(frv()),own=Math.round(dsusParts().t),tot=Math.round(S.me.dsus||0);const tx=`疑心組成：私兵與母家勢力的壓力約${own}`+(S.me.fo?`・母國往來${fr}`:'')+`（總疑心${tot}；兩邊會互相連動，降一邊另一邊也會跟著降一些）`;const d=c.querySelector('div.m');if(d)d.insertAdjacentHTML('afterend','<div class="m dsc23">'+tx+'</div>')}}}catch(e){console.log('r23u',e)}return r};
 window.dsFix23=dsFix;
 HELP.push(['皇帝疑心','選擇之後，結果文字會寫出疑心實際增減與目前數值；單次暴漲會被緩和，疑心高時漲得更慢。事件若會抬高疑心，常會多一個「低調謹慎」的選項；「示忠表心」另有陪伴、稟報母家、捐私產、閉門謝客等降疑心辦法。']);
+})();
+
+/* ===== round24：攝政公主的實際玩法；喪夫後不再生子 ===== */
+(function(){
+/* 1. 攝政中的公主不再觸發一般和親／聯姻事件（含「孩子降生」） */
+for(let j=0;j<MXE.length;j++){const f=MXE[j];if(/暴病身亡/.test(f.toString()))continue;MXE[j]=(k,o)=>(k&&k.sp&&k.sp.reg&&!k.sp.end)?false:f(k,o)}
+const _wt=wedTick;wedTick=function(){const t=[];(S.me.kids||[]).forEach(k=>{const s=k.sp;if(s&&s.reg&&!s.end){t.push(s);s.end='攝政'}});try{return _wt.apply(this,arguments)}finally{t.forEach(s=>{s.end=0})}};
+const _we=wedEvTick;wedEvTick=function(){const t=[];(S.me.kids||[]).forEach(k=>{const s=k.sp;if(s&&s.reg&&!s.end){t.push(s);s.end='攝政'}});try{return _we.apply(this,arguments)}finally{t.forEach(s=>{s.end=0})}};
+/* 2. 攝政狀態 */
+const RS=s=>{if(!s.rs)s.rs={st:60,han:30};return s.rs};
+const regKids=()=>(S.me.kids||[]).filter(k=>k.sp&&k.sp.reg&&!k.sp.end&&!k.dead);
+const sonAge=s=>Math.floor((S.t-(s.regT||S.t))/12)+3;
+const lv=v=>v>=75?'穩固':v>=50?'尚穩':v>=30?'動搖':'岌岌可危';
+window.rsTxt23=s=>{const r=RS(s);return`・攝政${lv(r.st)}${r.st|0}・幼主${sonAge(s)}歲、親漢${r.han|0}`};
+window.rsMul23=s=>{const st=RS(s).st;return st<30?0:Math.min(1.4,st/60)*(s.tb?2:1)};
+const cc=v=>Math.max(0,Math.min(100,v));
+function ap(s,st,han){const r=RS(s);r.st=cc(r.st+st);r.han=cc(r.han+(han||0));return`（攝政穩固${st>=0?'＋':'－'}${Math.abs(st)}${han?`，親漢${han>=0?'＋':'－'}${Math.abs(han)}`:''}，現${r.st|0}）`}
+/* 3. 行動：過問攝政 */
+const RA=['過問攝政','輔佐在外邦攝政的公主與幼主：賜禮、派人、請師、助兵或接來省親',()=>{const me=S.me,ks=regKids();if(!ks.length){L('你沒有正在外邦攝政的子女。（和親公主喪夫後，選「暗助她扶立自己的兒子」並成功，才會有。）');return}
+const go=k=>{const s=k.sp,r=RS(s),nt=s.nt;if(S.t<(s.rcd||0)){L(`才剛過問過${k.n}的事，過兩個月再說。`);return}
+choose(`${k.n}攝政${nt}（穩固${r.st|0}・幼主${sonAge(s)}歲・親漢${r.han|0}・感情${s.hap|0}）`,[
+{l:'厚賜金帛，遣使慰問（耗銀60，穩固＋8、感情＋、邦誼＋）',f(){if(!pay(60))return L('銀兩不足。');s.rcd=S.t+2;s.hap=cl(s.hap+8);k.bond=cl(k.bond+3);ntr()[nt]=cl(ntr()[nt]+3);L(`你送去厚禮，${k.n}在異鄉有了底氣。`+ap(s,8))}},
+{l:'派精幹心腹赴彼輔政（人脈－2，穩固＋12、親漢＋4）',f(){s.rcd=S.t+2;me.ally-=2;L(`你的心腹成了${k.n}的左右手，部族首領不敢輕舉妄動。`+ap(s,12,4))}},
+{l:'延聘漢師教導幼主（耗銀50，親漢＋14）',f(){if(!pay(50))return L('銀兩不足。');s.rcd=S.t+2;L(`幼主${s.son||''}開始讀漢家經書，將來或可成為親漢之主。`+ap(s,0,14))}},
+{l:'贈兵器糧草助其平亂（耗銀80，穩固＋15、邊防－1、疑心＋2）',f(){if(!pay(80))return L('銀兩不足。');s.rcd=S.t+2;S.nat.mil-=1;me.dsus=(me.dsus||0)+2;L(`軍資運抵${nt}，亂事很快平息，朝中卻有人說你外援藩部。`+ap(s,15))}},
+{l:'接母子來朝省親（感情＋12、親漢＋8、穩固－8）',f(){s.rcd=S.t+3;s.hap=cl(s.hap+12);k.bond=cl(k.bond+6);L(`${k.n}帶著幼主入京，母子在你膝下承歡數月；${nt}那邊的部族趁機議論紛紛。`+ap(s,-8,8))}},
+{l:'不插手，讓她自己歷練',f(){L(`你只回信勉勵，沒有插手${nt}的事。`)}}])};
+if(ks.length===1)go(ks[0]);else choose('過問哪位公主的攝政？',ks.map(k=>({l:`${k.n}（${k.sp.nt}）`,f(){go(k)}})));return 1}];
+const ri=ACT.length;ACT.push(RA);(function(){const c=ACTCAT.find(x=>/子嗣/.test(x[0]));if(c)c[1].push(ri)})();
+/* 4. 每年的攝政事件、親政與退位 */
+function rsYear(){if(!S||!S.me||S.over||S.reg||S.t%12!==3)return;regKids().forEach(k=>{const s=k.sp,r=RS(s),nt=s.nt,age=sonAge(s);
+ r.st=cc(r.st-2);
+ if(r.st<=12){s.reg=0;s.end='被迫退位';k.out=0;s.hap=cl(s.hap-20);ntr()[nt]=cl(ntr()[nt]-10);try{msPush(`${k.n}在${nt}被權臣奪權，被迫退位`);jot('宮',k.n,`${k.n}在${nt}失去攝政之位，被權臣逼退，狼狽回京。`)}catch(e){}L(`${nt}權臣奪權，${k.n}被迫退位，帶著殘部逃回京城，邦誼受損。`);return}
+ if(age>=16&&!s.cmp){s.cmp=1;const b=r.han;if(b>=60){ntr()[nt]=cl(ntr()[nt]+20);s.tb=1;r.st=cc(r.st+10)}else if(b<30){ntr()[nt]=cl(ntr()[nt]-15)}else ntr()[nt]=cl(ntr()[nt]+5);const t=b>=60?`${nt}之主${s.son||''}成年親政，自幼受漢學薰陶，對中原極為親近，朝貢加倍，邦誼大增。`:b<30?`${nt}之主${s.son||''}成年親政，卻與中原漸行漸遠，邦誼下降。`:`${nt}之主${s.son||''}成年親政，與中原相安無事。`;try{msPush(`${nt}幼主成年親政`);jot('宮',k.n,t)}catch(e){}L(t);return}
+ if(S.gcd>0||!P(.55))return;
+ const T=pk(['rebel','ill','war','ask']);
+ if(T==='rebel')infPush(infEv(`${nt}有部族首領不服${k.n}攝政，聚眾威脅要另立新主。`,[
+  ['出銀籠絡首領（耗銀60）',()=>{if(!pay(60))return'銀兩不足，首領們更加不滿。'+ap(s,-6);return'重金之下，首領們暫時安分。'+ap(s,10)}],
+  ['遣使施壓，威嚇其不得妄動（邦誼－6）',()=>{ntr()[nt]=cl(ntr()[nt]-6);return'使者強硬表態，首領們收斂了，卻對中原多了怨氣。'+ap(s,4)}],
+  ['靜觀其變',()=>'你按兵不動，只盼她自己撐得住。'+ap(s,-9)]]));
+ else if(T==='ill')infPush(infEv(`${nt}傳來消息，幼主${s.son||''}染病，${k.n}日夜憂心。`,[
+  ['派太醫遠赴診治（耗銀40）',()=>{if(!pay(40))return'銀兩不足。'+ap(s,-4);return'太醫妙手回春，幼主漸漸痊癒，${nt}上下感念。'.replace('${nt}',nt)+ap(s,6,3)}],
+  ['設壇祈福，寄信安慰',()=>{s.hap=cl(s.hap+3);return'你寫了長信安慰女兒，幼主所幸熬過去了。'+ap(s,1)}],
+  ['聽天由命',()=>{s.hap=cl(s.hap-10);return'你什麼也沒做，女兒的信裡多了幾分怨意。'+ap(s,-6)}]]));
+ else if(T==='war')infPush(infEv(`${nt}鄰部犯境，${k.n}遣使向你求援。`,[
+  ['調邊軍出兵相助（邊防－2）',()=>{S.nat.mil-=2;ntr()[nt]=cl(ntr()[nt]+8);return'邊軍出關擊退來犯之敵，攝政公主威望大增。'+ap(s,12)}],
+  ['賜糧草軍械（耗銀50）',()=>{if(!pay(50))return'銀兩不足。'+ap(s,-4);return'糧草運到，勉強守住了邊界。'+ap(s,6)}],
+  ['婉拒，勸她自行議和（邦誼－8）',()=>{ntr()[nt]=cl(ntr()[nt]-8);s.hap=cl(s.hap-8);return'你沒有出手，女兒只得割地求和。'+ap(s,-8)}]]));
+ else infPush(infEv(`${k.n}來信問政：「母親，${nt}的內政我拿不定主意，該重用舊臣還是新貴？」`,[
+  ['回信指點，重用舊臣（看心機）',()=>{if(ckp(.4+S.me.scheme/250)){return'你的建議切中要害，朝局穩了下來。'+ap(s,8)}return'舊臣們拖延掣肘，局面反而更亂。'+ap(s,-5)}],
+  ['建議扶植漢學出身的新貴（親漢＋）',()=>{return'新貴們感念漢家恩典，成了你女兒的臂膀。'+ap(s,3,10)}],
+  ['讓她自己決斷',()=>{k.bond=cl(k.bond-2);return'你只回「自行斟酌」，女兒有些失落。'+ap(s,-2)}]]))
+ })}
+const _my=mend;mend=function(){const r=_my.apply(this,arguments);try{rsYear()}catch(e){console.log('r24',e)}return r};
+window.rsYear24=rsYear;
+HELP.push(['攝政公主','和親公主在外邦喪夫、你暗助她扶立兒子成功後，她成為攝政太后。行動→子嗣→「過問攝政」可賜禮、派心腹、請漢師、助兵、接來省親，影響「攝政穩固」與幼主「親漢」。每年可能有部族叛亂、幼主染病、鄰部犯境等事件。穩固太低會被權臣奪權；幼主16歲親政，親漢高則朝貢加倍、邦誼大增，親漢低則疏遠。穩固越高朝貢越多，過低則停止朝貢。']);
 })();
 
 deco();intro();
