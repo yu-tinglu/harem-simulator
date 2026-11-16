@@ -4021,6 +4021,64 @@ const _mp26=msPush;msPush=function(x){try{const a=S&&S.ms;if(a&&a.length){const 
 HELP.push(['年表摺疊','史冊的「大事年表」按年份摺疊，最新的年份在最上面並預設展開前兩年，點年份可展開舊事。']);
 })();
 
+/* ===== round27：太后管教皇后、選人侍君（給皇后添堵） ===== */
+(function(){
+const cbs=()=>{const x=rx();if(!x.cb)x.cb=[];return x.cb};
+const sg=n=>(n>=0?'＋':'－')+Math.abs(n);
+/* 1. 管教皇后 */
+const CA=['管教皇后','皇后不敬時敲打、禁足、奪權、申飭母家、賞賜安撫，或上疏廢后',()=>{
+ const R_=S.reg,e=rx().emp;if(!e||e.gone){L('皇帝尚未立后，沒有皇后可管教。（可先「籌辦大婚」）');return}
+ if(S.t<(e.cd||0)){L('才剛管教過皇后，過兩個月再說，免得逼得太緊。');return}
+ const k=R_.k;
+ choose(`皇后${e.n}（${e.ty}出身・對你好感${e.gl|0}・家勢${e.pw|0}・帝寵${e.fv|0}）`,[
+ {l:'召入慈寧宮，當面訓誡立規矩（好感－8、家勢－3、權柄＋2）',f(){e.cd=S.t+2;e.gl=cl(e.gl-8);e.pw=cl(e.pw-3);R_.pw+=2;let t='皇后被你訓得面紅耳赤，不敢再有失禮。（好感－8、家勢－3、權柄＋2）';if(e.fv>=70){k.bond=cl(k.bond-3);t+='皇帝聽說後有些不悅。（皇帝孝心－3）'}L(t)}},
+ {l:'罰其禁足抄經一月（好感－15、家勢－5、皇帝孝心－4；皇帝若寵她有風險）',f(){e.cd=S.t+2;const p=cl(.6+R_.pw/300-e.fv/250,.2,.9);if(ckp(p)){e.gl=cl(e.gl-15);e.pw=cl(e.pw-5);k.bond=cl(k.bond-4);R_.pw+=2;L(`皇后被禁足抄經，宮裡人人噤聲。（好感－15、家勢－5、孝心－4、權柄＋2）`)}else{e.gl=cl(e.gl-5);k.bond=cl(k.bond-10);R_.pw-=3;e.fv=cl(e.fv+6);L('皇帝親自去皇后宮中探望，當場撤了你的禁令，母子失和。（孝心－10、權柄－3）')}}},
+ {l:'收回皇后協理六宮之權（家勢－10、好感－4、權柄＋3）',f(){e.cd=S.t+2;e.pw=cl(e.pw-10);e.gl=cl(e.gl-4);R_.pw+=3;L('你收回了鳳印，六宮諸事重歸慈寧宮。（家勢－10、好感－4、權柄＋3）')}},
+ {l:'申飭皇后母家，敲打外戚（家勢－8、好感－8、朝局－1）',f(){e.cd=S.t+2;e.pw=cl(e.pw-8);e.gl=cl(e.gl-8);S.nat.stab-=1;R_.pw+=1;L('你下旨申飭了皇后的母家，朝臣們心裡都有了數。（家勢－8、好感－8、朝局－1、權柄＋1）')}},
+ {l:'賞賜安撫，緩和婆媳關係（耗銀30，好感＋12）',f(){if(!pay(30))return L('銀兩不足。');e.cd=S.t+2;e.gl=cl(e.gl+12);L('你賞了皇后一份厚禮，她對你恭敬了許多。（好感＋12）')}},
+ {l:'蒐集過失，上疏廢后（極險）',f(){e.cd=S.t+3;const fault=(cbs().length?.03:0),p=cl(.1+R_.pw/260+(55-e.gl)/250-(e.fv-40)/300-(k.bond-45)/450+fault,.03,.7);
+   if(ckp(p)){rx().emp=null;R_.wed=0;k.bond=cl(k.bond-6);R_.pw+=3;S.nat.stab-=2;try{msPush(`太后廢黜皇后${e.n}`);jot('宮',e.n,`皇后${e.n}被廢，遷出中宮。`)}catch(x){}L(`你羅列罪狀，朝臣附議，皇后${e.n}被廢，遷出中宮。皇帝心中怨你，朝局也受震動。（孝心－6、朝局－2、權柄＋3；日後須另擇皇后）`)}
+   else{R_.pw-=12;k.bond=cl(k.bond-15);e.gl=cl(e.gl-5);e.fv=cl(e.fv+8);R_.rv=cl(R_.rv+5);L('廢后之議功敗垂成，皇帝護著皇后，朝臣也不肯附和。（權柄－12、孝心－15、對手勢力＋5）')}}},
+ {l:'暫且忍耐',f(){L('你按下火氣，只在心裡記了一筆。')}}]);return 1}];
+/* 2. 選人侍君 */
+const TY={'母族女子':[40,{fv:45,ld:80}],'才貌秀女':[30,{fv:62,ld:35}],'美貌宮女':[15,{fv:52,ld:50}],'皇后宿敵之女':[50,{fv:50,ld:55}]};
+const CB=['選人侍君','選人送到皇帝身邊：既添耳目，也分皇后的寵',()=>{
+ const R_=S.reg,k=R_.k,e=rx().emp;if(yr(k)<16){L('皇帝年紀尚小，還到不了納妃的年紀。');return}
+ if(cbs().length>=6){L('皇帝身邊已經有許多人，再塞只會招人非議。');return}
+ if(S.t<(R_.cbcd||0)){L('才剛送過人，過三個月再說。');return}
+ const mk=(ty,n)=>{const c=Object.assign({n:pnm('女'),ty,t:S.t,kids:0},TY[ty][1]);cbs().push(c);R_.cbcd=S.t+3;return c};
+ choose(`選誰送給皇帝？（現有${cbs().length}人${e?`；皇后${e.n}帝寵${e.fv|0}`:''}）`,[
+ {l:'母族女子（耗銀40，忠於你、做你的耳目；皇后帝寵－6、好感－4）',f(){if(!pay(40))return L('銀兩不足。');const c=mk('母族女子');if(e){e.fv=cl(e.fv-6);e.gl=cl(e.gl-4)}k.bond=cl(k.bond-1);L(`你把母族的${c.n}送進宮伺候皇帝，她事事向你回報。（皇后帝寵－6、好感－4、孝心－1）`)}},
+ {l:'才貌雙全的秀女（耗銀30，皇帝喜歡；皇后帝寵－10）',f(){if(!pay(30))return L('銀兩不足。');const c=mk('才貌秀女');if(e)e.fv=cl(e.fv-10);k.bond=cl(k.bond+2);L(`你挑了才貌雙全的${c.n}獻給皇帝，皇帝很是中意。（皇后帝寵－10、孝心＋2）`)}},
+ {l:'賜美貌宮女（耗銀15；皇后帝寵－7）',f(){if(!pay(15))return L('銀兩不足。');const c=mk('美貌宮女');if(e)e.fv=cl(e.fv-7);L(`你賜了貌美的宮女${c.n}給皇帝。（皇后帝寵－7）`)}},
+ {l:'皇后宿敵之女（耗銀50，專為爭寵；皇后帝寵－12、家勢－4）',f(){if(!pay(50))return L('銀兩不足。');const c=mk('皇后宿敵之女');if(e){e.fv=cl(e.fv-12);e.pw=cl(e.pw-4);e.gl=cl(e.gl-3)}L(`你把與皇后素有嫌隙的家族之女${c.n}送進宮，專為與皇后爭寵。（皇后帝寵－12、家勢－4、好感－3）`)}},
+ {l:'暫不插手皇帝的後宮',f(){L('你沒有插手皇帝的後宮。')}}]);return 1}];
+const ra=RACT.length;RACT.push(CA,CB);RAC_ORDER[1][1].push('管教皇后','選人侍君');
+/* 3. 每月影響與事件 */
+function cbTick(){if(!S||!S.reg||S.over)return;const x=rx(),cb=x.cb;if(!cb||!cb.length)return;const R_=S.reg,e=x.emp,k=R_.k;if(yr(k)<16)return;
+ let sum=0;cb.forEach(c=>{c.fv=cl(c.fv+R(-2,2)+(c.fv<45?1:-.5));sum+=Math.max(0,c.fv-40)});
+ if(e&&!e.gone){e.fv=cl(e.fv-sum/70);e.gl=cl(e.gl-sum/400)}
+ cb.forEach(c=>{if(c.ld>=60&&P(.07)){R_.rv=cl(R_.rv-1.2);R_.pw+=.5}
+  if(c.kids<3&&P(.012*(c.fv/50))){c.kids++;k.bond=cl(k.bond+1);R_.pw+=1;L(`${c.n}為皇帝誕下皇嗣，你又添了皇孫。`)}});
+ if(S.t%12!==5||S.gcd>0)return;const c=pk(cb);
+ if(e&&!e.gone&&P(.6))infPush(infEv(`皇后${e.n}與${c.n}在御花園起了衝突，鬧到了你這裡。`,[
+  ['偏袒新人，申斥皇后（好感－8、家勢－3、新人帝寵＋6）',()=>{e.gl=cl(e.gl-8);e.pw=cl(e.pw-3);c.fv=cl(c.fv+6);k.bond=cl(k.bond+2);return`皇后吃了啞巴虧，面上恭順，心裡更恨。（皇后好感－8、家勢－3，孝心＋2）`}],
+  ['偏袒皇后，責罰新人（好感＋8、新人忠誠－10）',()=>{e.gl=cl(e.gl+8);c.fv=cl(c.fv-10);c.ld=cl(c.ld-10);k.bond=cl(k.bond-3);return`新人被你罰了，皇后對你感激，皇帝卻有些不快。（皇后好感＋8、新人帝寵－10、孝心－3）`}],
+  ['各打五十大板（兩邊都收斂）',()=>{e.gl=cl(e.gl-3);c.fv=cl(c.fv-3);R_.pw+=1;return`你各罰了兩人，宮裡暫時太平。（皇后好感－3、新人帝寵－3、權柄＋1）`}]]));
+ else if(c.ld<45&&c.fv>60)infPush(infEv(`${c.n}恃寵而驕，在皇帝面前說起了你的是非。`,[
+  ['召來訓斥（新人帝寵－12、忠誠＋10、孝心－2）',()=>{c.fv=cl(c.fv-12);c.ld=cl(c.ld+10);k.bond=cl(k.bond-2);return`你把${c.n}訓得不敢再多嘴。（新人帝寵－12、忠誠＋10、孝心－2）`}],
+  ['賞賜拉攏（耗銀25，忠誠＋15）',()=>{if(!pay(25))return'銀兩不足。';c.ld=cl(c.ld+15);return`${c.n}收了賞賜，對你恭順了許多。（忠誠＋15）`}],
+  ['置之不理（孝心－5）',()=>{k.bond=cl(k.bond-5);return`${c.n}的話在皇帝心裡留了印象。（孝心－5）`}]]))}
+const _rm=rmend;rmend=function(){const r=_rm.apply(this,arguments);try{cbTick()}catch(e){console.log('r27',e)}return r};
+/* 4. 顯示：朝堂頁「皇帝身邊的人」 */
+const _u27=uiPost;uiPost=function(){const r=_u27.apply(this,arguments);try{if(typeof TAB!=='undefined'&&TAB===3&&S&&S.reg&&!S.over){document.querySelectorAll('.cd.cb27').forEach(e=>e.remove());const anchor=[...document.querySelectorAll('main .cd')].find(c=>/^皇后/.test(((c.querySelector('h3')||{}).textContent||'').trim()));const x=rx(),e=x.emp,cb=x.cb||[];if(anchor){const ia=RACT.findIndex(a=>a[0]=='管教皇后'),ib=RACT.findIndex(a=>a[0]=='選人侍君');
+ const lines=cb.map(c=>`<div class=m>${c.n}（${c.ty}）・帝寵${c.fv|0}・忠於你${c.ld|0}・子嗣${c.kids}</div>`).join('')||'<div class=m>你還沒有安排人到皇帝身邊。</div>';
+ const st=e&&!e.gone?`<div class=m>皇后${e.n}：對你好感${e.gl|0}・家勢${e.pw|0}・帝寵${e.fv|0}</div>`:'<div class=m>目前沒有皇后。</div>';
+ anchor.insertAdjacentHTML('afterend',`<div class="cd cb27"><h3>皇帝身邊的人</h3>${st}${lines}<div style="margin-top:6px"><button onclick="A(${ia})">管教皇后</button> <button onclick="A(${ib})">選人侍君</button></div></div>`)}}}catch(e){console.log('u27',e)}return r};
+window.cbTick27=cbTick;
+HELP.push(['管教皇后與選人侍君','太后模式「皇室」類新增兩個行動。管教皇后：訓誡、禁足、奪鳳印、申飭母家、賞賜、上疏廢后，每項都有明確數值與風險。選人侍君：把母族女子、才貌秀女、美貌宮女或皇后宿敵之女送到皇帝身邊，分皇后的帝寵、添你的耳目；之後會有皇后與新人爭鬥、新寵恃寵而驕等事件可處理。']);
+})();
+
 deco();intro();
 
 
