@@ -3995,23 +3995,24 @@ HELP.push(['壽命與後台','每個人依年齡有合理的病故機率（嬰�
 /* ===== round26：介面再優化——嬪妃列緊湊、孩子數值單行、年表按年摺疊（新到舊）、提示間距 ===== */
 (function(){
 const st=document.createElement('style');st.id='ui26';st.textContent=`
+html body details.con,html body details.cd.con{content-visibility:visible!important;contain-intrinsic-size:none!important}
 html body details.cd.con{padding:7px 12px!important;margin-bottom:6px!important}
-html body details.cd.con>summary{display:flex!important;flex-wrap:wrap;align-items:center;gap:3px 6px}
 html body details.cd.con>summary .pill{font-size:11px!important;padding:0 6px!important;line-height:18px;margin:0!important}
 html body details.cd.con>summary .nm{font-size:15px}
 html body details.cd.con>summary .mm{flex:1 0 100%;font-size:12px;opacity:.85;margin:0!important}
-html body .kb{display:flex!important;flex-wrap:wrap;gap:2px 12px!important}
-html body .kb .r{flex:0 0 auto!important;gap:5px!important}
-html body .kb .r span{flex:0 0 auto!important}
-html body .kb .r i{flex:0 0 30px!important}
-html body .kb .r em{flex:0 0 auto!important;min-width:1.7em}
+html body .kb{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(108px,1fr))!important;gap:3px 10px!important}
+html body .kb>*{min-width:0!important}
+html body .kb .r{display:grid!important;grid-template-columns:max-content minmax(0,1fr) 2.7em!important;gap:4px!important;align-items:center;width:auto!important;flex:none!important}
+html body .kb .r span{flex:none!important;width:auto!important}
+html body .kb .r i{width:auto!important;min-width:0!important;flex:none!important}
+html body .kb .r em{width:auto!important;min-width:0!important;text-align:right;flex:none!important}
 html body .tip,html body .guide14{margin-bottom:12px!important}
 html body details.y26{border-top:1px dashed rgba(0,0,0,.12);padding:3px 0}
-html body details.y26>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;padding:4px 0}
+html body details.y26>summary{cursor:pointer;list-style:none;display:block;padding:4px 0}
 html body details.y26>summary::-webkit-details-marker{display:none}
 html body details.y26>summary::before{content:"▸";color:#8a3a30;transition:transform .15s}
 html body details.y26[open]>summary::before{transform:rotate(90deg)}
-html body details.y26>summary .y{margin:0!important;flex:0 0 auto}
+html body details.y26>summary .y{margin:0 8px 0 0!important;display:inline-block}
 html body details.bg25>summary{cursor:pointer;list-style:none}
 `;document.head.appendChild(st);
 function tl26(){try{const tl=document.querySelector('main .tl');if(!tl||tl.dataset.t26)return;tl.dataset.t26='1';const groups=[];let cur=null;[...tl.children].forEach(el=>{if(el.classList.contains('y')){cur={y:el,es:[]};groups.push(cur)}else if(cur)cur.es.push(el)});if(groups.length<4)return;
