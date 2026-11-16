@@ -3506,20 +3506,21 @@ let _AUTO=0;
 const AGOALS={'疑心降到40以下':m=>(m.dsus||0)<40,'銀兩達一萬':m=>m.silver>=10000,'健康回到80':m=>m.hp>=80,'晉升一級位份':m=>m.rank>_gb.rk,'有孩子成年':m=>m.kids.filter(k=>!k.dead&&yr(k)>=16).length>_gb.ad,'母國猜忌降到40以下':m=>!S.fr||S.fr.dead||(S.fr.sus||0)<40};
 let _gb={rk:0,ad:0},_AG=0;
 function goalHit(){try{const g=S.agoal;return!!(g&&g!=='無'&&AGOALS[g]&&AGOALS[g](S.me))}catch(e){return false}}
+function autoResume(){const r=S&&S.aresume;if(!r||S.ev||S.ch||S.scn)return;S.aresume=null;if(r.g){const op=S.pol;S.pol=r.pol||S.pol;_AG=1;try{autoRun(r.left)}finally{_AG=0;S.pol=op}}else autoRun(r.left)}
 function autoGoal(){if(!S||!S.agoal||S.agoal==='無')return;_gb={rk:S.me.rank,ad:S.me.kids.filter(k=>!k.dead&&yr(k)>=16).length};if(goalHit()){ntfAdd('目標「'+S.agoal+'」目前已經達成。','ti');ntfDraw();render();return}const gp={'疑心降到40以下':'守成','銀兩達一萬':'斂財','健康回到80':'養生','晉升一級位份':'固寵','有孩子成年':'育子','母國猜忌降到40以下':'守成'},op=S.pol;if(gp[S.agoal])S.pol=gp[S.agoal];_AG=1;try{autoRun(60)}finally{_AG=0;S.pol=op}}
 const _as11=autoStop;autoStop=function(){return _AG&&goalHit()?1:_as11()};
-function autoRun(months){if(_AUTO||!S||S.over||S.reg||S.scn||S.ev||S.ch){return}_AUTO=1;const m=S.me,b={fv:m.favor,sv:m.silver,hp:m.hp,rk:m.rank,t:S.t},target=S.t+months,rd=render;let why='',n=0,evN=0;
-try{render=function(){};let g=0;while(!autoStop()&&S.t<target&&g++<600){const t0=S.t;const i=polAct();try{A(i)}catch(e){console.log('auto',e);break}n++;let z=0;while(S.ch&&z++<6){const o=S.ch.o;let k=o.findIndex(x=>!/險|極兇險/.test(x.l));if(k<0)k=0;try{C(k)}catch(e){break}}
-let w=0;while(S.ev&&!S.over&&w++<12){if(evCritical(S.ev)||S.apx==='ask'){why='有重要的事要你決定';break}evN++;const o=S.ev.o;let k=o.findIndex(x=>!/險|極/.test(x[0]));if(k<0)k=0;try{V(k)}catch(e){console.log('autoV',e);break}}
+function autoRun(months){if(_AUTO||!S||S.over||S.reg||S.scn||S.ev||S.ch){return}_AUTO=1;const _AGsave=_AG;const m=S.me,b={fv:m.favor,sv:m.silver,hp:m.hp,rk:m.rank,t:S.t},target=S.t+months,rd=render;let why='',n=0,evN=0;S.alog=[];S.aresume=null;
+try{render=function(){};let g=0;while(!autoStop()&&S.t<target&&g++<600){const t0=S.t;const i=polAct();const ent={t:t0,a:ACT[i][0],c:[],e:[]};S.alog.push(ent);try{A(i)}catch(e){console.log('auto',e);break}n++;let z=0;while(S.ch&&z++<6){const o=S.ch.o;let k=o.findIndex(x=>!/險|極兇險/.test(x.l));if(k<0)k=0;ent.c.push(String(o[k].l).replace(/[（(].*$/,''));try{C(k)}catch(e){break}}
+let w=0;while(S.ev&&!S.over&&w++<12){if(evCritical(S.ev)||S.apx==='ask'){why='有重要的事要你決定';break}evN++;const o=S.ev.o;let k=o.findIndex(x=>!/險|極/.test(x[0]));if(k<0)k=0;ent.e.push(String(S.ev.t||'').replace(/<[^>]*>/g,'').slice(0,22)+'→'+String(o[k][0]).replace(/[（(].*$/,''));try{V(k)}catch(e){console.log('autoV',e);break}}
 if(why)break;if(S.ev||S.scn)break}}finally{render=rd;_AUTO=0}
-if(S.over){render();return}const m2=S.me;if(!why){if(S.scn)why='有重要的事要你決定';else if(S.ev)why='有事件等你決定';else if(_AG&&goalHit())why='已達成目標「'+S.agoal+'」';else if(autoStop())why='出現需要留意的狀況'}
+if(S.over){render();return}if(S.t<target&&(why==='有重要的事要你決定'||why==='有事件等你決定'))S.aresume={left:target-S.t,g:_AGsave,pol:S.pol};const m2=S.me;if(!why){if(S.scn)why='有重要的事要你決定';else if(S.ev)why='有事件等你決定';else if(_AG&&goalHit())why='已達成目標「'+S.agoal+'」';else if(autoStop())why='出現需要留意的狀況'}
 const d=(a,b2)=>{const x=Math.round(b2-a);return x>0?'＋'+x:x<0?'－'+(-x):'±0'};
 try{ntfAdd(`一鍵「${S.pol||'固寵'}」${S.t-b.t}個月：聖寵${d(b.fv,m2.favor)}・銀兩${d(b.sv,m2.silver)}・健康${d(b.hp,m2.hp)}${m2.rank>b.rk?'・晉位':''}${evN?'・自動處理'+evN+'件事':''}${why?'。已停下：'+why:''}`,'ti');ntfDraw()}catch(e){}
 render()}
 /* 主畫面：方針列、精簡 */
 const _ap10=uiPost;uiPost=function(){const r=_ap10.apply(this,arguments);try{if(TAB==0&&S&&S.me&&!S.over&&!S.reg&&!S.scn){const main=document.querySelector('main');if(main){
 if(!S.pol)S.pol='固寵';main.querySelectorAll('.autobar').forEach(e=>e.remove());const d=document.createElement('div');d.className='autobar';
-d.innerHTML=`<span class=al>方針</span><select onchange="S.pol=this.value;document.querySelector('.autobar .ad').textContent=POLD[S.pol]">${Object.keys(POLS).map(k=>`<option ${k==S.pol?'selected':''}>${k}</option>`).join('')}</select><span class=ad>${POLD[S.pol]}</span><span class=ab><button onclick="autoRun(1)">一鍵本月</button><button onclick="autoRun(12)">一鍵一年</button></span><details class=am><summary>進階</summary><div>遇事：<select onchange="S.apx=this.value"><option value=auto ${S.apx!=='ask'?'selected':''}>小事自動處理</option><option value=ask ${S.apx==='ask'?'selected':''}>每件都讓我決定</option></select></div><div>目標：<select onchange="S.agoal=this.value;render()">${['無'].concat(Object.keys(AGOALS)).map(k=>`<option ${k==(S.agoal||'無')?'selected':''}>${k}</option>`).join('')}</select>${S.agoal&&S.agoal!=='無'?'<button onclick="autoGoal()">一鍵達成</button>':''}</div></details>`;
+d.innerHTML=`<span class=al>方針</span><select onchange="S.pol=this.value;document.querySelector('.autobar .ad').textContent=POLD[S.pol]">${Object.keys(POLS).map(k=>`<option ${k==S.pol?'selected':''}>${k}</option>`).join('')}</select><span class=ad>${POLD[S.pol]}</span><span class=ab><button onclick="autoRun(1)">一鍵本月</button><button onclick="autoRun(12)">一鍵一年</button></span>${S.aresume&&!S.ev&&!S.ch?`<button class=rs onclick="autoResume()">繼續剛才的一鍵（剩${S.aresume.left}個月）</button>`:''}<details class=am><summary>進階</summary><div>遇事：<select onchange="S.apx=this.value"><option value=auto ${S.apx!=='ask'?'selected':''}>小事自動處理</option><option value=ask ${S.apx==='ask'?'selected':''}>每件都讓我決定</option></select></div><div>目標：<select onchange="S.agoal=this.value;render()">${['無'].concat(Object.keys(AGOALS)).map(k=>`<option ${k==(S.agoal||'無')?'selected':''}>${k}</option>`).join('')}</select>${S.agoal&&S.agoal!=='無'?'<button onclick="autoGoal()">一鍵達成</button>':''}</div>${S.alog&&S.alog.length?`<div class=alg><b>上次一鍵明細</b>${S.alog.slice(-40).map(x=>`<div class=m>第${Math.floor(x.t/12)+1}年${x.t%12+1}月　${x.a}${x.c.length?'（'+x.c.join('、')+'）':''}${x.e.length?'<br>　↳ '+x.e.join('<br>　↳ '):''}</div>`).join('')}</div>`:''}</details>`;
 const st=main.querySelector('.stat-strip');if(st)st.after(d);else main.prepend(d);
 if(S.t>=24)main.querySelectorAll(':scope>.tip').forEach(e=>e.remove());
 [...main.querySelectorAll(':scope>.cd')].forEach(c=>{if(!c.querySelector('h3')&&/^\s*母國/.test(c.textContent))c.classList.add('frs')});
@@ -3531,7 +3532,7 @@ html body .autobar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin
 html body .autobar .al{font-weight:700;color:#8a3a30}
 html body .autobar select{font:inherit;font-size:13px;padding:3px 6px;border-radius:8px;border:1px solid rgba(196,138,112,.4);background:#fff;color:#5a3a32}
 html body .autobar .ad{display:none}
-html body .autobar details.am{flex-basis:100%;font-size:12.5px}html body .autobar details.am summary{cursor:pointer;color:#8a3a30;opacity:.8}html body .autobar details.am div{margin-top:5px}
+html body .autobar details.am{flex-basis:100%;font-size:12.5px}html body .autobar details.am summary{cursor:pointer;color:#8a3a30;opacity:.8}html body .autobar details.am div{margin-top:5px}html body .autobar button.rs{flex-basis:100%;background:#8a3a30}html body .autobar .alg .m{font-size:12px;margin-top:3px;line-height:1.5}
 html body .autobar .ab{display:flex;gap:6px;margin-left:auto}
 html body .autobar button{padding:5px 11px;font-size:12.5px;border-radius:999px;border:1px solid #c0584e;background:#c8465a;color:#fff;box-shadow:none}
 html body .cd.frs{padding:7px 12px;font-size:12.5px;line-height:1.55;margin:6px 0}html body .cd.frs *{font-size:12.5px}html body details.frc>summary{cursor:pointer;list-style:none;font-weight:700;font-size:14px;color:#8a3a30}
@@ -3545,6 +3546,7 @@ HELP.push(['方針與一鍵','主畫面「方針」可選固寵、養生、斂�
 /* ===== round11：事件稽核過濾、去重、後期節奏、通知位置 ===== */
 const EVCD=18;
 function evBad(e){const t=e.t||'';
+ if(S&&S.qi==='me'&&/^皇后(賜你|罰你|召你|以你|為難)/.test(t))return true;
  if(S.dow||S.reg)return false;
  if(/^太后|太后(鳳體|禮佛|召你|賜了|有意|的侄)/.test(t)&&!/先帝|皇太后|太妃/.test(t))return true;
  return false}
@@ -3640,6 +3642,36 @@ if(G.prof.length){const d=document.createElement('details');d.className='cd prof
 out.forEach(e=>main.appendChild(e))}
 const _up13=uiPost;uiPost=function(){const r=_up13.apply(this,arguments);try{if(TAB==0&&S&&S.me&&!S.over&&!S.reg&&!S.scn)reorg13()}catch(e){console.log('ui13',e)}return r};
 (function(){const st=document.createElement('style');st.id='ui13';st.textContent=`html body .sec13{margin:14px 2px 4px;font-size:12.5px;letter-spacing:.2em;color:#8a3a30;font-weight:700;display:flex;align-items:center;gap:8px}html body .sec13::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(196,138,112,.45),transparent)}html body .sec13.sub{margin:8px 2px 2px;font-size:11.5px;letter-spacing:.12em;opacity:.8;font-weight:600}html body details.prof13{padding:9px 13px!important}html body details.prof13>summary{cursor:pointer;list-style:none;display:block!important;padding:0!important;margin:0!important;position:relative;font-size:13px;color:#8a3a30}html body details.prof13>summary b{display:inline!important;margin-right:8px;font-size:14px}html body details.prof13>summary span{display:inline!important;font-size:12.5px}html body details.prof13>summary::-webkit-details-marker{display:none}html body details.prof13>summary::after{content:'▾';opacity:.5;position:absolute;right:0;top:0}html body details.prof13[open]>summary{margin-bottom:8px}html body details.prof13>.cd{box-shadow:none;margin:6px 0}`;document.head.appendChild(st)})();
+
+/* ===== round14：通知條單則化 ===== */
+ntfDraw=function(){let e=document.getElementById('ntf');if(e)e.remove();clearTimeout(_ntT);if(!S||!S.nt||!S.nt.length)return;
+const all=S.nt,imp=all.filter(n=>n.k=='me'||n.k=='medn'),top=(imp.length?imp:all).slice(-1)[0],rest=all.length-1;
+e=document.createElement('div');e.id='ntf';e.className='ntf14';
+e.innerHTML=`<div class="nc ${top.k}">${top.t}</div>${rest>0?`<div class=nmore>另有 ${rest} 則，已記在「紀事」</div>`:''}<div class=ntap>點一下收起</div>`;
+e.onclick=()=>{S.nt=[];ntfDraw()};document.body.appendChild(e);
+_ntT=setTimeout(()=>{if(!S||!S.nt)return;const now=Date.now();S.nt=S.nt.filter(n=>n.k=='me'||n.k=='medn'||(n.ts&&now-n.ts<7000));ntfDraw()},8000)};
+(function(){const st=document.createElement('style');st.id='ui14';st.textContent=`html body #ntf.ntf14{display:block;left:12px;right:12px;width:auto;max-width:520px;margin:0 auto;gap:0;cursor:pointer}html body #ntf.ntf14 .nc{padding:9px 14px;border-radius:14px;font-size:13px;line-height:1.5;box-shadow:0 4px 14px rgba(120,50,40,.25)}html body #ntf.ntf14 .nmore,html body #ntf.ntf14 .ntap{font-size:11px;text-align:right;opacity:.7;margin:3px 8px 0;color:#5a3a32;text-shadow:0 0 4px #fff}html body #ntf.ntf14 button{display:none}`;document.head.appendChild(st)})();
+const _na14=ntfAdd;ntfAdd=function(t,k){try{if(S){S.nlog=S.nlog||[];S.nlog.push({t:String(t).replace(/<[^>]*>/g,''),m:S.t});if(S.nlog.length>120)S.nlog.shift()}}catch(e){}return _na14.apply(this,arguments)};
+const _up14=uiPost;uiPost=function(){const r=_up14.apply(this,arguments);try{if(TAB==5&&S&&S.nlog&&S.nlog.length){const main=document.querySelector('main');if(main&&!main.querySelector('.nlog14')){const mo=m=>`第${Math.floor(m/12)+1}年${m%12+1}月`;main.insertAdjacentHTML('afterbegin',`<details class="cd nlog14" style="padding:9px 13px"><summary style="cursor:pointer;color:#8a3a30"><b>通知記錄</b>　<span class=m>最近 ${S.nlog.length} 則</span></summary>${S.nlog.slice().reverse().map(n=>`<div class=m style="margin-top:5px">${mo(n.m)}　${n.t}</div>`).join('')}</details>`)}}}catch(e){console.log('ui14',e)}return r};
+
+/* ===== round15：其他分頁分區整理 ===== */
+function reorg15(){const main=document.querySelector('main');if(!main)return;main.querySelectorAll('.sec15').forEach(e=>e.remove());
+const kids=[...main.children];const T=e=>(e.innerText||'').trim();
+const G={1:[['後宮成員',[e=>/^後宮名冊/.test(T(e)),e=>e.classList.contains('fbar'),e=>e.classList.contains('rcnt'),e=>e.className===''&&e.tagName=='DIV']],['我的人與關係',[e=>/^我的下人/.test(T(e)),e=>/^身邊人物/.test(T(e)),e=>/^恩怨簿/.test(T(e))]],['編制',[e=>/^後宮編制/.test(T(e))]]],
+2:[['我的孩子',[e=>/^我的子女/.test(T(e))]],['奪嫡',[e=>/^奪嫡局勢/.test(T(e)),e=>/^奪嫡聲勢/.test(T(e))]],['皇室子嗣',[e=>/^皇室子嗣總覽/.test(T(e))]]],
+3:[['朝局',[e=>/^天下大勢/.test(T(e)),e=>/^皇室帝后/.test(T(e)),e=>/^朝堂紀事/.test(T(e))]],['前朝',[e=>/^前朝官階/.test(T(e)),e=>/^官職編制/.test(T(e)),e=>/^前朝官員履歷/.test(T(e))]],['家族與派系',[e=>/^母家族人/.test(T(e)),e=>/^後宮派系/.test(T(e))]]],
+5:[['紀錄',[e=>e.classList.contains('nlog14'),e=>/^宮中紀事/.test(T(e)),e=>/^本屆選秀結果/.test(T(e)),e=>/^母家（/.test(T(e)),e=>/^成就/.test(T(e))]],['存檔與設定',[e=>/^事件頻率/.test(T(e)),e=>/^我的畫像/.test(T(e)),e=>/^存檔/.test(T(e)),e=>/^完整備份/.test(T(e)),e=>/^隱私與通知/.test(T(e)),e=>/^意見回饋/.test(T(e)),e=>/^主畫面/.test(T(e))]]]};
+const g=G[TAB];if(!g)return;const used=new Set(),out=[];
+kids.filter(e=>e.classList.contains('tip')).forEach(e=>{used.add(e);out.push(e)});
+g.forEach(([lab,ms])=>{const part=[];ms.forEach(f=>kids.forEach(e=>{if(!used.has(e)&&f(e)){used.add(e);part.push(e)}}));if(part.length){const s=document.createElement('div');s.className='sec13 sec15';s.textContent=lab;out.push(s);part.forEach(e=>out.push(e))}});
+const rest=kids.filter(e=>!used.has(e));if(rest.length){const s=document.createElement('div');s.className='sec13 sec15';s.textContent='其他';out.push(s);rest.forEach(e=>out.push(e))}
+out.forEach(e=>main.appendChild(e))}
+const _up15=uiPost;uiPost=function(){const r=_up15.apply(this,arguments);try{if(S&&S.me&&!S.over&&!S.reg&&!S.scn&&TAB!=0&&TAB!=4)reorg15()}catch(e){console.log('ui15',e)}return r};
+/* 開局導覽 */
+function guideSeen(){try{return localStorage.getItem('hg_guide14')=='1'}catch(e){return false}}
+function guideOff(){try{localStorage.setItem('hg_guide14','1')}catch(e){}document.querySelectorAll('.guide14').forEach(e=>e.remove());S._g14=1}
+const _up16=uiPost;uiPost=function(){const r=_up16.apply(this,arguments);try{if(TAB==0&&S&&S.me&&!S.over&&!S.reg&&!S.scn&&S.t<6&&!S._g14&&!guideSeen()){const main=document.querySelector('main');if(main&&!main.querySelector('.guide14')){const st=main.querySelector('.stat-strip');const h=`<div class="cd guide14"><b>三步上手</b><ol><li>每月有 4 次行動，下方分組按鈕都是行動；先從「恩寵聖眷」開始，聖寵是晉位的關鍵。</li><li>最上面紅色「注意」欄會在快出事時提醒你，旁邊有按鈕可直接處理；點「皇帝詳情」可看皇上的狀態。</li><li>玩累了就選一個「方針」，按「一鍵本月／一年」，遇到大事它會停下來等你。</li></ol><button onclick="guideOff()">知道了</button></div>`;if(st)st.insertAdjacentHTML('afterend',h);else main.insertAdjacentHTML('afterbegin',h)}}}catch(e){console.log('guide',e)}return r};
+(function(){const st=document.createElement('style');st.id='ui16';st.textContent=`html body .guide14{padding:10px 14px!important;font-size:13px;line-height:1.6;background:#fff8e8!important;border:1px solid rgba(214,168,96,.5)}html body .guide14 ol{margin:6px 0 8px 18px;padding:0}html body .guide14 li{margin:2px 0}html body .guide14 button{padding:5px 14px;font-size:12.5px;border-radius:999px}`;document.head.appendChild(st)})();
 
 deco();intro();
 
