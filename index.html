@@ -674,7 +674,7 @@ if(m.preg&&--m.preg==0)S.q.unshift(labourEv());
 ids().forEach(i=>{const n=S.npcs[i],q=TS[n.g][2];n.hp=Math.min(100,n.hp+2-dfx(n).hp*.7);{const a=n.at;if(P(.5)){const s=R(0,13);a.sk[s]=cl(a.sk[s]+(P(.7)?1:-1)*R(0,2))}a.sp=cl(a.sp+R(-3,3)+(60-a.sp)*.05);a.wt=+(a.wt+R(-3,3)/10).toFixed(1);a.hr=cl(a.hr+R(-1,1));if(S.t%12==0){a.lk=cl(a.lk+(S.t>96?-R(0,2):R(-1,1)));a.sf=cl(a.sf+R(-2,1));a.iq=cl(a.iq+R(0,1));n.sc=cl(n.sc+R(-2,3))}}if(P(.003)&&n.at.ds.length<3){const d=ONSET[R(0,ONSET.length-1)];if(!n.at.ds.includes(d)){n.at.ds.push(d);L(`${n.n}染上了「${DS[d][0]}」。`)}}if(P(.012)){n.hp-=R(15,35);L(`${n.n}病了一場。`)}n.host=cl(n.host-1);n.favor=cl(n.favor+R(-3,3)+(q.perf||0)*3+(q.f||0)/20+cb(n)*.4);if(n.preg){n.preg--;if(n.preg==0){n.hp-=R(0,8);birth(n.kids,i)}}else if(n.kids.length<4&&P(Math.max(.002,.008+n.favor/4000+(q.fert||0)/10+dfx(n).fert/8))){n.preg=10;if(P(.7))L(`${n.n}被診出有孕。`)}});
 {const ep=EPS[S.ep][2];S.mood=cl(Math.round(S.mood+R(-ep.vol,ep.vol)+(50+(natv()-50)*.3-S.mood)*.12))}const qn=Q();if(qn&&S.t>36&&P(.0012))qn.hp=0;
 if(P(.5))courtFight();court();if(S.over)return;
-m.kids=m.kids.filter(k=>{const q=KT[k.t][2];if(yr(k)<3&&P((.004+(q.weak?.012:0)+(k.at&&k.at.ds.includes(12)?.012:0))*((q.luck||tf('kh'))?.5:1))){L(`${k.n}不幸夭折，你肝腸寸斷。`);m.hp-=10;return false}return true});
+m.kids=m.kids.filter(k=>{const q=KT[k.t][2];if(yr(k)<3&&P(0*(.004+(q.weak?.012:0)+(k.at&&k.at.ds.includes(12)?.012:0))*((q.luck||tf('kh'))?.5:1))){L(`${k.n}不幸夭折，你肝腸寸斷。`);m.hp-=10;return false}return true});
 shopTick();m.favor-=1;m.silver+=Math.max(0,3+m.rank*2+(tf('rich')?5:0)+Math.round((natv()-50)/15));
 if(S.t%12==0){[m].concat(S.npcs).forEach(o=>o.fam.forEach(x=>{x.pw+=R(-3,4);x.ab+=R(0,2)}));
 S.npcs.forEach(n=>n.kids.forEach(k=>{k.cai+=R(0,3);k.de+=R(0,2);k.pow+=R(0,2)+Math.round((n.pow-45)/30);k.chong+=R(-3,3)}));m.kids.forEach(k=>k.chong+=R(-2,2));
@@ -2837,8 +2837,8 @@ function svTasks(x){const m=S.me;const T=[
 const SVACT=[
 ['差遣下人','派宮人打探、送禮、打點、散播流言',()=>{svSync();choose('差遣哪位下人？',S.srv.map(x=>({l:svBox(x),f(){choose(`派${x.n}去做什麼？`,svTasks(x))}})));return 1}],
 ['管教下人','賞賜、責罰、調任、提拔、遣散',()=>{svSync();choose('管教哪位下人？',S.srv.map(x=>({l:svBox(x),f(){choose(`如何處置${x.n}？`,[
-{l:'賞賜（耗銀15，忠誠大增）',f(){if(!pay(15))return L('銀兩不足。');const a=x.lo|0;x.lo=cl(x.lo+R(10,16));L(`${x.n}叩頭謝恩，忠誠 ${a}→${x.lo|0}。`)}},
-{l:'責罰（忠誠降，能力略升）',f(){const a=x.lo|0;x.lo=cl(x.lo-R(5,9));x.ab=cl(x.ab+R(1,3));if(x.tr=='多嘴'&&P(.5)){x.tr='老練';L(`${x.n}吃了教訓，從此謹言慎行。`)}else L(`${x.n}挨了板子，忠誠 ${a}→${x.lo|0}，做事卻更謹慎了。`)}},
+{l:'賞賜（耗銀15，忠誠大增）',f(){if(!pay(15))return L('銀兩不足。');const a=x.lo|0;x.lo=cl(x.lo+R(10,16));x.md=cl((x.md===undefined?50:x.md)+15);L(`${x.n}叩頭謝恩，忠誠 ${a}→${x.lo|0}。`)}},
+{l:'責罰（忠誠降，能力略升）',f(){const a=x.lo|0;x.lo=cl(x.lo-R(5,9));x.md=cl((x.md===undefined?50:x.md)-12);x.ab=cl(x.ab+R(1,3));if(x.tr=='多嘴'&&P(.5)){x.tr='老練';L(`${x.n}吃了教訓，從此謹言慎行。`)}else L(`${x.n}挨了板子，忠誠 ${a}→${x.lo|0}，做事卻更謹慎了。`)}},
 {l:'調任職務',f(){choose(`${x.n}調任為？`,SVJ.map(j=>({l:j+(x.job==j?'（現任）':''),f(){x.job=j;L(`${x.n}改任「${j}」。`)}})))}},
 {l:'提拔為掌事（忠誠需≥60，能力＋8）',f(){if(x.top)return L(`${x.n}已是掌事。`);if(x.lo<60)return L(`${x.n}的資歷與忠心都還不夠。`);x.top=1;x.ab=cl(x.ab+8);x.lo=cl(x.lo+6);L(`${x.n}升為掌事，辦事更得力了。`)}},
 {l:'遣出宮去',f(){S.srv=S.srv.filter(y=>y!==x);if(x.lo>=60&&P(.4)){S.me.ally+=2;L(`${x.n}含淚拜別，日後或許還會念你的好。`)}else if(x.lo<30&&P(.4)){S.me.scheme+=1;L(`${x.n}走時怨氣沖天，不知會在外頭說些什麼。`)}else L(`${x.n}被遣出宮去。`)}}])}})));return 1}],
@@ -2869,7 +2869,7 @@ const _npU=natPanel;natPanel=function(){let h=_npU.apply(this,arguments);try{if(
 const _fpU=famPanel;famPanel=function(){let h=_fpU.apply(this,arguments);try{if(!S.reg&&S.me.fo&&S.fr){const c=frCard();if(c&&h.startsWith(c))h=h.slice(c.length)}h=h.replace(/你屬「undefined」/g,'你不屬任何派系').replace(/「undefined」/g,'「無派系」')}catch(e){}return h};
 const _agU=actGroups;actGroups=function(){let h=_agU.apply(this,arguments);try{if(!S.me.fo){const i=IDX('資助母國');h=h.replace(new RegExp(`<button onclick="A\\(${i}\\)">[\\s\\S]*?</button>`),'')}}catch(e){}return h};
 function svPanel(){if(!S||!S.me||S.reg||S.over)return'';svSync();const f=S.srv.filter(x=>x.k=='宮女').length,t=S.srv.length-f;
-return`<div class=cd data-open=0><h3>我的下人　宮女${f}・太監${t}</h3><div class=m>到「行動→宮人差遣」派他們辦事、賞罰或補人。忠誠太低的下人會出賣你。</div>`+S.srv.map(x=>`<div class=k><b>${x.n}</b>・${x.k}${x.top?'・掌事':''}・${x.tr}・${x.job}<div class=kb style="display:block">${abar("忠誠",x.lo)}${abar("能力",x.ab)}</div></div>`).join('')+(S.me.fo&&typeof pbHTML=='function'?pbHTML():'')+'</div>'}
+return`<div class=cd data-open=0><h3>我的下人　宮女${f}・太監${t}</h3><div class=m>到「行動→宮人差遣」派他們辦事、賞罰或補人。忠誠太低的下人會出賣你。</div>`+S.srv.map(x=>`<div class=k><b>${x.n}</b>${mdPill(mdGet(x))}・${x.k}${x.top?'・掌事':''}・${x.tr}・${x.job}<div class=kb style="display:block">${abar("忠誠",x.lo)}${abar("能力",x.ab)}</div></div>`).join('')+(S.me.fo&&typeof pbHTML=='function'?pbHTML():'')+'</div>'}
 const _qpU=quotaPanel;quotaPanel=function(){let h=_qpU.apply(this,arguments);try{h=svPanel()+h}catch(e){console.log('svPanel',e)}return h};
 /* 每月：下人忠誠、職務效果、背叛事件 */
 function svTick(){if(!S||!S.me||S.over||S.reg)return;svSync();const m=S.me;
@@ -2880,7 +2880,7 @@ else if(x.job=='跑腿傳話')m.ally+=a/90;
 else if(x.job=='試毒守門'){m.hp=Math.min(100,m.hp+a/100);if(P(.03)){m.hp=Math.min(100,m.hp+3);L(`${x.n}試出膳食有異，替你擋下一劫。`)}}
 else if(x.job=='管理庫房'){if(x.tr=='貪財'&&P(.2)){m.silver=Math.max(0,m.silver-3);L(`${x.n}手腳不乾淨，庫房少了幾兩銀子。`)}else m.silver+=a/28}
 if(P(.002)){S.srv=S.srv.filter(y=>y!==x);L(`${x.k}${x.n}染病，不治而亡。`)}});
-const bad=S.srv.filter(x=>x.lo<22);if(bad.length&&P(.08)&&!S.ev&&!S.ch){const x=pk(bad);S.q.push({t:`${x.k}${x.n}近來與別宮走得很近，你察覺${x.k=='宮女'?'她':'他'}在向外傳遞你的消息。`,o:[
+const bad=S.srv.filter(x=>x.lo<22);if(bad.length&&P(.08)){const x=pk(bad);S.q.push({t:`${x.k}${x.n}近來與別宮走得很近，你察覺${x.k=='宮女'?'她':'他'}在向外傳遞你的消息。`,o:[
 ['杖責逐出，殺雞儆猴',()=>{S.srv=S.srv.filter(y=>y!==x);m.scheme+=2;m.ally-=1;S.srv.forEach(y=>y.lo=cl(y.lo+3));return`${x.n}被逐出宮，其餘下人噤若寒蟬。`}],
 ['敲打警告並加以賞賜（耗銀20）',()=>{if(!pay(20))return'銀兩不足，只能口頭警告，效果有限。';x.lo=cl(x.lo+25);return`${x.n}惶恐叩謝，似乎真心悔過。`}],
 ['將計就計，餵假消息（看心機）',()=>{if(ckp(.3+m.scheme/250)){const c=ids();if(c.length)S.npcs[pk(c)].favor-=8;m.ally+=3;return'假消息傳了出去，對頭上了當，你暗中得利。'}m.favor-=4;return'對方識破了你的把戲，反而抓到你的把柄。'}]]})}}
@@ -2925,9 +2925,9 @@ const _mdSh=mend;mend=function(){const r=_mdSh.apply(this,arguments);try{shopFx(
 /* ===== 介面細修：行動分頁精簡、狀態列、手風琴 ===== */
 ACTCAT.forEach((c,i)=>{c[2]=i==0?1:0});
 (function(){const st=document.createElement('style');st.textContent=`
-.stat-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:6px 0 10px}
+.stat-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin:6px 0 10px}
 .stat-strip div{background:var(--card,rgba(255,255,255,.7));border:1px solid rgba(190,120,100,.25);border-radius:10px;padding:6px 4px 5px;text-align:center;line-height:1.2}
-.stat-strip b{display:block;font-size:16px}
+.stat-strip b{display:block;font-size:15px}
 .stat-strip span{font-size:11px;opacity:.75}
 .stat-strip i{display:block;height:3px;border-radius:2px;margin-top:4px;background:rgba(150,110,90,.18);overflow:hidden}
 .stat-strip i u{display:block;height:100%;background:linear-gradient(90deg,#e8905a,#d9546b)}
@@ -2937,7 +2937,7 @@ ACTCAT.forEach((c,i)=>{c[2]=i==0?1:0});
 .cd.actcat>h3 em{font-style:normal;font-size:12px;opacity:.6;margin-left:6px;letter-spacing:0}
 `;document.head.appendChild(st)})();
 function stripHTML(){const m=S.me,v=(l,x,max,lowAt)=>`<div class="${x<lowAt?'low':''}"><b>${x|0}</b><span>${l}</span><i><u style="width:${Math.max(0,Math.min(100,x/(max||100)*100))}%"></u></i></div>`;
-return`<div class=stat-strip>${v('聖寵',m.favor,100,20)}${v('健康',m.hp,100,35)}${v('人脈',m.ally,100,10)}${v('心機',m.scheme,100,0)}<div><b>${m.silver|0}</b><span>銀兩</span><i><u style="width:${Math.min(100,m.silver/3)}%"></u></i></div></div>`}
+return`<div class=stat-strip>${v('聖寵',m.favor,100,20)}${v('健康',m.hp,100,35)}${v('人脈',m.ally,100,10)}${v('心機',m.scheme,100,0)}${v('心情',mdGet(m),100,25)}<div><b>${m.silver|0}</b><span>銀兩</span><i><u style="width:${Math.min(100,m.silver/3)}%"></u></i></div></div>`}
 function uiPost(){try{if(!S||!S.me||S.over||S.scn)return;const app=document.getElementById('app'),main=app&&app.querySelector('main');if(!main)return;main.querySelectorAll('.stat-strip').forEach(e=>e.remove());
 if(TAB==0){main.insertAdjacentHTML('afterbegin',stripHTML());
 main.querySelectorAll(':scope>.cd').forEach(c=>{const h=c.firstElementChild;if(!h||h.tagName!=='H3')return;
@@ -2995,10 +2995,10 @@ function frInfMonth(){const m=S&&S.me,f=S&&S.fr;if(!m||!m.fo||!f||f.dead||S.over
 let d=0;if(f.pw>=55&&f.rel>=30)d+=(f.pw-50)/70;if(f.war)d-=.4;(m.shops||[]).forEach(s=>{const nm=SHT[s.t]&&SHT[s.t][0],lv=s.lv||1;d+=nm=='嫁妝商隊'?.15*lv:nm=='情報樓'?.1*lv:nm=='青樓'?.05*lv:0});d-=.1+natv()/400;f.inf=cl(f.inf+d);
 const lv=infLv(f.inf);if(lv>=2)S.nat.eco=cl(S.nat.eco-.05*lv);if(lv>=3){S.nat.mil=cl(S.nat.mil-.08);S.nat.stab=cl(S.nat.stab-.1)}
 if(lv>=2&&P(.04)){m.favor-=2;L(`皇上對${f.n}多了幾分猜忌，看你的眼神有些複雜。`)}
-f.icd=(f.icd||0)-1;if(!S.ev&&!S.ch&&!S.scn&&!(S.gcd>0)&&f.icd<=0&&f.pw>=48&&S.t>12&&P(.06)){f.icd=8;infPush(FIE[R(0,FIE.length-1)]())}
+f.icd=(f.icd||0)-1;if(!(S.gcd>0)&&f.icd<=0&&f.pw>=48&&S.t>12&&P(.06)){f.icd=8;infPush(FIE[R(0,FIE.length-1)]())}
 if(S.t%12==3)frInfYear()}
 function frInfYear(){const m=S.me,f=S.fr;if(!f||f.dead||S.reg||S.over)return;
-if(f.inf>=70&&f.mil>=58&&natv()<50&&P(.4)&&!S.ev&&!S.ch&&!S.scn)return infPush(infEv(`${f.n}的使者在深夜叩開你的宮門：大軍已集結邊關，只待內應開門。「娘娘，您是${f.n}的公主，這是您的時候了。」`,[
+if(f.inf>=70&&f.mil>=58&&natv()<50&&P(.4)&&!(S.gcd>0))return infPush(infEv(`${f.n}的使者在深夜叩開你的宮門：大軍已集結邊關，只待內應開門。「娘娘，您是${f.n}的公主，這是您的時候了。」`,[
 ['作內應，開門迎立',()=>{if(ckp(.35+f.mil/250+f.inf/300+m.ally/500)){over('皇朝易主',`那一夜，你親手為${f.n}的先鋒抽開了城門的門閂。天亮時，皇朝的旗幟已被換下，皇上被請出了養心殿，宮人們跪了一地。${f.n}的新主論功行賞，封你為「${f.n}王妃」，母家父兄也都得了封賞。往後的日子榮寵尚在，只是每逢深夜，你總會想起舊日的姐妹、被你背叛的宮人，以及那個曾經握過你手的人。史書上對你只有一句：「某氏開門納敵，皇朝遂亡。」是功是罪，後人各有說法。`);return''}over('通敵伏誅',`內應之事在最後一刻敗露。禁軍踹開宮門時，你正伏案寫著給${f.n}的最後一封密信。你被當作細作押上殿前，皇上看了你很久，什麼也沒說，只留下一句「賜死」。母家被牽連，父兄流放，你的名字從玉牒上被抹去。宮牆之外，${f.n}的使者連夜離京，沒有人記得你曾為他們冒過什麼險。`);return''}],
 ['連夜告發，力挽狂瀾（看心機與聖寵）',()=>{if(ckp(.3+m.scheme/250+m.favor/300)){f.inf=10;f.rel=cl(f.rel-25);m.favor+=10;m.ally+=5;S.nat.stab=cl(S.nat.stab+4);if(!f.war)f.war={k:'imp',m:0,s:0,sc:0,pend:0};return`你連夜面聖，禁軍星夜增援邊關，政變消弭於無形。皇朝與${f.n}就此交惡，你卻成了救駕功臣。`}f.inf=cl(f.inf+5);m.favor-=15;m.scand=(m.scand||0)+4;return'沒人信你的話，皇上反疑你賊喊捉賊，把你軟禁了幾日。'}],
 ['稱病閉宮，兩不相幫',()=>{m.favor-=8;f.icd=12;f.inf=cl(f.inf-5);return'你閉門謝客，兩邊都沒有再來找你，但這件事並沒有真的過去。'}]]));
@@ -3025,7 +3025,7 @@ const dsPr=()=>dsOwn().filter(x=>x.k.sex=='男'&&yr(x.k)>=14&&!x.k.jin).sort((a,
 const dsOf=k=>S.me.kids.includes(k)?'me':S.npcs.findIndex(n=>n.kids.includes(k));
 const amb=k=>{if(k.am===undefined)k.am=cl(R(25,75)+(k.pow-50)/5-(k.de-50)/4);return k.am};
 const ambTx=k=>{const a=amb(k);return a>=70?'野心勃勃':a>=45?'頗有抱負':'與世無爭'};
-const dsOk=()=>!S.ev&&!S.ch&&!S.scn&&!(S.q&&S.q.length)&&!(S.gcd>0);
+const dsOk=()=>!(S.gcd>0);
 const dsInit=()=>{if(!S.dj)S.dj={heat:0,cd:0,sus:0}};
 const dsNm=k=>`${k.n}（${on(dsOf(k))}之子）`;
 function dsDown(k,a,b){k.chong=cl(k.chong-(a||0));k.pow=cl(k.pow-(b||0))}
@@ -3091,7 +3091,7 @@ if(ty=='rank'){return infEv('皇上春秋已高，群臣紛紛上書請立儲君
 ['不表態，靜觀其變',()=>'你按兵不動，看各方出招。']])}
 return null}
 function dsTick(){if(!S||!S.me||S.reg||S.over||S.dying)return;dsInit();const d=S.dj,pr=dsPr(),m=S.me;if(S.eage<32||!pr.length){d.heat=Math.max(0,d.heat-1);return}
-const strong=pr.filter(x=>x.k.pow>=45).length;d.heat=cl(d.heat+strong*.35+(S.heir?0:.5)+(pr.length>=3?.3:0)-.55-d.heat/120);
+const strong=pr.filter(x=>x.k.pow>=45).length;d.heat=cl(d.heat+strong*.2+(S.heir?0:.5)+(pr.length>=3?.3:0)-.55-d.heat/60);
 if(S.heir&&!S.heir.jin){const h=S.heir;h.sus=cl((h.sus||0)+(h.pow>70?.7:h.pow>55?.2:-.2)+(S.eage>=58?.2:0)-(h.de>=65&&h.chong>=60?.5:0));d.sus=h.sus;if(h.sus>=70&&P(.12)&&dsOk())return dsDepose(h)}else d.sus=0;
 if(d.cd>0)d.cd--;if(!dsOk()||d.cd>0)return;
 if(S.heir&&!S.heir.jin&&yr(S.heir)>=24&&S.eage>=52&&P(Math.min(.05,(amb(S.heir)-40)/1500+(yr(S.heir)-24)*.003+d.sus/2500))){d.cd=10;return dsCoup(S.heir)}
@@ -3110,6 +3110,48 @@ const _mdD=mend;mend=function(){const r=_mdD.apply(this,arguments);try{dsTick()}
 ACT.push(['帶孩子面聖','帶孩子見皇上，皇上寵愛＋',()=>{const m=S.me;if(!m.kids.length)return L('你還沒有子嗣。');choose('帶哪位去見皇上？',m.kids.filter(k=>!k.jin).map(k=>({l:`${tag(k)}　寵${k.chong|0}・才${k.cai|0}・德${k.de|0}`,f(){if(yr(k)<2)return L(`${k.n}還太小，帶去御前怕驚了聖駕。`);const p=.45+m.favor/220+(k.cai+k.de)/500+(S.mood-40)/400;if(ckp(p)){const g=R(4,8);k.chong=cl(k.chong+g);m.favor+=1;L(`皇上見了${k.n}很是歡喜，賞了東西，皇上寵愛＋${g}（${k.chong|0}）。`)}else{k.chong=cl(k.chong+1);L(`皇上心緒不佳，只草草問了${k.n}幾句。`)}}})));return 1}]);
 {const c=ACTCAT.find(x=>x[0]=='子嗣');if(c)c[1].push(ACT.length-1)}
 const _mdK=mend;mend=function(){const r=_mdK.apply(this,arguments);try{if(S&&S.me&&!S.over&&!S.reg)S.me.kids.forEach(k=>{if(!k.jin&&yr(k)>=3)k.chong=cl(k.chong+(S.me.favor>=60?.3:S.me.favor<30?-.3:0)+(k.cai+k.de-100)/500)})}catch(e){}return r};
+
+/* ===== 全員心情值 + 孩子生病/遭人暗算 ===== */
+const MDT=v=>v>=75?['😄','喜悅']:v>=55?['🙂','平和']:v>=40?['😐','尋常']:v>=25?['😟','憂鬱']:['😠','煩怒'];
+function mdGet(x){if(x.md===undefined)x.md=R(40,70);return x.md}
+function mdPill(v){const t=MDT(v);return`<span class="pill mdp" title="心情${v|0}">${t[0]}${t[1]}</span>`}
+function mdTick(){if(!S||!S.me||S.over)return;const m=S.me,dr=(x,tg)=>{mdGet(x);x.md=cl(x.md+(tg-x.md)*.2+R(-2,2))};
+dr(m,50+(m.favor-50)*.4+(m.hp-60)*.2+(m.silver>100?5:-5)-((m.scand||0)>5?8:0));
+if(m.md<25)m.favor-=.3;else if(m.md>=75)m.favor+=.2;
+S.npcs.forEach(n=>{if(n.st)return;dr(n,50+(n.favor-50)*.5-(n.host-40)*.1);if(n.md<25)n.host=cl(n.host+.3);else if(n.md>=75)n.al=cl((n.al||0)+.2)});
+const kd=k=>{dr(k,50+(k.chong-50)*.3+((k.bond===undefined?50:k.bond)-50)*.3);if(k.md<30&&k.bond!==undefined)k.bond=cl(k.bond-.3);else if(k.md>=70&&k.bond!==undefined)k.bond=cl(k.bond+.2)};
+m.kids.forEach(kd);S.npcs.forEach(n=>n.kids.forEach(kd));
+(S.srv||[]).forEach(x=>{dr(x,50+(x.lo-50)*.4);if(x.md<30)x.lo=cl(x.lo-.4);else if(x.md>=70){x.lo=cl(x.lo+.2)}});
+(m.fam||[]).forEach(f=>{dr(f,50+((f.pw||50)-50)*.3+((f.lo===undefined?50:f.lo)-50)*.2)})}
+/* 顯示：名冊、子嗣、母家 */
+const _rowM=ROW;ROW=function(n,i){let h=_rowM.apply(this,arguments);try{if(n&&!n.st)h=h.replace('<span class=mm>',mdPill(mdGet(n))+'<span class=mm>')}catch(e){}return h};
+const _kapM=kidsAllPanel;kidsAllPanel=function(){let h=_kapM.apply(this,arguments);try{const all=S.me.kids.concat(...S.npcs.map(n=>n.kids));all.forEach(k=>{h=h.replace(`<span class=nm>${k.n}</span>`,`<span class=nm>${k.n}</span>${mdPill(mdGet(k))}`)})}catch(e){console.log('kapM',e)}return h};
+const _fpM=famPanel;famPanel=function(){let h=_fpM.apply(this,arguments);try{S.me.fam.forEach(x=>{h=h.replace(`<b>${x.rel}${x.nm||''}</b>`,`<b>${x.rel}${x.nm||''}</b>${mdPill(mdGet(x))}`)})}catch(e){console.log('fpM',e)}return h};
+/* 孩子生病 */
+function kidSick(k){const m=S.me,sev=R(1,3),nm=k.n,q=KT[k.t][2];
+const p0=(b)=>cl(b-sev*.1+(q.luck?.05:0)+(tf('kh')?.05:0)+(k.md>=60?.04:0),.05,.95);
+const die=()=>{m.kids=m.kids.filter(x=>x!==k);if(S.heir===k)S.heir=null;m.hp=Math.max(1,m.hp-10);m.md=cl(mdGet(m)-30);msPush&&msPush(`${nm}病逝`);L(`${nm}不治夭折。`)};
+const go=(b,cost,okT,badT,self)=>()=>{let p=b;if(cost&&!pay(cost)){p=.3;}if(self)m.hp=Math.max(1,m.hp-8);p=p0(p);if(ckp(p)){k.md=cl(mdGet(k)+10);k.bond=cl((k.bond||50)+(self?8:4));m.md=cl(mdGet(m)+5);L(`${nm}病癒。`);return okT}
+if(sev>=3&&P(.55)||sev==2&&P(.2)){die();return badT[0]}k.chong=cl(k.chong-3);k.md=cl(mdGet(k)-8);k.cai=cl(k.cai-2);L(`${nm}病情拖延，元氣大傷。`);return badT[1]};
+return{t:`${nm}${['有些低熱，精神不振','高熱不退，滴水不進','病勢兇險，昏睡不醒'][sev-1]}。`,o:[
+['請太醫診治（耗銀30）',go(.72,30,`太醫施針用藥，${nm}燒退了，漸漸好轉。`,[`太醫束手無策，${nm}終究沒能撐過去，你哭得幾乎昏厥。`,`太醫盡力了，${nm}雖保住性命，卻留下病根。`])],
+['延請民間名醫（耗銀80）',go(.82,80,`名醫一副湯藥下去，${nm}竟奇蹟般退了燒。`,[`連名醫也搖頭，${nm}沒能留住。`,`名醫救回了命，卻說需長期調養。`])],
+['親自日夜照料（損耗自身健康）',go(.6,0,`你三日三夜未合眼，${nm}終於睜開了眼睛。`,[`你守了整整七天，孩子還是走了。`,`你熬垮了身子，孩子總算熬過一關，但元氣大傷。`],1)],
+['求神拜佛（耗銀10）',go(.38,10,`佛前香火不斷，${nm}竟慢慢好轉，宮人都說菩薩顯靈。`,[`香火燒盡，孩子還是沒能留住。`,`孩子拖了許久才見起色。`])],
+['聽天由命',go(.3,0,`${nm}命大，自己挺了過來。`,[`你終究沒能救下孩子。`,`孩子病了許久，元氣大傷。`])]]}}
+/* 孩子遭人暗算 */
+function kidHarmEv(k,n){const m=S.me,nm=k.n,dmg=()=>{k.chong=cl(k.chong-5);k.md=cl(mdGet(k)-12);m.md=cl(mdGet(m)-8)};
+return{t:`${nm}忽然上吐下瀉，太醫查驗後說似是被人下了藥，源頭疑與${n.n}有關。`,o:[
+['徹查到底（耗銀40，看心機）',()=>{dmg();if(!pay(40))return'銀兩不足，只能草草查問，不了了之。';if(ckp(.35+m.scheme/220)){n.favor-=12;n.host=cl(n.host+10);S.mood=cl(S.mood-2);return`你順藤摸瓜，查出${n.n}的人動了手腳，證據遞到皇上面前，${n.n}失了不少寵。`}m.scand=(m.scand||0)+1;return'查來查去沒有實證，反落了個「疑神疑鬼」的名聲。'}],
+['請太醫全力救治（耗銀30）',()=>{if(pay(30)){k.md=cl(mdGet(k)+4);return`太醫及時用藥，${nm}沒有大礙，你暗暗記下了這筆帳。`}dmg();return'銀兩不足，只得用尋常藥草，孩子受了不少罪。'}],
+['向皇上哭訴（看聖寵）',()=>{dmg();if(ckp(.3+m.favor/200)){n.favor-=15;n.host=cl(n.host+12);m.favor+=1;return`皇上震怒，申飭了${n.n}，並加派人手護著孩子。`}m.favor-=3;return'皇上嫌你拿不出證據，只讓你「好生看顧孩子」。'}],
+['暗中報復（耗銀50，看心機）',()=>{dmg();if(!pay(50))return'銀兩不足，報復的念頭只能壓下。';if(ckp(.35+m.scheme/250)){n.hp=cl(n.hp-15);n.favor-=6;return`你的人給了${n.n}一個教訓，對方暫時不敢再動孩子。`}n.host=cl(n.host+15);m.scand=(m.scand||0)+2;return`報復被識破，${n.n}對你恨之入骨。`}],
+['忍氣吞聲，加強守衛',()=>{dmg();k.md=cl(mdGet(k)+3);m.ally+=1;return`你不動聲色，把孩子身邊的人全換了一遍，暗中戒備。`}]]}}
+function kidEvTick(){if(!S||!S.me||S.over||S.reg||S.dying)return;const m=S.me;if(S.gcd>0)return;
+for(const k of m.kids){if(k.jin||yr(k)>=14)continue;const q=KT[k.t][2],p=(.005+(q.weak?.01:0)+(yr(k)<3?.004:0)+(mdGet(k)<30?.006:0))*(q.luck||tf('kh')?.6:1);
+if(P(p)){S.gcd=EVG();return infPush(kidSick(k))}
+const en=S.npcs.filter(n=>!n.st&&n.host>=55);if(en.length&&P(.003+(en.length>2?.002:0))){S.gcd=EVG();const n=pk(en);L(`${k.n}身邊出了蹊蹺，宮人慌忙通報給你。`);return infPush(kidHarmEv(k,n))}}}
+const _mdMood=mend;mend=function(){const r=_mdMood.apply(this,arguments);try{mdTick();kidEvTick()}catch(e){console.log('mood',e)}return r};
 
 /* ===== 收尾：猜忌值、說明、成就、事件頻率、分頁收合 ===== */
 let EVF=2;try{EVF=+(localStorage.getItem('hg_evf')||2)||2}catch(e){}
