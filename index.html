@@ -3388,12 +3388,12 @@ const STORY=[
  n2:(n,i)=>n.sto.s==1?`${n.n}發現有人在查她的舊事，托人來探你口風。`:n.sto.s==2?`${n.n}想報答你的人情，願意幫你一件事。`:`${n.n}對你懷恨在心，在暗處盯著你。`,
  o2:(n,i)=>n.sto.s==1?[['矢口否認',()=>{n.host=cl(n.host+6);n.sto=null;return'她半信半疑，從此防著你。'}],['以此要挾她替你辦事',()=>{ec().scheme+=2;n.al+=6;n.sto=null;return`${n.n}被迫聽命，替你打探了不少消息。`}]]:n.sto.s==2?[['請她在皇上面前說好話',()=>{ec().favor+=4;n.sto=null;return`${n.n}果然在皇上跟前替你美言。`}],['請她替你牽線結盟',()=>{ec().ally+=5;n.sto=null;return`${n.n}替你牽上了幾條人脈。`}]]:[['先下手為強，設計她（險）',()=>{if(ckp(.35+ec().scheme/300)){n.favor=cl(n.favor-12);n.sto=null;return'你搶先一步，讓她吃了啞巴虧。'}ec().favor-=4;n.sto=null;return'你的設計被她看穿，反吃了虧。'}],['主動示好，化解仇怨（耗銀40）',()=>{if(!pay(40))return'銀兩不足。';n.host=cl(n.host-12);n.sto=null;return'一份厚禮化解了她的敵意。'}]]},
 {k:'病',a:(n)=>`${n.n}近來身子日漸虛弱，太醫束手無策。`,o:(n,i)=>[['送上名貴藥材（耗銀60）',()=>{if(!pay(60))return'銀兩不足。';n.hp=Math.min(100,n.hp+20);n.al+=12;n.sto=null;return`${n.n}病情好轉，記下了你這份情。`}],['去探望，聊表心意',()=>{n.al+=4;n.sto=null;return'你去看望了她，兩人說了許久的話。'}],['趁她病弱，奪她管事之權',()=>{n.pow=cl((n.pow||0)-5);ec().ally+=2;ec().fame=cl(ec().fame-4);n.sto=null;return'你趁虛而入，宮裡人看在眼裡，對你的觀感不一。'}]]}];
-function storyTick(){if(S.gcd>0||!P(.02))return;const c=ids();if(!c.length)return;const i=pk(c),n=S.npcs[i];
+function perStoryTick(){if(S.gcd>0||!P(.02))return;const c=ids();if(!c.length)return;const i=pk(c),n=S.npcs[i];
 if(n.sto){if(S.t-n.sto.t>=6&&STORY[0].n2){const st=STORY[0],t=st.n2(n,i),o=st.o2(n,i);infPush(infEv(t,o))}return}
 const st=pk(STORY);infPush(infEv(st.a(n),st.o(n,i)))}
 /* 稱號 */
 function titleOf(){const m=ec();if(m.fame>=80)return'賢德之名';if((m.scand||0)>=45&&m.scheme>=70)return'毒婦之名';if(m.favor>=95)return'專房之寵';if(m.silver>=3000)return'宮中財神';if(m.face>=60)return'交際名流';return''}
-const _mt7=mend;mend=function(){const r=_mt7.apply(this,arguments);try{ec();econTick();storyTick();m_title()}catch(e){console.log('econ',e)}return r};
+const _mt7=mend;mend=function(){const r=_mt7.apply(this,arguments);try{ec();econTick();perStoryTick();m_title()}catch(e){console.log('econ',e)}return r};
 function m_title(){const t=titleOf();if(t!==S.me.ttl){S.me.ttl=t;if(t)L(`宮裡開始傳你的名號：「${t}」。`)}}
 /* 主畫面：賢名／面子／名號／時局 */
 const _up7=uiPost;uiPost=function(){const r=_up7.apply(this,arguments);try{if(TAB==0&&S&&S.me&&!S.over&&!S.reg&&!S.scn){const hero=document.querySelector('main .cd.hero');if(hero){hero.querySelectorAll('.fml').forEach(e=>e.remove());const m=ec(),cd=CONDS.find(x=>x[0]==S.cond);hero.insertAdjacentHTML('beforeend',`<div class="m fml" style="margin-top:6px">賢名 ${m.fame|0}・面子 ${m.face|0}${m.ttl?'・名號「'+m.ttl+'」':''}${cd?'<br>本局時局：'+cd[0]+'（'+cd[1]+'）':''}${(m.prop.farm+m.prop.lend+m.prop.cargo)?'<br>產業外收入：田莊'+m.prop.farm+'・放貸'+m.prop.lend+'・商隊'+m.prop.cargo:''}${m.items.length?'<br>珍藏：'+m.items.map(x=>x.n).join('、'):''}</div>`)}}}catch(e){console.log('fml',e)}return r};
