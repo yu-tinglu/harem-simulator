@@ -2920,6 +2920,32 @@ else if(nm=='賭坊'){m.scand=(m.scand||0)+.06*lv}
 else if(nm=='嫁妝商隊'&&f){f.rel=cl(f.rel+.3);f.eco=cl(f.eco+.2*lv);if(P(.02)){const l=R(20,50);m.silver=Math.max(0,m.silver-l);L(`商隊在途中遇劫，損失${l}兩。`)}}
 else if(nm=='牧場馬場'&&f){f.mil=cl(f.mil+.15*lv)}})}
 const _mdSh=mend;mend=function(){const r=_mdSh.apply(this,arguments);try{shopFx()}catch(e){console.log('shopFx',e)}return r};
+/* ===== 介面細修：行動分頁精簡、狀態列、手風琴 ===== */
+ACTCAT.forEach((c,i)=>{c[2]=i==0?1:0});
+(function(){const st=document.createElement('style');st.textContent=`
+.stat-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:6px 0 10px}
+.stat-strip div{background:var(--card,rgba(255,255,255,.7));border:1px solid rgba(190,120,100,.25);border-radius:10px;padding:6px 4px 5px;text-align:center;line-height:1.2}
+.stat-strip b{display:block;font-size:16px}
+.stat-strip span{font-size:11px;opacity:.75}
+.stat-strip i{display:block;height:3px;border-radius:2px;margin-top:4px;background:rgba(150,110,90,.18);overflow:hidden}
+.stat-strip i u{display:block;height:100%;background:linear-gradient(90deg,#e8905a,#d9546b)}
+.stat-strip .low b{color:#c0392b}
+.cd.actcat .g button{min-height:50px;padding:8px 10px}
+.cd.actcat .g button small{font-size:11.5px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cd.actcat>h3 em{font-style:normal;font-size:12px;opacity:.6;margin-left:6px;letter-spacing:0}
+`;document.head.appendChild(st)})();
+function stripHTML(){const m=S.me,v=(l,x,max,lowAt)=>`<div class="${x<lowAt?'low':''}"><b>${x|0}</b><span>${l}</span><i><u style="width:${Math.max(0,Math.min(100,x/(max||100)*100))}%"></u></i></div>`;
+return`<div class=stat-strip>${v('聖寵',m.favor,100,20)}${v('健康',m.hp,100,35)}${v('人脈',m.ally,100,10)}${v('心機',m.scheme,100,0)}<div><b>${m.silver|0}</b><span>銀兩</span><i><u style="width:${Math.min(100,m.silver/3)}%"></u></i></div></div>`}
+function uiPost(){try{if(!S||!S.me||S.over||S.scn)return;const app=document.getElementById('app'),main=app&&app.querySelector('main');if(!main)return;main.querySelectorAll('.stat-strip').forEach(e=>e.remove());
+if(TAB==0){main.insertAdjacentHTML('afterbegin',stripHTML());
+main.querySelectorAll(':scope>.cd').forEach(c=>{const h=c.firstElementChild;if(!h||h.tagName!=='H3')return;
+if(c.querySelector('.g button[onclick^="A("]')){c.classList.add('actcat');if(!h.querySelector('em')){const n=c.querySelectorAll('.g button').length;const e=document.createElement('em');e.textContent=n+'項';h.insertBefore(e,h.querySelector('.fa'))}}
+if(/^主線劇情/.test(h.textContent)&&FOLDS[c.dataset.fk]===undefined)c.classList.add('closed')})}}catch(e){console.log('uiPost',e)}}
+const _rdU=render;render=function(){const r=_rdU.apply(this,arguments);uiPost();return r};
+if(document.addEventListener)document.addEventListener('click',e=>{const h=e.target.closest&&e.target.closest('.cd.actcat>h3');if(!h||TAB!=0)return;const c=h.parentElement;if(c.classList.contains('closed'))return;document.querySelectorAll('main>.cd.actcat').forEach(o=>{if(o!==c&&!o.classList.contains('closed')){o.classList.add('closed');FOLDS[o.dataset.fk]=1}});FOLDS[c.dataset.fk]=0;try{localStorage.setItem('hgfold',JSON.stringify(FOLDS))}catch(e){}});
+/* 動作按鈕簡短說明 */
+const SHORT={'經營產業':'開鋪子、整頓、賣官','獻藝邀寵':'聖寵＋＋','結交外臣':'結交前朝官員','資助母家':'資助家人，增母族勢力','差遣下人':'打探、送禮、打點','管教下人':'賞罰、調任、遣散','招募宮人':'向內務府要人','暗中設計':'流言、蒐證、下毒','結盟拉攏':'贈禮化敵為友','傳書母家':'資助或差遣家人'};
+ACT.forEach(a=>{if(SHORT[a[0]])a[1]=SHORT[a[0]]});
 
 /* ===== 編制人物多樣化：宮中執事・官女子有名字、性情、籍貫，會告老、調任、被選中 ===== */
 const OFS=['李','張','王','劉','趙','孫','錢','周','吳','鄭','馮','陳','褚','衛','蔣','沈','韓','楊','朱','秦','尤','許','何','呂','施','曹','嚴','華','金','魏'],
