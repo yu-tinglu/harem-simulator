@@ -3335,6 +3335,71 @@ me.fam.forEach(y=>y.pw=cl(y.pw-10));me.clan=cl((me.clan||0)-5);const t=`你的�
 infPush(infEv(t,[['出銀扶持旁支，穩住母家（耗銀50）',()=>{if(!pay(50))return'銀兩不足。';me.fam.forEach(y=>y.pw=cl(y.pw+7));me.clan=cl((me.clan||0)+3);return'旁支族人感念你的接濟，母家才沒有散掉。'}],['請皇上賜恤，抬高母家門楣（看聖寵）',()=>{if(ckp(.3+me.favor/250)){me.fam.forEach(y=>y.pw=cl(y.pw+8));return'皇上賜了恤典，母家門楣暫時保住了。'}return'皇上只是慰問了幾句。'}],['認命',()=>'你把這份失落藏進了心裡。']]))}
 const _fy7=famYear;famYear=function(){const before=(S.me&&S.me.fam||[]).slice();const r=_fy7.apply(this,arguments);try{const me=S.me;if(!me.fo)before.filter(x=>!me.fam.includes(x)&&x.rel=='父親').forEach(x=>homeSucc(x))}catch(e){console.log('homeSucc',e)}return r};
 
+/* ===== 第七輪：金錢用途與更多可玩性 ===== */
+function ec(){const m=S.me;if(m.fame===undefined){m.fame=0;m.face=10;m.prop={farm:0,lend:0,cargo:0};m.items=[];m.itn=0;m.bwin=0}return m}
+const CONDS=[['皇帝好色','每月常有新寵分走聖眷'],['國庫空虛','宮中份例縮減，行善更得人心'],['太平盛世','天下無事，宮中心情較好'],['邊關多事','偶有軍餉攤派，母家武將受重用']];
+const _st7=start0;start0=function(){const r=_st7.apply(this,arguments);try{if(S&&!S.cond)S.cond=pk(CONDS)[0]}catch(e){}return r};
+const fam7=()=>{const m=S.me;return (m.fam||[]).filter(x=>x.sx!='女'&&fAge(x)>=18&&!/流亡|軟禁/.test(x.job||''))};
+const BUYACT=['買官賄賂','花銀打點，替母家謀官或壓下風聲',()=>{const m=ec();const o=[];
+if(m.fo){o.push({l:'重金結交母國權貴（耗銀80，滲透＋5、邦誼＋3、猜忌＋2）',f(){if(!pay(80))return L('銀兩不足。');const f=S.fr;if(!f||f.dead||f.ann)return L('母國已無人可結交。');infInit();f.inf=cl(f.inf+5);f.rel=cl(f.rel+3);f.sus=cl((f.sus||0)+2);L('你託人打點母國權貴，往來更密了。')}})}
+else{o.push({l:'重金疏通，替兄弟謀升遷（耗銀100，有風險）',f(){const c=fam7();if(!c.length)return L('母家沒有適合謀官的男丁。');choose('替誰謀官？',c.map(x=>({l:`${x.rel}${x.nm}（${x.job}）`,f(){if(!pay(100))return L('銀兩不足。');const p=cl(.55-(m.scand||0)/200+m.scheme/300,.2,.85);m.dsus=(m.dsus||0)+2;if(P(p)){x.pw=cl(x.pw+10);if(x.gd!==undefined)x.gd=Math.min(5,x.gd+1);m.clan=cl((m.clan||0)+3);L(`銀子遞到了關鍵人手裡，${x.nm}得了升遷，母家勢力漲了一截。`)}else{m.scand=(m.scand||0)+6;m.favor-=4;m.dsus=(m.dsus||0)+6;L('買官的事走漏了風聲，被御史聞到了味道，你被皇上敲打了一番。')}}})));return 1}})}
+o.push({l:'買通御史，壓下一則風聲（耗銀60，醜聞－6）',f(){if(!pay(60))return L('銀兩不足。');m.scand=Math.max(0,(m.scand||0)-6);L('一筆銀子送出去，那封彈章便沒了下文。')}});
+choose('如何打點？',o);return 1}];
+const REWARD=['賞賜宮人','每月份例之外的打賞，換人心與耳目',()=>{const m=ec();choose('如何打賞？',[
+{l:'普賞宮人（耗銀40，下人忠誠＋、人脈＋）',f(){if(!pay(40))return L('銀兩不足。');(S.srv||[]).forEach(x=>x.lo=cl(x.lo+R(4,8)));m.ally+=3;L('你賞了宮裡上下一筆月錢，人人都說你寬厚。')}},
+{l:'厚賞各宮管事（耗銀80，三位妃嬪好感＋）',f(){if(!pay(80))return L('銀兩不足。');const c=ids();for(let i=0;i<3&&c.length;i++){const n=S.npcs[pk(c)];n.al+=R(5,9);n.host-=R(1,4)}m.face=cl(m.face+4);L('你出手闊綽，各宮管事對你多了幾分好感。')}},
+{l:'收買對手的下人（耗銀50，蒐證）',f(){if(!pay(50))return L('銀兩不足。');const c=ids();if(!c.length)return L('宮中無人可查。');const i=pk(c),n=S.npcs[i];if(P(.55+m.scheme/400)){S.evid[i]=(S.evid[i]||0)+1;L(`${n.n}宮裡的一個小太監收了你的銀子，透露了她的把柄。`)}else{n.host=cl(n.host+6);m.scand=(m.scand||0)+1;L(`${n.n}的下人轉頭就把你出賣了。`)}}}]);return 1}];
+const INVEST=['置產投資','買田莊、放貸、投資商隊，錢生錢',()=>{const m=ec();const p=m.prop;choose(`置產（田莊${p.farm}・放貸${p.lend}・商隊${p.cargo}）`,[
+{l:'買田莊（耗銀200，每月穩定＋6）',f(){if(p.farm>=5)return L('田莊已買到上限。');if(!pay(200))return L('銀兩不足。');p.farm++;L('你買下一處田莊，租子每月穩定入帳。')}},
+{l:'放貸生息（耗銀100，每月＋12，可能被告發）',f(){if(p.lend>=4)return L('放貸已到上限。');if(!pay(100))return L('銀兩不足。');p.lend++;m.scand=(m.scand||0)+1;L('你託人放出一筆印子錢，利息豐厚，只是名聲不太好聽。')}},
+{l:'投資商隊（耗銀120，每月盈虧不定）',f(){if(p.cargo>=4)return L('商隊已到上限。');if(!pay(120))return L('銀兩不足。');p.cargo++;L('你入了一支商隊的股，是賺是賠就看天意了。')}}]);return 1}];
+const CHAR=['行善積德','修橋施粥建寺，換賢名',()=>{const m=ec(),cs=S.cond=='國庫空虛'?1.5:1;choose(`行善積德（賢名${m.fame|0}）`,[
+{l:'修橋鋪路（耗銀50，賢名＋，疑心－2）',f(){if(!pay(50))return L('銀兩不足。');m.fame=cl(m.fame+6*cs);m.dsus=Math.max(0,(m.dsus||0)-2);L('橋成之日，百姓稱頌你的名字。')}},
+{l:'設棚施粥（耗銀30，賢名＋、心情＋）',f(){if(!pay(30))return L('銀兩不足。');m.fame=cl(m.fame+4*cs);m.md=cl((m.md||50)+4);L('你開設粥棚，災民感念不已。')}},
+{l:'捐建佛寺（耗銀150，賢名大增）',f(){if(!pay(150))return L('銀兩不足。');m.fame=cl(m.fame+13*cs);m.ally+=2;L('佛寺落成，住持親自為你祈福。')}}]);return 1}];
+const SPY=['買通消息','花錢探聽內情',()=>{const m=ec();choose('買什麼消息？',[
+{l:'打探宮內動靜（耗銀40，蒐證）',f(){if(!pay(40))return L('銀兩不足。');const c=ids();if(!c.length)return L('無人可探。');const i=pk(c),n=S.npcs[i];S.evid[i]=(S.evid[i]||0)+1;m.scheme+=1;L(`你花錢買到一條關於${n.n}的消息，罪證增至${S.evid[i]}。`)}},
+{l:'買通太醫（耗銀60，健康＋，近期更不易中毒）',f(){if(!pay(60))return L('銀兩不足。');m.hp=Math.min(100,m.hp+8);m.gdm=Math.max(m.gdm||0,4);L('太醫收了你的銀子，替你調養身子，也格外留意起你的飲食。')}},
+{l:'探聽前朝風向（耗銀30，知派系強弱）',f(){if(!pay(30))return L('銀兩不足。');const f=S.fp.map((v,i)=>[v,i]).sort((a,b)=>b[0]-a[0]);m.scheme+=1;L(`消息回報：${FAC[f[0][1]]}勢力最盛（${f[0][0]|0}），${FAC[f[4][1]]}最弱（${f[4][0]|0}）。`)}}]);return 1}];
+const ITEMS=[['翡翠玉如意',90],['東珠朝珠',100],['前朝古畫',80],['百年人參',70],['波斯地毯',60],['南海珍珠',85],['和田玉佩',75],['琉璃屏風',65]];
+const LUX=['珍寶收藏','購置珍寶，贈禮、獻上或變賣',()=>{const m=ec();choose(`珍寶（現藏${m.items.length}件・面子${m.face|0}）`,[
+{l:'購置珍寶（耗銀60／120／200）',f(){choose('預算多少？',[60,120,200].map(c=>({l:`耗銀${c}`,f(){if(!pay(c))return L('銀兩不足。');const it=pk(ITEMS),v=Math.round(it[1]*(c/100+.5)+R(-8,8));m.items.push({n:it[0],v});m.itn++;L(`你購得「${it[0]}」，估價約${v}兩。`)}})))}},
+{l:'贈予妃嬪（好感＋、面子＋）',f(){if(!m.items.length)return L('你還沒有珍寶可送。');const c=ids();choose('送給誰？',c.slice(0,10).map(i=>({l:S.npcs[i].n,f(){choose('送哪一件？',m.items.map((x,k)=>({l:`${x.n}（${x.v}）`,f(){m.items.splice(k,1);const n=S.npcs[i];n.al+=Math.round(x.v/8);n.host=cl(n.host-3);m.face=cl(m.face+5);L(`你把「${x.n}」送給${n.n}，她收得眉開眼笑。`)}})))}})))}},
+{l:'獻給皇上（聖寵＋）',f(){if(!m.items.length)return L('你還沒有珍寶可獻。');choose('獻哪一件？',m.items.map((x,k)=>({l:`${x.n}（${x.v}）`,f(){m.items.splice(k,1);m.favor+=Math.max(2,Math.round(x.v/14));m.face=cl(m.face+3);L(`皇上見了「${x.n}」，龍心大悅。`)}})))}},
+{l:'變賣換銀',f(){if(!m.items.length)return L('你沒有珍寶可賣。');choose('賣哪一件？',m.items.map((x,k)=>({l:`${x.n}（可得${Math.round(x.v*.7)}兩）`,f(){m.items.splice(k,1);m.silver+=Math.round(x.v*.7);L(`你賣掉了「${x.n}」。`)}})))}}]);return 1}];
+const BET=['宮中賭局','與妃嬪賭牌下注，贏錢也贏面子',()=>{const m=ec();choose('下注多少？',[40,100,200].map(c=>({l:`下注${c}兩`,f(){if(!pay(c))return L('銀兩不足。');const p=.42+m.scheme/500+(m.at&&m.at.qi?m.at.qi/800:0);if(P(p)){m.silver+=Math.round(c*2);m.face=cl(m.face+3);m.bwin++;L(`你手氣極佳，贏了${c}兩，滿座喝彩。`)}else{const n=S.npcs[pk(ids())];if(n)n.al+=1;L(`今日手氣不佳，輸了${c}兩，倒也博得幾分笑談。`)}}})));return 1}];
+const a7=ACT.length;[BUYACT,REWARD,INVEST,CHAR,SPY,LUX,BET].forEach(a=>ACT.push(a));
+ACTCAT.push(['財貨運用',[a7,a7+1,a7+2,a7+3,a7+4,a7+5,a7+6],0]);
+/* 每月經濟、賢名、時局 */
+function econTick(){const m=ec();if(!m||S.over||S.reg)return;const p=m.prop;let g=0;g+=p.farm*6;if(p.lend){g+=p.lend*12;if(P(.03*p.lend)){const l=Math.round(m.silver*.15);m.silver=Math.max(0,m.silver-l);m.scand=(m.scand||0)+5;L(`你放貸的事被人告發，賠了${l}兩，醜聞纏身。`)}}
+for(let i=0;i<p.cargo;i++){const r=Math.random();g+=r<.1?90:r<.55?32:-14}
+if(g)m.silver=Math.max(0,m.silver+Math.round(g));
+m.fame=cl(m.fame-.12);m.face=cl(m.face-.1);if(m.fame>=60){m.favor+=.15;m.dsus=Math.max(0,(m.dsus||0)-.3)}if(m.face>=40)m.ally+=.2;
+const c=S.cond;if(c=='國庫空虛')m.silver=Math.max(0,m.silver-3);
+if(c=='太平盛世'&&m.md!==undefined)m.md=cl(m.md+.3);
+if(c=='皇帝好色'&&P(.15)){const k=ids();if(k.length){const n=S.npcs[pk(k)];n.favor=cl(n.favor+4);m.favor-=1}}
+if(c=='邊關多事'&&P(.08)&&!(S.gcd>0)){infPush(infEv('邊關吃緊，兵部請后妃宗親攤派軍餉。',[['捐銀50，博個忠君的名聲',()=>{if(!pay(50))return'銀兩不足，只得推說家用緊張。';m.fame=cl(m.fame+5);m.favor+=2;return'你慷慨解囊，皇上龍顏大悅。'}],['讓母家出頭，不動宮裡的錢',()=>{(m.fam||[]).forEach(y=>y.pw=cl(y.pw+2));m.fame=cl(m.fame+1);return'母家出面應了差，你自己分文未出。'}],['推說無錢',()=>{m.favor-=2;return'皇上聽了淡淡一笑，沒有說什麼。'}]]))}
+if(!(S.gcd>0)&&P(.012)){const k=R(0,2);if(k==0)infPush(infEv('今夏大旱，各地災民湧入京城。',[['捐銀100賑災（賢名大增）',()=>{if(!pay(100))return'銀兩不足。';m.fame=cl(m.fame+14);m.favor+=3;return'你捐出大筆銀兩，災民感念，皇上也有所聞。'}],['囤糧居奇，賺一筆（險）',()=>{if(P(.6)){m.silver+=160;m.fame=cl(m.fame-8);return'你趁災賺了一筆，只是名聲難聽。'}m.scand=(m.scand||0)+6;m.fame=cl(m.fame-12);return'囤糧之事被御史查出，醜聞纏身。'}],['袖手旁觀',()=>'你不聞不問。']]));
+else if(k==1)infPush(infEv('京城時疫流行，宮中人心惶惶。',[['出銀施藥（耗銀70，賢名＋、健康＋）',()=>{if(!pay(70))return'銀兩不足。';m.fame=cl(m.fame+9);m.hp=Math.min(100,m.hp+5);return'你設藥局施藥，救活了不少人。'}],['閉門謝客，自保為上',()=>{m.hp=Math.min(100,m.hp+2);return'你緊閉宮門，平安度過疫期。'}]]));
+else infPush(infEv('一位商人託人遞話，想出重金求你為他的買賣說句話。',[['收下重金，幫他說話（醜聞＋）',()=>{m.silver+=120;m.scand=(m.scand||0)+3;m.fame=cl(m.fame-4);return'你收了他的銀子，卻也留下了把柄。'}],['婉拒，並勸他守法經營',()=>{m.fame=cl(m.fame+4);return'商人悻悻而去，卻到處傳你清廉的名聲。'}]]))}}
+/* 人物個人劇情線 */
+const STORY=[
+{k:'舊情',a:(n)=>`有宮人密報：${n.n}與一位年輕侍衛私下往來，似有舊情。`,o:(n,i)=>[['暗中蒐證，留作把柄',()=>{S.evid[i]=(S.evid[i]||0)+2;n.sto={k:'舊情',s:1,t:S.t,i};return`你悄悄蒐集了證據，${n.n}的罪證增至${S.evid[i]}。`}],['替她遮掩，賣個人情',()=>{n.al+=15;n.host=cl(n.host-10);n.sto={k:'舊情',s:2,t:S.t,i};return`${n.n}知道是你替她遮掩，對你感激不盡。`}],['密報皇后（看聖寵）',()=>{if(ckp(.4+ec().favor/300)){n.favor=cl(n.favor-15);ec().favor+=2;n.sto={k:'舊情',s:3,t:S.t,i};return`${n.n}被申斥，聖寵大減。`}ec().favor-=3;return'皇后不願多事，反說你多嘴。'}]],
+ n2:(n,i)=>n.sto.s==1?`${n.n}發現有人在查她的舊事，托人來探你口風。`:n.sto.s==2?`${n.n}想報答你的人情，願意幫你一件事。`:`${n.n}對你懷恨在心，在暗處盯著你。`,
+ o2:(n,i)=>n.sto.s==1?[['矢口否認',()=>{n.host=cl(n.host+6);n.sto=null;return'她半信半疑，從此防著你。'}],['以此要挾她替你辦事',()=>{ec().scheme+=2;n.al+=6;n.sto=null;return`${n.n}被迫聽命，替你打探了不少消息。`}]]:n.sto.s==2?[['請她在皇上面前說好話',()=>{ec().favor+=4;n.sto=null;return`${n.n}果然在皇上跟前替你美言。`}],['請她替你牽線結盟',()=>{ec().ally+=5;n.sto=null;return`${n.n}替你牽上了幾條人脈。`}]]:[['先下手為強，設計她（險）',()=>{if(ckp(.35+ec().scheme/300)){n.favor=cl(n.favor-12);n.sto=null;return'你搶先一步，讓她吃了啞巴虧。'}ec().favor-=4;n.sto=null;return'你的設計被她看穿，反吃了虧。'}],['主動示好，化解仇怨（耗銀40）',()=>{if(!pay(40))return'銀兩不足。';n.host=cl(n.host-12);n.sto=null;return'一份厚禮化解了她的敵意。'}]]},
+{k:'病',a:(n)=>`${n.n}近來身子日漸虛弱，太醫束手無策。`,o:(n,i)=>[['送上名貴藥材（耗銀60）',()=>{if(!pay(60))return'銀兩不足。';n.hp=Math.min(100,n.hp+20);n.al+=12;n.sto=null;return`${n.n}病情好轉，記下了你這份情。`}],['去探望，聊表心意',()=>{n.al+=4;n.sto=null;return'你去看望了她，兩人說了許久的話。'}],['趁她病弱，奪她管事之權',()=>{n.pow=cl((n.pow||0)-5);ec().ally+=2;ec().fame=cl(ec().fame-4);n.sto=null;return'你趁虛而入，宮裡人看在眼裡，對你的觀感不一。'}]]}];
+function storyTick(){if(S.gcd>0||!P(.02))return;const c=ids();if(!c.length)return;const i=pk(c),n=S.npcs[i];
+if(n.sto){if(S.t-n.sto.t>=6&&STORY[0].n2){const st=STORY[0],t=st.n2(n,i),o=st.o2(n,i);infPush(infEv(t,o))}return}
+const st=pk(STORY);infPush(infEv(st.a(n),st.o(n,i)))}
+/* 稱號 */
+function titleOf(){const m=ec();if(m.fame>=80)return'賢德之名';if((m.scand||0)>=45&&m.scheme>=70)return'毒婦之名';if(m.favor>=95)return'專房之寵';if(m.silver>=3000)return'宮中財神';if(m.face>=60)return'交際名流';return''}
+const _mt7=mend;mend=function(){const r=_mt7.apply(this,arguments);try{ec();econTick();storyTick();m_title()}catch(e){console.log('econ',e)}return r};
+function m_title(){const t=titleOf();if(t!==S.me.ttl){S.me.ttl=t;if(t)L(`宮裡開始傳你的名號：「${t}」。`)}}
+/* 主畫面：賢名／面子／名號／時局 */
+const _up7=uiPost;uiPost=function(){const r=_up7.apply(this,arguments);try{if(TAB==0&&S&&S.me&&!S.over&&!S.reg&&!S.scn){const hero=document.querySelector('main .cd.hero');if(hero){hero.querySelectorAll('.fml').forEach(e=>e.remove());const m=ec(),cd=CONDS.find(x=>x[0]==S.cond);hero.insertAdjacentHTML('beforeend',`<div class="m fml" style="margin-top:6px">賢名 ${m.fame|0}・面子 ${m.face|0}${m.ttl?'・名號「'+m.ttl+'」':''}${cd?'<br>本局時局：'+cd[0]+'（'+cd[1]+'）':''}${(m.prop.farm+m.prop.lend+m.prop.cargo)?'<br>產業外收入：田莊'+m.prop.farm+'・放貸'+m.prop.lend+'・商隊'+m.prop.cargo:''}${m.items.length?'<br>珍藏：'+m.items.map(x=>x.n).join('、'):''}</div>`)}}}catch(e){console.log('fml',e)}return r};
+[['a56','腰纏萬貫','銀兩達5000',()=>S.me.silver>=5000],['a57','賢名遠播','賢名達80',()=>(S.me.fame||0)>=80],['a58','三路財源','田莊、放貸、商隊各至少一處',()=>{const p=S.me.prop;return !!(p&&p.farm&&p.lend&&p.cargo)}],['a59','收藏家','購置珍寶達6件',()=>(S.me.itn||0)>=6],['a60','賭神','宮中賭局贏五次',()=>(S.me.bwin||0)>=5],['a61','名號響亮','獲得宮中名號',()=>!!S.me.ttl]].forEach(a=>AL.push(a));
+HELP.push(['金錢用途','「行動→財貨運用」：買官賄賂（替母家謀官、壓風聲）、賞賜宮人（換人心與耳目）、置產投資（田莊穩定、放貸高利可能被告發、商隊盈虧不定）、行善積德（累積賢名，賢名高聖寵與疑心都受益）、買通消息、珍寶收藏（贈禮、獻上、變賣）、宮中賭局。主畫面角色卡會顯示賢名、面子、名號與本局時局。']);
+
 /* ===== 編制人物多樣化：宮中執事・官女子有名字、性情、籍貫，會告老、調任、被選中 ===== */
 const OFS=['李','張','王','劉','趙','孫','錢','周','吳','鄭','馮','陳','褚','衛','蔣','沈','韓','楊','朱','秦','尤','許','何','呂','施','曹','嚴','華','金','魏'],
 OFG1=['德','福','順','祿','喜','貴','安','全','進','忠','長','永','元','來','慶','得','寶','有','吉','連'],
