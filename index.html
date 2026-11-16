@@ -3582,13 +3582,13 @@ const nat=S.nat?`穩定${S.nat.stab|0}・經濟${S.nat.eco|0}・軍力${S.nat.mi
 const heir=S.heir?`儲君：${S.heir.n}`:'尚未立儲';
 const warn=S.ehp<30?'<div class=m style="color:#b0382e">⚠ 龍體危殆，隨時可能駕崩，宜及早為子女謀劃。</div>':S.ehp<50?'<div class=m style="color:#a8642e">龍體欠安，需留意。</div>':'';
 const btn=(n,l)=>{const i=ACT.findIndex(a=>a[0]==n);return i<0?'':`<button onclick="A(${i})">${l||n}</button>`};
-return`<details class="cd emp"><summary><b>皇帝詳情</b><span class=m>${eg}歲・${pr[0]}・龍體${S.ehp|0}・疑心${sus}（${lv}）</span></summary>
+return`<details class="cd emp"><summary><b>皇帝詳情</b><span class=m>${eg}歲・${pr[0]}・${mw()}・龍體${S.ehp|0}・疑心${sus}（${lv}）</span></summary>
 <div class=m>${pr[1]}</div>${bar('龍體',S.ehp)}${bar('聖心',S.mood)}${bar('對你寵愛',m.favor)}${bar('對你疑心',sus)}${warn}
 <div class=m>近來最受寵：${fav.map(n=>n.n+'('+(n.favor|0)+')').join('　')||'無'}　你排第 ${myRank}</div>
-<div class=m>${heir}　${nat}</div>
+<div class=m>中宮：${S.qi==='me'?'你':Q()&&!Q().st&&Q().rank>=8?Q().n:'空懸'}　${heir}</div><div class=m>${nat}</div>
 <div class=eab>${btn('獻藝邀寵')}${btn('寬慰聖心')}${btn('侍奉湯藥')}${btn('進言政事')}${btn('枕邊進言')}${btn('勸皇上養生')}${btn('進獻珍玩')}${btn('示忠表心')}</div></details>`}
 const _up12=uiPost;uiPost=function(){const r=_up12.apply(this,arguments);try{if(TAB==0&&S&&S.me&&!S.over&&!S.reg&&!S.scn){const main=document.querySelector('main');if(main){main.querySelectorAll('.cd.emp').forEach(e=>e.remove());const ch=main.querySelector('.chips');const h=empCard();if(ch)ch.insertAdjacentHTML('afterend',h);else{const ab=main.querySelector('.autobar');if(ab)ab.insertAdjacentHTML('afterend',h)}const d=main.querySelector('.cd.emp');if(d&&S._empOpen)d.open=true;if(d)d.addEventListener('toggle',()=>{S._empOpen=d.open})}}}catch(e){console.log('ui12',e)}return r};
-(function(){const st=document.createElement('style');st.id='ui12';st.textContent=`html body details.cd.emp{padding:8px 12px;margin:6px 0}html body details.cd.emp>summary{cursor:pointer;list-style:none;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;font-size:14px;color:#8a3a30}html body details.cd.emp>summary::-webkit-details-marker{display:none}html body details.cd.emp>summary::after{content:'▾';opacity:.5;margin-left:auto}html body details.cd.emp[open]>summary{margin-bottom:6px}html body details.cd.emp .m{font-size:12.5px}html body .eab{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}html body .eab button{padding:5px 10px;font-size:12.5px;border-radius:999px}`;document.head.appendChild(st)})();
+(function(){const st=document.createElement('style');st.id='ui12';st.textContent=`html body details.cd.emp{padding:9px 13px!important;margin:6px 0!important}html body details.cd.emp>summary{cursor:pointer;list-style:none;display:block!important;font-size:13px;color:#8a3a30;line-height:1.5;padding:0!important;margin:0!important;position:relative;padding-right:18px!important}html body details.cd.emp>summary b{display:inline!important;margin-right:8px;font-size:14px}html body details.cd.emp>summary span{display:inline!important;font-size:12.5px}html body details.cd.emp>summary::-webkit-details-marker{display:none}html body details.cd.emp>summary::after{content:'▾';opacity:.5;position:absolute;right:0;top:0}html body details.cd.emp[open]>summary{margin-bottom:6px!important}html body details.cd.emp .m{font-size:12.5px}html body .eab{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}html body .eab button{padding:5px 10px;font-size:12.5px;border-radius:999px}`;document.head.appendChild(st)})();
 HELP.push(['皇帝詳情','行動頁的「皇帝詳情」可展開查看龍體、聖心、對你寵愛、對你疑心、近來最受寵的嬪妃、儲君與國事，並直接對皇上做事：獻藝、寬慰、侍奉湯藥、進言政事、枕邊進言、勸養生、進獻珍玩、示忠。龍體過低時要及早為子女謀劃。']);
 
 /* ===== 編制人物多樣化：宮中執事・官女子有名字、性情、籍貫，會告老、調任、被選中 ===== */
@@ -3614,6 +3614,32 @@ if(P(.35)&&S.gn&&S.gn.length){const g=pk(S.gn);const x=pk([`官女子${g.n}（${
 function gnTick(){if(!S||S.reg||!S.gn)return;ofcFix();
 if(S.t>0&&S.t%12===0){const out=S.gn.filter(g=>S.t-g.y>=96&&P(.6));if(out.length){S.gn=S.gn.filter(g=>!out.includes(g));L(`宮中依例放出年滿的宮女 ${out.length} 人。`)}let add=0;for(let i=R(3,6);i>0&&S.gn.length<GN_CAP;i--){S.gn.push({n:nm2(),y:S.t,tr:pk(GTR),o:pk(OFP)});add++}if(add)L(`內務府新選入官女子 ${add} 人，來自${pk(OFP)}、${pk(OFP)}等地。`);ofcTick()}
 if(S.gn.length&&S.npcs.length<24&&P(.05)&&rkRoom(0,null)){const w=S.gn.map(g=>1+(/容貌|歌舞|才思|識文/.test(g.tr)?2:0)),tot=w.reduce((a,b)=>a+b,0);let r=Math.random()*tot,k=0;while(k<w.length-1&&r>w[k]){r-=w[k];k++}const g=S.gn.splice(k,1)[0],n=mkN(g.n,0,R(35,55),famFor(0));S.npcs.push(n);L(`官女子${g.n}（${g.tr}）偶得皇上青眼，冊為答應。`)}}
+
+/* ===== round13：行動頁重新編排（同性質放一起） ===== */
+function reorg13(){const main=document.querySelector('main');if(!main||TAB!=0)return;
+main.querySelectorAll('.sec13,details.prof13').forEach(e=>e.remove());
+const kids=[...main.children].filter(e=>!e.classList.contains('sec13'));
+const G={strip:[],alert:[],res:[],sit:[],act:[],cat:{},prof:[]};
+const grpOf=n=>/恩寵|人脈|宮人|遊歷/.test(n)?0:/修身|財貨|產業/.test(n)?1:2;
+kids.forEach(e=>{const t=(e.innerText||'').trim(),c=e.classList;
+ if(c.contains('stat-strip'))G.strip.push(e);
+ else if(c.contains('alertbar'))G.alert.push(e);
+ else if(c.contains('chips'))e.remove();
+ else if(c.contains('res'))G.res.push(e);
+ else if(c.contains('autobar'))G.act.unshift(e);
+ else if(c.contains('actcat')){const n=(e.firstElementChild&&e.firstElementChild.textContent||t).trim();const g=grpOf(n);(G.cat[g]=G.cat[g]||[]).push(e)}
+ else if(c.contains('hero')||/^(容貌|夜間翻牌)/.test(t))G.prof.push(e);
+ else if(/^主線劇情/.test(t))G.act.push(e);
+ else G.sit.push(e)});
+const sec=(txt)=>{const d=document.createElement('div');d.className='sec13';d.textContent=txt;return d};
+const out=[];G.strip.forEach(e=>out.push(e));G.alert.forEach(e=>out.push(e));G.res.forEach(e=>out.push(e));
+if(G.sit.length){out.push(sec('宮中情勢'));G.sit.forEach(e=>out.push(e))}
+out.push(sec('行動'));G.act.forEach(e=>out.push(e));
+['面聖・人脈','自身・家業','子嗣・宮鬥'].forEach((nm,g)=>{if(G.cat[g]&&G.cat[g].length){const s=sec(nm);s.classList.add('sub');out.push(s);G.cat[g].forEach(e=>out.push(e))}});
+if(G.prof.length){const d=document.createElement('details');d.className='cd prof13';if(S._profOpen)d.open=true;d.innerHTML='<summary><b>我的檔案</b><span class=m>出身・天賦・容貌・翻牌設定</span></summary>';G.prof.forEach(e=>d.appendChild(e));d.addEventListener('toggle',()=>{S._profOpen=d.open});out.push(sec('個人'));out.push(d)}
+out.forEach(e=>main.appendChild(e))}
+const _up13=uiPost;uiPost=function(){const r=_up13.apply(this,arguments);try{if(TAB==0&&S&&S.me&&!S.over&&!S.reg&&!S.scn)reorg13()}catch(e){console.log('ui13',e)}return r};
+(function(){const st=document.createElement('style');st.id='ui13';st.textContent=`html body .sec13{margin:14px 2px 4px;font-size:12.5px;letter-spacing:.2em;color:#8a3a30;font-weight:700;display:flex;align-items:center;gap:8px}html body .sec13::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(196,138,112,.45),transparent)}html body .sec13.sub{margin:8px 2px 2px;font-size:11.5px;letter-spacing:.12em;opacity:.8;font-weight:600}html body details.prof13{padding:9px 13px!important}html body details.prof13>summary{cursor:pointer;list-style:none;display:block!important;padding:0!important;margin:0!important;position:relative;font-size:13px;color:#8a3a30}html body details.prof13>summary b{display:inline!important;margin-right:8px;font-size:14px}html body details.prof13>summary span{display:inline!important;font-size:12.5px}html body details.prof13>summary::-webkit-details-marker{display:none}html body details.prof13>summary::after{content:'▾';opacity:.5;position:absolute;right:0;top:0}html body details.prof13[open]>summary{margin-bottom:8px}html body details.prof13>.cd{box-shadow:none;margin:6px 0}`;document.head.appendChild(st)})();
 
 deco();intro();
 
