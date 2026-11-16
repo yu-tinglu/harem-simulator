@@ -2965,6 +2965,59 @@ const _AU=A;A=function(){const f0=S&&S.log&&S.log[0];_AU.apply(this,arguments);r
 const _CU=C;C=function(){const f0=S&&S.log&&S.log[0];_CU.apply(this,arguments);resShow(f0)};
 const _BZU=BZ;BZ=function(){const f0=S&&S.log&&S.log[0];_BZU.apply(this,arguments);resShow(f0)};
 
+/* ===== 母國滲透、政變併吞、皇朝反向併吞 ===== */
+const INFN=['零星往來','漸有耳目','盤根錯節','暗中掌控'];
+const infLv=v=>v>=75?3:v>=50?2:v>=25?1:0;
+function infInit(){const f=S&&S.fr;if(f&&f.inf===undefined){f.inf=0;f.sub=0;f.icd=0}}
+const infPush=e=>{if(!e)return;S.q.push(e);if(!S.ev&&!S.ch&&!S.scn)next();else render()};
+const infEv=(t,o)=>({t,o});
+const FIE=[
+()=>infEv(`${S.fr.n}的商人與使節頻頻入京，在市井和衙門裡四處打點，有人悄悄來求你行個方便。`,[
+['行個方便，收下謝禮',()=>{const f=S.fr;f.inf=cl(f.inf+4);S.me.silver+=30;S.me.favor-=2;S.me.scand=(S.me.scand||0)+1;return'你收了三十兩謝禮，母國的人在京中走動得更自在了。'}],
+['婉拒，並提醒他們收斂',()=>{const f=S.fr;f.inf=cl(f.inf-5);S.me.favor+=3;f.rel=cl(f.rel-4);return'使者面上不悅，皇上聽說後卻誇你識大體。'}],
+['裝作不知',()=>{S.fr.inf=cl(S.fr.inf+1);return'你什麼也沒說，事情自己悄悄發酵。'}]]),
+()=>infEv(`你發現內務府新來的幾個人，口音裡帶著${S.fr.n}的腔調，似乎是母國安插的密探。`,[
+['暗中配合，替他們遮掩',()=>{const f=S.fr;f.inf=cl(f.inf+5);S.me.ally+=4;S.me.scheme+=2;return'密探們暗中記了你的人情，你的耳目也多了幾雙。'}],
+['向皇上揭發',()=>{const f=S.fr;f.inf=cl(f.inf-8);f.rel=cl(f.rel-6);S.me.favor+=5;S.nat.stab=cl(S.nat.stab+1);return'密探被拿下，皇上很欣賞你的坦蕩，母國卻震怒了。'}]]),
+()=>infEv(`${S.fr.n}的密使送來一封家書，要你在皇上枕邊進言「減免${S.fr.n}貢賦、開放邊市」。`,[
+['照辦，找機會進言',()=>{const f=S.fr;f.inf=cl(f.inf+6);f.eco=cl(f.eco+4);f.pw=frPw(f);S.nat.eco=cl(S.nat.eco-1);if(P(.3+S.fr.inf/300)){S.me.favor-=4;return'皇上准了，卻若有所思地看了你一眼。'}return'皇上准了奏，母國商人從此往來無阻。'}],
+['婉拒，回信說後宮不得干政',()=>{S.fr.rel=cl(S.fr.rel-3);S.me.favor+=1;return'母國有些失望，你仍是謹守本分的皇妃。'}],
+['反向進言，替皇朝多爭些好處（看心機）',()=>{if(ckp(.35+S.me.scheme/220)){S.me.favor+=5;S.nat.eco=cl(S.nat.eco+2);S.fr.rel=cl(S.fr.rel-2);return'你巧妙地把條件談得對皇朝有利，皇上龍心大悅。'}S.me.favor-=3;return'你的小心思被母國使者看穿，兩邊都不討好。'}]]),
+()=>infEv(`邊關傳來消息：有守將收了${S.fr.n}的重禮，防務鬆弛。消息輾轉傳到你這裡。`,[
+['密報皇上，揭發守將',()=>{const f=S.fr;f.inf=cl(f.inf-6);S.nat.mil=cl(S.nat.mil+1);S.me.favor+=4;return'守將被撤換，皇上賞了你，母國的路被堵了一截。'}],
+['裝作不知',()=>{const f=S.fr;f.inf=cl(f.inf+3);S.nat.mil=cl(S.nat.mil-1);return'邊關的口子越開越大。'}]]),
+()=>infEv(`皇上忽然問起：「朕聽說${S.fr.n}近來動作頻頻，你可知情？」`,[
+['表明忠心，與母國劃清界線',()=>{const f=S.fr;f.inf=cl(f.inf-4);f.rel=cl(f.rel-4);S.me.favor+=5;return'皇上點了點頭，眼中的疑慮散了些。'}],
+['據理辯解，說只是尋常往來（看心機）',()=>{if(ckp(.4+S.me.scheme/220+S.me.favor/400)){S.me.favor+=2;return'你說得滴水不漏，皇上不再追問。'}S.me.favor-=8;S.me.scand=(S.me.scand||0)+3;return'皇上冷笑一聲：「你倒是替他們說話得很。」'}],
+['坦承並獻上防範之策',()=>{const f=S.fr;f.inf=cl(f.inf-3);S.me.favor+=3;S.nat.stab=cl(S.nat.stab+1);return'皇上對你的坦誠頗為受用，也對你多了份信任。'}]])];
+function frInfMonth(){const m=S&&S.me,f=S&&S.fr;if(!m||!m.fo||!f||f.dead||S.over)return;infInit();
+let d=0;if(f.pw>=55&&f.rel>=30)d+=(f.pw-50)/70;if(f.war)d-=.4;(m.shops||[]).forEach(s=>{const nm=SHT[s.t]&&SHT[s.t][0],lv=s.lv||1;d+=nm=='嫁妝商隊'?.15*lv:nm=='情報樓'?.1*lv:nm=='青樓'?.05*lv:0});d-=.1+natv()/400;f.inf=cl(f.inf+d);
+const lv=infLv(f.inf);if(lv>=2)S.nat.eco=cl(S.nat.eco-.05*lv);if(lv>=3){S.nat.mil=cl(S.nat.mil-.08);S.nat.stab=cl(S.nat.stab-.1)}
+if(lv>=2&&P(.04)){m.favor-=2;L(`皇上對${f.n}多了幾分猜忌，看你的眼神有些複雜。`)}
+f.icd=(f.icd||0)-1;if(!S.ev&&!S.ch&&!S.scn&&f.icd<=0&&f.pw>=48&&S.t>12&&P(.06)){f.icd=8;infPush(FIE[R(0,FIE.length-1)]())}
+if(S.t%12==3)frInfYear()}
+function frInfYear(){const m=S.me,f=S.fr;if(!f||f.dead||S.reg||S.over)return;
+if(f.inf>=70&&f.mil>=58&&natv()<50&&P(.4)&&!S.ev&&!S.ch&&!S.scn)return infPush(infEv(`${f.n}的使者在深夜叩開你的宮門：大軍已集結邊關，只待內應開門。「娘娘，您是${f.n}的公主，這是您的時候了。」`,[
+['作內應，開門迎立',()=>{if(ckp(.35+f.mil/250+f.inf/300+m.ally/500)){over('皇朝易主',`${f.n}大軍長驅入關，城門洞開。皇朝一夕易主，你因獻門之功，被新主奉為「${f.n}王妃」，榮寵一時，只是午夜夢回，總聽見故國舊臣的哭聲。`);return''}over('通敵伏誅',`內應之事敗露，禁軍包圍了你的宮殿。你被當作${f.n}的細作，以通敵罪賜死，母家也一併獲罪。`);return''}],
+['連夜告發，力挽狂瀾（看心機與聖寵）',()=>{if(ckp(.3+m.scheme/250+m.favor/300)){f.inf=10;f.rel=cl(f.rel-25);m.favor+=10;m.ally+=5;S.nat.stab=cl(S.nat.stab+4);if(!f.war)f.war={k:'imp',m:0,s:0,sc:0,pend:0};return`你連夜面聖，禁軍星夜增援邊關，政變消弭於無形。皇朝與${f.n}就此交惡，你卻成了救駕功臣。`}f.inf=cl(f.inf+5);m.favor-=15;m.scand=(m.scand||0)+4;return'沒人信你的話，皇上反疑你賊喊捉賊，把你軟禁了幾日。'}],
+['稱病閉宮，兩不相幫',()=>{m.favor-=8;f.icd=12;f.inf=cl(f.inf-5);return'你閉門謝客，兩邊都沒有再來找你，但這件事並沒有真的過去。'}]]));
+const dom=natv()>f.pw+15&&S.nat.mil>f.mil+12;f.sub=cl((f.sub||0)+(dom?(f.rel<55?7:4):-3));
+if(f.sub>=100&&!f.ann)return infPush(infEv(`皇朝國勢鼎盛，${f.n}已無力自保。朝中有人提議「改土歸流」，將${f.n}併入皇朝版圖，聖意難測。`,[
+['上書勸母國歸附，求保全母家',()=>{if(ckp(.45+m.favor/250)){f.dead=1;f.ann=1;m.favor+=6;m.fam.forEach(x=>{x.pw=cl(x.pw+8);if(/^(父王|汗父|贊普|父親)$/.test(x.rel))x.job='歸義王';else if(/^(兄長|兄)$/.test(x.rel))x.job='都護府長史'});msPush&&msPush(f.n+'併入皇朝');return`${f.n}歸附皇朝，你的父兄被封為歸義王與都護府長史，母家反而在新朝站穩了腳跟。`}f.sub=60;if(!f.war)f.war={k:'imp',m:0,s:0,sc:0,pend:0};m.favor-=3;return`${f.n}拒絕歸附，戰事一觸即發。`}],
+['力阻併吞，為母國說話',()=>{m.favor-=10;m.scand=(m.scand||0)+2;f.sub=cl(f.sub-25);if(ckp(.3+m.favor/250)){f.sub=40;return'皇上暫緩了此議，卻對你多了幾分戒心。'}m.favor-=5;return'皇上拂袖而去，併吞之議只是暫時擱置。'}],
+['袖手旁觀',()=>{f.dead=1;f.ann=1;m.fam.forEach(x=>{x.pw=Math.max(0,x.pw-20);x.job='軟禁京中'});S.nat.mil=cl(S.nat.mil+3);S.nat.eco=cl(S.nat.eco+3);m.favor-=2;msPush&&msPush(f.n+'併入皇朝');return`${f.n}被併入皇朝，你的父兄被遷居京中軟禁，母家從此再無實權。`}]]));
+if(f.sub>=60&&!f.sw){f.sw=1;L(`朝中開始有人議論「${f.n}不過一隅之地」，皇朝似有併吞之意。`)}}
+/* 新行動：母國謀略 */
+ACT.push(['母國謀略','滲透皇朝或協助防範，影響母國滲透度',()=>{const m=S.me,f=S.fr;if(!m.fo||!f)return L('你的母家不在外邦。');if(f.dead)return L('母國已不在。');infInit();choose(`母國謀略（滲透度${f.inf|0}・${INFN[infLv(f.inf)]}）`,[
+{l:'派人潛入皇朝（耗銀50，滲透＋8）',f(){if(!pay(50))return L('銀兩不足。');if(ckp(.6+m.scheme/300)){f.inf=cl(f.inf+8);m.scand=(m.scand||0)+1;L(`母國的人悄悄潛入京城，滲透度升至${f.inf|0}。`)}else{f.inf=cl(f.inf+2);m.favor-=6;m.scand=(m.scand||0)+3;L('密探被抓，雖未供出你，皇上仍起了疑心。')}}},
+{l:'協助皇朝防範（耗銀30，滲透－8，聖寵＋）',f(){if(!pay(30))return L('銀兩不足。');f.inf=cl(f.inf-8);m.favor+=4;f.rel=cl(f.rel-3);L(`你替皇上留意母國的動靜，滲透度降至${f.inf|0}，皇上對你更加信任。`)}},
+{l:'為皇朝獻策併吞母國（聖寵＋，母國邦誼大降）',f(){if(S.nat.mil<=f.mil){return L('皇朝兵力不及母國，此時獻策只會惹人笑話。')}f.sub=cl((f.sub||0)+10);m.favor+=3;f.rel=cl(f.rel-6);m.fam.forEach(x=>x.lo=Math.max(0,(x.lo||50)-6));L(`你向皇上獻上蠶食${f.n}的方略，皇朝控制度升至${f.sub|0}，母家上下視你為叛徒。`)}}]);return 1}]);
+{const i=ACT.length-1;ACTCAT[1][1].push(i);const _agI=actGroups;actGroups=function(){let h=_agI.apply(this,arguments);try{if(!S.me.fo)h=h.replace(new RegExp(`<button onclick="A\\(${i}\\)">[\\s\\S]*?</button>`),'')}catch(e){}return h}}
+/* 母國卡顯示滲透度與控制度 */
+const _frI=frCard;frCard=function(){let h=_frI.apply(this,arguments);try{const f=S.fr;if(h&&f){infInit();let x='';if(f.ann)x+='<div class=m><b>母國已併入皇朝版圖。</b></div>';else{x+=abar('母國滲透度',f.inf|0)+`<div class=m>滲透：${INFN[infLv(f.inf)]}。母國越強、你的商鋪與謀略越多，滲透越深；皇朝越強則越難。太深會招來猜忌，甚至引發政變。</div>`;if(f.sub>0)x+=abar('皇朝控制度',f.sub|0)+'<div class=m>皇朝若遠強於母國，會逐步蠶食，滿格時朝廷可能下旨併吞母國。</div>'}h=h.replace(/<\/div>$/,x+'</div>')}}catch(e){console.log('frI',e)}return h};
+const _gcI=goalChip;goalChip=function(){let h=_gcI.apply(this,arguments);try{if(S.me.fo&&S.fr&&S.fr.inf>=10&&!S.fr.dead)h=h.replace(/(邦誼 \d+)/,`$1　滲透 ${S.fr.inf|0}`)}catch(e){}return h};
+const _mdI=mend;mend=function(){const r=_mdI.apply(this,arguments);try{if(S&&S.me&&S.me.fo&&!S.over&&!S.reg)frInfMonth()}catch(e){console.log('infMonth',e)}return r};
+
 /* ===== 編制人物多樣化：宮中執事・官女子有名字、性情、籍貫，會告老、調任、被選中 ===== */
 const OFS=['李','張','王','劉','趙','孫','錢','周','吳','鄭','馮','陳','褚','衛','蔣','沈','韓','楊','朱','秦','尤','許','何','呂','施','曹','嚴','華','金','魏'],
 OFG1=['德','福','順','祿','喜','貴','安','全','進','忠','長','永','元','來','慶','得','寶','有','吉','連'],
