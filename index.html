@@ -1,4 +1,4 @@
-<!doctype html><html><head><link rel="icon" type="image/png" sizes="192x192" href="icon-192.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta property="og:image" content="icon-1024.png"><meta property="og:title" content="後宮模擬器"><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><style>.copyright{text-align:center;font-size:12px;line-height:1.7;opacity:.6;padding:18px 16px calc(24px + env(safe-area-inset-bottom,0px));letter-spacing:.04em}.copyright b{font-weight:600}</style><style>.qrow{padding:9px 0;border-top:1px dashed rgba(150,100,80,.3)}.qrow b{margin-right:8px}.qp{display:inline-block;padding:1px 10px;border-radius:99px;font-size:12px;background:rgba(190,120,90,.16);margin-right:5px}.qp.full{background:rgba(160,40,50,.18);color:#8a1d2b}.qp.vac{background:rgba(60,140,100,.2);color:#2a6b4c}.qn{display:inline-block;margin:4px 10px 0 0;font-size:13px}.qn[onclick]{text-decoration:underline dotted;cursor:pointer}.qn.me{font-weight:700;color:#a2263a}.hist{margin-top:8px;padding-top:6px;border-top:1px dashed rgba(150,100,80,.3);font-size:12.5px;line-height:1.75}.hist small{opacity:.7}.fh{display:block;font-size:11.5px;opacity:.72;line-height:1.5}</style></head><body>
+<!doctype html><html><head><link rel="icon" type="image/png" sizes="192x192" href="icon-192.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta property="og:image" content="icon-1024.png"><meta property="og:title" content="後宮模擬器"><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><style>.copyright{text-align:center;font-size:12px;line-height:1.7;opacity:.6;padding:18px 16px calc(24px + env(safe-area-inset-bottom,0px));letter-spacing:.04em}.copyright b{font-weight:600}</style><style>.qrow{padding:9px 0;border-top:1px dashed rgba(150,100,80,.3)}.qrow b{margin-right:8px}.qp{display:inline-block;padding:1px 10px;border-radius:99px;font-size:12px;background:rgba(190,120,90,.16);margin-right:5px}.qp.full{background:rgba(160,40,50,.18);color:#8a1d2b}.qp.vac{background:rgba(60,140,100,.2);color:#2a6b4c}.qn{display:inline-block;margin:4px 10px 0 0;font-size:13px}.qn[onclick]{text-decoration:underline dotted;cursor:pointer}.qn.me{font-weight:700;color:#a2263a}.hist{margin-top:8px;padding-top:6px;border-top:1px dashed rgba(150,100,80,.3);font-size:12.5px;line-height:1.75}.hist small{opacity:.7}.fh{display:block;font-size:11.5px;opacity:.72;line-height:1.5}</style><style>.mcover{display:block;width:78%;max-width:300px;margin:4px auto 10px;border-radius:18px;border:1px solid rgba(227,180,90,.6);box-shadow:0 8px 24px rgba(0,0,0,.35)}.mmenu .g1 button small{display:block;opacity:.8;font-size:12px;margin-top:2px}</style></head><body>
 <meta name="claude:viewport-fit-sides" content="cover">
 <title>後宮模擬器</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;900&display=swap">
@@ -1849,7 +1849,7 @@ let p='';[[90,560],[310,540]].forEach(([x,y])=>{p+=`<path d="M${x} ${y}V380M${x}
 function sceneOf(){if(!S)return'dusk';if(S.over)return'dusk';if(S.scn||(S.ev&&S.ev.env))return'court';return['room','dusk','room','court','court','dusk'][TAB]}
 function setTab(i){TAB=i;SMSG='';PEND=null;S.ch=null;render();window.scrollTo(0,0)}
 function modal(){let tag,body;
-if(S.over)return`<div class=scrim><div class=scroll><span class=tag>終局</span><h2>${S.over.t}</h2><p>${S.over.x}</p><p class=m>入宮 ${Math.floor(S.t/12)+1} 年，育有子女 ${S.me.kids.length} 人。</p>${endCard()}<button onclick="S=null;intro()">重新開始</button></div></div>`;
+if(S.over)return`<div class=scrim><div class=scroll><span class=tag>終局</span><h2>${S.over.t}</h2><p>${S.over.x}</p><p class=m>入宮 ${Math.floor(S.t/12)+1} 年，育有子女 ${S.me.kids.length} 人。</p>${endCard()}<button onclick="S=null;MENU=0;intro()">再玩一局</button><button class=s onclick="S=null;menuHome()">回主畫面</button></div></div>`;
 if(S.scn)return`<div class=scrim><div class=scroll><span class=tag>聖旨已下</span>${S.scn.h}`+S.scn.o.map((o,i)=>`<button onclick="S.scn.o[${i}].f()">${o.l}</button>`).join('')+'</div></div>';
 if(S.ev)return`<div class=scrim><div class="scroll ${S.ev.atk?'bad':''}"><span class=tag>${S.ev.story?'故事':S.ev.night?'今夜翻牌':S.ev.env?'天下大事':S.ev.atk?'有人暗算':'宮中事件'}</span><p>${S.ev.t}</p>`+S.ev.o.map((o,i)=>`<button onclick="V(${i})">${o[0]}</button>`).join('')+'</div></div>';
 if(S.ch)return`<div class=scrim><div class=scroll><span class=tag>抉擇</span><p>${S.ch.t}</p>`+S.ch.o.map((o,i)=>`<button onclick="C(${i})">${o.l}</button>`).join('')+`<button class=s onclick="S.ch=null;render()">取消</button></div></div>`;return''}
@@ -1870,7 +1870,7 @@ h+=`<div class=cd><h3>我的子女</h3>`+(m.kids.map(k=>`<div class=kid>${tag(k)
 h+=kidsAllPanel();h+=S.reg?kinPanel():`<div class=cd><h3>奪嫡聲勢</h3>`+pr.filter(x=>x[0].sex=='男').sort((a,b)=>sc(b[0])-sc(a[0])).slice(0,5).map((x,i)=>`<div class=k>${i+1}. ${x[0]===S.heir?'<span class=pill r>儲君</span> ':''}${x[0].n}・${on(x[1])}之子・${yr(x[0])}歲・聲勢${sc(x[0])|0}</div>`).join('')+'</div>'}
 else if(TAB==3){h+=royalPanel()+(S.reg?regPanel():natPanel())+famPanel()+chaoPanel()+postPanel()+courtHist()}
 else if(TAB==4){h+=chrPanel()}
-else{h+=avPanel()+slotPanel()+achPanel()+statsCard()+(S.xiu&&S.xiu.list?`<div class=cd><h3>本屆選秀結果（${S.xiu.N}人參選，你第${S.xiu.pos}名）</h3>`+S.xiu.list.map(r=>`<div class=k>第${r.p}名　${r.n}・${r.f}・${r.r}</div>`).join('')+'</div>':'')+`<div class=cd><h3>母家（${GS[G][0]}）</h3>`+m.fam.map(x=>`<div class=k>${famTxt(x)}　權${x.pw|0} 才${x.ab|0} 忠${x.lo|0}</div>`).join('')+`<div class=m>權＝權勢　才＝才幹　忠＝對你的忠誠</div></div><div class="cd l"><h3>宮中紀事</h3>`+S.log.map(s=>`<p>${s}</p>`).join('')+'</div>'}
+else{h+=menuBackCard()+avPanel()+slotPanel()+achPanel()+statsCard()+(S.xiu&&S.xiu.list?`<div class=cd><h3>本屆選秀結果（${S.xiu.N}人參選，你第${S.xiu.pos}名）</h3>`+S.xiu.list.map(r=>`<div class=k>第${r.p}名　${r.n}・${r.f}・${r.r}</div>`).join('')+'</div>':'')+`<div class=cd><h3>母家（${GS[G][0]}）</h3>`+m.fam.map(x=>`<div class=k>${famTxt(x)}　權${x.pw|0} 才${x.ab|0} 忠${x.lo|0}</div>`).join('')+`<div class=m>權＝權勢　才＝才幹　忠＝對你的忠誠</div></div><div class="cd l"><h3>宮中紀事</h3>`+S.log.map(s=>`<p>${s}</p>`).join('')+'</div>'}
 h+='</main>';
 if(!done)h+=`<nav class=tabs aria-label="分頁">`+TABS.map((t,i)=>`<button aria-current="${TAB==i}" onclick="setTab(${i})"><i>${t[0]}</i>${S.reg&&i==1?'太妃':S.reg&&i==2?'宗室':t[1]}</button>`).join('')+'</nav>';
 $('app').innerHTML=h+modal()}
@@ -2463,6 +2463,39 @@ const HELP_V50=[
 ['通知、紀事、存檔與結局','晉封、降位、母家與前朝的變動都會跳通知，也都記在「紀事」分頁。<br>遊戲會自動存檔（回到首頁會看到「繼續遊戲」），另有 4 個手動存檔格，在「紀事」分頁，只存在這個瀏覽器裡。<br>結局很多種，終局會依存活年數、位份、子嗣、成就等計分，也可以先在開局選一個人生目標，達成有獎勵。']];
 
 HELP=HELP_V50;
+/* ===== v51：主畫面（新遊戲・繼續・讀檔・成就・傳承・今日挑戰・說明・設定） ===== */
+let MENU=1,MSEC=null;
+function menuGo(sec){MSEC=MSEC===sec?null:sec;intro();if(MSEC)setTimeout(()=>{const e=document.getElementById('msec');if(e)e.scrollIntoView({behavior:'smooth',block:'start'})},60)}
+function menuNew(){MENU=0;MSEC=null;intro();window.scrollTo(0,0)}
+function menuHome(){MENU=1;MSEC=null;intro();window.scrollTo(0,0)}
+function menuLeave(){try{autoSave()}catch(e){}S=null;MENU=1;MSEC=null;intro();window.scrollTo(0,0)}
+function menuAuto(){let j=null;try{const r=stg.get(AUTOK);if(r)j=JSON.parse(r)}catch(e){}return j}
+function mainMenu(){S=null;document.body.dataset.scene='dusk';
+const au=menuAuto(),o=ACH().size;let sv=0;for(let i=0;i<4;i++)if(stg.get(SK(i)))sv++;
+const b=(fn,t,sm,cls)=>`<button ${cls?`class="${cls}"`:''} onclick="${fn}">${t}<small>${sm}</small></button>`;
+let sec='';
+if(MSEC==='load')sec=slotPanel();
+else if(MSEC==='ach')sec=achPanel();
+else if(MSEC==='legacy')sec=lgCard();
+else if(MSEC==='daily')sec=dailyCard();
+else if(MSEC==='set')sec=avPanel()+`<div class=cd><h3>音樂</h3><p><button class=s onclick="sndToggle();intro()">背景音樂：${typeof SND!=='undefined'&&SND.on?'開':'關'}</button></p></div>`+privacyCard();
+$('app').innerHTML=`<div class="splash menuhero"><img class=mcover src="icon-512.png" alt="後宮模擬器" onerror="this.style.display='none';document.getElementById('mt').style.display=''"><h1 id=mt style="display:none">後宮模擬器</h1><p>一入宮門深似海</p></div><main class=mmenu>
+${au?`<div class=cd><h3>繼續上次的遊戲</h3><div class=m>${au.sum}<br>${au.time}（自動存檔）</div><p><button class=go style="letter-spacing:.3em" onclick="loadAuto()">繼續遊戲</button></p></div>`:''}
+<div class=g1>
+${b('menuNew()','新遊戲','選出身與天賦，開始入宮',au?'s':'')}
+${b("menuGo('load')",'讀取存檔',sv?`共 ${sv} 個手動存檔`:'目前沒有手動存檔','s')}
+${b("menuGo('ach')",'成就',`已解鎖 ${o}／${AL.length}`,'s')}
+${b("menuGo('legacy')",'前世傳承','完成的世代會留下傳承','s')}
+${b("menuGo('daily')",'今日挑戰','每天同一個開局，比拼評分','s')}
+${b('helpOpen()','新手說明','詳細的玩法與攻略','s')}
+${b("menuGo('set')",'設定','畫像、音樂、隱私','s')}
+</div>
+${MSEC?`<div id=msec>${sec}<p><button class=s onclick="menuGo(MSEC)">收起</button></p></div>`:''}
+</main>`;
+try{avFix()}catch(e){}
+if(MSEC==='daily'){try{dailyLoad()}catch(e){}}}
+const _introV51=intro;intro=function(){if(MENU)return mainMenu();_introV51.apply(this,arguments);try{if(MENU===0&&!document.getElementById('mback'))$('app').insertAdjacentHTML('afterbegin','<p id=mback style="margin:8px 0 0"><button class="s mini" onclick="menuHome()">← 回主畫面</button></p>')}catch(e){}};
+function menuBackCard(){return`<div class=cd><h3>主畫面</h3><div class=m>回到主畫面可以開新局、讀檔、看成就。目前的進度會自動存檔，之後在主畫面按「繼續遊戲」就能接著玩。</div><p><button class=s onclick="menuLeave()">回主畫面</button></p></div>`}
 deco();intro();
 
 </script>
