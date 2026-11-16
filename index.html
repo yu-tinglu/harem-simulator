@@ -3302,6 +3302,28 @@ const _st5=start0;start0=function(){KU.clear();return _st5.apply(this,arguments)
 /* 既有存檔：一次性去重 */
 const _nf5=mend;mend=function(){const r=_nf5.apply(this,arguments);try{if(S&&!S.nmFix&&S.npcs){S.nmFix=1;const seen=new Set([S.me.n]);let ch=0;S.npcs.forEach(n=>{if(seen.has(n.n)){const o=n.n;n.n=nm2();ch++}seen.add(n.n)});const ks=[];S.npcs.forEach(n=>(n.kids||[]).forEach(k=>ks.push(k)));(S.me.kids||[]).forEach(k=>ks.push(k));const ksn=new Set();ks.forEach(k=>{if(ksn.has(k.n)){k.n=kidNm(k.sex);ch++}ksn.add(k.n)});if(ch)L(`宮中人事整理，${ch}人因重名而改了名字。`)}}catch(e){console.log('nmFix',e)}return r};
 
+/* ===== 第六輪：母國君主駕崩的繼位 ===== */
+const RULER_REL=/^(父親|父王|汗父|贊普|國王|可汗)$/;
+function rulerTitle(rel,fo){if(rel=='汗父')return'可汗';if(rel=='贊普')return'贊普';return/蒙古|準噶爾|西域/.test(fo||'')?'可汗':'國王'}
+function ruleSucc(x){const me=S.me,f=S.fr;if(!me.fo||!f||f.dead||f.ann)return;infInit();const ti=rulerTitle(x.rel,me.fo);
+const sons=me.fam.filter(y=>y!==x&&/^(兄長|兄|大哥|二哥|幼弟|弟)/.test(y.rel)&&y.sx!='女').sort((a,b)=>fAge(b)-fAge(a));const adult=sons.filter(y=>fAge(y)>=16)[0];
+const nmOf=y=>y.nm||'新君';
+if(adult){const b=adult;b.job=ti;b.pw=cl(Math.max(b.pw,x.pw-5));f.stab=cl(f.stab-2);f.pw=frPw(f);
+const t=`${f.n}${ti}${x.nm}駕崩，你的${b.rel}${nmOf(b)}依例繼位為新${ti}。`;try{ntfAdd(t,'medn')}catch(e){}L(t);
+if(typeof msPush=='function')msPush(`${f.n}${ti}駕崩，${b.rel}繼位`);
+infPush(infEv(`${t}新君派使者入京報喪，並問你這位妹妹的意思。`,[
+['修書道賀並獻上厚禮（耗銀40）',()=>{if(!pay(40))return'銀兩不足，只能草草寫了封信。';f.rel=cl(f.rel+8);f.stab=cl(f.stab+3);me.favor+=2;f.inf=cl(f.inf+3);return`${nmOf(b)}收到你的賀禮，對你這位在皇朝的妹妹更加倚重，邦誼升至${f.rel|0}。`}],
+['勸兄長善待舊臣、與皇朝修好（看口才）',()=>{if(ckp(.4+me.favor/300)){f.stab=cl(f.stab+5);f.rel=cl(f.rel+5);return'新君聽了你的勸，穩住了舊臣，也向皇朝遞了國書。'}f.stab=cl(f.stab-2);return'你的信石沉大海，新君顯然有自己的打算。'}],
+['按禮數致哀，不多干預',()=>{return'你依禮服喪，朝廷多了幾分對你的憐惜。'}]]));return}
+if(sons.length){const b=sons[0];f.stab=cl(f.stab-8);f.mil=cl(f.mil-3);f.pw=frPw(f);const reg=me.fam.find(y=>y!==x&&/叔|舅|伯|堂/.test(y.rel));
+b.job=ti+'（年幼）';const t=`${f.n}${ti}${x.nm}駕崩，你的${b.rel}${nmOf(b)}年紀尚小，由${reg?reg.rel+reg.nm:'宗親大臣'}攝政，母國人心浮動。`;try{ntfAdd(t,'medn')}catch(e){}L(t);if(typeof msPush=='function')msPush(`${f.n}${ti}駕崩，幼主繼位`);
+infPush(infEv(`${t}`,[['請皇上遣使弔唁，穩定局面（耗銀30）',()=>{if(!pay(30))return'銀兩不足。';f.stab=cl(f.stab+5);f.rel=cl(f.rel+4);me.favor+=1;return'皇朝遣使弔唁，攝政大臣暗自鬆了口氣。'}],['趁機暗中培植自己的人在母國（滲透＋）',()=>{f.inf=cl(f.inf+8);me.scheme+=2;return'你託人聯絡母國舊部，勢力悄悄伸了進去。'}],['靜觀其變',()=>'你只能遠遠看著母國的動靜。']]));return}
+/* 無子：旁支繼位 */
+const nn=fnm(x.nm?x.nm[0]:'汗','男');f.stab=cl(f.stab-12);f.rel=cl(f.rel-4);f.pw=frPw(f);me.fam.forEach(y=>{y.pw=cl(y.pw-12)});
+const t=`${f.n}${ti}${x.nm}駕崩，膝下沒有成年兒子，宗室旁支${nn}奪得${ti}之位，你家這一支從此失勢。`;try{ntfAdd(t,'medn')}catch(e){}L(t);if(typeof msPush=='function')msPush(`${f.n}${ti}駕崩，旁支繼位`);
+infPush(infEv(t+'新君與你的父兄素有嫌隙。',[['送禮示好，保全母家（耗銀50）',()=>{if(!pay(50))return'銀兩不足。';me.fam.forEach(y=>y.pw=cl(y.pw+6));f.rel=cl(f.rel+4);return'新君收下厚禮，暫時沒有為難你的母家。'}],['請皇上出面施壓，替母家說話（看聖寵）',()=>{if(ckp(.35+me.favor/250)){me.fam.forEach(y=>y.pw=cl(y.pw+8));me.favor-=2;return'皇上遣使替你母家說話，新君不敢輕易動手。'}me.favor-=3;return'皇上不願為此事干預他國內政。'}],['認命，不再過問',()=>{me.fam.forEach(y=>y.pw=cl(y.pw-4));return'你只能看著母家日漸沒落。'}]]))}
+const _fy6=famYear;famYear=function(){const before=(S.me&&S.me.fam||[]).slice();const r=_fy6.apply(this,arguments);try{const me=S.me;before.filter(x=>!me.fam.includes(x)&&RULER_REL.test(x.rel)).forEach(x=>ruleSucc(x))}catch(e){console.log('ruleSucc',e)}return r};
+
 /* ===== 編制人物多樣化：宮中執事・官女子有名字、性情、籍貫，會告老、調任、被選中 ===== */
 const OFS=['李','張','王','劉','趙','孫','錢','周','吳','鄭','馮','陳','褚','衛','蔣','沈','韓','楊','朱','秦','尤','許','何','呂','施','曹','嚴','華','金','魏'],
 OFG1=['德','福','順','祿','喜','貴','安','全','進','忠','長','永','元','來','慶','得','寶','有','吉','連'],
