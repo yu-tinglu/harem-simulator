@@ -3295,7 +3295,8 @@ const GK1='靜端長淑永榮和固溫安嘉慧純敦恪悼昌貞憲'.split(''),
 const KU=new Set();
 function namesUsed(){const u=new Set(KU);try{if(typeof HU!='undefined')HU.forEach(x=>u.add(x));if(S){if(S.me&&S.me.n)u.add(S.me.n);(S.npcs||[]).forEach(n=>{u.add(n.n);(n.kids||[]).forEach(k=>u.add(k.n))});(S.me&&S.me.kids||[]).forEach(k=>u.add(k.n));(S.gn||[]).forEach(g=>u.add(g.n));(S.srv||[]).forEach(x=>u.add(x.n));try{allKids().forEach(k=>u.add(k.n))}catch(e){}}}catch(e){}return u}
 function kidNm(sex){const u=namesUsed();let n,c=0;do{n=sex=='男'?'承'+BKC[R(0,BKC.length-1)]:GK1[R(0,GK1.length-1)]+GK2[R(0,GK2.length-1)];if(c>60&&sex=='男')n+=BKC[R(0,BKC.length-1)];if(c>60&&sex!='男')n+=GK2[R(0,GK2.length-1)]}while(u.has(n)&&c++<200);KU.add(n);return n}
-nm2=function(){const u=namesUsed();let n,c=0;do{const a=GIV[R(0,GIV.length-1)];let b='';if(P(.6)){do{b=GIV[R(0,GIV.length-1)]}while(b===a)}n=SUR[R(0,SUR.length-1)]+a+b}while(u.has(n)&&c++<80);HU.add(n);return n};
+const sc5=(ch,u)=>{let k=0;u.forEach(x=>{if(x[0]==ch&&x[0]!='承')k++});return k};
+nm2=function(){const u=namesUsed();let n,c=0;do{const a=GIV[R(0,GIV.length-1)];let b='';if(P(.6)){do{b=GIV[R(0,GIV.length-1)]}while(b===a)}n=SUR[R(0,SUR.length-1)]+a+b}while((u.has(n)||sc5(n[0],u)>=3)&&c++<80);HU.add(n);return n};
 function pnmU(sex){const u=namesUsed();let n,c=0;do{n=pk(SUR)+(sex=='男'?pk(MG)+(P(.5)?pk(MG):''):pk(GIV))}while(u.has(n)&&c++<50);KU.add(n);return n}
 const _st5=start0;start0=function(){KU.clear();return _st5.apply(this,arguments)};
 /* 既有存檔：一次性去重 */
