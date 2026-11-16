@@ -3834,6 +3834,23 @@ const _mt20=mend;mend=function(){const r=_mt20.apply(this,arguments);try{if(S&&S
 /* ===== round21：界面異常修正 ===== */
 (function(){const st=document.createElement('style');st.id='ui21';st.textContent=`html body .top{flex-wrap:wrap!important;row-gap:4px}html body .top .mini{min-width:32px;min-height:32px;display:inline-flex;align-items:center;justify-content:center}html,body{overflow-x:hidden;max-width:100%}html body main{padding-bottom:calc(110px + env(safe-area-inset-bottom,0px))}html body .eab button,html body .autobar button{min-height:32px}html body details>summary{-webkit-tap-highlight-color:transparent}`;document.head.appendChild(st)})();
 
+/* ===== round22：和親公主喪夫・攝政後續 ===== */
+(function(){
+const REGN=['蒙古','準噶爾','吐蕃'];
+const i=MXE.findIndex(f=>/暴病身亡/.test(f.toString()));
+if(i>=0)MXE[i]=(k,o)=>wid(k)&&!k.sp.reg&&!(k.sp.wd&&S.t-k.sp.wd<60)&&k.out&&REGN.includes(k.sp.nt)&&P(.5)&&{t:`${k.sp.nt}傳來急報：${k.n}的丈夫${k.sp.n}暴病身亡，依當地舊俗，她須改嫁繼位的新首領。`,o:[
+['遣使接回公主（邦誼受損）',()=>{const nt=k.sp.nt;k.sp.wd=S.t;k.out=0;k.sp.end='寡居歸國';k.sp.hap=cl(k.sp.hap+15);ntr()[nt]-=14;return`你不顧舊俗，派人接回了${k.n}，${nt}君臣面上無光，邦交轉冷。`}],
+['依舊俗，讓她再嫁（邦誼＋）',()=>{const nt=k.sp.nt;k.sp.wd=S.t;ntr()[nt]+=12;k.sp.hap=cl(k.sp.hap-25);k.sp.n=pnm('男');k.bond=cl(k.bond-10);return`${k.n}含淚改嫁新首領，邦誼穩固，但她在給你的信裡再無一句溫言。`}],
+['暗助她扶立自己的兒子（看心機）',()=>{const nt=k.sp.nt,hus=k.sp.n;k.sp.wd=S.t;if(ckp(.3+S.me.scheme/250+S.me.ally/400)){const son=pnm('男');k.sp.hus=hus;k.sp.son=son;k.sp.reg=1;k.sp.regT=S.t;k.sp.gk=Math.max(1,k.sp.gk||0);ntr()[nt]=cl(ntr()[nt]+22);k.sp.hap=cl(k.sp.hap+12);k.pow=cl((k.pow||0)+10);k.bond=cl(k.bond+6);S.nat.mil+=3;S.nat.stab+=2;const t=`${k.n}扶立幼子${son}為${nt}之主，自己攝政，${nt}自此與你同氣連枝。`;try{jot('宮',k.n,t);msPush(`${k.n}在${nt}攝政`)}catch(e){}return`在你的暗中謀劃下，${t}（此後每年${nt}會朝貢，邊防也更穩；可在「朝堂」的六國邦誼看到攝政狀態。）`}ntr()[nt]-=12;k.sp.hap=cl(k.sp.hap-15);k.sp.hus=hus;k.sp.n=pnm('男');return`謀劃敗露，${k.n}被迫改嫁新首領，在異鄉的處境更加艱難，邦誼受損。`}]]};
+const _sl=spLine;spLine=function(k){const s=k&&k.sp;if(s&&s.reg&&!s.end)return`<span class=m>和親${s.nt}・夫${s.hus||'前任首領'}已逝・${k.n}攝政太后，扶立幼子${s.son||'繼位者'}・感情${s.hap|0}・子嗣${s.gk}・遠在${k.out||s.nt}</span>`;return _sl.apply(this,arguments)};
+const _sb=spBrief;spBrief=function(k){const s=k&&k.sp;if(s&&s.reg&&!s.end)return`攝政${s.nt}（扶立${s.son||'幼子'}）`;return _sb.apply(this,arguments)};
+function regTick(){if(!S||!S.me||S.over||S.t%12!==7)return;(S.me.kids||[]).forEach(k=>{const s=k.sp;if(!s||!s.reg||s.end)return;const nt=s.nt,r=ntr();r[nt]=cl(r[nt]+2);S.nat.mil+=.3;const g=Math.round(20+r[nt]/4);S.me.silver+=g;try{msPush(`${nt}攝政的${k.n}遣使朝貢，進獻銀${g}兩`)}catch(e){}})}
+const _m22=mend;mend=function(){const r=_m22.apply(this,arguments);try{regTick()}catch(e){console.log('r22',e)}return r};
+const _u22=uiPost;uiPost=function(){const r=_u22.apply(this,arguments);try{if(typeof TAB!=='undefined'&&TAB===3&&S&&S.me&&!S.over&&!S.reg&&!S.scn){document.querySelectorAll('.cd.nat22').forEach(e=>e.remove());const anchor=[...document.querySelectorAll('main .cd')].find(c=>/天下大勢/.test((c.querySelector('h3')||{}).textContent||''));if(anchor){const rel=ntr(),rg={};(S.me.kids||[]).forEach(k=>{if(k.sp&&k.sp.reg&&!k.sp.end)rg[k.sp.nt]=k});const h=`<div class="cd nat22"><h3>六國邦誼</h3>`+NAT6.map(n=>abar(`${n}（${relT(n)}）`,rel[n])+(rg[n]?`<div class="m" style="margin:-2px 0 6px">└ ${rg[n].n}在此攝政，幼主${rg[n].sp.son||''}在位，每年朝貢</div>`:'')).join('')+`<div class="m">邦誼過低會引發邊釁；和親、聯姻、遣使、通商都能影響。</div></div>`;anchor.insertAdjacentHTML('afterend',h)}}}catch(e){console.log('r22u',e)}return r};
+window.regTick22=regTick;
+HELP.push(['公主攝政','和親公主若在外邦喪夫，可選擇暗助她扶立自己的兒子；成功後她成為攝政太后，每年朝貢、邦誼上升、邊防更穩，狀態顯示在子女卡片與朝堂的六國邦誼。']);
+})();
+
 deco();intro();
 
 
