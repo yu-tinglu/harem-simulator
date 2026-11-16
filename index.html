@@ -3831,6 +3831,9 @@ const _mt20=mend;mend=function(){const r=_mt20.apply(this,arguments);try{if(S&&S
  if(S.t%12==11&&m.silver>4000){const tax=Math.round((m.silver-4000)*.08);m.silver-=tax;if(typeof ntfAdd=='function'){ntfAdd('年節賞賜、人情往來與宮中開銷，今年花去了 '+tax+' 兩。','ti')}}
  if(S.t%12==5&&m.silver>8000){const x=Math.round((m.silver-8000)*.05);m.silver-=x}}}catch(e){console.log('r20',e)}return r};
 
+/* ===== round21：界面異常修正 ===== */
+(function(){const st=document.createElement('style');st.id='ui21';st.textContent=`html body .top{flex-wrap:wrap!important;row-gap:4px}html body .top .mini{min-width:32px;min-height:32px;display:inline-flex;align-items:center;justify-content:center}html,body{overflow-x:hidden;max-width:100%}html body main{padding-bottom:calc(110px + env(safe-area-inset-bottom,0px))}html body .eab button,html body .autobar button{min-height:32px}html body details>summary{-webkit-tap-highlight-color:transparent}`;document.head.appendChild(st)})();
+
 deco();intro();
 
 
