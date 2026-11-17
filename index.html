@@ -4160,6 +4160,20 @@ const _st30=start;start=function(){const r=_st30.apply(this,arguments);try{if(!g
  {l:'悠閒無腦：小事自動處理，重要的才問我，選項標★建議，一局約十幾二十年',f(){ss('hg_rlx','on');ss('hg_rlxset','1');L('已選「悠閒無腦」：放心點★建議的選項即可。')}},
  {l:'鬥智宮心：每件事都由我決定，完整體驗，一局較長',f(){ss('hg_rlx','off');ss('hg_rlxset','1');L('已選「鬥智宮心」：每個抉擇都在你手上。')}}])}}catch(x){console.log('r30s',x)}return r};
 })();
+/* 開局頁：快速開始＋步驟提示＋入宮鈕固定在底部 */
+(function(){
+const _i30=intro;intro=function(){const r=_i30.apply(this,arguments);try{const sp=document.querySelector('#app .splash:not(.menuhero)');if(sp&&!document.querySelector('.qs30')){
+ sp.insertAdjacentHTML('afterend',`<div class="cd qs30"><h3>怎麼開始？</h3><button class=go style="width:100%;letter-spacing:0" onclick="qs30()">🎲 快速開始（隨機身分，直接入宮）</button><div class=m style="margin-top8px;margin-top:8px">想自己捏人：往下依序 ①取名 ②選出身 ③選天賦 ④按最下面的「入　宮」（按鈕會一直固定在畫面底部）。第一次玩建議用快速開始。</div></div>`);
+ const m=document.querySelector('#app main:not(.mmenu)');if(m&&m.querySelector('button.go')){const bg=getComputedStyle(document.body).backgroundColor;m.style.cssText+=`;position:sticky;bottom:0;z-index:9;padding:8px 0 calc(8px + env(safe-area-inset-bottom,0px));background:${bg}`}}}catch(x){console.log('r30i',x)}return r};
+window.qs30=()=>{G=R(0,GS.length-1);GCt=GS[G][4];T=R(0,TS.length-1);AT=null;intro();start()};
+})();
+/* 主選單：新遊戲永遠是醒目的主按鈕，另附一鍵開始 */
+(function(){
+if(typeof mainMenu!=='function')return;
+const _mm=mainMenu;mainMenu=function(){const r=_mm.apply(this,arguments);try{const nb=document.querySelector('main.mmenu button[onclick="menuNew()"]');if(nb&&!document.querySelector('.st30')){
+ const g1=nb.parentElement;nb.remove();
+ g1.insertAdjacentHTML('beforebegin',`<div class="cd st30" style="text-align:center"><button class=go style="width:100%;letter-spacing:.2em" onclick="menuNew()">開始新遊戲</button><div class=m style="margin:8px 0">第一次玩？先按「一鍵開始」，系統隨機替你選好身分，直接入宮。</div><button class=s style="width:100%" onclick="qs30()">🎲 一鍵開始（隨機入宮）</button></div>`)}}catch(x){console.log('r30m',x)}return r};
+})();
 
 deco();intro();
 
