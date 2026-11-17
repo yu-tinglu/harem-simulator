@@ -4127,11 +4127,12 @@ const IMP=/廢|冊封|立后|病危|薨|遺詔|和親|賜死|謀逆|立儲|儲�
 const KEEP=/衝突|恃寵而驕|部族|幼主|鄰部|來信問政|求援|宮人向皇帝遞話|扶立|朝貢|攝政|廢后/;
 /* 小事自動處理 */
 let _RX=0;
-function pickK(e){const o=e.o||[];let k=o.findIndex(x=>!/險|極|耗銀|耗龍|反噬/.test(x[0]));if(k<0)k=o.findIndex(x=>!/險|極/.test(x[0]));return k<0?0:k}
+function pickK(e){const o=e.o||[];let k=o.findIndex(x=>!/險|極|耗銀|耗龍|反噬|動手腳|暗中|下毒|陷害|暗算|嫁禍|栽贓|收買|賜死|處死/.test(x[0]));if(k<0)k=o.findIndex(x=>!/險|極/.test(x[0]));return k<0?0:k}
 function rlxAuto(e){const k=pickK(e);const t=String(e.t||'').replace(/<[^>]*>/g,'').replace(/\s+/g,' ').slice(0,30),c=String(e.o[k][0]).replace(/[（(].*$/,'');
  const h=S.rlxh=S.rlxh||[];h.unshift({y:Math.floor(S.t/12),t:t+'→'+c});if(h.length>40)h.length=40;S.rlxn=(S.rlxn||0)+1;V(k)}
-const _n29=next;next=function(){const r=_n29.apply(this,arguments);if(_RX||!rlxOn()||!S||!S.me||S.over||S.scn||S.ch||S.t<6)return r;_RX=1;
- try{let w=0;while(S.ev&&!S.over&&!S.scn&&!S.ch&&w++<10){const e=S.ev;if(!e.o||!e.o.length||evCritical(e)||(e.story&&IMP.test(String(e.t||'')))||e.keep||KEEP.test(String(e.t||'')))break;rlxAuto(e)}}catch(x){console.log('r29',x)}finally{_RX=0}return r};
+let _RXt=-1,_RXn=0;
+const _n29=next;next=function(){const r=_n29.apply(this,arguments);if(S&&S.t!==_RXt){_RXt=S.t;_RXn=0}if(_RXn>=8)return r;if(_RX||!rlxOn()||!S||!S.me||S.over||S.scn||S.ch||S.t<6)return r;_RX=1;
+ try{let w=0;while(S.ev&&!S.over&&!S.scn&&!S.ch&&w++<10){const e=S.ev;if(!e.o||!e.o.length||evCritical(e)||(e.story&&IMP.test(String(e.t||'')))||e.keep||KEEP.test(String(e.t||'')))break;_RXn++;rlxAuto(e)}}catch(x){console.log('r29',x)}finally{_RX=0}return r};
 /* 每月事件上限、後台提前 */
 const _ec=window.evCap;window.evCap=()=>rlxOn()?2:(_ec?_ec():4);
 const _bo=window.bgOn;window.bgOn=()=>{try{if(_bo&&_bo())return true;return rlxOn()&&S&&S.me&&!S.over&&!S.reg&&S.t>=36&&(gs('hg_bgm')||'auto')!=='off'}catch(e){return false}};
@@ -4154,7 +4155,17 @@ HELP.push(['輕鬆模式','預設開啟：小事自動處理、只留重要的�
 (function(){
 const gs=k=>{try{return localStorage.getItem(k)}catch(e){return null}},ss=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
 /* 手動事件在輕鬆模式下，替較穩妥的選項標上「建議」，可無腦點 */
-const _n30=next;next=function(){const r=_n30.apply(this,arguments);try{const e=S&&S.ev;if(e&&e.o&&e.o.length>1&&window.rlxOn&&rlxOn()&&!e._sg){e._sg=1;const o=e.o,k=o.findIndex(x=>!/險|極|耗銀|耗龍|反噬|廢|殺|死/.test(x[0]));if(k>=0&&!/建議/.test(o[k][0])){o[k]=[o[k][0]+'　★建議',o[k][1]];render()}}}catch(x){console.log('r30',x)}return r};
+const _n30=next;
+window.sug31=function(e){const m=S.me,o=e.o,bad=/險|極|耗銀|耗龍|反噬|廢|殺|死|動手腳|暗中|下毒|陷害|暗算|嫁禍|栽贓|收買/;let best=-1,bs=-1e9,why='較穩妥、不傷聖寵';
+ o.forEach((x,i)=>{const L=String(x[0]);let sc=0,w='';if(bad.test(L))sc-=100;
+  if(m.silver<120&&/耗銀|賞賜|重金|花銀/.test(L))sc-=30;
+  if(m.hp<50&&/調養|休養|醫|藥|靜養|休息/.test(L)){sc+=20;w='健康偏低，先顧身體'}
+  if((m.dsus||0)>=40&&/示忠|低調|婉拒|推辭|澄清|謙|不敢/.test(L)){sc+=20;w='疑心偏高，先低調'}
+  if(m.favor<40&&/邀寵|獻|侍|陪|梳妝/.test(L)){sc+=10;w='聖寵偏低，先爭取恩寵'}
+  if(m.silver<120&&!/耗銀/.test(L)&&!w)w='銀兩吃緊，選不花錢的';
+  sc-=i*0.01;if(sc>bs){bs=sc;best=i;why=w||why}});
+ return bs<-50?null:{k:best,why}};
+next=function(){const r=_n30.apply(this,arguments);try{const e=S&&S.ev;if(e&&e.o&&e.o.length>1&&window.rlxOn&&rlxOn()&&!e._sg){e._sg=1;const g=sug31(e);if(g&&!/建議/.test(e.o[g.k][0])){e.o[g.k]=[e.o[g.k][0]+'　★建議（'+g.why+'）',e.o[g.k][1]];render()}}}catch(x){console.log('r30',x)}return r};
 /* 開局先選定位 */
 const _st30=start;start=function(){const r=_st30.apply(this,arguments);try{if(!gs('hg_rlxset')&&S&&S.me&&!S.ch){choose('你想怎麼玩這一局？（之後可在「紀事」→輕鬆模式更改）',[
  {l:'悠閒無腦：小事自動處理，重要的才問我，選項標★建議，一局約十幾二十年',f(){ss('hg_rlx','on');ss('hg_rlxset','1');L('已選「悠閒無腦」：放心點★建議的選項即可。')}},
@@ -4254,7 +4265,7 @@ const _u36=uiPost;uiPost=function(){const r=_u36.apply(this,arguments);try{const
   document.body.appendChild(d);const m=document.querySelector('#app main');if(m)m.style.paddingBottom='calc(52px + '+(parseInt(getComputedStyle(m).paddingBottom)||0)+'px)'}}catch(x){console.log('r36',x)}return r};
 })();
 
-(function(){const st=document.createElement('style');st.id='ac31s';st.textContent='html body .ntf14{bottom:calc(var(--acb,0px) + 86px)!important}';document.head.appendChild(st)})();
+(function(){const st=document.createElement('style');st.id='ac31s';st.textContent='html body #ntf.ntf14{bottom:calc(var(--acb,0px) + 86px + env(safe-area-inset-bottom,0px))!important}';document.head.appendChild(st)})();
 /* 一鍵方針納入「經營產業」：自動開鋪、整頓、擴建、宣傳 */
 (function(){
 ['斂財'].forEach(k=>POLS[k].unshift('經營產業','經營產業'));['固寵','人脈','守成','養生'].forEach(k=>POLS[k].push('經營產業'));
@@ -4276,6 +4287,41 @@ const _ba=bizAct;bizAct=function(){if(!_AUTO)return _ba.apply(this,arguments);
   else if(/宣傳/.test(lab)){let mn=1e9;sh.forEach((s,ix)=>{if(s.pop<mn){mn=s.pop;j=ix}})}
   C(j)}
  return 1};
+})();
+
+/* ===== round31：新手引導、年度小結、事件摘要、結局對照 ===== */
+(function(){
+const gs=k=>{try{return localStorage.getItem(k)}catch(e){return null}},ss=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+const css=document.createElement('style');css.textContent='@keyframes pl31{0%,100%{box-shadow:0 0 0 0 rgba(214,70,90,.55)}50%{box-shadow:0 0 0 10px rgba(214,70,90,0)}}.ac31 .pulse31{animation:pl31 1.4s infinite}.ob31{position:fixed;top:calc(env(safe-area-inset-top,0px) + 64px);left:50%;transform:translateX(-50%);width:min(92vw,420px);z-index:41;background:#4a2a3a;color:#fff;border-radius:14px;padding:10px 34px 10px 14px;font-size:14px;line-height:1.5;box-shadow:0 4px 16px rgba(0,0,0,.35)}.ob31 b{color:#ffd9a0}.ob31 .x{position:absolute;right:8px;top:6px;background:none;border:0;color:#fff;font-size:18px;min-height:0;padding:2px 6px}.ys31 .scroll p{margin:6px 0}.ev31s{cursor:pointer}.ev31s u{color:var(--accent,#c0394f);text-decoration:none;white-space:nowrap}';css.textContent+='html body:has(.scrim:not(.ys31)) #ntf.ntf14{display:none!important}';document.head.appendChild(css);
+/* 1 新手引導 */
+function ob(){const old=document.querySelector('.ob31');const bar=document.querySelector('.ac31');if(!bar||!S||S.over){if(old)old.remove();return}const st=gs('hg_ob31')||'0';if(st==='2'){if(old)old.remove();return}
+ let msg='';if(st==='0'&&S.t<1){msg='<b>第一次玩？</b>先按「▶ 無腦玩一個月」，系統會幫你處理。想自己決定，就點上面導覽的「行動」。';const b=bar.querySelector('button.go');if(b)b.classList.add('pulse31')}
+ else if(st==='0'&&S.t>=1){ss('hg_ob31','1');msg='<b>玩完一個月了！</b>之後可以按「⏩ 無腦玩一年」，或到「行動」分頁自己選。';setTimeout(()=>{ss('hg_ob31','2');const o=document.querySelector('.ob31');if(o)o.remove()},9000)}
+ else if(st==='1'){ss('hg_ob31','2');return}
+ if(!msg){if(old)old.remove();return}if(old&&old.dataset.k===msg)return;if(old)old.remove();const d=document.createElement('div');d.className='ob31';d.dataset.k=msg;d.innerHTML=msg+'<button class=x onclick="this.parentNode.remove();try{localStorage.setItem(\'hg_ob31\',\'2\')}catch(e){}">×</button>';document.body.appendChild(d)}
+/* 2 年度小結 */
+const _m31=mend;mend=function(){const r=_m31.apply(this,arguments);try{if(S&&!S.reg&&S.me&&S.t>0&&S.t%12===0){const m=S.me,p=S.y31,cur={t:S.t,rk:m.rank,fv:m.favor,sv:m.silver,hp:m.hp,kd:m.kids.length,sh:(m.shops||[]).length,rn:S.rlxn||0};
+  if(p&&p.t<S.t){const d=(a,b)=>{const x=Math.round(b-a);return x>0?'＋'+x:x<0?'－'+(-x):'±0'};const L=[];
+   L.push(m.rank>p.rk?`位份晉升：${RK[p.rk]}→<b>${RK[m.rank]}</b>`:m.rank<p.rk?`位份下降：${RK[p.rk]}→${RK[m.rank]}`:`位份不變：${RK[m.rank]}`);
+   L.push(`聖寵 ${Math.round(m.favor)}（${d(p.fv,m.favor)}）・健康 ${Math.round(m.hp)}（${d(p.hp,m.hp)}）`);L.push(`銀兩 ${Math.round(m.silver)}（${d(p.sv,m.silver)}）`);
+   if(cur.kd!==p.kd)L.push(`子女 ${cur.kd} 人（${d(p.kd,cur.kd)}）`);if(cur.sh!==p.sh)L.push(`鋪子 ${cur.sh} 間（${d(p.sh,cur.sh)}）`);
+   if(cur.rn>p.rn)L.push(`自動處理了 ${cur.rn-p.rn} 件小事`);
+   S.ysum31={y:Math.floor(S.t/12),L}}
+  S.y31=cur}}catch(x){console.log('r31m',x)}return r};
+window.ys31=()=>{S.ysum31=null;const e=document.querySelector('.ys31');if(e)e.remove()};
+/* 4 事件摘要 + 5 結局對照 + 掛載 */
+function shorten31(){document.querySelectorAll('.scrim .scroll>p').forEach(p=>{if(p.dataset.s31||p.closest('.ys31'))return;p.dataset.s31='1';const t=p.textContent;if(t.length<56)return;const full=p.innerHTML;const m=t.match(/^[^。！？]{10,60}[。！？]/);if(!m)return;
+  p.innerHTML='';const sp=document.createElement('span');sp.textContent=m[0]+' ';const u=document.createElement('u');u.textContent='▾看全文';p.className+=' ev31s';p.appendChild(sp);p.appendChild(u);p.onclick=()=>{p.innerHTML=full;p.className=p.className.replace(' ev31s','');p.onclick=null}});}
+const _r31=render;render=function(){const r=_r31.apply(this,arguments);try{shorten31()}catch(x){console.log('r31s',x)}return r};
+const _u31=uiPost;uiPost=function(){const r=_u31.apply(this,arguments);try{
+ const y=document.querySelector('.ys31');if(y&&(!S||!S.ysum31||S.over))y.remove();
+ if(S&&S.ysum31&&!S.ev&&!S.ch&&!S.scn&&!S.over&&!document.querySelector('.ys31')&&!_AUTO){const d=document.createElement('div');d.className='scrim ys31';d.innerHTML=`<div class=scroll><span class=tag>第 ${S.ysum31.y} 年小結</span>${S.ysum31.L.map(x=>'<p>'+x+'</p>').join('')}<button onclick="ys31()">知道了</button></div>`;document.body.appendChild(d)}
+ ob();
+ shorten31();
+ if(S&&S.over&&S.me&&!document.querySelector('.cmp31')){const main=document.querySelector('main');if(main){const cur={sc:scoreOf(),yr:Math.floor(S.t/12),kd:S.me.kids.length,rk:RK[S.me.rank]};if(!S.cmp31){S.cmp31=1;let pv=null;try{pv=JSON.parse(gs('hg_last31')||'null')}catch(e){}S.cmpPrev=pv;ss('hg_last31',JSON.stringify(cur))}
+  const pr=S.cmpPrev;const a=(x,y)=>y==null?'—':x>y?`<b style="color:#2e8b57">▲${x-y}</b>`:x<y?`<b style="color:#c0394f">▼${y-x}</b>`:'＝';
+  main.insertAdjacentHTML('afterbegin',`<div class="cd cmp31"><h3>這一局 vs 上一局</h3>${pr?`<div class=m>評分 ${cur.sc}（上局 ${pr.sc}）${a(cur.sc,pr.sc)}<br>入宮 ${cur.yr} 年（上局 ${pr.yr}）${a(cur.yr,pr.yr)}<br>子女 ${cur.kd} 人（上局 ${pr.kd}）${a(cur.kd,pr.kd)}<br>最高位份 ${cur.rk}（上局 ${pr.rk}）</div>`:`<div class=m>這是你第一個有紀錄的結局：評分 ${cur.sc}、入宮 ${cur.yr} 年、子女 ${cur.kd} 人、位份 ${cur.rk}。下一局會和這局比較。</div>`}</div>`)}}
+ }catch(x){console.log('r31',x)}return r};
 })();
 
 deco();intro();
