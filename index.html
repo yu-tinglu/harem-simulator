@@ -4189,7 +4189,7 @@ const stepOf=el=>{const h=el.querySelector&&el.querySelector('h3'),t=h?h.textCon
  if(el.tagName==='MAIN')return 2;if(/選擇天賦|前世傳承/.test(t)||/lg31/.test(el.className))return 1;if(/容貌|身體|技藝/.test(t))return 1;
  if(/人生目標|難度|目標/.test(t))return 2;if(!h&&el.tagName==='DIV'&&el.classList.contains('m'))return 2;return 0};
 const NM=['① 角色與出身','② 外貌與天賦','③ 目標與入宮'];
-const _i32=intro;intro=function(){const r=_i32.apply(this,arguments);try{const app=document.getElementById('app');if(!app||S)return r;if(IST<0)IST=0;if(IST>2)IST=2;
+const _i32=intro;intro=function(){const r=_i32.apply(this,arguments);try{const app=document.getElementById('app');if(!app||S||app.querySelector('main.mmenu'))return r;if(IST<0)IST=0;if(IST>2)IST=2;
  [...app.children].forEach(el=>{if(el.id==='dbBoard')return;const s=el.classList.contains('splash')?(IST==0?-1:-2):stepOf(el);if(s===-2||(s>=0&&s!==IST))el.style.display='none'});
  const hd=document.createElement('div');hd.className='cd wz31h';hd.innerHTML=`<div class=m style="text-align:center"><b>步驟 ${IST+1}／3：${NM[IST].slice(2)}</b><br>${[0,1,2].map(i=>`<span style="opacity:${i==IST?1:.35}">${NM[i]}</span>`).join('　')}</div>`;
  const first=[...app.children].find(el=>el.style.display!=='none'&&!el.classList.contains('splash'));if(first)first.before(hd);
