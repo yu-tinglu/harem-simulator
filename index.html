@@ -4145,7 +4145,7 @@ window.rlxSet=v=>{ss('hg_rlx',v);render()};
 window.rlxEnd=()=>{if(!S||!S.me||S.over)return;if(S.reg){L('你正在垂簾聽政，請待皇帝親政後再結算。');render();return}
  choose('確定要在此刻功成身退、結算本局嗎？',[{l:'結算本局（以目前的成就收尾）',f(){const m=S.me,k=(m.kids||[]).length,y=Math.floor(S.t/12);over('功成身退',`你在宮中度過了${y}年，位至${(typeof RK!=='undefined'&&RK[m.rank])||'高位'}，膝下${k}名子女。你決定放下一切，安穩度過餘生。`)}},{l:'再玩一會兒',f(){L('你決定再看看。')}}])};
 const _u29=uiPost;uiPost=function(){const r=_u29.apply(this,arguments);try{if(typeof TAB!=='undefined'&&TAB===5&&S&&S.me){const main=document.querySelector('main');if(main&&!main.querySelector('.rx29')){const on=rlxOn(),h=(S.rlxh||[]).slice(0,12).map(x=>`<div class=m>第${x.y}年：${x.t}</div>`).join('')||'<div class=m>尚無自動處理紀錄。</div>';
- const html=`<details class="cd rx29" open><summary><b>輕鬆模式</b>　<span class=m>${on?'目前：開啟':'目前：關閉'}</span></summary><div class=m style="margin:6px 0">開啟後：小事自動處理（只選較穩妥的選項），只有廢立、儲君、病危、婚事、冊封等重要的事才請你決定；每月事件變少，嬪妃日常第3年起轉入後台；皇帝壽命較短，一局大約縮短到十幾二十年。</div><select onchange="rlxSet(this.value)"><option value="on"${on?' selected':''}>開啟（推薦）</option><option value="off"${on?'':' selected'}>關閉（完整體驗）</option></select> <button onclick="rlxEnd()">功成身退・結算本局</button><div style="margin-top:8px"><b class=m>最近自動處理的事</b>${h}</div></details>`;
+ const html=`<details class="cd rx29"><summary><b>輕鬆模式</b>　<span class=m>${on?'目前：開啟':'目前：關閉'}</span></summary><div class=m style="margin:6px 0">開啟後：小事自動處理（只選較穩妥的選項），只有廢立、儲君、病危、婚事、冊封等重要的事才請你決定；每月事件變少，嬪妃日常第3年起轉入後台；皇帝壽命較短，一局大約縮短到十幾二十年。</div><select onchange="rlxSet(this.value)"><option value="on"${on?' selected':''}>開啟（推薦）</option><option value="off"${on?'':' selected'}>關閉（完整體驗）</option></select> <button onclick="rlxEnd()">功成身退・結算本局</button><div style="margin-top:8px"><b class=m>最近自動處理的事</b>${h}</div></details>`;
  const a=main.querySelector('.bg25');if(a)a.insertAdjacentHTML('beforebegin',html);else main.insertAdjacentHTML('afterbegin',html)}}}catch(e){console.log('u29',e)}return r};
 HELP.push(['輕鬆模式','預設開啟：小事自動處理、只留重要的選擇；每月事件變少；第3年起嬪妃日常轉入後台；皇帝壽命較短，一局縮短。可在「紀事」關閉，或隨時「功成身退」結算。']);
 })();
@@ -4209,6 +4209,24 @@ const _s32=start;start=function(){IST=0;return _s32.apply(this,arguments)};
 const _i33=intro;intro=function(){const r=_i33.apply(this,arguments);try{[...document.querySelectorAll('#app .cd')].forEach(c=>{const h=c.querySelector('h3');if(h&&/幫助作者改進遊戲/.test(h.textContent))c.remove()})}catch(x){}return r};
 const _ca=window.csAnswer;window.csAnswer=function(v){const r=_ca.apply(this,arguments);try{if(v&&S&&S.over&&typeof reportRun==='function')reportRun()}catch(x){}return r};
 const _u33=uiPost;uiPost=function(){const r=_u33.apply(this,arguments);try{if(S&&S.over&&typeof csGet==='function'&&!csGet().asked){const main=document.querySelector('main');if(main&&!main.querySelector('.cs33')){main.insertAdjacentHTML('afterbegin',csBanner().replace('<div class=cd>','<div class="cd cs33">').replace('你願意在遊戲結束時，匿名回傳遊玩結果','這一局結束了，你願意匿名回傳這一局的結果'))}}}catch(x){console.log('r33',x)}return r};
+})();
+/* 所有卡片預設收起（點標題展開）；新手說明內可切換「預設展開」 */
+(function(){
+const gp=()=>{try{return localStorage.getItem('hg_cardsopen')==='1'}catch(e){return false}};
+function foldMenu(){const app=document.getElementById('app');if(!app||S)return;
+ app.querySelectorAll('.cd').forEach(c=>{if(c.classList.contains('st30')||c.classList.contains('wz31h')||c.classList.contains('hero'))return;const h=c.firstElementChild;if(!h||h.tagName!=='H3'||c.querySelector('.wz31'))return;
+  if(document.querySelector('#app .wz31h'))return;/* 捏人頁：內容就是主體，不收 */
+  const key='menu|'+h.textContent.replace(/[\s　0-9.]+.*$/,'').slice(0,8);c.dataset.fk=key;c.classList.add('fold');if(!h.querySelector('.fa')){const s=document.createElement('span');s.className='fa';s.textContent='▾';h.appendChild(s)}
+  const closed=FOLDS[key]!==undefined?!!FOLDS[key]:!gp();c.classList.toggle('closed',closed)})}
+function foldGame(){const app=document.getElementById('app');if(!app||!S||S.scn||S.over||gp())return;
+ app.querySelectorAll('main>.cd.fold').forEach(c=>{if(c.classList.contains('hero'))return;const k=c.dataset.fk;if(k&&FOLDS[k]===undefined&&!c.dataset.f30){c.dataset.f30='1';c.classList.add('closed')}})}
+const _u34=uiPost;uiPost=function(){const r=_u34.apply(this,arguments);try{foldMenu();foldGame()}catch(x){console.log('r34',x)}return r};
+const _mm2=window.mainMenu;if(typeof mainMenu==='function'){const o=mainMenu;mainMenu=function(){const r=o.apply(this,arguments);try{foldMenu()}catch(x){}return r}}
+const _in34=intro;intro=function(){const r=_in34.apply(this,arguments);try{foldMenu()}catch(x){}return r};
+window.cardPref34=v=>{try{localStorage.setItem('hg_cardsopen',v?'1':'0');FOLDS={};localStorage.setItem('hgfold','{}')}catch(e){}if(S)render();else{try{mainMenu()}catch(e){intro()}}const b=document.getElementById('cp34');if(b)b.innerHTML=cp34()};
+const cp34=()=>`<b>卡片收合</b><div class=m style="margin:4px 0">點任一卡片的標題，可展開或收起。目前：${gp()?'預設全部展開':'預設全部收起'}。</div><button class=s onclick="cardPref34(${gp()?0:1})">${gp()?'改成預設收起':'改成預設展開'}</button>`;
+const _ho=helpOpen;helpOpen=function(){const r=_ho.apply(this,arguments);try{const hb=document.querySelector('#help .hb');if(hb&&!hb.querySelector('#cp34')){const d=document.createElement('div');d.id='cp34';d.className='cd';d.innerHTML=cp34();hb.insertBefore(d,hb.children[1]||null)}}catch(x){console.log('r34h',x)}return r};
+window.helpOpen=helpOpen;
 })();
 
 deco();intro();
