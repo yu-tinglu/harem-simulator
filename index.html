@@ -4227,6 +4227,23 @@ const cp34=()=>`<b>卡片收合</b><div class=m style="margin:4px 0">點任一�
 const _ho=helpOpen;helpOpen=function(){const r=_ho.apply(this,arguments);try{const hb=document.querySelector('#help .hb');if(hb&&!hb.querySelector('#cp34')){const d=document.createElement('div');d.id='cp34';d.className='cd';d.innerHTML=cp34();hb.insertBefore(d,hb.children[1]||null)}}catch(x){console.log('r34h',x)}return r};
 window.helpOpen=helpOpen;
 })();
+/* 捏人頁順序：快速開始 → 名字/頭像 → 出身 → 外貌 → 天賦 → 傳承 → 畫像設定 → 遊戲簡介；存檔類卡片只留在主選單 */
+(function(){
+const _i35=intro;intro=function(){const r=_i35.apply(this,arguments);try{const app=document.getElementById('app');if(!app||S||app.querySelector('main.mmenu')||!app.querySelector('.wz31h'))return r;
+ const T=el=>{const h=el.querySelector&&el.querySelector(':scope>h3');return h?h.textContent.trim():''};
+ [...app.children].forEach(el=>{if(el.classList.contains('cd')&&/^(繼續上次的遊戲|存檔|存檔匯出|完整備份|讀取)/.test(T(el)))el.remove()});
+ const kids=[...app.children],find=f=>kids.find(f);
+ const who=find(e=>e.classList&&e.classList.contains('cd')&&e.querySelector('.who')&&!/我的畫像/.test(T(e)));
+ let lore=null;if(who){const p=who.querySelector(':scope>p.m');if(p){lore=p;p.remove()}}
+ const pick=re=>find(e=>e.classList&&e.classList.contains('cd')&&re.test(T(e)));
+ const ids=[who,pick(/^選擇出身/),pick(/^容貌/),pick(/^選擇天賦/),find(e=>e.classList&&e.classList.contains('lg31')),pick(/^我的畫像/)].filter(Boolean);
+ const qs=app.querySelector('.qs30');if(!qs)return r;let cur=qs;
+ ids.forEach(e=>{cur.after(e);cur=e});
+ if(lore&&!app.querySelector('.lore35')){const c=document.createElement('div');c.className='cd lore35';const hh=document.createElement('h3');hh.textContent='遊戲簡介';c.appendChild(hh);c.appendChild(lore);cur.after(c);c.dataset.fk='menu|遊戲簡介';c.classList.add('fold');const fa=document.createElement('span');fa.className='fa';fa.textContent='▾';hh.appendChild(fa);c.classList.toggle('closed',FOLDS['menu|遊戲簡介']!==undefined?!!FOLDS['menu|遊戲簡介']:true);
+  const st=ids.length?ids[0].style.display:'';c.style.display=st;/* 與第1頁同顯示 */if(window.IST>0)c.style.display='none'}
+}catch(x){console.log('r35',x)}return r};
+const _u35=uiPost;
+})();
 
 deco();intro();
 
