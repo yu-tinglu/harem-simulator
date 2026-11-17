@@ -4362,6 +4362,14 @@ function regAuto(months){
 const _ar=autoRun;autoRun=function(n){if(S&&S.reg&&!S.over)return regAuto(n);return _ar.apply(this,arguments)};
 })();
 
+/* ===== round33：賞下人／資助母家／資助母國 的花費依對象與身家拉開比例 ===== */
+(function(){
+const TIER=[[/普賞宮人|厚賞各宮管事|收買對手的下人/,.5],[/整個母族|小額資助|大筆資助/,1.2],[/撥軍費|賑濟興農|遣使修好/,2]];
+const wf=()=>Math.max(1,Math.min(5,Math.sqrt(((S&&S.me&&S.me.silver)||0)/500)));
+const _ch=choose;choose=function(t,o){try{if(Array.isArray(o)&&!_RS3){const f0=wf();o.forEach(x=>{const lab=String(x.l||'');const tr=TIER.find(r=>r[0].test(lab));const mm=/耗銀(\d+)/.exec(lab);if(!tr||!mm||!x.f)return;const base=+mm[1],nc=Math.max(5,Math.round(base*tr[1]*f0/5)*5);if(nc===base)return;x.l=lab.replace(/耗銀\d+/,'耗銀'+nc);const of=x.f,ex=nc-base;x.f=function(){const m=S.me;if(m.silver<nc){L('銀兩不足。');return}const s0=m.silver;m.silver-=ex;const r=of.apply(this,arguments);if(s0-m.silver<nc)m.silver=Math.min(s0,m.silver+ex);return r}})}}catch(e){console.log('r33',e)}return _ch.apply(this,arguments)};
+let _RS3=0;
+})();
+
 deco();intro();
 
 
