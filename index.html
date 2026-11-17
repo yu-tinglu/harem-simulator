@@ -4204,6 +4204,12 @@ const _s32=start;start=function(){IST=0;return _s32.apply(this,arguments)};
 
 /* 手機：輸入框 16px 避免 iOS 點擊時整頁放大；開局頁標題縮小 */
 (function(){const st=document.createElement('style');st.id='fs31';st.textContent='html{-webkit-text-size-adjust:100%;text-size-adjust:100%}input,select,textarea{font-size:16px!important}@media(max-width:600px){.wz31h~.splash h1,.splash h1{font-size:clamp(30px,10vw,40px)!important}.menuhero .mcover{max-height:34vh;width:auto}}';document.head.appendChild(st)})();
+/* 「幫助作者改進遊戲」：開局不再詢問，改在結局畫面詢問；同意後補送這一局 */
+(function(){
+const _i33=intro;intro=function(){const r=_i33.apply(this,arguments);try{[...document.querySelectorAll('#app .cd')].forEach(c=>{const h=c.querySelector('h3');if(h&&/幫助作者改進遊戲/.test(h.textContent))c.remove()})}catch(x){}return r};
+const _ca=window.csAnswer;window.csAnswer=function(v){const r=_ca.apply(this,arguments);try{if(v&&S&&S.over&&typeof reportRun==='function')reportRun()}catch(x){}return r};
+const _u33=uiPost;uiPost=function(){const r=_u33.apply(this,arguments);try{if(S&&S.over&&typeof csGet==='function'&&!csGet().asked){const main=document.querySelector('main');if(main&&!main.querySelector('.cs33')){main.insertAdjacentHTML('afterbegin',csBanner().replace('<div class=cd>','<div class="cd cs33">').replace('你願意在遊戲結束時，匿名回傳遊玩結果','這一局結束了，你願意匿名回傳這一局的結果'))}}}catch(x){console.log('r33',x)}return r};
+})();
 
 deco();intro();
 
