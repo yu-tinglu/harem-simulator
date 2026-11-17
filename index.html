@@ -4163,7 +4163,7 @@ const _st30=start;start=function(){const r=_st30.apply(this,arguments);try{if(!g
 /* 開局頁：快速開始＋步驟提示＋入宮鈕固定在底部 */
 (function(){
 const _i30=intro;intro=function(){const r=_i30.apply(this,arguments);try{const sp=document.querySelector('#app .splash:not(.menuhero)');if(sp&&!document.querySelector('.qs30')){
- sp.insertAdjacentHTML('afterend',`<div class="cd qs30"><h3>怎麼開始？</h3><button class=go style="width:100%;letter-spacing:0" onclick="qs30()">🎲 快速開始（隨機身分，直接入宮）</button><div class=m style="margin-top8px;margin-top:8px">想自己捏人：往下依序 ①取名 ②選出身 ③選天賦 ④按最下面的「入　宮」（按鈕會一直固定在畫面底部）。第一次玩建議用快速開始。</div></div>`);
+ sp.insertAdjacentHTML('afterend',`<div class="cd qs30"><h3>怎麼開始？</h3><button class=go style="width:100%;letter-spacing:0" onclick="qs30()">🎲 快速開始（隨機身分，直接入宮）</button><div class=m style="margin-top8px;margin-top:8px">想自己捏人：往下取名、選出身、選天賦，再按「下一步」。</div></div>`);
  const m=document.querySelector('#app main:not(.mmenu)');if(m&&m.querySelector('button.go')){const bg=getComputedStyle(document.body).backgroundColor;m.style.cssText+=`;position:sticky;bottom:0;z-index:9;padding:8px 0 calc(8px + env(safe-area-inset-bottom,0px));background:${bg}`}}}catch(x){console.log('r30i',x)}return r};
 window.qs30=()=>{G=R(0,GS.length-1);GCt=GS[G][4];T=R(0,TS.length-1);AT=null;intro();start()};
 })();
@@ -4191,7 +4191,7 @@ const stepOf=el=>{const h=el.querySelector&&el.querySelector('h3'),t=h?h.textCon
 const NM=['① 角色・出身・天賦','② 目標與入宮'];
 const _i32=intro;intro=function(){const r=_i32.apply(this,arguments);try{const app=document.getElementById('app');if(!app||S||app.querySelector('main.mmenu'))return r;if(IST<0)IST=0;if(IST>1)IST=1;
  [...app.children].forEach(el=>{if(el.id==='dbBoard')return;const s=el.classList.contains('splash')?(IST==0?-1:-2):stepOf(el);if(s===-2||(s>=0&&s!==IST))el.style.display='none'});
- const hd=document.createElement('div');hd.className='cd wz31h';hd.innerHTML=`<div class=m style="text-align:center"><b>步驟 ${IST+1}／2：${NM[IST].slice(2)}</b><br>${[0,1].map(i=>`<span style="opacity:${i==IST?1:.35}">${NM[i]}</span>`).join('　')}</div>`;
+ const hd=document.createElement('div');hd.className='cd wz31h';hd.style.cssText='position:sticky;top:0;z-index:8;padding:6px 10px;margin-bottom:8px';hd.innerHTML=`<div class=m style="text-align:center;margin:0"><b>步驟 ${IST+1}／2</b>　${NM[IST].slice(2)}</div>`;
  const first=[...app.children].find(el=>el.style.display!=='none'&&!el.classList.contains('splash'));if(first)first.before(hd);
  if(IST<1){const bar=document.createElement('div');bar.className='wz31';bar.style.cssText='position:sticky;bottom:0;z-index:9;display:flex;gap:8px;padding:8px 0 calc(8px + env(safe-area-inset-bottom,0px));background:'+getComputedStyle(document.body).backgroundColor;
   bar.innerHTML=(IST>0?'<button class=s style="flex:1" onclick="wz31(-1)">‹ 上一步</button>':'')+`<button class=go style="flex:2" onclick="wz31(1)">下一步 ›</button>`;app.appendChild(bar)}
@@ -4201,6 +4201,9 @@ window.wz31=d=>{IST=Math.max(0,Math.min(1,IST+d));intro();window.scrollTo(0,0)};
 const _mn=window.menuNew;window.menuNew=function(){IST=0;return _mn.apply(this,arguments)};
 const _s32=start;start=function(){IST=0;return _s32.apply(this,arguments)};
 })();
+
+/* 手機：輸入框 16px 避免 iOS 點擊時整頁放大；開局頁標題縮小 */
+(function(){const st=document.createElement('style');st.id='fs31';st.textContent='html{-webkit-text-size-adjust:100%;text-size-adjust:100%}input,select,textarea{font-size:16px!important}@media(max-width:600px){.wz31h~.splash h1,.splash h1{font-size:clamp(30px,10vw,40px)!important}.menuhero .mcover{max-height:34vh;width:auto}}';document.head.appendChild(st)})();
 
 deco();intro();
 
