@@ -4176,9 +4176,30 @@ const _mm=mainMenu;mainMenu=function(){const r=_mm.apply(this,arguments);try{con
 })();
 /* 前世傳承：放在「選擇天賦」的下一張卡，開局時不會被忽略 */
 (function(){
-const _i31=intro;intro=function(){const r=_i31.apply(this,arguments);try{if(typeof lgCard==='function'&&typeof lgGet==='function'&&lgGet().g>0&&!document.querySelector('#app .lg31')){
+const _i31=intro;intro=function(){const r=_i31.apply(this,arguments);try{[...document.querySelectorAll('#app > .cd')].forEach(c=>{const h=c.querySelector('h3');if(h&&/^(前世傳承|今日挑戰)/.test(h.textContent.trim()))c.remove()});if(typeof lgCard==='function'&&typeof lgGet==='function'&&lgGet().g>0&&!document.querySelector('#app .lg31')){
  const h=[...document.querySelectorAll('#app .cd h3')].find(x=>/選擇天賦/.test(x.textContent));const card=h&&h.closest('.cd');
  if(card){const w=document.createElement('div');w.className='lg31';w.innerHTML=lgCard();card.after(w)}}}catch(x){console.log('r31',x)}return r};
+})();
+/* 夜間模式：頭像不再偏色（精確抵銷整頁反相） */
+(function(){const st=document.createElement('style');st.id='dk31';st.textContent='html.dk18 img,html.dk18 video,html.dk18 .av18,html.dk18 img.av,html.dk18 img.av[big]{filter:invert(1) contrast(1.25) hue-rotate(180deg)!important}';document.head.appendChild(st)})();
+/* 捏人分三步：角色與出身 → 天賦 → 目標與入宮，入宮鈕不再和選天賦同頁 */
+(function(){
+window.IST=0;
+const stepOf=el=>{const h=el.querySelector&&el.querySelector('h3'),t=h?h.textContent:'';
+ if(el.tagName==='MAIN')return 2;if(/選擇天賦|前世傳承/.test(t)||/lg31/.test(el.className))return 1;if(/容貌|身體|技藝/.test(t))return 1;
+ if(/人生目標|難度|目標/.test(t))return 2;if(!h&&el.tagName==='DIV'&&el.classList.contains('m'))return 2;return 0};
+const NM=['① 角色與出身','② 外貌與天賦','③ 目標與入宮'];
+const _i32=intro;intro=function(){const r=_i32.apply(this,arguments);try{const app=document.getElementById('app');if(!app||S)return r;if(IST<0)IST=0;if(IST>2)IST=2;
+ [...app.children].forEach(el=>{if(el.id==='dbBoard')return;const s=el.classList.contains('splash')?(IST==0?-1:-2):stepOf(el);if(s===-2||(s>=0&&s!==IST))el.style.display='none'});
+ const hd=document.createElement('div');hd.className='cd wz31h';hd.innerHTML=`<div class=m style="text-align:center"><b>步驟 ${IST+1}／3：${NM[IST].slice(2)}</b><br>${[0,1,2].map(i=>`<span style="opacity:${i==IST?1:.35}">${NM[i]}</span>`).join('　')}</div>`;
+ const first=[...app.children].find(el=>el.style.display!=='none'&&!el.classList.contains('splash'));if(first)first.before(hd);
+ if(IST<2){const bar=document.createElement('div');bar.className='wz31';bar.style.cssText='position:sticky;bottom:0;z-index:9;display:flex;gap:8px;padding:8px 0 calc(8px + env(safe-area-inset-bottom,0px));background:'+getComputedStyle(document.body).backgroundColor;
+  bar.innerHTML=(IST>0?'<button class=s style="flex:1" onclick="wz31(-1)">‹ 上一步</button>':'')+`<button class=go style="flex:2" onclick="wz31(1)">下一步 ›</button>`;app.appendChild(bar)}
+ else{const m=app.querySelector('main:not(.mmenu)'),g=m&&m.querySelector('button.go');if(g&&!m.querySelector('.bk31'))g.insertAdjacentHTML('beforebegin','<button class="s bk31" style="width:100%;margin-bottom:8px" onclick="wz31(-1)">‹ 上一步</button>')}
+}catch(x){console.log('r32',x)}return r};
+window.wz31=d=>{IST=Math.max(0,Math.min(2,IST+d));intro();window.scrollTo(0,0)};
+const _mn=window.menuNew;window.menuNew=function(){IST=0;return _mn.apply(this,arguments)};
+const _s32=start;start=function(){IST=0;return _s32.apply(this,arguments)};
 })();
 
 deco();intro();
