@@ -4214,8 +4214,7 @@ const _u33=uiPost;uiPost=function(){const r=_u33.apply(this,arguments);try{if(S&
 (function(){
 const gp=()=>{try{return localStorage.getItem('hg_cardsopen')==='1'}catch(e){return false}};
 function foldMenu(){const app=document.getElementById('app');if(!app||S)return;
- app.querySelectorAll('.cd').forEach(c=>{if(c.classList.contains('st30')||c.classList.contains('wz31h')||c.classList.contains('hero'))return;const h=c.firstElementChild;if(!h||h.tagName!=='H3'||c.querySelector('.wz31'))return;
-  if(document.querySelector('#app .wz31h'))return;/* 捏人頁：內容就是主體，不收 */
+ app.querySelectorAll('.cd').forEach(c=>{if(c.classList.contains('st30')||c.classList.contains('qs30')||c.classList.contains('wz31h')||c.classList.contains('hero'))return;const h=c.firstElementChild;if(!h||h.tagName!=='H3'||c.querySelector('.wz31'))return;
   const key='menu|'+h.textContent.replace(/[\s　0-9.]+.*$/,'').slice(0,8);c.dataset.fk=key;c.classList.add('fold');if(!h.querySelector('.fa')){const s=document.createElement('span');s.className='fa';s.textContent='▾';h.appendChild(s)}
   const closed=FOLDS[key]!==undefined?!!FOLDS[key]:!gp();c.classList.toggle('closed',closed)})}
 function foldGame(){const app=document.getElementById('app');if(!app||!S||S.scn||S.over||gp())return;
