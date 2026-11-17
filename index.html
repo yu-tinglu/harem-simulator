@@ -4346,7 +4346,8 @@ function regAuto(months){
  try{render=function(){};let g=0;
   while(!S.over&&S.reg&&S.t<target&&g++<400){
    if(m.hp<20){why='健康告急';break}
-   if(yr(S.reg.k)>=16&&!S.rg16){S.rg16=1;why='皇帝已滿十六歲，可選擇「還政退隱」，或繼續臨朝';break}
+   if(yr(S.reg.k)>=18){const j=RACT.findIndex(x=>x[0]==='還政退隱');if(j>=0){try{A(j)}catch(e){console.log('regEnd',e)}why='皇帝已成年，自動還政退隱';break}}
+   if(yr(S.reg.k)>=16&&!S.rg16){S.rg16=1;why='皇帝已滿十六歲，再按「無腦玩」會在皇帝滿十八歲時自動還政；想繼續掌權就改手動';break}
    const i=regPick();if(i<0)break;
    try{A(i)}catch(e){console.log('regA',e);break}
    let z=0;while(S.ch&&z++<6){const o=S.ch.o;let k=o.findIndex(x=>!/險|極兇險|廢|殺|死/.test(x.l));if(k<0)k=0;try{C(k)}catch(e){break}}
