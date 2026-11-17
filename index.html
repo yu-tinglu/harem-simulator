@@ -4255,6 +4255,28 @@ const _u36=uiPost;uiPost=function(){const r=_u36.apply(this,arguments);try{const
 })();
 
 (function(){const st=document.createElement('style');st.id='ac31s';st.textContent='html body .ntf14{bottom:calc(var(--acb,0px) + 86px)!important}';document.head.appendChild(st)})();
+/* 一鍵方針納入「經營產業」：自動開鋪、整頓、擴建、宣傳 */
+(function(){
+['斂財'].forEach(k=>POLS[k].unshift('經營產業','經營產業'));['固寵','人脈','守成','養生'].forEach(k=>POLS[k].push('經營產業'));
+POLD['斂財']='經營產業、置產投資、廣結財源';
+const bizOK=()=>{const m=S.me;return (m.shops&&m.shops.length)||m.silver>=130};
+const _pa=polAct;polAct=function(){let i=_pa.apply(this,arguments),g=0;while(ACT[i]&&ACT[i][0]==='經營產業'&&!bizOK()&&g++<6)i=_pa.apply(this,arguments);if(ACT[i]&&ACT[i][0]==='經營產業'&&!bizOK())i=ACT.findIndex(a=>a[0]==='獻藝邀寵');return i};
+const _ba=bizAct;bizAct=function(){if(!_AUTO)return _ba.apply(this,arguments);
+ const m=S.me;_ba.call(this);if(!S.ch)return 1;const pickL=(re)=>{const k=S.ch.o.findIndex(x=>re.test(x.l));return k};
+ let k;const sh=m.shops||[];
+ if(!sh.length)k=pickL(/開設新鋪/);
+ else{const lowMg=sh.some(s=>s.mg<70),canUp=sh.some(s=>s.lv<5)&&m.silver>=400,canAd=sh.some(s=>s.pop<70)&&m.silver>=60;
+  k=(m.silver>=260&&sh.length<4&&P(.35))?pickL(/開設新鋪/):canUp&&P(.4)?pickL(/擴建/):lowMg?pickL(/整頓/):canAd?pickL(/宣傳/):pickL(/整頓/)}
+ if(k<0)k=pickL(/整頓|查賬/);if(k<0)return 1;
+ const lab=S.ch.o[k].l;C(k);let z=0;
+ while(S.ch&&z++<3){const o=S.ch.o;let j=0;
+  if(/開哪種/.test(S.ch.t||'')){let best=-1,bv=-1;o.forEach((x,ix)=>{const c=SHT[ix][1];if(c<=m.silver-60){const v=SHT[ix][2]/c*10+SHT[ix][2];if(v>bv){bv=v;best=ix}}});if(best<0)return 1;j=best}
+  else if(/整頓/.test(lab)){let mn=1e9;sh.forEach((s,ix)=>{if(s.mg<mn){mn=s.mg;j=ix}})}
+  else if(/擴建/.test(lab)){let mn=1e9;sh.forEach((s,ix)=>{if(s.lv<5&&s.lv<mn){mn=s.lv;j=ix}})}
+  else if(/宣傳/.test(lab)){let mn=1e9;sh.forEach((s,ix)=>{if(s.pop<mn){mn=s.pop;j=ix}})}
+  C(j)}
+ return 1};
+})();
 
 deco();intro();
 
