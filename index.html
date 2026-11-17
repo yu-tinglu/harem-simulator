@@ -4324,6 +4324,43 @@ const _u31=uiPost;uiPost=function(){const r=_u31.apply(this,arguments);try{
  }catch(x){console.log('r31',x)}return r};
 })();
 
+/* ===== round32：臨朝（小孩登基後）也能無腦玩 ===== */
+(function(){
+const SAFE=['批閱奏章','教導皇帝','安撫皇帝','賑濟施恩','整軍經武','調養身子','召見重臣'];
+let _RG=0;
+function regPick(){const R_=S.reg,k=R_.k,m=S.me,n=S.nat,h=S.rg32=S.rg32||[];const sc={};
+ const a=yr(k);
+ sc['調養身子']=m.hp<65?(80-m.hp)*2:0;
+ sc['安撫皇帝']=k.bond<60?(65-k.bond)*1.6:3;
+ sc['教導皇帝']=a<16?Math.max(0,(150-k.cai-k.de)/2.5):0;
+ sc['賑濟施恩']=m.silver>=25&&n.pop<55?(60-n.pop)*1.4:0;
+ sc['整軍經武']=m.silver>=25&&n.mil<50?(55-n.mil)*1.2:0;
+ sc['批閱奏章']=Math.max(8,(75-R_.pw)*1.3)+(n.stab<50?(50-n.stab):0);
+ sc['召見重臣']=m.silver>=20&&R_.pw<55?12:0;
+ let best=null,bv=-1;SAFE.forEach(nm=>{let v=sc[nm]+Math.random()*10;const c=h.filter(x=>x===nm).length;if(h.slice(-2).every(x=>x===nm)&&h.length>=2)v-=40;v-=c*1.5;if(v>bv){bv=v;best=nm}});
+ h.push(best);if(h.length>6)h.shift();
+ return RACT.findIndex(x=>x[0]===best)}
+function regAuto(months){
+ if(_RG||!S||S.over||!S.reg||S.scn||S.ev||S.ch)return;_RG=1;
+ const m=S.me,b={sv:m.silver,hp:m.hp,pw:S.reg.pw,t:S.t},target=S.t+months,rd=render;let why='',evN=0;
+ try{render=function(){};let g=0;
+  while(!S.over&&S.reg&&S.t<target&&g++<400){
+   if(m.hp<20){why='健康告急';break}
+   if(yr(S.reg.k)>=16&&!S.rg16){S.rg16=1;why='皇帝已滿十六歲，可選擇「還政退隱」，或繼續臨朝';break}
+   const i=regPick();if(i<0)break;
+   try{A(i)}catch(e){console.log('regA',e);break}
+   let z=0;while(S.ch&&z++<6){const o=S.ch.o;let k=o.findIndex(x=>!/險|極兇險|廢|殺|死/.test(x.l));if(k<0)k=0;try{C(k)}catch(e){break}}
+   let w=0;while(S.ev&&!S.over&&w++<12){if(evCritical(S.ev)||S.apx==='ask'){why='有重要的事要你決定';break}evN++;const o=S.ev.o;let k=o.findIndex(x=>!/險|極|動手腳|暗中|下毒|陷害|暗算|嫁禍|栽贓/.test(x[0]));if(k<0)k=0;try{V(k)}catch(e){console.log('regV',e);break}}
+   if(why)break;if(S.ev||S.scn||S.ch)break}
+ }finally{render=rd;_RG=0}
+ if(S.over){render();return}
+ if(!why){if(S.scn)why='有重要的事要你決定';else if(S.ev)why='有事件等你決定'}
+ const d=(a,c)=>{const x=Math.round(c-a);return x>0?'＋'+x:x<0?'－'+(-x):'±0'};
+ try{ntfAdd(`臨朝無腦玩${S.t-b.t}個月：權柄${d(b.pw,S.reg?S.reg.pw:b.pw)}・銀兩${d(b.sv,m.silver)}・健康${d(b.hp,m.hp)}${evN?'・自動處理'+evN+'件事':''}${why?'。已停下：'+why:''}`,'ti');ntfDraw()}catch(e){}
+ render()}
+const _ar=autoRun;autoRun=function(n){if(S&&S.reg&&!S.over)return regAuto(n);return _ar.apply(this,arguments)};
+})();
+
 deco();intro();
 
 
