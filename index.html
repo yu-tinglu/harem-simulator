@@ -4150,6 +4150,17 @@ const _u29=uiPost;uiPost=function(){const r=_u29.apply(this,arguments);try{if(ty
 HELP.push(['輕鬆模式','預設開啟：小事自動處理、只留重要的選擇；每月事件變少；第3年起嬪妃日常轉入後台；皇帝壽命較短，一局縮短。可在「紀事」關閉，或隨時「功成身退」結算。']);
 })();
 
+/* ===== round30：定位選擇（無腦悠閒／鬥智宮心）＋重要選項標「建議」 ===== */
+(function(){
+const gs=k=>{try{return localStorage.getItem(k)}catch(e){return null}},ss=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+/* 手動事件在輕鬆模式下，替較穩妥的選項標上「建議」，可無腦點 */
+const _n30=next;next=function(){const r=_n30.apply(this,arguments);try{const e=S&&S.ev;if(e&&e.o&&e.o.length>1&&window.rlxOn&&rlxOn()&&!e._sg){e._sg=1;const o=e.o,k=o.findIndex(x=>!/險|極|耗銀|耗龍|反噬|廢|殺|死/.test(x[0]));if(k>=0&&!/建議/.test(o[k][0])){o[k]=[o[k][0]+'　★建議',o[k][1]];render()}}}catch(x){console.log('r30',x)}return r};
+/* 開局先選定位 */
+const _st30=start;start=function(){const r=_st30.apply(this,arguments);try{if(!gs('hg_rlxset')&&S&&S.me&&!S.ch){choose('你想怎麼玩這一局？（之後可在「紀事」→輕鬆模式更改）',[
+ {l:'悠閒無腦：小事自動處理，重要的才問我，選項標★建議，一局約十幾二十年',f(){ss('hg_rlx','on');ss('hg_rlxset','1');L('已選「悠閒無腦」：放心點★建議的選項即可。')}},
+ {l:'鬥智宮心：每件事都由我決定，完整體驗，一局較長',f(){ss('hg_rlx','off');ss('hg_rlxset','1');L('已選「鬥智宮心」：每個抉擇都在你手上。')}}])}}catch(x){console.log('r30s',x)}return r};
+})();
+
 deco();intro();
 
 
