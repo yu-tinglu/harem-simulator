@@ -4174,6 +4174,12 @@ const _mm=mainMenu;mainMenu=function(){const r=_mm.apply(this,arguments);try{con
  const g1=nb.parentElement;nb.remove();
  g1.insertAdjacentHTML('beforebegin',`<div class="cd st30" style="text-align:center"><button class=go style="width:100%;letter-spacing:.2em" onclick="menuNew()">開始新遊戲</button><div class=m style="margin:8px 0">第一次玩？先按「一鍵開始」，系統隨機替你選好身分，直接入宮。</div><button class=s style="width:100%" onclick="qs30()">🎲 一鍵開始（隨機入宮）</button></div>`)}}catch(x){console.log('r30m',x)}return r};
 })();
+/* 前世傳承：放在「選擇天賦」的下一張卡，開局時不會被忽略 */
+(function(){
+const _i31=intro;intro=function(){const r=_i31.apply(this,arguments);try{if(typeof lgCard==='function'&&typeof lgGet==='function'&&lgGet().g>0&&!document.querySelector('#app .lg31')){
+ const h=[...document.querySelectorAll('#app .cd h3')].find(x=>/選擇天賦/.test(x.textContent));const card=h&&h.closest('.cd');
+ if(card){const w=document.createElement('div');w.className='lg31';w.innerHTML=lgCard();card.after(w)}}}catch(x){console.log('r31',x)}return r};
+})();
 
 deco();intro();
 
