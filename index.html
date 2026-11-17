@@ -4118,6 +4118,38 @@ window.darkTick28=darkTick;
 HELP.push(['暗算皇后','太后模式「皇室」類的高風險行動：陷害（成功廢后）、慢性下藥（皇后抱病、難孕，可能病逝）、收買宮人（累積把柄，提高廢后成功率）、離間帝后。做這些事之後有一段時間可能被查出，須處理以免皇帝對你寒心。']);
 })();
 
+/* ===== round29：輕鬆模式（小事自動處理、後台提前、一局縮短、隨時結算） ===== */
+(function(){
+const gs=k=>{try{return localStorage.getItem(k)}catch(e){return null}},ss=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+window.rlxOn=()=>(gs('hg_rlx')||'on')==='on';
+const ROUT=/萬壽節|壽辰|道謝|南巡|遊園|設宴|旁敲側擊|託人遞話|眉頭緊鎖|問安|請安|賞花|賜宴/;
+const IMP=/廢|冊封|立后|病危|薨|遺詔|和親|賜死|謀逆|立儲|儲君|病重|臨終/;
+const KEEP=/衝突|恃寵而驕|部族|幼主|鄰部|來信問政|求援|宮人向皇帝遞話|扶立|朝貢|攝政|廢后/;
+/* 小事自動處理 */
+let _RX=0;
+function pickK(e){const o=e.o||[];let k=o.findIndex(x=>!/險|極|耗銀|耗龍|反噬/.test(x[0]));if(k<0)k=o.findIndex(x=>!/險|極/.test(x[0]));return k<0?0:k}
+function rlxAuto(e){const k=pickK(e);const t=String(e.t||'').replace(/<[^>]*>/g,'').replace(/\s+/g,' ').slice(0,30),c=String(e.o[k][0]).replace(/[（(].*$/,'');
+ const h=S.rlxh=S.rlxh||[];h.unshift({y:Math.floor(S.t/12),t:t+'→'+c});if(h.length>40)h.length=40;S.rlxn=(S.rlxn||0)+1;V(k)}
+const _n29=next;next=function(){const r=_n29.apply(this,arguments);if(_RX||!rlxOn()||!S||!S.me||S.over||S.scn||S.ch||S.t<6)return r;_RX=1;
+ try{let w=0;while(S.ev&&!S.over&&!S.scn&&!S.ch&&w++<10){const e=S.ev;if(!e.o||!e.o.length||evCritical(e)||(e.story&&IMP.test(String(e.t||'')))||e.keep||KEEP.test(String(e.t||'')))break;rlxAuto(e)}}catch(x){console.log('r29',x)}finally{_RX=0}return r};
+/* 每月事件上限、後台提前 */
+const _ec=window.evCap;window.evCap=()=>rlxOn()?2:(_ec?_ec():4);
+const _bo=window.bgOn;window.bgOn=()=>{try{if(_bo&&_bo())return true;return rlxOn()&&S&&S.me&&!S.over&&!S.reg&&S.t>=36&&(gs('hg_bgm')||'auto')!=='off'}catch(e){return false}};
+/* 一局縮短：皇帝死亡率加倍 */
+const _eh=window.emH;window.emH=e=>_eh(e)*(rlxOn()?2:1);
+/* 年底摘要 */
+const _m29=mend;mend=function(){const r=_m29.apply(this,arguments);try{if(S&&!S.over&&S.t>0&&S.t%12===0&&S.rlxn){const n=S.rlxn;S.rlxn=0;ntfAdd(`第${Math.floor(S.t/12)}年：有${n}件小事已自動處理（詳見「紀事」→輕鬆模式）。`,'ti')}
+ if(S&&!S.over&&!S.rlxHint&&rlxOn()&&S.t>=6){S.rlxHint=1;ntfAdd('輕鬆模式已開啟：小事會自動處理，只有重要的事才請你決定；也可以隨時在「紀事」→輕鬆模式裡結算本局。','ti')}}catch(e){console.log('r29m',e)}return r};
+/* 設定卡與結算 */
+window.rlxSet=v=>{ss('hg_rlx',v);render()};
+window.rlxEnd=()=>{if(!S||!S.me||S.over)return;if(S.reg){L('你正在垂簾聽政，請待皇帝親政後再結算。');render();return}
+ choose('確定要在此刻功成身退、結算本局嗎？',[{l:'結算本局（以目前的成就收尾）',f(){const m=S.me,k=(m.kids||[]).length,y=Math.floor(S.t/12);over('功成身退',`你在宮中度過了${y}年，位至${(typeof RK!=='undefined'&&RK[m.rank])||'高位'}，膝下${k}名子女。你決定放下一切，安穩度過餘生。`)}},{l:'再玩一會兒',f(){L('你決定再看看。')}}])};
+const _u29=uiPost;uiPost=function(){const r=_u29.apply(this,arguments);try{if(typeof TAB!=='undefined'&&TAB===5&&S&&S.me){const main=document.querySelector('main');if(main&&!main.querySelector('.rx29')){const on=rlxOn(),h=(S.rlxh||[]).slice(0,12).map(x=>`<div class=m>第${x.y}年：${x.t}</div>`).join('')||'<div class=m>尚無自動處理紀錄。</div>';
+ const html=`<details class="cd rx29" open><summary><b>輕鬆模式</b>　<span class=m>${on?'目前：開啟':'目前：關閉'}</span></summary><div class=m style="margin:6px 0">開啟後：小事自動處理（只選較穩妥的選項），只有廢立、儲君、病危、婚事、冊封等重要的事才請你決定；每月事件變少，嬪妃日常第3年起轉入後台；皇帝壽命較短，一局大約縮短到十幾二十年。</div><select onchange="rlxSet(this.value)"><option value="on"${on?' selected':''}>開啟（推薦）</option><option value="off"${on?'':' selected'}>關閉（完整體驗）</option></select> <button onclick="rlxEnd()">功成身退・結算本局</button><div style="margin-top:8px"><b class=m>最近自動處理的事</b>${h}</div></details>`;
+ const a=main.querySelector('.bg25');if(a)a.insertAdjacentHTML('beforebegin',html);else main.insertAdjacentHTML('afterbegin',html)}}}catch(e){console.log('u29',e)}return r};
+HELP.push(['輕鬆模式','預設開啟：小事自動處理、只留重要的選擇；每月事件變少；第3年起嬪妃日常轉入後台；皇帝壽命較短，一局縮短。可在「紀事」關閉，或隨時「功成身退」結算。']);
+})();
+
 deco();intro();
 
 
