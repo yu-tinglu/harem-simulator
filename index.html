@@ -7107,6 +7107,20 @@ function injK(){try{const md=document.getElementById('kmodal49');if(!md||md.quer
 new MutationObserver(injK).observe(document.body,{childList:true,subtree:true});
 })();
 
+/* ===== round79：做完一個動作，結果直接浮在畫面上，不用往上滑 ===== */
+(function(){
+const css=document.createElement('style');css.textContent='#rt77{position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 62px);width:min(92vw,440px);z-index:46;background:rgba(74,42,58,.96);color:#fff;border-radius:14px;padding:11px 14px;font-size:14px;line-height:1.6;box-shadow:0 6px 22px rgba(0,0,0,.35);white-space:pre-line;max-height:38vh;overflow:auto;animation:rt77 .25s ease-out;cursor:pointer}#rt77 small{display:block;opacity:.6;font-size:11.5px;margin-top:4px}@keyframes rt77{from{opacity:0;transform:translate(-50%,-8px)}to{opacity:1;transform:translate(-50%,0)}}';document.head.appendChild(css);
+let tm=null;
+const clean=h=>String(h).replace(/<br\s*\/?>/gi,'\n').replace(/<[^>]+>/g,'').replace(/&nbsp;/g,' ').trim();
+function show(txt){try{if(!txt)return;let e=document.getElementById('rt77');if(e)e.remove();e=document.createElement('div');e.id='rt77';e.textContent=txt.slice(0,300);const s=document.createElement('small');s.textContent='點一下關閉';e.appendChild(s);e.onclick=()=>e.remove();document.body.appendChild(e);clearTimeout(tm);tm=setTimeout(()=>{const x=document.getElementById('rt77');if(x)x.remove()},Math.min(9000,3500+txt.length*60))}catch(er){console.log('r79',er)}}
+const _u=uiPost;uiPost=function(){const r=_u.apply(this,arguments);try{
+ if(!S||!S.me||S.over)return r;
+ if(typeof _AUTO!=='undefined'&&_AUTO)return r;
+ const cur=S.res?clean(S.res):'';
+ if(cur&&cur!==S._rs79){if(!S.ev&&!S.ch&&!S.scn){S._rs79=cur;show(cur)}}
+ else if(!cur)S._rs79=''}catch(e){console.log('r79u',e)}return r};window.uiPost=uiPost;
+})();
+
 deco();intro();
 
 
