@@ -4952,7 +4952,7 @@ window.zbSet=function(mode,txt){zbInit();const t=document.getElementById('zb45')
  const o={mode,txt:s.join('')};lsSet(o);if(S&&S.zb43){S.zb43.mode=mode;S.zb43.list=mode==='cus'?s:[];if(mode==='rand')S.zb43.rl=[]}
  if(S&&S.me){try{render()}catch(e){}}else{const m=document.getElementById('zbm45');if(m)m.textContent=mode==='cus'?'已設定：之後的皇子依序用「'+s.join('、')+'」字輩。':'已改為隨機字輩。'}};
 function zbCardInner(){const c=lsGet(),cur=S&&S.zb43?S.zb43:c,cus=cur.mode==='cus';
- return`<div class=m>皇子的名字＝<b>字輩＋一字</b>（同一代皇子共用一個字輩，例如「承煜」「承琰」）。換了皇帝，就換下一代字輩。公主名不受字輩影響。名字庫約 ${BIG.length} 個男名用字、${GK1.length}×${GK2.length} 種公主名組合。</div>
+ return`<div class=m>皇子名＝字輩＋一字，換皇帝即換下一代字輩。</div>
  <p>目前：<b>${cus?'自訂':'隨機'}</b>${S&&S.me?`｜本代字輩：<b>${zbChar()}</b>`:''}</p>
  <p><input id=zb45 placeholder="輸入字輩，如：承嗣光宗" value="${cus?(cur.list||cjk(c.txt)).join(''):''}" style="width:55%;max-width:240px"> <button onclick="zbSet('cus')">套用自訂</button> <button class=s onclick="zbSet('rand')">改隨機</button></p><div id=zbm45 class=m></div>`}
 function zbCard(){return`<div class=cd><h3>皇子字輩</h3>${zbCardInner()}</div>`}
