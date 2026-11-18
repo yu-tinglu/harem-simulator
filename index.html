@@ -6016,9 +6016,7 @@ function linkify(root){try{if(!S||!S.me||!root)return;build();if(!RE)return;
   const fr=document.createDocumentFragment();let last=0,m;
   while((m=RE.exec(t))){if(m.index>last)fr.appendChild(document.createTextNode(t.slice(last,m.index)));const s=document.createElement('span');s.className='pn68';s.dataset.n=m[0];s.textContent=m[0];fr.appendChild(s);last=m.index+m[0].length}
   if(last<t.length)fr.appendChild(document.createTextNode(t.slice(last)));n.parentNode.replaceChild(fr,n)})}catch(e){console.log('r68l',e)}}
-let raf=0;function sched(){if(raf)return;raf=requestAnimationFrame(()=>{raf=0;linkify(document.body)})}
-new MutationObserver(()=>{if(S&&S.me)sched()}).observe(document.body,{childList:true,subtree:true,characterData:true});
-const _r=render;render=function(){const r=_r.apply(this,arguments);try{linkify(document.querySelector('main'))}catch(e){}return r};
+const _r=render;render=function(){const r=_r.apply(this,arguments);try{linkify(document.getElementById('app')||document.querySelector('main'))}catch(e){}return r};
 document.addEventListener('click',e=>{const s=e.target.closest&&e.target.closest('.pn68');if(!s)return;e.preventDefault();e.stopPropagation();open68(s.dataset.n)},true);
 function open68(nm){try{if(!REMAP)build();const v=REMAP.get(nm);if(!v)return;
  if(v.t==='kid')return kopen49(v.n||nm);
@@ -6038,7 +6036,7 @@ function showM(html){try{kclose49()}catch(e){}
  const sc=md?md.firstElementChild&&md.firstElementChild.firstElementChild&&md.firstElementChild.firstElementChild.scrollTop:0;
  if(!md){md=document.createElement('div');md.id='pm68';document.body.appendChild(md)}
  md.innerHTML=`<div style="position:fixed;inset:0;z-index:72;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center" onclick="if(event.target===this)pm68close()"><div style="width:100%;max-width:560px;max-height:90vh;overflow:auto;background:${bg};color:${fg};border-radius:18px 18px 0 0;padding:14px 16px calc(22px + env(safe-area-inset-bottom,0px))">${html}</div></div>`;
- document.body.style.overflow='hidden';if(sc)md.firstElementChild.firstElementChild.scrollTop=sc}
+ document.body.style.overflow='hidden';if(sc)md.firstElementChild.firstElementChild.scrollTop=sc;try{linkify(md)}catch(e){}}
 const head=(t,sub)=>`<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h3 style="margin:0;font-size:19px">${ESC(t)}</h3><button class=s onclick="pm68close()" style="min-height:0;height:32px;padding:0 14px">關閉</button></div><div class=m style="margin:8px 0;line-height:1.7">${sub}</div>`;
 const sec=(t,b)=>`<h4 style="margin:14px 0 6px">${t}</h4><div class=m style="line-height:1.75">${b}</div>`;
 const busy=()=>S.ch||S.ev||S.scn||S.over;
@@ -6367,10 +6365,10 @@ function tick(){try{if(!S||!S.me||S.over||S.q.length>8)return;
  const H=holders();const due=H.filter(h=>h.p.st70&&h.p.st70.nx<=S.t);
  if(due.length&&P(.7)){const h=due[0],ev=mkEv(h);if(ev){S.q.push(ev);if(!S.ev&&!S.ch&&!S.scn)next();else render();return}}
  const act=H.filter(h=>h.p.st70).length;if(act>=3||S.t<8||S.t-(S.sg70||-99)<5||!P(.2))return;
- const opts=[];H.forEach(h=>{if(h.p.st70)return;ST.forEach(t=>{if(t.kinds.includes(h.k)&&!((h.p.sd70||[]).some(x=>x.id===t.id))){let ok=false;try{ok=t.cond(h.p,h.k)}catch(e){}if(ok)opts.push([h,t])}})});
+ const opts=[];H.forEach(h=>{if(h.p.st70)return;ST.forEach(t=>{if(t.kinds.includes(h.k)&&!((h.p.sd70||[]).some(x=>x.id===t.id))){let ok=false;try{ok=t.cond(h.p,h.k)&&(!t.pair||!!t.pair(h.p,h.k))}catch(e){}if(ok)opts.push([h,t])}})});
  if(!opts.length)return;
  const em=opts.filter(o=>o[0].k==='emp'||o[0].k==='empR');const [h,t]=(em.length&&P(.4))?pk(em):pk(opts);
- h.p.st70={id:t.id,act:0,fl:{},nx:S.t,log:[]};try{const me0=hn(h),oth=S.npcs.filter(x=>!x.st&&nm(x,'npc')!==me0);if(oth.length)h.p.st70.oN=nm(pk(oth),'npc');const kk=(h.p.kids||[]).filter(x=>!x.dead);if(kk.length)h.p.st70.kN=kk[0].n;const fm=h.p.fam;h.p.st70.fj=(Array.isArray(fm)?(fm[0]&&(fm[0].job||fm[0][1])):fm&&fm.job)||'家中'}catch(e){}S.sg70=S.t;const ev=mkEv(h);if(ev){S.q.push(ev);if(!S.ev&&!S.ch&&!S.scn)next();else render()}}catch(e){console.log('r70',e)}}
+ h.p.st70={id:t.id,act:0,fl:{},nx:S.t,log:[]};try{const me0=hn(h),oth=S.npcs.filter(x=>!x.st&&nm(x,'npc')!==me0);if(oth.length)h.p.st70.oN=nm(pk(oth),'npc');const kk=(h.p.kids||[]).filter(x=>!x.dead);if(kk.length)h.p.st70.kN=kk[0].n;if(t.pair){const po=t.pair(h.p,h.k);if(po)h.p.st70.oN=po}const fm=h.p.fam;h.p.st70.fj=(Array.isArray(fm)?(fm[0]&&(fm[0].job||fm[0][1])):fm&&fm.job)||'家中'}catch(e){}S.sg70=S.t;const ev=mkEv(h);if(ev){S.q.push(ev);if(!S.ev&&!S.ch&&!S.scn)next();else render()}}catch(e){console.log('r70',e)}}
 const _m=mend;mend=function(){const r=_m.apply(this,arguments);tick();return r};
 const _rm=rmend;rmend=function(){const r=_rm.apply(this,arguments);tick();return r};
 /* ---------- 顯示：故事回顧 ---------- */
@@ -6795,6 +6793,97 @@ const _pe=window.pExtra68;window.pExtra68=function(p){let h=_pe?_pe(p):'';try{if
 const st=document.createElement('style');st.textContent='.chip73{display:inline-block;padding:2px 9px;border-radius:11px;margin:2px 3px 2px 0;font-size:12.5px;line-height:1.5;border:1px solid}.chip73.up{color:#27774a;background:rgba(60,160,100,.14);border-color:rgba(60,160,100,.4)}.chip73.dn{color:#b03a2e;background:rgba(200,70,60,.12);border-color:rgba(200,70,60,.4)}html.dk18 .chip73.up{color:#86d9a8}html.dk18 .chip73.dn{color:#f1948a}';document.head.appendChild(st);
 try{HELP.push(['選擇的後果','做完選擇後，畫面頂端會列出這個選擇帶來的實際變化：聖寵、人脈、銀兩、哪位妃嬪對你的好感變了多少，綠色是好事、紅色是壞事。被點名的人會記得你的選擇，過幾個月可能回頭報答你、通風報信，也可能記恨、散播流言、與你的對手結盟。你的行事風格（仁厚／冷面／深沉）會累積成宮中的評價，在「紀事」頁可以查看歷次選擇與後果。'])}catch(e){}
 window.__CQ73={snap,diff,record,echo};
+})();
+
+/* ===== round74：新手引導更新・簡潔模式・雙人關係故事 ===== */
+(function(){
+const X=window.__P68,ST=window.__ST70,TP=window.__TP70;
+const ESC=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const g=k=>{try{return localStorage.getItem(k)}catch(e){return null}},st=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+const nm0=n=>(n.name||n.n);
+/* ---------- 1. 新手說明：新增「人物、故事與後果」總覽並置頂 ---------- */
+try{HELP.push(['新功能上手：人物、故事與後果','<b>這一局最值得做的 5 件事</b><br>① 看到有「虛線」的人名就點進去——妃嬪、皇子公主、官員、皇上都有檔案。<br>② 在妃嬪檔案按「談心拉近」，她會一層層告訴你身世、心願、秘密；在皇帝檔案按「陪皇上說說話」，他會慢慢說起往事。<br>③ 選擇後看畫面頂端的「你剛才的選擇」：綠色是好事、紅色是壞事，列出實際變化。<br>④ 偶爾出現的長篇故事（標題有【】）有 3～4 幕，每幕的選擇會影響結局。<br>⑤ 被你幫過或得罪過的人會記得，幾個月後可能回頭報答或報復（「舊日的回響」）。<br><b>覺得畫面太雜？</b>到「紀事」頁最下方的設定，開啟「簡潔模式」。'])}catch(e){}
+const _ho=helpOpen;helpOpen=function(){const r=_ho.apply(this,arguments);
+ try{const hb=document.querySelector('#help .hb');if(!hb||hb.querySelector('.hcat74'))return r;
+  const keys=['新功能上手','點人名看檔案','皇上的情緒與往事','太后期的皇帝','長篇故事','個人化故事','選擇的後果','個人化的故事'];
+  const all=[...hb.querySelectorAll('details')].filter(d=>!d.classList.contains('hcat55')&&d.parentElement&&keys.some(k=>(d.querySelector('summary')||{textContent:''}).textContent.includes(k)));
+  if(!all.length)return r;
+  const c=document.createElement('details');c.className='hcat55 hcat74';c.open=true;c.innerHTML=`<summary><b>人物、故事與後果（新）</b>　<span class=m>${all.length} 則</span></summary><div class=hin55></div>`;const box=c.querySelector('.hin55');
+  all.forEach((d,i)=>{d.open=i===0;box.appendChild(d)});
+  const first=hb.querySelector('.hcat55:not(.hcat74)');if(first)hb.insertBefore(c,first);else hb.appendChild(c);
+  /* 清掉空的類別 */
+  hb.querySelectorAll('.hcat55:not(.hcat74)').forEach(x=>{const n=x.querySelectorAll('.hin55>details').length;const sp=x.querySelector('summary .m');if(!n)x.remove();else if(sp)sp.textContent=n+' 則'})}catch(e){console.log('r74h',e)}return r};
+window.helpOpen=helpOpen;
+/* ---------- 首次出現的小提示 ---------- */
+const TIP={names:'畫面上有虛線的人名都可以點，看她（他）的檔案。',cq:'選完後，頂端會列出這個選擇的實際變化：綠色是好事、紅色是壞事。',story:'標題帶【】的是長篇故事，有 3～4 幕，每一幕的選擇都會影響結局。',emp:'到「朝堂」頁的「在位皇帝」卡，可查看皇帝檔案並陪他說話。',talk:'在妃嬪檔案裡按「談心拉近」，她會逐層告訴你身世與心事。'};
+function tip(k){if(g('hg74t_'+k))return;st('hg74t_'+k,'1');try{toast('💡 '+TIP[k])}catch(e){}}
+const _r=render;render=function(){const r=_r.apply(this,arguments);
+ try{if(S&&S.me&&!S.over&&!S.scn){
+  if(S.t>=2&&!S.ev&&!S.ch&&document.querySelector('main .pn68'))tip('names');
+  if(document.querySelector('main .cq73'))tip('cq');
+  if(S.ev&&/<b>【/.test(S.ev.t||''))tip('story');
+  if(S.t>=8&&!S.ev&&!S.ch&&TAB===3)tip('emp')}}catch(e){}return r};
+/* ---------- 2. 簡潔模式 ---------- */
+const KEY='hg74c';let CP=g(KEY)==='1';
+const apply=()=>document.documentElement.classList.toggle('cp74',CP);apply();
+window.cpToggle74=function(){CP=!CP;st(KEY,CP?'1':'0');apply();render()};
+const css=document.createElement('style');css.textContent=`html.cp74 .pn68{border-bottom:none}html.cp74 .cq73 h3,html.cp74 .cq73>.m{display:none}html.cp74 .cq73{padding:8px 12px}html.cp74 .cqh73{display:none}html.cp74 .bio69 .m span:last-child{display:none}html.cp74 .e68b{display:none}html.cp74 #tt56{display:none}`;document.head.appendChild(css);
+const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
+ try{if(!S||!S.me||S.over||TAB!==5)return r;const main=document.querySelector('main');if(!main||main.querySelector('.cp74c'))return r;
+  const d=document.createElement('div');d.className='cd cp74c';d.innerHTML=`<h3>簡潔模式</h3><div class=m>開啟後：人名不再顯示虛線（仍可點）、選擇後果只留色塊、隱藏紀事裡的後果歷史與提示氣泡。介面太雜時可以開。</div><p><button class=s onclick="cpToggle74()">簡潔模式：${CP?'開':'關'}</button></p>`;
+  const gp=main.querySelector('.grp65[data-t="設定與存檔"] .gin65');if(gp)gp.insertAdjacentElement('afterbegin',d);else main.appendChild(d)}catch(e){console.log('r74u',e)}return r};
+/* ---------- 3. 雙人關係故事 ---------- */
+if(ST&&TP){
+const alive=()=>S.npcs.filter(x=>!x.st);
+const near=(p,o)=>Math.abs((o.rank||0)-(p.rank||0))<=2;
+const byNm=n=>S.npcs.find(x=>nm0(x)===n);
+const OA=(c,d)=>{const o=byNm(c.o);if(o)o.al=cl((o.al||0)+d)};
+const OF=(c,d)=>{const o=byNm(c.o);if(o)o.favor=cl(o.favor+d)};
+const OH=(c,d)=>{const o=byNm(c.o);if(o)o.host=cl((o.host||0)+d)};
+const AF=(c,d)=>{c.p.al=cl((c.p.al||0)+d)};const FV=(c,d)=>{c.p.favor=cl(c.p.favor+d)};
+const pick=a=>a.length?nm0(a[Math.floor(Math.random()*a.length)]):null;
+const add=(id,title,pair,acts)=>{const t={id,title,kinds:['npc'],cond:p=>!p.st,pair:(p)=>pick(alive().filter(o=>o!==p&&near(p,o)&&pair(p,o))),acts};ST.push(t);TP[id]=t};
+add('結拜之誼','結拜之誼',(p,o)=>p.fac===o.fac,[
+ c=>({t:`${c.n}與${c.o}走得越來越近，兩人商量著要結為異姓姐妹，特地請你做見證。`,o:[
+  ['欣然做見證，備一桌酒席',()=>{AF(c,5);OA(c,5);S.me.ally+=1;return`兩人在你面前互換了信物，笑得很開心。（盟友度＋5、人脈＋1）`},'w',1],
+  ['答應，但提醒她們低調',()=>{AF(c,3);OA(c,3);return`兩人點頭稱是，行事也謹慎了些。（盟友度＋3）`},'w',2],
+  ['婉拒，說怕牽連她們',()=>{AF(c,-2);OA(c,-2);return`兩人有些失望，卻也沒說什麼。（盟友度－2）`},'w',0]]}),
+ c=>({t:`${c.n}與${c.o}結拜後形影不離，連皇上也留意到了。偏有人在背後說閒話，指兩人「結黨」。`,o:[
+  ['出面替她們澄清',()=>{AF(c,5);OA(c,5);S.me.favor-=1;return`流言被你壓下去了。（盟友度＋5、聖寵－1）`},'x',1],
+  ['私下勸她們收斂一些',()=>{AF(c,2);OA(c,2);return`兩人聽進了勸，漸漸少在人前同進同出。（盟友度＋2）`},'x',2],
+  ['看看風向，不插手',()=>{AF(c,-1);OA(c,-1);return`流言傳了一陣，兩人明顯受了影響。（盟友度－1）`},'x',0]]}),
+ c=>({t:`這年，${c.n}與${c.o}因一件事生了嫌隙——皇上這回只召見了其中一人。${(c.f.x===1||c.f.w===1)?'兩人都來找你，各自委屈。':'兩人誰也沒來找你，暗自冷戰。'}`,o:[
+  ['把兩人叫到一處，說開心結',()=>{if(P(.55+S.me.ally/300)){AF(c,10);OA(c,10);S.me.ally+=2;return`兩人終於抱頭痛哭，和好如初。（盟友度＋10、人脈＋2）`}AF(c,3);OA(c,-4);return`你勸了一晚，勉強維持了表面的和氣。（盟友度＋3）`}],
+  ['站在被冷落的一方',()=>{AF(c,6);OA(c,-8);OH(c,5);return`${c.n}很感激你，${c.o}卻從此對你有了芥蒂。（盟友度＋6）`}],
+  ['任由她們自己處理',()=>{AF(c,-3);OA(c,-3);return`兩人漸行漸遠。（盟友度－3）`}]]})]);
+add('宿敵相逢','宿敵相逢',(p,o)=>p.fac!==o.fac,[
+ c=>({t:`${c.n}與${c.o}在請安時為一件小事當眾爭執，語氣越來越重，滿堂都靜了下來。`,o:[
+  ['出言調停，各打五十大板',()=>{AF(c,2);OA(c,2);return`兩人都下不來台，卻也沒再吵。（盟友度＋2）`},'a',1],
+  ['偏幫${c.n}'.replace('${c.n}','她們中的一方'),()=>{const w=P(.5);if(w){AF(c,6);OA(c,-6);OH(c,6);return`${c.n}得了你的支持，${c.o}記恨在心。（盟友度＋6）`}AF(c,-6);OA(c,6);return`你偏幫了${c.o}，${c.n}頓時冷了臉。（盟友度－6）`},'a',2],
+  ['冷眼旁觀，看她們怎麼收場',()=>{return`你什麼也沒說，兩人悻悻散去。`},'a',0]]}),
+ c=>({t:`爭執之後，${c.n}與${c.o}都暗中來拉攏你，各自在你面前說對方的不是。`,o:[
+  ['誰也不得罪，兩邊都客氣',()=>{S.me.ally+=1;return`你左右逢源，兩邊都沒得罪。（人脈＋1）`},'b',1],
+  ['選擇其中一方，與之結盟',()=>{AF(c,8);OA(c,-8);S.me.ally+=2;return`你表明了立場，另一邊自此視你為對手。（盟友度＋8、人脈＋2）`},'b',2],
+  ['把兩人的話都原封不動傳給對方',()=>{AF(c,-6);OA(c,-6);return`兩人都知道你不可信任。（盟友度－6）`},'b',0]]}),
+ c=>({t:`${c.n}與${c.o}的恩怨終於到了了結的時候。${c.f.b===2?'你與其中一方結了盟，局面已很清楚。':'兩人都在等你表態。'}`,o:[
+  ['促成她們當眾和解',()=>{if(P(.4+S.me.ally/300)){AF(c,8);OA(c,8);S.me.ally+=3;return`兩人在你面前握手言和，宮裡人都說你有本事。（盟友度＋8、人脈＋3）`}AF(c,-2);OA(c,-2);S.me.favor-=1;return`你出面調停卻碰了釘子，兩人更加僵持。（聖寵－1）`}],
+  ['在暗中推波助瀾，讓其中一人失勢',()=>{if(P(.5+S.me.scheme/250)){OF(c,-12);OH(c,8);S.me.ally+=1;return`${c.o}一時失了勢，你在幕後不動聲色。（人脈＋1）`}S.me.favor-=3;return`你的手腳被察覺，兩邊都對你起了疑。（聖寵－3）`}]]})]);
+add('爭寵之局','爭寵之局',(p,o)=>Math.abs(p.favor-o.favor)<=18,[
+ c=>({t:`皇上近來對${c.n}與${c.o}都另眼相看，兩人都開始暗中較勁，連你這裡的點心都比往常少了。`,o:[
+  ['對兩人一視同仁',()=>{AF(c,2);OA(c,2);return`你不偏不倚，兩人都對你客氣。（盟友度＋2）`},'a',1],
+  ['悄悄幫${c.n}一把'.replace('${c.n}','其中一人'),()=>{AF(c,5);OA(c,-5);FV(c,4);return`${c.n}多得了幾次召見，另一邊暗暗記恨。（盟友度＋5、聖寵＋4）`},'a',2]]}),
+ c=>({t:`${c.o}想出手對付${c.n}，有人把消息悄悄遞給了你。這是個選擇的時刻。`,o:[
+  ['把消息告訴'+'被算計的一方',()=>{AF(c,8);OA(c,-6);return`被算計的一方躲過了這次暗算，對你感激不盡。（盟友度＋8）`},'b',1],
+  ['按下消息，不動聲色',()=>{S.me.ally+=1;return`你沒有出手，只是看著事態發展。（人脈＋1）`},'b',0],
+  ['把消息賣給另一方（耗銀）',()=>{S.me.silver+=R(30,60);OA(c,4);AF(c,-6);return`你得了些好處，卻欠下一份暗債。（銀兩＋、盟友度－6）`},'b',2]]}),
+ c=>({t:`這場爭寵終於有了結果。${c.f.b===1?'被你提醒過的一方，穩穩坐住了位置。':c.f.b===2?'有人栽了跟頭，宮裡傳言與你有關。':'兩人都沒討到便宜，反而被別的人撿了便宜。'}`,o:[
+  ['登門探望落敗的一方，說幾句寬慰的話',()=>{AF(c,6);OA(c,6);return`落敗的人眼眶紅了，說你是宮裡少有的明白人。（盟友度＋6）`}],
+  ['不聲不響，繼續經營自己',()=>{S.me.favor+=2;return`你在她們爭鬥時悄悄鞏固了自己的位置。（聖寵＋2）`}]]})]);
+}
+/* ---------- 平衡：高端軟上限（越接近滿值，維持越費力） ---------- */
+const _mb=mend;mend=function(){const r=_mb.apply(this,arguments);try{if(S&&S.me&&!S.over){const m=S.me;if(m.ally>85)m.ally=Math.max(60,m.ally-(m.ally-85)*.28);if(m.favor>85)m.favor=Math.max(50,m.favor-(m.favor-85)*.18)}}catch(e){}return r};
+const _rb=rmend;rmend=function(){const r=_rb.apply(this,arguments);try{if(S&&S.me&&!S.over){const m=S.me;if(m.ally>85)m.ally=Math.max(60,m.ally-(m.ally-85)*.28)}}catch(e){}return r};
+window.__R74=1;
 })();
 
 deco();intro();
