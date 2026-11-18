@@ -5039,7 +5039,7 @@ function yearly(){const ks=titled(),m=ks.filter(k=>k.sex=='男');let e=0,j=0,b=0
  const load=e*.8+j*.4+b*.15;if(load>0){S.nat.eco=cl(S.nat.eco-load);if(load>=2)L(`宗室歲俸、府邸開銷沉重，戶部叫苦不迭。`)}
  let inc=0;ks.forEach(k=>{if(momOf(k)==='me'){const i=tIdx(k);inc+=k.sex=='男'?[0,3,6,12][i]:[3,6][i]}});
  if(inc>0){S.me.silver+=inc;try{msPush(`本年孩子們的歲俸分潤，進帳${inc}兩。`)}catch(x){}}}
-function suspicion(){let pw=0;titled().filter(k=>k.sex=='男').forEach(k=>{pw+=[0,1,2,3][tIdx(k)]*k.pow/60});return pw}
+function suspicion(){let pw=0;titled().filter(k=>k.sex=='男').forEach(k=>{pw+=[0,1,2,3][tIdx(k)]*k.pow/60});if(window.susX47)pw+=window.susX47();return pw}
 function sneak(){const c=titled().filter(k=>k.sex=='男'&&tIdx(k)>=2).sort((a,b)=>b.pow-a.pow)[0];if(!c)return null;const o=momOf(c),mine=o==='me';
  if(!mine){const r=P(.5);if(r)setTier(c,tIdx(c)-1);logN(`皇上憂心宗室坐大，${r?'下旨削減'+c.n+'的爵位':'申飭了'+c.n}。`,0);return null}
  return{t:`皇上近來頻頻提起：「宗室諸王權勢日重，不可不防。」矛頭隱隱指向你的${c.t45}${c.n}。`,o:[
@@ -5097,6 +5097,111 @@ const _r=render;render=function(){const r=_r.apply(this,arguments);
   const re=new RegExp('(皇子|公主|親王)(「?)('+names+')','g'),root=document.querySelector('main')||document.body;
   const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null);let n,batch=[];while((n=w.nextNode())){if(n.nodeValue.length>3&&/皇子|公主|親王/.test(n.nodeValue))batch.push(n)}
   batch.forEach(t=>{const v=t.nodeValue.replace(re,(m,a,q,nm)=>{const k=mp[nm];return kTitle(k)+q+nm});if(v!==t.nodeValue)t.nodeValue=v})}catch(e){console.log('r47t',e)}return r};
+})();
+
+/* ===== round48：孩子資質與培養、差事安插、國情實數與國庫 ===== */
+(function(){
+const mm=(a,b)=>Math.max(0,Math.min(100,a+b));
+const fl=()=>{if(!S.ev&&!S.ch&&!S.scn)next();else render()};
+const momOf=k=>{for(const x of S.me.kids)if(x===k)return'me';for(let i=0;i<S.npcs.length;i++)if(S.npcs[i].kids.includes(k))return i;return null};
+// ---------- 1. 資質 ----------
+const ARCH=[
+ {n:'天之驕子',w:4,d:'才德勢皆出眾，成長也快',a:{cai:12,de:6,chong:8,pow:6},g:{cai:1.3,de:1.2,pow:1.3,bond:1}},
+ {n:'文曲之才',w:12,d:'讀書天賦極高，不擅武事',a:{cai:14,pow:-4},g:{cai:1.5,de:1,pow:.7,bond:1}},
+ {n:'將帥之材',w:12,d:'生來愛騎射，是軍中好苗子',a:{pow:10,cai:2},g:{cai:.9,de:1,pow:1.5,bond:1}},
+ {n:'仁厚君子',w:12,d:'心地寬厚，深得人心',a:{de:14,bond:8},g:{cai:1,de:1.5,pow:.9,bond:1.3}},
+ {n:'機敏善謀',w:10,d:'心思活絡，但與母親不夠親近',a:{cai:6,pow:6,chong:4,bond:-4},g:{cai:1.2,de:.8,pow:1.2,bond:.8}},
+ {n:'中人之資',w:30,d:'資質平常，全看後天培養',a:{},g:{cai:1,de:1,pow:1,bond:1}},
+ {n:'大器晚成',w:8,d:'起步慢，十二歲後突飛猛進',a:{cai:-6,de:-3,pow:-6,chong:-4},g:{cai:1.6,de:1.5,pow:1.6,bond:1.2},late:1},
+ {n:'體弱早慧',w:7,d:'身子單薄卻極聰明，與母親最親',a:{cai:10,de:4,bond:6,pow:-8},g:{cai:1.3,de:1,pow:.5,bond:1.4}},
+ {n:'驕縱頑劣',w:5,d:'被慣壞了，需要嚴加管教',a:{chong:6,de:-10,pow:6},g:{cai:.8,de:.7,pow:1.1,bond:.9}}];
+const _kid=kid;kid=function(){const k=_kid.apply(this,arguments);
+ try{let r=Math.random()*ARCH.reduce((a,x)=>a+x.w,0),i=0;for(;i<ARCH.length;i++){r-=ARCH[i].w;if(r<=0)break}i=Math.min(i,ARCH.length-1);k.zz47=i;
+  const a=ARCH[i].a;['cai','de','chong','pow','bond'].forEach(x=>{if(a[x])k[x]=mm(k[x],a[x])})}catch(e){console.log('r48a',e)}return k};
+// ---------- 2. 培養方式 ----------
+const PLAN={'文教':{c:20,e:{cai:.6,de:.1},min:3},'武備':{c:15,e:{pow:.5,cai:.1},min:3},'德育':{c:10,e:{de:.6,bond:.2},min:3},'歷練':{c:25,e:{pow:.3,cai:.3,de:.1,chong:.1},min:12},'放養':{c:0,e:{bond:.2},min:0}};
+window.plSet47=function(nm,v){const k=allKids().find(x=>x.n===nm);if(!k||!PLAN[v])return;k.pl47=v;try{L(`你為${nm}定下「${v}」的培養方式。`)}catch(e){}render()};
+// ---------- 3. 差事 ----------
+const POS=[
+ {id:'jj',n:'軍機處行走',req:k=>k.cai>=55,st:'cai',fac:1,ef:{stab:.5,eco:.2},sus:1,cost:0},
+ {id:'bb',n:'統領禁軍・兵部差',req:k=>k.pow>=55,st:'pow',fac:2,ef:{mil:.9},sus:3,cost:60},
+ {id:'hb',n:'戶部・內務府當差',req:k=>k.cai>=50,st:'cai',fac:3,ef:{eco:.9},sus:1,cost:0},
+ {id:'zr',n:'宗人府辦事',req:k=>true,st:'de',fac:4,ef:{stab:.5},sus:1,cost:0},
+ {id:'ws',n:'出使外藩・經略邊務',req:k=>k.pow>=45&&k.cai>=45,st:'cai',fac:2,ef:{mil:.4,stab:.3},sus:2,cost:40,dip:1},
+ {id:'df',n:'巡撫地方・治水賑災',req:k=>k.de>=55,st:'de',fac:3,ef:{pop:.9,eco:.2},sus:2,cost:30},
+ {id:'hl',n:'翰林院修書',req:k=>k.cai>=60,st:'cai',fac:1,ef:{pop:.3,stab:.2},sus:0,cost:0},
+ {id:'xs',n:'閒散宗室，富貴閒人',req:()=>true,st:'de',fac:-1,ef:{},sus:0,cost:0}];
+const PB=id=>POS.find(x=>x.id===id);
+const elig=k=>POS.filter(x=>x.req(k));
+function approve(k,p){const sus=p.sus;return Math.random()<Math.max(.2,Math.min(.9,.5+S.me.favor/220-.07*sus))}
+function assign(k,p,mine){k.pos47=p.id;k.pe47=1;if(p.fac>=0&&mine)S.me.ally+=1}
+window.posSet47=function(nm,id){const k=allKids().find(x=>x.n===nm),p=PB(id);if(!k||!p)return;
+ if(k.pos47===id)return;
+ if(p.cost&&!pay(p.cost)){try{L('銀兩不足，打點不開。')}catch(e){}render();return}
+ if(approve(k,p)){assign(k,p,1);try{msPush(`${nm}受命${p.n}。`)}catch(e){}}
+ else{S.me.favor-=1;try{L(`皇上沒有准你為${nm}謀「${p.n}」，說皇子辦差須由朝廷定奪。`)}catch(e){}}render()};
+window.susX47=function(){let x=0;allKids().forEach(k=>{if(k.dead||!k.pos47)return;const p=PB(k.pos47);if(p)x+=p.sus*.6});return x};
+// ---------- 4. 國情實數 ----------
+const NT=()=>S.nat;
+function figs(){const n=NT(),e=S.era41,pol=(S.led47&&S.led47.pol)||'';
+ const pop=Math.round(2500+n.pop*70),inc0=Math.round(n.eco*38+n.pop*18+400),army=Math.round(8+n.mil*.9);
+ let inc=inc0*(pol==='tax'?1.12:1);
+ const mil=Math.round(army*26*(e==='war'?1.5:e==='peace'?.9:1)),adm=Math.round(640+pop*.02),court=Math.round(280+(S.npcs?S.npcs.length:0)*3);
+ let zong=0;allKids().forEach(k=>{if(k.dead)return;const t=k.t45;zong+=({親王:8,郡王:5,貝勒:2,貝子:1,固倫公主:3,和碩公主:2,格格:.5})[t]||0});zong=Math.round(zong);
+ let relief=(n.pop<40?Math.round((40-n.pop)*8):0)+(e==='disaster'?300:0)+(pol==='relief'?400:0);
+ let exp=mil+adm+court+zong+relief;if(pol==='cut')exp-=Math.round((adm+court)*.08);
+ return{pop,inc:Math.round(inc),army,mil,adm,court,zong,relief,exp:Math.round(exp)}}
+window.led47=figs;
+function ledInit(){if(!S.led47)S.led47={tr:Math.round(figs().inc*1.5),pol:'',bal:0,y:0}}
+function ledYear(){ledInit();const f=figs(),L7=S.led47,n=NT(),b=f.inc-f.exp;L7.bal=b;L7.tr+=b;L7.y++;
+ const pol=L7.pol;if(pol==='tax'){n.pop=cl(n.pop-1.2);n.stab=cl(n.stab-.4)}else if(pol==='cut'){n.stab=cl(n.stab-.3);n.mil=cl(n.mil-.3)}else if(pol==='relief'){n.pop=cl(n.pop+1.2);n.stab=cl(n.stab+.3)}
+ if(L7.tr<0){const d=L7.tr<-f.inc?1.5:.5;n.eco=cl(n.eco-d);n.stab=cl(n.stab-.3*d);try{L(`國庫虧空${-L7.tr}萬兩，各部欠餉欠俸，朝野怨聲漸起。`)}catch(e){}}
+ else if(L7.tr>f.inc*3){n.eco=cl(n.eco+.3)}
+ try{msPush(`歲計：入${f.inc}萬兩、出${f.exp}萬兩，${b>=0?'結餘':'虧空'}${Math.abs(b)}萬兩（庫存${L7.tr}萬兩）。`)}catch(e){}}
+// 差事年度成績
+function posYear(){allKids().forEach(k=>{if(k.dead||!k.pos47||yr(k)<16)return;const p=PB(k.pos47);if(!p||!p.ef)return;const mine=momOf(k)==='me',sc=mine?1:.6;
+ const perf=(k[p.st]/100)*.7+Math.random()*.5,s=(perf-.55)*2.2;
+ Object.keys(p.ef).forEach(x=>{NT()[x]=cl(NT()[x]+p.ef[x]*s*sc)});if(p.fac>=0&&S.fp)S.fp[p.fac]=cl(S.fp[p.fac]+3*s*sc);
+ if(p.dip&&S.ntr){const a=NAT6[Math.floor(Math.random()*NAT6.length)];ntr()[a]=cl(ntr()[a]+s*3)}
+ if(s>=.7){k.pow=mm(k.pow,2);if(mine)try{msPush(`${k.n}在「${p.n}」任上政績卓著，朝野稱許。`)}catch(e){}}
+ else if(s<=-.5){k.chong=mm(k.chong,-3);NT().stab=cl(NT().stab-.4);if(mine){S.me.favor-=1;try{msPush(`${k.n}在「${p.n}」任上出了紕漏，被御史參了一本。`)}catch(e){}}}})}
+// ---------- 月度主流程 ----------
+const _m=mend;mend=function(){const r=_m.apply(this,arguments);
+ try{if(!S||!S.me||S.over)return r;ledInit();let pushed=0;
+  const lst=[];S.me.kids.forEach(k=>lst.push([k,'me']));S.npcs.forEach((n,i)=>n.kids.forEach(k=>lst.push([k,i])));
+  lst.forEach(([k,o])=>{if(k.dead)return;const a=yr(k),mine=o==='me';
+   // 月度成長
+   if(a<18){const pl=PLAN[k.pl47||'放養'];if(a>=pl.min||!k.pl47){const A=ARCH[k.zz47==null?5:k.zz47];const gm=A.late&&a>=12?1.6:A.late?.7:1;
+     Object.keys(pl.e).forEach(x=>{const m=(A.g[x]||1)*gm;k[x]=mm(k[x],pl.e[x]*m*(mine?1:.7))})}}
+   // 啟蒙後讓你定培養方式（4歲）
+   if(mine&&!pushed&&!k.pl47&&a>=4&&!k.pq47&&!S.reg){k.pq47=1;pushed=1;const A=ARCH[k.zz47==null?5:k.zz47];
+    S.q.push({t:`${k.n}${a}歲了，天資被評為「${A.n}」（${A.d}）。該如何栽培？`,o:Object.keys(PLAN).filter(x=>x!=='歷練').map(x=>[`${x}${PLAN[x].c?'（每年耗銀'+PLAN[x].c+'）':''}`,()=>{k.pl47=x;return`你為${k.n}定下「${x}」的培養方式，之後也可以隨時調整。`}])})}
+   // 差事
+   if(!k.pos47&&a>=16&&k.sex=='男'&&!(S.reg&&S.reg.k===k)){
+    if(mine&&!pushed&&!S.reg){if(!k.pe47){pushed=1;k.pe47=1;const ps=elig(k).filter(x=>x.id!=='xs').sort(()=>Math.random()-.5).slice(0,3).concat([PB('xs')]);
+     S.q.push({t:`${k.n}已成年，皇上問你：想為他謀個什麼差事？朝中各派都在觀望。`,o:ps.map(p=>[`${p.n}${p.cost?'（打點耗銀'+p.cost+'）':''}${p.sus>=2?'・皇上易起疑':''}`,()=>{if(p.cost&&!pay(p.cost))return'銀兩不足，只能先作罷。';if(approve(k,p)||p.id==='xs'){assign(k,p,1);return`${k.n}受命${p.n}。${p.fac>=0?'「'+FAC[p.fac]+'」一派自此與你更親近。':''}`}S.me.favor-=1;assign(k,PB('zr'),1);return`皇上覺得「${p.n}」不合適，改派他去宗人府辦事。`}])})}}
+    else if(!mine){const ps=elig(k).filter(x=>x.sus<3||P(.3));if(ps.length)assign(k,ps[Math.floor(Math.random()*ps.length)],0)}}
+  });
+  if(S.t>0&&S.t%12===0&&S.led47T!==S.t){S.led47T=S.t;
+   // 培養年費
+   S.me.kids.forEach(k=>{if(k.dead||yr(k)>=18||!k.pl47)return;const c=PLAN[k.pl47].c;if(c&&!pay(c)){k.pl47='放養';try{L(`銀兩不足，${k.n}的培養只得改為放養。`)}catch(e){}}});
+   posYear();ledYear()}
+  if(pushed)fl()}catch(e){console.log('r48',e)}return r};
+// ---------- 畫面 ----------
+const _ka=kidsAllPanel;kidsAllPanel=function(){let h=_ka.apply(this,arguments);
+ try{const map={};allKids().forEach(k=>map[k.n]=k);
+  h=h.split('</details>').map(seg=>{const m=seg.match(/<span class=nm>([^<]*)<\/span>/);if(!m)return seg;const k=map[m[1]];if(!k)return seg;
+   const A=k.zz47==null?null:ARCH[k.zz47],mine=momOf(k)==='me',a=yr(k);let pill='',ctl='';
+   if(A)pill+=`<span class=pill title="${A.d}">${A.n}</span>`;if(k.pos47&&PB(k.pos47))pill+=`<span class=pill title="${PB(k.pos47).n}">${PB(k.pos47).n.split('・')[0]}</span>`;
+   seg=seg.replace('<span class=mm>',pill+'<span class=mm>');
+   if(mine&&!k.dead){if(a<18)ctl+=`<div class=m>培養方式：<select onchange="plSet47('${k.n}',this.value)">${Object.keys(PLAN).filter(x=>PLAN[x].min<=a).map(x=>`<option${(k.pl47||'放養')===x?' selected':''}>${x}</option>`).join('')}</select>${PLAN[k.pl47||'放養'].c?'（年耗銀'+PLAN[k.pl47||'放養'].c+'）':''}</div>`;
+    if(k.sex=='男'&&a>=16&&!S.reg)ctl+=`<div class=m>差事：<select onchange="posSet47('${k.n}',this.value)">${elig(k).map(p=>`<option value="${p.id}"${k.pos47===p.id?' selected':''}>${p.n}${p.cost?'（'+p.cost+'兩）':''}</option>`).join('')}</select></div>`}
+   if(A&&!ctl&&!pill)return seg;return seg+ctl}).join('</details>')}catch(e){console.log('r48k',e)}return h};
+window.ledPol47=function(p){ledInit();S.led47.pol=S.led47.pol===p?'':p;render()};
+function ledCard(){ledInit();const f=figs(),L7=S.led47,b=f.inc-f.exp,pols=[['tax','加征賦稅'],['cut','裁減冗費'],['relief','賑濟安民']];
+ return`<div class="cd led47"><h3>國情實數（每年結算）</h3><div class=m>人口 ${f.pop}萬　兵力 ${f.army}萬<br>歲入 ${f.inc}萬兩　歲出 ${f.exp}萬兩<br>〔軍費${f.mil}・官俸行政${f.adm}・宮廷${f.court}・宗室歲俸${f.zong}・賑災河工${f.relief}〕<br>預計年結餘：<b>${b>=0?'+':''}${b}</b>萬兩　國庫存銀：<b>${L7.tr}</b>萬兩</div>${S.reg?`<p class=m>太后聽政，可定本年財政方針：${pols.map(([k,n])=>`<button class="${L7.pol===k?'':'s'}" onclick="ledPol47('${k}')">${n}</button>`).join(' ')}<br>加征賦稅：歲入＋12%，但民心、朝局下降；裁減冗費：宮廷與官俸支出略減，軍力與朝局微降；賑濟安民：多支出400萬兩，民心朝局上升。</p>`:`<div class=m>你不掌朝政，財政由朝廷決定；孩子們的差事與宗室歲俸會影響國庫。</div>`}</div>`}
+const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
+ try{if(S&&S.me&&!S.over&&TAB==3){const main=document.querySelector('main');if(main&&!main.querySelector('.led47')){const d=document.createElement('div');d.innerHTML=ledCard();const el=d.firstChild,e=main.querySelector('.emp45');if(e)e.insertAdjacentElement('afterend',el);else{const f=main.querySelector(':scope>.cd');if(f)main.insertBefore(el,f);else main.appendChild(el)}}}}catch(e){console.log('r48b',e)}return r};
 })();
 
 deco();intro();
