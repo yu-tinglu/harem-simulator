@@ -4529,6 +4529,26 @@ const _V=V;V=function(i){let e=null,lab='';try{e=S.ev;lab=e&&e.o&&e.o[i]?String(
 const _m36=mend;mend=function(){const r=_m36.apply(this,arguments);try{if(S&&S.me&&!S.over&&S.cn35&&S.cn35.length){const due=S.cn35.filter(c=>c.at<=S.t);if(due.length){S.cn35=S.cn35.filter(c=>c.at>S.t);due.slice(0,1).forEach(c=>{if(CH[c.k])S.q.push(CH[c.k](c.lab))});if(!S.ev&&!S.ch&&!S.scn)next();else render()}}}catch(x){console.log('r36b',x)}return r};
 })();
 
+/* ===== round37：專長解鎖選項、★建議依難度調整 ===== */
+(function(){
+const gF=x=>{if(S.reg)S.reg.pw+=x;else S.me.favor+=x};
+const sk=i=>{try{return S.me.at.sk[i]||0}catch(e){return 0}};
+const SP=[
+ ['醫理',12,/毒|病|湯藥|藥|太醫|時疫|疫|咳嗽|染病|不適|中毒/,'憑醫理親自診辨',(v)=>{if(P(.55+(v-50)/150)){S.me.ally+=3;gF(3);S.me.hp=Math.min(100,S.me.hp+3);S.me.fame=(S.me.fame||0)+2;return'你一眼看出癥結所在，對症處置，眾人嘖嘖稱奇。'}return'你診得不夠準，只勉強穩住了局面。'}],
+ ['琴藝',1,/宴|獻藝|賞|雅|燈會|賀壽|獻禮/,'以琴曲出彩',(v)=>{if(P(.55+(v-50)/150)){gF(6);S.me.fame=(S.me.fame||0)+3;return'一曲終了，滿座靜默，隨即響起讚歎。'}gF(1);return'你彈得中規中矩，沒有太大反響。'}],
+ ['書畫',3,/宴|獻藝|賞|雅|燈會|賀壽|獻禮|題字|詩/,'潑墨揮毫，獻上字畫',(v)=>{if(P(.55+(v-50)/150)){gF(5);S.me.fame=(S.me.fame||0)+3;return'字畫一展，連老臣都連連點頭。'}gF(1);return'筆下略有失手，所幸無人苛責。'}],
+ ['詩詞',13,/宴|獻藝|賞|雅|燈會|謎|賀壽|題詩/,'即興賦詩一首',(v)=>{if(P(.55+(v-50)/150)){gF(5);S.me.fame=(S.me.fame||0)+3;return'詩成之際，座中皆擊節稱善。'}gF(1);return'詩句平平，沒掀起什麼波瀾。'}],
+ ['舞藝',11,/宴|獻藝|賞|燈會|賀壽|獻禮/,'翩然起舞，獻上一曲',(v)=>{if(P(.55+(v-50)/150)){gF(6);S.me.fame=(S.me.fame||0)+3;return'舞袖翻飛，滿堂喝彩。'}gF(1);return'舞步稍有生疏，好在無傷大雅。'}],
+ ['禮',4,/衝突|爭執|失儀|規矩|請安|責難|責罰|問罪|質問|理論|指責/,'引經據禮，據理力爭',(v)=>{if(P(.55+(v-50)/150)){gF(3);S.me.ally+=3;return'你言之有據、禮數周全，對方一時語塞。'}return'你的道理被對方輕輕擋了回來。'}],
+ ['數',8,/帳|銀|靡費|虧空|賞賜|開支|份例|貪墨|國庫|賑/,'核算帳目，找出破綻',(v)=>{if(P(.55+(v-50)/150)){S.me.silver+=40;S.me.ally+=2;gF(2);return'你把帳目逐筆對過，揪出了其中的貓膩，還追回了一筆銀子。'}return'帳目太亂，你算了半天沒理出頭緒。'}],
+ ['騎射',6,/遊園|圍獵|狩|秋獮|騎|馬|校場|比武|獵/,'策馬張弓，一展身手',(v)=>{if(P(.55+(v-50)/150)){gF(6);S.me.fame=(S.me.fame||0)+3;return'一箭中的，四座皆驚。'}gF(1);return'箭偏了些，只博了個勇氣可嘉。'}],
+ ['廚藝',9,/點心|膳|湯|飲食|賞菊|糕|茶/,'親手烹製，表一份心意',(v)=>{if(P(.55+(v-50)/150)){gF(4);S.me.ally+=2;return'那道菜香氣撲鼻，吃過的人都念念不忘。'}return'火候差了一點，心意還是到了。'}],
+ ['女紅',10,/香囊|衣|綢|針|乞巧|賀禮|縫/,'一針一線，親手縫製',(v)=>{if(P(.55+(v-50)/150)){gF(4);S.me.ally+=2;return'針腳細密、花樣別致，收到的人愛不釋手。'}return'手藝尚可，沒有出彩之處。'}]];
+const _n=next;next=function(){const r=_n.apply(this,arguments);
+ try{const e=S&&S.ev;if(e&&e.o&&!e._sp37&&!evCritical(e)&&e.o.length<5){e._sp37=1;const t=String(e.t||'').replace(/<[^>]*>/g,'');const hit=SP.filter(s=>sk(s[1])>=60&&s[2].test(t)).sort((a,b)=>sk(b[1])-sk(a[1]))[0];if(hit){const v=sk(hit[1]);e.o.push([hit[3]+'（專長：'+hit[0]+'）',()=>hit[4](v)]);render()}}}catch(x){console.log('r37',x)}return r};
+const _s=window.sug31;if(_s)window.sug31=function(e){const d=(S&&S.diff===undefined)?1:(S&&S.diff);if(d===2)return null;if(d===1&&P(.15))return null;return _s.apply(this,arguments)};
+})();
+
 deco();intro();
 
 
