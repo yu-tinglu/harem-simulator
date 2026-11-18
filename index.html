@@ -4914,6 +4914,55 @@ const _r=render;render=function(){const r=_r.apply(this,arguments);
   if(b)b.textContent=on?'☀':'☾'}catch(e){console.log('r44',e)}return r};
 })();
 
+/* ===== round45：皇帝名諱＋年號、皇子字輩、擴大名字庫 ===== */
+(function(){
+const uq=s=>[...new Set(s.split(''))];
+// 皇子單名用字（偏旁取玉、火、水、木、金、日，貼近皇室取名習慣）
+const BIG=uq(BKC.join('')+'煊燁煥熠焜煒炘烜燦熾烽煜曜暄旭昊晟暉曦晗昱昕晏晝暻晤澈澤沛淵洵泓浩潤澄瀚渙淳湛溥濬灝泰洛清淮湘涵濟榆楷樟梓桐楠樾榮棟楨梧槿柏松榛楓檀柯樺杉鈞銘鋒鑒鑑錚鎮錦鈺釗鉞鑠琛琮琰瑾璋瑜璟瑞璘璿璵瑄琪瑀琥珩珣玹珉瓊琨璞璨璇璐琬'+'儀仁佑佾俊俶倫偉儼允勉勤勳協博卓嘉啟喆堯堅塏域壎奕奎宇守宏宣宸寅寧寰尚崇崧嵩嶽巍帆帥幹庚廷弘弼彥彰徽忱愷恆恪恭悅惇惟慎懿承敏敬斌斐旻昭昌明朗朔期杰柔棠毅毓熙爔璽矩碩祁祺祿禎禧穆章翊翔翰耀聿肅胤臻良芃芮英茂荃蒼蔚藻衡裕詡謙謹豫賢贊軒軼輔輝迪遠邁邵郁鄴鴻鵬麟黎')
+.filter(c=>/[\u4e00-\u9fff]/.test(c));
+// 字輩候選（每代一字）
+const ZP=uq('承嗣繼光宗景啟元載永延宏德懷長興正廣昭明遠大崇慶祖和泰安世仁文武恭敬誠賢睿成初顯祐祥貞剛毅行克紹述升恒隆建烈裕').filter(c=>/[\u4e00-\u9fff]/.test(c));
+const ERA=['景和','永寧','貞觀','開元','元豐','嘉靖','承平','天啟','崇德','建安','昭武','順治','乾元','建熙','正德','隆慶','寶曆','太初','景祐','熙寧','慶曆','咸和','延祐','至正','泰定','天順','永樂','弘治','宣和','紹興','端平','咸平','淳化','大觀','元祐','貞元','萬曆','康寧','啟元','承德','明昌'].filter(x=>/^[\u4e00-\u9fff]+$/.test(x));
+const SURN=['蕭','李','趙','朱','劉','嬴','楊','陳','宇文','慕容','拓跋','完顏','耶律','司馬','夏侯'];
+// 擴大女名／公主用字池
+const addTo=(arr,s)=>uq(s).forEach(c=>{if(!arr.includes(c))arr.push(c)});
+addTo(GK1,'壽福祿喜瑞祥寶玉珍惠賢福孝禮貴嫻柔慈莊榮儀雅芳妍');
+addTo(GK2,'貞淑慧嫻靜妍婉嬌靈瑩芷蘭宜珮玥萱雅瑗璇翎詩韻琬姝媛妙寧儀');
+const pk=a=>a[Math.floor(Math.random()*a.length)];
+const LS='hg45z';
+function lsGet(){try{return JSON.parse(localStorage.getItem(LS)||'{}')}catch(e){return{}}}
+function lsSet(o){try{localStorage.setItem(LS,JSON.stringify(o))}catch(e){}}
+function cjk(s){return(String(s||'').match(/[\u4e00-\u9fff]/g)||[])}
+let PRE=null;
+function mkZb(){const c=lsGet(),cus=c.mode==='cus'&&cjk(c.txt).length;const z={mode:cus?'cus':'rand',list:cus?cjk(c.txt):[],rl:[]};if(!cus)z.rl[0]=pk(ZP);return z}
+function zbInit(){if(PRE)return;if(!S)return;if(!S.zb43){const c=lsGet();S.zb43={mode:c.mode==='cus'&&cjk(c.txt).length?'cus':'rand',list:c.mode==='cus'?cjk(c.txt):[],rl:[]}}if(S.gen43==null)S.gen43=0}
+function zbChar(){zbInit();const z=PRE||S.zb43,g=PRE?0:(S.gen43||0);if(z.mode==='cus'&&z.list[g])return z.list[g];
+ z.rl=z.rl||[];if(!z.rl[g]){if(g===0&&!PRE&&!S.zbNew)z.rl[0]='承';else{const used=z.rl.filter(Boolean);let c,n=0;do{c=pk(ZP)}while(used.includes(c)&&n++<40);z.rl[g]=c}}return z.rl[g]}
+kidNm=function(sex){const u=namesUsed();let n,c=0;
+ do{if(sex=='男'){n=zbChar()+pk(BIG);if(c>50)n+=pk(BIG)}
+    else{n=pk(GK1)+pk(GK2);if(c>50)n+=pk(GK2)}}while(u.has(n)&&c++<300);KU.add(n);return n};
+// 皇帝名諱
+function mkEmp(){const sur=pk(SURN);let g=pk(BIG);if(Math.random()<.35)g+=pk(BIG);return{sur,giv:g,era:pk(ERA),yr:1}}
+const _s0=start0;start0=function(){PRE=mkZb();let r;try{r=_s0.apply(this,arguments)}finally{const z=PRE;PRE=null;try{if(S){S.zbNew=1;S.zb43=z;S.gen43=0;S.em43=mkEmp()}}catch(e){console.log('r45a',e)}}return r};
+function empSync(){if(!S||!S.me)return;if(!S.em43)S.em43=mkEmp();
+ if(S.reg&&S.reg.k&&S.em43.kn!==S.reg.k.n){const old=S.em43;S.gen43=(S.gen43||0)+1;S.em43={sur:old.sur,giv:S.reg.k.n,era:pk(ERA),yr:1,kn:S.reg.k.n};try{msPush&&msPush(`${S.em43.era}元年，${S.em43.giv}登基`)}catch(e){}}}
+window.empName=function(){empSync();const e=S.em43;return e?`${e.era}帝・${e.sur}${e.giv}`:''};
+window.zbSet=function(mode,txt){zbInit();const t=document.getElementById('zb45');const s=cjk(txt!=null?txt:(t&&t.value));
+ if(mode==='cus'&&!s.length){const m=document.getElementById('zbm45');if(m)m.textContent='請輸入至少一個字（例如「承嗣光宗」，每一代皇子用一個字）。';return}
+ const o={mode,txt:s.join('')};lsSet(o);if(S&&S.zb43){S.zb43.mode=mode;S.zb43.list=mode==='cus'?s:[];if(mode==='rand')S.zb43.rl=[]}
+ if(S&&S.me){try{render()}catch(e){}}else{const m=document.getElementById('zbm45');if(m)m.textContent=mode==='cus'?'已設定：之後的皇子依序用「'+s.join('、')+'」字輩。':'已改為隨機字輩。'}};
+function zbCardInner(){const c=lsGet(),cur=S&&S.zb43?S.zb43:c,cus=cur.mode==='cus';
+ return`<div class=m>皇子的名字＝<b>字輩＋一字</b>（同一代皇子共用一個字輩，例如「承煜」「承琰」）。換了皇帝，就換下一代字輩。公主名不受字輩影響。名字庫約 ${BIG.length} 個男名用字、${GK1.length}×${GK2.length} 種公主名組合。</div>
+ <p>目前：<b>${cus?'自訂':'隨機'}</b>${S&&S.me?`｜本代字輩：<b>${zbChar()}</b>`:''}</p>
+ <p><input id=zb45 placeholder="輸入字輩，如：承嗣光宗" value="${cus?(cur.list||cjk(c.txt)).join(''):''}" style="width:55%;max-width:240px"> <button onclick="zbSet('cus')">套用自訂</button> <button class=s onclick="zbSet('rand')">改隨機</button></p><div id=zbm45 class=m></div>`}
+function zbCard(){return`<div class=cd><h3>皇子字輩</h3>${zbCardInner()}</div>`}
+const _dc=dailyCard;dailyCard=function(){return _dc.apply(this,arguments)+zbCard()};
+const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
+ try{if(S&&S.me&&!S.over){empSync();const main=document.querySelector('main');if(main&&TAB==3&&!main.querySelector('.emp45')){const e=S.em43,ep=(typeof EPS!=='undefined'&&EPS[S.ep])?EPS[S.ep][0]:'';
+  const d=document.createElement('div');d.className='cd emp45';d.innerHTML=`<h3>在位皇帝</h3><div class=m><b>${e.era}帝・${e.sur}${e.giv}</b>${ep?'｜性格：'+ep:''}${S.reg?'（幼主，由太后聽政）':''}</div>${zbCardInner()}`;const f=main.querySelector(':scope>.cd');if(f)main.insertBefore(d,f);else main.appendChild(d)}}}catch(e){console.log('r45b',e)}return r};
+const _g=goalChip;goalChip=function(){let s='';try{if(S&&S.me){empSync();const e=S.em43;s=`<div class=cd><span class=m>在位：<b>${e.era}帝・${e.sur}${e.giv}</b>（${e.era}${S.t>=12?Math.floor(S.t/12)+1:1}年）</span></div>`}}catch(x){}return _g.apply(this,arguments)+s};
+})();
+
 deco();intro();
 
 
