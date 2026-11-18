@@ -5597,7 +5597,7 @@ window.mkFam58=mkFam58;window.TR58=TR58;
 function mkPool(n){const p=[];for(let i=0;i<n;i++){const t=pickTy();p.push({n:pnm('女'),t,cai:R(35,90),mei:R(35,92)})}if(cur57===null||1)cur57={t:S.t,who:'太后',pool:p,kept:[]};return p}
 const desc=c=>`${c.n}（${c.t.ty}・才${c.cai}・貌${c.mei}）`;
 function addEmpress(c){const x=rx(),R_=S.reg;R_.wed=1;x.emp={n:c.n,ty:c.t.ty,pw:c.t.pw+R(-5,8),gl:c.t.gl,fv:c.t.fm+Math.round((c.mei-60)/4),gs:0};c.t.ef();if(cur57)cur57.kept.push(c);try{jot('帝','新帝'+R_.k.n,`你主持選秀，為皇帝選定${c.t.ty}${c.n}為皇后。`)}catch(e){}return`你在選秀中為皇帝選定${c.t.ty}${c.n}為皇后。${c.t.d}。`}
-function addConsort(c,e){const x=rx();x.cb=x.cb||[];x.cb.push({n:c.n,ty:c.t.ty,t:S.t,kids:0,fv:cl(c.t.fm+Math.round((c.mei-60)/3)),ld:c.t.ld,rk:c.t.rk,cai:c.cai,fam:mkFam58(c.t.ty),tr:pk(TR58)});c.t.ef();if(cur57)cur57.kept.push(c);if(e&&!e.gone)e.fv=cl(e.fv-3);return`留了${c.t.ty}${c.n}的牌子，封為${c.t.rk}。${c.t.d}。`}
+function addConsort(c,e){const x=rx();x.cb=x.cb||[];x.cb.push({n:c.n,ty:c.t.ty,t:S.t,kids:0,fv:cl(c.t.fm+Math.round((c.mei-60)/3)),ld:c.t.ld,rk:c.t.rk,cai:c.cai,mei:c.mei,at:S.t,fam:mkFam58(c.t.ty),tr:pk(TR58),log:[{t:S.t,x:`入選秀女，被留了牌子，封為${c.t.rk}。`}]});c.t.ef();if(cur57)cur57.kept.push(c);if(e&&!e.gone)e.fv=cl(e.fv-3);return`留了${c.t.ty}${c.n}的牌子，封為${c.t.rk}。${c.t.d}。`}
 function round(pool,left,after){const x=rx(),e=x.emp,needE=!e||e.gone;
  if(!pool.length||left<=0||(!needE&&cbs().length>=10)){L(after||'選秀完畢。');if(after!==null)finish();return}
  choose(needE?`先為皇帝擇后。以下是入選殿選的秀女：`:`再為皇帝留牌子（還能留${left}位；後宮現有${cbs().length}人）：`,
@@ -5621,10 +5621,10 @@ const RKL=['答應','常在','貴人','嬪','貴嬪','妃'],CAPL=[6,6,6,4,3,2];
 const rkIdx=c=>Math.max(0,RKL.indexOf(c.rk||(c.fv>=70?'嬪':c.fv>=55?'貴人':'常在')));
 const rkCnt=i=>cbs().filter(c=>rkIdx(c)===i).length;
 window.cbDo58=function(i,act){try{const c=cbs()[i],e=rx().emp;if(!c||S.t<(c.cd58||0))return;c.cd58=S.t+3;
- if(act==='up'){const r=rkIdx(c);if(r>=RKL.length-1||rkCnt(r+1)>=CAPL[r+1]){L(`${RKL[Math.min(r+1,5)]}名額已滿或已到頂，無法再晉封。`);render();return}if(!pay(20)){L('銀兩不足。');render();return}c.rk=RKL[r+1];c.ld=cl(c.ld+8);if(e&&!e.gone)e.gl=cl(e.gl-2);L(`你下旨晉封${c.n}為${c.rk}，她感念你的恩典。（忠誠＋8、皇后好感－2）`)}
- else{c.fv=cl(c.fv-8);c.ld=cl(c.ld+4);if(e&&!e.gone)e.gl=cl(e.gl+2);L(`你召${c.n}訓誡一番，她收斂了許多。（帝寵－8、忠誠＋4、皇后好感＋2）`)}render()}catch(x){console.log('r59c',x)}};
+ if(act==='up'){const r=rkIdx(c);if(r>=RKL.length-1||rkCnt(r+1)>=CAPL[r+1]){L(`${RKL[Math.min(r+1,5)]}名額已滿或已到頂，無法再晉封。`);render();return}if(!pay(20)){L('銀兩不足。');render();return}c.rk=RKL[r+1];(c.log=c.log||[]).push({t:S.t,x:`被你晉封為${c.rk}。`});c.ld=cl(c.ld+8);if(e&&!e.gone)e.gl=cl(e.gl-2);L(`你下旨晉封${c.n}為${c.rk}，她感念你的恩典。（忠誠＋8、皇后好感－2）`)}
+ else{(c.log=c.log||[]).push({t:S.t,x:'被你召來訓誡。'});c.fv=cl(c.fv-8);c.ld=cl(c.ld+4);if(e&&!e.gone)e.gl=cl(e.gl+2);L(`你召${c.n}訓誡一番，她收斂了許多。（帝寵－8、忠誠＋4、皇后好感＋2）`)}render()}catch(x){console.log('r59c',x)}};
 // 每年自動晉封
-const _rm=rmend;rmend=function(){const r=_rm.apply(this,arguments);try{if(S&&S.reg&&S.t%12===3){cbs().forEach(c=>{const k=rkIdx(c);if((c.kids>0||c.fv>70)&&k<4&&rkCnt(k+1)<CAPL[k+1]&&P(.5)){c.rk=RKL[k+1];try{msPush(`皇帝晉封${c.n}為${c.rk}`)}catch(e){}}})}}catch(e){console.log('r59y',e)}return r};
+const _rm=rmend;rmend=function(){const r=_rm.apply(this,arguments);try{if(S&&S.reg&&S.t%12===3){cbs().forEach(c=>{const k=rkIdx(c);if((c.kids>0||c.fv>70)&&k<4&&rkCnt(k+1)<CAPL[k+1]&&P(.5)){c.rk=RKL[k+1];(c.log=c.log||[]).push({t:S.t,x:`皇帝晉封她為${c.rk}。`});try{msPush(`皇帝晉封${c.n}為${c.rk}`)}catch(e){}}})}}catch(e){console.log('r59y',e)}return r};
 const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
  try{if(S&&S.reg&&!S.over&&TAB==1){const main=document.querySelector('main');if(main&&!main.querySelector('.hg57')){const x=rx(),e=x.emp,cb=x.cb||[],ix=RACT.findIndex(a=>a[0]==='主持選秀');
   const R_=S.reg,left=Math.max(0,(R_.xiu57||0)-S.t);
@@ -5732,7 +5732,7 @@ const EV=[
 const _rm=rmend;rmend=function(){const r=_rm.apply(this,arguments);
  try{if(!S||!S.reg||S.over)return r;ensure();const cb=cbs();if(!cb.length||S.gcd>0||S.t<(S.cb60||0)||!P(.07)||(S.ev||S.ch||S.scn))return r;
   const c=cb[R(0,cb.length-1)],pool=EV.map(f=>f(c)).filter(Boolean);if(!pool.length)return r;let t=pool.reduce((a,x)=>a+x.w,0),k=Math.random()*t,pick=pool[0];for(const x of pool){k-=x.w;if(k<=0){pick=x;break}}
-  S.cb60=S.t+6;infPush(pick.e())}catch(e){console.log('r60',e)}return r};
+  S.cb60=S.t+6;const ev=pick.e();ev.o=ev.o.map(([l,f])=>[l,()=>{const rr=f();(c.log=c.log||[]).push({t:S.t,x:String(rr).slice(0,60)});return rr}]);infPush(ev)}catch(e){console.log('r60',e)}return r};
 })();
 
 /* ===== round61：本月重點卡 ===== */
@@ -5907,6 +5907,43 @@ function tab5(main){
 const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
  try{if(!S||!S.me||S.over||S.scn)return r;const main=document.querySelector('#app main');if(!main||main.classList.contains('mmenu'))return r;
   if(TAB==0)tab0(main);else if(TAB==1)tab1(main);else if(TAB==3)tab3(main);else if(TAB==4)tab4(main);else if(TAB==5)tab5(main)}catch(e){console.log('r65',e)}return r};
+})();
+
+/* ===== round66：皇帝的後宮成為獨立區域（太妃頁切換），每位妃嬪有完整詳情 ===== */
+(function(){
+const ESC=x=>String(x==null?'':x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let VIEW=(()=>{try{return localStorage.getItem('hg66v')||'tf'}catch(e){return'tf'}})();
+const cbs=()=>{const x=rx();if(!x.cb)x.cb=[];return x.cb};
+const RKL=['答應','常在','貴人','嬪','貴嬪','妃'];
+const rkOf=c=>c.rk||(c.fv>=70?'嬪':c.fv>=55?'貴人':'常在');
+const yrs=c=>c.at==null?'':`第${Math.floor(c.at/12)+1}年入宮`;
+const bar=(v,l)=>`<div class=m style="display:flex;align-items:center;gap:8px"><span style="min-width:3.2em">${l}</span><span style="flex:1;height:6px;border-radius:3px;background:rgba(160,90,90,.18);overflow:hidden"><i style="display:block;height:100%;width:${Math.max(0,Math.min(100,v))}%;background:linear-gradient(90deg,#e58a96,#c8323c)"></i></span><b>${Math.round(v)}</b></div>`;
+window.cbDo66=function(i,act){try{const c=cbs()[i];if(!c)return;const e=rx().emp;(c.log=c.log||[]);
+ if(S.t<(c.cd66||0)){L('才剛見過她，過幾個月再說。');render();return}
+ if(act==='gift'){if(!pay(20)){L('銀兩不足。');render();return}c.cd66=S.t+2;c.ld=Math.min(100,c.ld+8);c.fv=Math.min(100,c.fv+2);c.log.push({t:S.t,x:'得了你的賞賜。'});L(`你賞了${c.n}一份體面的禮物，她很是感念。（忠誠＋8、帝寵＋2）`)}
+ else if(act==='talk'){c.cd66=S.t+2;c.ld=Math.min(100,c.ld+2);const hint=c.ld<45?'言語間有些敷衍，心裡似乎另有打算。':c.ld>=70?'對你十分恭順，無話不談。':'應對得體，看不出別的心思。';const kid=c.kids?`她提起${c.kids}個孩子時神色柔和。`:'';c.log.push({t:S.t,x:'被召來問話。'});L(`你召${c.n}來慈寧宮說話。${hint}${kid}（忠誠＋2）`)}
+ render()}catch(x){console.log('r66a',x)}};
+window.hgView66=function(v){VIEW=v;try{localStorage.setItem('hg66v',v)}catch(e){}render()};
+function panel(){const x=rx(),e=x.emp,cb=cbs(),R_=S.reg,ix=RACT.findIndex(a=>a[0]==='主持選秀'),ig=RACT.findIndex(a=>a[0]==='管教皇后'),left=Math.max(0,(R_.xiu57||0)-S.t);
+ let h=`<div class="cd hg66"><h3>皇帝的後宮</h3><div class=m>皇后${e&&!e.gone?'1':'0'}人・妃嬪 ${cb.length} 人　${left?`下一屆選秀：還有 ${left} 個月`:'可以主持選秀了'}</div><p><button onclick="A(${ix})">主持選秀</button> <button class=s onclick="A(${ig})">管教皇后</button></p></div>`;
+ if(e&&!e.gone){h+=`<details class="cd con hg66"><summary><span class=nm>${ESC(e.n)}</span><span class=pill>皇后</span><span class=m style="margin-left:6px">${ESC(e.ty)}出身</span></summary>${bar(e.gl,'對你好感')}${bar(e.pw,'家勢')}${bar(e.fv,'帝寵')}<div class=m>${e.flt?`你手上握有她的 ${e.flt} 條把柄。`:'目前沒有抓到她的把柄。'}</div></details>`}
+ else h+=`<div class="cd hg66"><div class=m>中宮尚缺皇后，可「籌辦大婚」或在選秀中擇后。</div></div>`;
+ const ord=cb.map((c,i)=>[c,i]).sort((a,b)=>RKL.indexOf(rkOf(b[0]))-RKL.indexOf(rkOf(a[0]))||b[0].fv-a[0].fv);
+ if(!ord.length)h+=`<div class="cd hg66"><div class=m>皇帝身邊還沒有妃嬪。主持選秀、或用「選人侍君」安排人過去。</div></div>`;
+ ord.forEach(([c,i])=>{const f=c.fam;const logs=(c.log||[]).slice(-5).reverse();
+  h+=`<details class="cd con hg66"><summary><span class=nm>${ESC(c.n)}</span><span class=pill>${rkOf(c)}</span><span class=m style="margin-left:6px">${ESC(c.ty)}${c.tr?'・'+ESC(c.tr):''}</span></summary>
+  ${bar(c.fv,'帝寵')}${bar(c.ld,'忠於你')}
+  <div class=m>${yrs(c)}　子嗣 ${c.kids||0} 人${c.cai?`　才 ${c.cai}`:''}${c.mei?`　貌 ${c.mei}`:''}</div>
+  ${f?`<div class=m>母家：父親任${ESC(f.job)}（勢力 ${Math.round(f.pw)}）</div>`:''}
+  <div class=m style="margin-top:4px"><b>近況</b></div>${logs.length?logs.map(l=>`<div class=m>第${Math.floor(l.t/12)+1}年${l.t%12+1}月・${ESC(l.x)}</div>`).join(''):'<div class=m>暫無記載。</div>'}
+  <p><button class=s onclick="cbDo66(${i},'talk')">召見</button> <button class=s onclick="cbDo66(${i},'gift')">賞賜（20）</button> <button class=s onclick="cbDo58(${i},'up')">晉封（20）</button> <button class=s onclick="cbDo58(${i},'warn')">申飭</button></p></details>`});
+ return h}
+const st=document.createElement('style');st.textContent=`.vsw66{display:flex;gap:8px;margin:6px 0}.vsw66 button{flex:1}main.hgv66>*:not(.hg66):not(.vsw66){display:none!important}.hg57{display:none!important}details.hg66{padding:2px 12px}details.hg66>summary{cursor:pointer;padding:10px 0;list-style:none}details.hg66>summary::-webkit-details-marker{display:none}`;document.head.appendChild(st);
+const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
+ try{if(S&&S.reg&&S.me&&!S.over&&TAB==1){const main=document.querySelector('#app main');if(main&&!main.querySelector('.vsw66')){
+  const sw=document.createElement('div');sw.className='vsw66';sw.innerHTML=`<button class="${VIEW==='tf'?'':'s'}" onclick="hgView66('tf')">太妃（先帝後宮）</button><button class="${VIEW==='hg'?'':'s'}" onclick="hgView66('hg')">皇帝的後宮（${cbs().length+(rx().emp&&!rx().emp.gone?1:0)}）</button>`;
+  main.insertBefore(sw,main.firstChild);
+  if(VIEW==='hg'){const d=document.createElement('div');d.innerHTML=panel();[...d.children].reverse().forEach(el=>sw.insertAdjacentElement('afterend',el));main.classList.add('hgv66')}else main.classList.remove('hgv66')}}}catch(e){console.log('r66',e)}return r};
 })();
 
 deco();intro();
