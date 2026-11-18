@@ -7129,6 +7129,17 @@ window.cmpAll49=function(o){const r=f.apply(this,arguments);try{
  const first=main.querySelector('details.con');if(first&&first.scrollIntoView)setTimeout(()=>first.scrollIntoView({block:o?'start':'center',behavior:'smooth'}),80)
  }catch(e){console.log('r79c',e)}return r}}catch(e){}})();
 
+/* ===== round80：非外邦公主出身，沒有「母國」相關行動 ===== */
+(function(){
+const NAMES=['母國謀略','化解母國猜忌','降低母國猜忌','資助母國'];
+const _u=uiPost;uiPost=function(){const r=_u.apply(this,arguments);try{
+ if(!S||!S.me||S.over||S.me.fo)return r;
+ document.querySelectorAll('main .actcat').forEach(card=>{let n=0;
+  card.querySelectorAll('button').forEach(b=>{const t=(b.innerText||b.textContent||'').trim();if(NAMES.some(x=>t.startsWith(x))){b.remove();n++}});
+  if(n){const left=card.querySelectorAll('button').length;const hs=[...card.querySelectorAll('*')].find(e=>!e.children.length&&/^\d+項$/.test((e.textContent||'').trim()));if(hs&&left>0)hs.textContent=left+'項'}})
+}catch(e){console.log('r80',e)}return r};window.uiPost=uiPost;
+})();
+
 deco();intro();
 
 
