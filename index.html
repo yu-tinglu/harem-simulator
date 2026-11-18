@@ -5815,6 +5815,8 @@ const IMG=['data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHCAkIBgoJC
 const st=document.createElement('style');st.textContent=`#bg63{position:fixed;inset:0;z-index:0;background-size:cover;background-position:center top;background-repeat:no-repeat;display:none}
 #bg63::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,246,238,.40),rgba(255,246,238,.14) 35%,rgba(255,240,232,.48))}
 html.dk18 #bg63::after{background:linear-gradient(180deg,rgba(20,6,12,.72),rgba(20,6,12,.55) 35%,rgba(14,4,8,.82))}
+html:not(.in63):not(.dk18) #bg::after{background:linear-gradient(180deg,rgba(255,243,228,.22),rgba(255,226,204,.08) 45%,rgba(255,240,224,.40))!important}
+html:not(.in63):not(.dk18) .cd,html:not(.in63):not(.dk18) .g1>*{background:rgba(255,248,240,.93)!important}
 html.in63 #bg63{display:block}html.in63 #bg,html.in63 .bokeh{display:none!important}`;document.head.appendChild(st);
 let el=document.getElementById('bg63');if(!el){el=document.createElement('div');el.id='bg63';const bg=document.getElementById('bg');if(bg)bg.insertAdjacentElement('afterend',el);else document.body.insertBefore(el,document.body.firstChild)}
 let last=-1;
