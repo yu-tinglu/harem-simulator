@@ -5252,6 +5252,28 @@ const _r=render;render=function(){const r=_r.apply(this,arguments);
   d.innerHTML=`<summary style="cursor:pointer"><b>概況</b>　<span class=m>${em}｜${era?era+'｜':''}國力${natv()|0}${S.reg?'｜權柄'+(S.reg.pw|0):''}</span></summary>`;
   m.insertBefore(d,take[0]);take.forEach(e=>d.appendChild(e))}catch(e){console.log('r49b',e)}return r};
 })();
+/* ---- round49c：太妃／宗室頁 簡版・詳細版切換 ---- */
+(function(){
+let CMP=true;try{const v=localStorage.getItem('hg49cmp');if(v!==null)CMP=v==='1'}catch(e){}
+const st=document.createElement('style');st.textContent=`
+body.cmp49 .pc40 .pc-sub .pc-chip:not(.rel){display:none}
+body.cmp49 .pc40 .pc-av{transform:scale(.8);margin:-3px -2px -3px -4px}
+body.cmp49 .pc40>summary{padding-top:6px!important;padding-bottom:6px!important}
+body.cmp49 .kid .kb{display:none}
+body.cmp49 .kid{font-size:13px}
+body.cmp49 details.con>summary .mm{display:none}
+.cmp49bar{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:6px 0;font-size:13px}
+.cmp49bar .m{margin-right:2px}
+.cmp49bar button{min-height:0!important;height:30px!important;padding:0 12px!important;font-size:13px!important}
+`;document.head.appendChild(st);
+window.cmp49=function(v){CMP=!!v;try{localStorage.setItem('hg49cmp',CMP?'1':'0')}catch(e){}document.body.classList.toggle('cmp49',CMP);document.querySelectorAll('.cmp49bar button[data-m]').forEach(b=>b.className=(b.dataset.m==='1')===CMP?'':'s')};
+window.cmpAll49=function(o){document.querySelectorAll('main details.con').forEach(d=>d.open=!!o)};
+const _r=render;render=function(){const r=_r.apply(this,arguments);
+ try{document.body.classList.toggle('cmp49',CMP);if(!S||!S.me||S.over||(TAB!==1&&TAB!==2))return r;const m=document.querySelector('main');if(!m||m.querySelector('.cmp49bar'))return r;
+  const d=document.createElement('div');d.className='cmp49bar';
+  d.innerHTML=`<button data-m=1 class="${CMP?'':'s'}" onclick="cmp49(1)">簡版</button><button data-m=0 class="${CMP?'s':''}" onclick="cmp49(0)">詳細版</button><span style="flex:1"></span><button class=s onclick="cmpAll49(1)">展開</button><button class=s onclick="cmpAll49(0)">收合</button>`;
+  const f=m.querySelector(':scope>.sec13,:scope>.cd,:scope>.fbar');if(f)m.insertBefore(d,f);else m.appendChild(d)}catch(e){console.log('r49c',e)}return r};
+})();
 
 deco();intro();
 
