@@ -4362,12 +4362,32 @@ function regAuto(months){
 const _ar=autoRun;autoRun=function(n){if(S&&S.reg&&!S.over)return regAuto(n);return _ar.apply(this,arguments)};
 })();
 
-/* ===== round33：賞下人／資助母家／資助母國 的花費依對象與身家拉開比例 ===== */
+/* ===== round33：比例原則——花費依對象與身家放大，效果隨花費同步放大（遞減） ===== */
 (function(){
-const TIER=[[/普賞宮人|厚賞各宮管事|收買對手的下人/,.5],[/整個母族|小額資助|大筆資助/,1.2],[/撥軍費|賑濟興農|遣使修好/,2]];
 const wf=()=>Math.max(1,Math.min(5,Math.sqrt(((S&&S.me&&S.me.silver)||0)/500)));
-const _ch=choose;choose=function(t,o){try{if(Array.isArray(o)&&!_RS3){const f0=wf();o.forEach(x=>{const lab=String(x.l||'');const tr=TIER.find(r=>r[0].test(lab));const mm=/耗銀(\d+)/.exec(lab);if(!tr||!mm||!x.f)return;const base=+mm[1],nc=Math.max(5,Math.round(base*tr[1]*f0/5)*5);if(nc===base)return;x.l=lab.replace(/耗銀\d+/,'耗銀'+nc);const of=x.f,ex=nc-base;x.f=function(){const m=S.me;if(m.silver<nc){L('銀兩不足。');return}const s0=m.silver;m.silver-=ex;const r=of.apply(this,arguments);if(s0-m.silver<nc)m.silver=Math.min(s0,m.silver+ex);return r}})}}catch(e){console.log('r33',e)}return _ch.apply(this,arguments)};
-let _RS3=0;
+const cost=(base,mul)=>Math.max(5,Math.round(base*mul*wf()/5)*5);
+const kOf=(nc,base)=>Math.max(1,Math.min(4,Math.pow(nc/base,.75)));
+function snap(g){const a=[],P=(o,k)=>{if(o&&typeof o[k]==='number')a.push([o,k,o[k]])};
+ try{
+ if(g==='srv'){(S.srv||[]).forEach(x=>P(x,'lo'));P(S.me,'ally');(S.npcs||[]).forEach(n=>P(n,'al'))}
+ else if(g==='fam'){(S.me.fam||[]).forEach(x=>{P(x,'pw');P(x,'lo');P(x,'ab')});P(S.me,'ally')}
+ else if(g==='fr'){const f=S.fr;if(f)['mil','eco','stab','rel'].forEach(k=>P(f,k))}
+ else if(g==='nat'){if(S.nat)Object.keys(S.nat).forEach(k=>P(S.nat,k));if(S.reg)P(S.reg,'pw');P(S.me,'ally');try{const r=ntr();Object.keys(r).forEach(k=>P(r,k))}catch(e){}}
+ }catch(e){}return a}
+function amp(a,k,g){if(k<=1.001)return;a.forEach(([o,key,v0])=>{const d=o[key]-v0;if(d>0)o[key]=Math.round(v0+d*k)});if(g==='fr'&&S.fr&&typeof frPw==='function')S.fr.pw=frPw(S.fr)}
+/* 把「原本耗 base」的處理改成「耗 nc、效果×k」 */
+function wrapPay(of,base,nc,g){return function(){const m=S.me;if(m.silver<nc){L('銀兩不足。');return}const s0=m.silver;m.silver-=nc-base;const sn=snap(g);const r=of.apply(this,arguments);if(s0-m.silver<nc){m.silver=Math.min(s0,m.silver+(nc-base))}else amp(sn,kOf(nc,base),g);return r}}
+const TIER=[
+ [/普賞宮人|厚賞各宮管事|收買對手的下人/,.5,'srv'],
+ [/整個母族|小額資助|大筆資助/,1.2,'fam'],
+ [/撥軍費|賑濟興農|遣使修好/,2,'fr'],
+ [/通商互市/,1.5,'nat'],[/冊封賞賜，結盟修好/,2,'nat'],[/擢升心腹/,1,'nat']];
+const _ch=choose;choose=function(t,o){try{if(Array.isArray(o)){o.forEach(x=>{const lab=String(x.l||'');const tr=TIER.find(r=>r[0].test(lab));const mm=/耗銀(\d+)/.exec(lab);if(!tr||!mm||!x.f||x._s33)return;x._s33=1;const base=+mm[1],nc=cost(base,tr[1]);if(nc===base)return;x.l=lab.replace(/耗銀\d+/,'耗銀'+nc);x.f=wrapPay(x.f,base,nc,tr[2])})}}catch(e){console.log('r33',e)}return _ch.apply(this,arguments)};
+/* 臨朝：直接扣銀的行動 */
+const RT={'召見重臣':[15,1,'nat'],'賑濟施恩':[20,1.5,'nat'],'整軍經武':[20,1.5,'nat'],'開科取士':[30,1.2,'nat']};
+const D0={};
+try{RACT.forEach(a=>{const t=RT[a[0]];if(!t)return;D0[a[0]]=a[1];const of=a[2];a[2]=function(){const nc=cost(t[0],t[1]);if(nc===t[0])return of.apply(this,arguments);return wrapPay(of,t[0],nc,t[2]).apply(this,arguments)}})}catch(e){console.log('r33b',e)}
+const _ra=regActs;regActs=function(){try{RACT.forEach(a=>{const t=RT[a[0]];if(t&&D0[a[0]])a[1]=D0[a[0]].replace(/耗銀\d+/,'耗銀'+cost(t[0],t[1]))})}catch(e){}return _ra.apply(this,arguments)};
 })();
 
 deco();intro();
