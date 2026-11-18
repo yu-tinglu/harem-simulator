@@ -7170,6 +7170,16 @@ const _u=uiPost;uiPost=function(){const r=_u.apply(this,arguments);try{
 try{const _ec82=empCard;empCard=function(){let h=_ec82.apply(this,arguments);try{h=h.replace(/<div style="margin-top:6px"><div class=m>近 \d+ 個月走勢<\/div>[\s\S]*?<\/div>(?=<div class=eab>)/,'')}catch(e){console.log('r82',e)}return h}}catch(e){console.log('r82',e)}
 /* 數值條填色（--gd 先前未定義，導致條是空的） */
 try{const st=document.createElement('style');st.textContent=':root{--gd:linear-gradient(90deg,#eaa06c,#d98a2b)}';document.head.appendChild(st)}catch(e){console.log('r82',e)}
+/* 按鈕與字體比例統一 */
+try{const st=document.createElement('style');st.textContent=`
+main button.chip,main button.s{height:auto!important;min-height:36px!important;padding-block:6px!important;line-height:1.25}
+main button.chip{font-size:12px!important}
+main button:not(.chip):not(.ac31 *){font-size:13.5px}
+.ac31 button{min-height:40px;font-size:15px}
+.ac31 select{font-size:13.5px!important;min-height:36px}
+.ac31 .pol75{font-size:12px}
+#help .hb button,#pm68 button,#kmodal49 button{font-size:13.5px;min-height:36px}
+`;document.head.appendChild(st)}catch(e){console.log('r82',e)}
 
 deco();intro();
 
