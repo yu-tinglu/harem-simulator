@@ -6886,6 +6886,17 @@ const _rb=rmend;rmend=function(){const r=_rb.apply(this,arguments);try{if(S&&S.m
 window.__R74=1;
 })();
 
+/* ===== round75：修正「按了沒反應」——開局選項沒畫出來、新手說明蓋住畫面 ===== */
+(function(){
+/* 1. 開局的「你想怎麼玩這一局？」只設定了 S.ch 卻沒重畫，導致按鈕全部被擋住又看不到選項 */
+try{const _s=start;start=function(){const r=_s.apply(this,arguments);try{if(S&&S.me&&S.ch)render()}catch(e){console.log('r75a',e)}return r};window.start=start}catch(e){console.log('r75',e)}
+/* 2. 有事情待處理時，按「無腦玩」不再默默沒反應：重畫並提示 */
+try{const _a=autoRun;autoRun=function(){if(S&&!S.over&&!S.reg&&(S.ch||S.ev||S.scn)){try{render();if(typeof toast==='function')toast('請先處理眼前的選擇')}catch(e){}return}return _a.apply(this,arguments)};window.autoRun=autoRun}catch(e){console.log('r75b',e)}
+/* 3. 新手說明：頂端固定「✕ 關閉」，點背景也能關 */
+try{const _h=helpOpen;helpOpen=function(){const r=_h.apply(this,arguments);try{const e=document.getElementById('help'),hb=e&&e.querySelector('.hb');if(hb&&!hb.querySelector('.hx75')){const x=document.createElement('button');x.className='hx75';x.textContent='✕ 關閉';x.onclick=()=>e.remove();hb.insertBefore(x,hb.firstChild);e.addEventListener('click',ev=>{if(ev.target===e)e.remove()})}}catch(er){console.log('r75c',er)}return r};window.helpOpen=helpOpen}catch(e){console.log('r75',e)}
+try{const st=document.createElement('style');st.textContent='#help .hx75{position:sticky;top:0;display:block;margin:0 0 8px auto;z-index:2;padding:8px 14px;border-radius:999px;border:1px solid #d9a7a0;background:#fff;color:#8a3b3b;font-weight:700;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.15)}';document.head.appendChild(st)}catch(e){}
+})();
+
 deco();intro();
 
 
