@@ -5512,7 +5512,7 @@ const CATS=[
 ['入門與操作',['這是什麼遊戲','第一年照著做','每月 4 次行動','六組行動','數值是什麼','方針與一鍵','輕鬆模式','警示欄','事件頻率','事件冷卻']],
 ['後宮、位份與宮鬥',['位份與編制','官女子','盟友度','敵意、罪證','皇后與中宮','管教皇后','暗算皇后','結拜與宿敵','關係圖','記憶、派系','因果與人生','選秀']],
 ['皇帝、朝堂與主線',['皇帝詳情','皇帝疑心','前朝、母家','私兵與疑心','主線劇情','終局大計']],
-['子嗣、宗室與傳承',['子嗣與奪嫡','九龍奪嫡','子女婚配','姻親勢力','皇子字輩','孩子資質','皇子差事','公主差事','孩子詳情卡','皇室族譜']],
+['子嗣、宗室與傳承',['子嗣與奪嫡','九龍奪嫡','子女婚配','姻親勢力','皇子字輩','孩子資質','皇子差事','出身與差事','公主差事','孩子詳情卡','皇室族譜']],
 ['外邦與公主',['外邦公主','降低母國猜忌','公主攝政','攝政公主']],
 ['金錢與國庫',['下人與商鋪','金錢用途','國情實數']],
 ['存檔與其他',['通知、紀事','壽命與後台','年表摺疊']]];
@@ -5761,6 +5761,52 @@ function pts(){const m=S.me,o=[];const add=(p,t)=>o.push([p,t]);
 const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
  try{if(S&&S.me&&!S.over&&TAB==0&&!S.scn){const main=document.querySelector('main');if(main){main.querySelectorAll('.pt61').forEach(e=>e.remove());const l=pts();
   const d=document.createElement('div');d.className='cd pt61';d.innerHTML='<h3>本月重點</h3>'+(l.length?l.map(t=>`<div class=m>• ${t}</div>`).join(''):'<div class=m>目前一切平穩，可以放心按「無腦玩一個月」。</div>');main.insertBefore(d,main.firstChild)}}}catch(e){console.log('r61',e)}return r};
+})();
+
+/* ===== round62：中秋、冬至節慶分版本；皇子差事門檻看生母位份 ===== */
+(function(){
+const m_=()=>S.me,rk=()=>S.me.rank,fav=()=>S.me.favor,nk=()=>S.me.kids.length;
+const E=(t,o)=>()=>({t,o});
+const V={
+7:[
+ [()=>rk()<=1,'newbie',E('中秋夜，位份低的小主們只能在各自院中賞月，連月餅都是最普通的一份。',[
+  ['自己添些點心，與同院姐妹同樂（耗銀10）',()=>{if(!pay(10))return'銀兩不足，只能對月嘆息。';m_().ally+=3;return'同院的姐妹們記下了你的好。（人脈＋3）'}],
+  ['獨自賞月，寫詩抒懷',()=>{m_().scheme+=1;m_().favor+=1;return'你寫了幾句詩，被路過的宮女傳了出去，竟傳到了皇上耳中。（聖寵＋1）'}],
+  ['早早歇息，省些心力',()=>{m_().hp=Math.min(100,m_().hp+2);return'你睡得很安穩。（健康＋2）'}]])],
+ [()=>fav()>=65,'fav',E('中秋宮宴，皇上特意讓你坐在離御座最近的位置，眾人側目。',[
+  ['謙遜推讓，請皇上讓座給皇后',()=>{m_().emp+=5;m_().favor+=1;return'皇后面上有光，皇上也笑你識大體。（皇后好感＋5）'}],
+  ['大方落座，敬皇上一杯酒',()=>{m_().favor+=4;m_().ally-=2;return'皇上龍心大悅，只是有人暗自不平。（聖寵＋4、人脈－2）'}],
+  ['藉機為母家說幾句好話',()=>{m_().fam.forEach(x=>x.pw+=3);m_().favor-=1;return'皇上隨口答應，母家得了賞賜。（聖寵－1）'}]])],
+ [()=>nk()>=1,'kids',E('中秋夜，孩子們鬧著要吃桂花糕、看皇上放的煙火。',[
+  ['帶孩子們到御花園賞月',()=>{m_().kids.forEach(k=>k.bond+=3);return'孩子們玩得很開心。'}],
+  ['讓孩子在皇上面前背詩',()=>{m_().favor+=3;m_().kids.forEach(k=>{k.chong+=2;k.cai+=1});return'皇上笑著賞了孩子們一盒月餅。（聖寵＋3）'}],
+  ['怕孩子著涼，早早回宮',()=>{m_().kids.forEach(k=>k.bond+=1);return'孩子有些失望，你哄了許久。'}]])],
+ [()=>S.qi==='me','queen',E('中秋宮宴由你主持，月餅與賞賜要分給各宮。',[
+  ['依位份均分，面面俱到（耗銀40）',()=>{if(!pay(40))return'銀兩不足，賞賜略顯單薄。';m_().ally+=5;return'各宮都稱讚皇后周全。（人脈＋5）'}],
+  ['多賞得力與有子嗣的妃嬪',()=>{m_().ally+=2;return'受賞的感激，沒受賞的難免有微詞。'}],
+  ['節省開支，只辦家常宴',()=>{m_().silver+=20;m_().favor-=1;return'你省下了銀子，卻落了個「小氣」的名聲。'}]])]],
+10:[
+ [()=>rk()<=1,'newbie',E('冬至將至，位份低的宮裡炭火不夠，夜裡凍得睡不著。',[
+  ['自己花錢買炭（耗銀15）',()=>{if(!pay(15))return'銀兩不足，只能多添衣裳。';m_().hp=Math.min(100,m_().hp+2);return'屋裡暖和多了。（健康＋2）'}],
+  ['向同院的姐妹借炭，欠個人情',()=>{m_().ally+=2;return'姐妹們肯借，你記下了這份情。（人脈＋2）'}],
+  ['硬撐過去',()=>{m_().hp-=3;return'你受了涼，咳了好幾天。（健康－3）'}]])],
+ [()=>fav()>=60,'fav',E('冬至祭天後，皇上特意賜了你一件狐裘，眾妃嬪都看在眼裡。',[
+  ['穿著它去向皇后請安，示好',()=>{m_().emp+=4;return'皇后含笑稱讚。（皇后好感＋4）'}],
+  ['珍藏起來，低調以對',()=>{m_().ally+=1;return'你不露鋒芒，旁人也挑不出錯。（人脈＋1）'}],
+  ['穿去御前謝恩',()=>{m_().favor+=3;m_().ally-=2;return'皇上滿意，旁人暗自不快。（聖寵＋3、人脈－2）'}]])],
+ [()=>nk()>=1,'kids',E('冬至吃餃子，孩子們鬧著要親手包。',[
+  ['陪孩子們一起包餃子',()=>{m_().kids.forEach(k=>k.bond+=3);return'廚房裡滿是笑聲。'}],
+  ['請皇上嘗嘗孩子們包的餃子',()=>{m_().favor+=3;return'皇上嘗了一口，笑著誇孩子們手巧。（聖寵＋3）'}],
+  ['讓宮人代勞，孩子們早些歇息',()=>{m_().kids.forEach(k=>k.bond+=1);return'孩子們有些無趣。'}]])],
+ [()=>S.qi==='me','queen',E('冬至宮宴由你主持，要排祭祀、分賞賜。',[
+  ['隆重辦理，賞各宮炭與衣料（耗銀50）',()=>{if(!pay(50))return'銀兩不足，只能從簡。';m_().ally+=5;return'各宮感念皇后體恤。（人脈＋5）'}],
+  ['照例辦理，不出差錯',()=>{m_().favor+=2;return'一切順利，皇上點頭稱許。（聖寵＋2）'}],
+  ['藉機整肅不守規矩的妃嬪',()=>{if(P(.5+m_().scheme/300)){m_().favor+=2;return'你一番話讓人收斂。（聖寵＋2）'}m_().ally-=3;return'整肅太過，有人心生怨懟。（人脈－3）'}]])]]};
+try{const FE=window.FEST||FEST;Object.keys(V).forEach(k=>{FE[k]=function(){const cand=V[k].filter(v=>{try{return v[0]()}catch(e){return false}});S.fv62=S.fv62||{};if(cand.length&&P(.85)){const nl=cand.filter(v=>S.fv62[k]!==v[1]);const pick=pk(nl.length?nl:cand);S.fv62[k]=pick[1];return pick[2]()}return(k==7?E('中秋賞月，宮中設了小宴，月餅人手一份。',[['陪著說說笑笑',()=>{m_().ally+=2;return'席間氣氛融洽。（人脈＋2）'}],['早些回去歇息',()=>{m_().hp=Math.min(100,m_().hp+1);return'你睡了個好覺。'}]]):E('冬至祭天，宮中添了炭火與餃子。',[['與同宮的姐妹小聚',()=>{m_().ally+=2;return'屋裡暖烘烘的。（人脈＋2）'}],['早些歇息，免受寒氣',()=>{m_().hp=Math.min(100,m_().hp+1);return'你睡得很安穩。'}]]))()}})}catch(e){console.log('r62f',e)}
+// 差事門檻：生母位份低的皇子，起點較難進中樞
+try{const momRank=k=>{for(const x of S.me.kids)if(x===k)return S.me.rank;for(const n of S.npcs)if(n.kids.includes(k))return n.rank;return 3};
+ (window.POS48||[]).forEach(p=>{if(['jj','bb','ws'].includes(p.id)&&!p.g62){p.g62=1;const o=p.req;p.req=k=>o(k)&&(momRank(k)>=2||(k[p.st]||0)>=75)}})}catch(e){console.log('r62p',e)}
+try{HELP.push(['出身與差事','皇子的生母位份太低（答應、常在）時，起點較難進軍機處、禁軍兵部或出使外藩，除非他自己的能力特別出眾（75 以上）。生母位份高，爵位和差事的起點也較高。'])}catch(e){}
 })();
 
 deco();intro();
