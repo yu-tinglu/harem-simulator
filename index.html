@@ -3491,7 +3491,7 @@ html body .kid,html body .k{font-size:13.5px}
 `;document.head.appendChild(st)})();
 HELP.push(['姻親勢力','子女的配偶家世會影響你：武將姻親加成宮變、逼宮、奪嫡；文官姻親有各自好處（御史壓醜聞、鹽商增進項、翰林增賢名、巡撫穩朝局），但勢力過強也會招來皇帝疑心。']);
 
-/* ===== 第十輪：方針與一鍵、主畫面再精簡 ===== */
+/* ===== 第十輪：方針與自動過月、主畫面再精簡 ===== */
 const POLS={'固寵':['獻藝邀寵','梳妝保養','寬慰聖心','結交宮人','研習技藝'],'養生':['調養身子','延醫問藥','梳妝保養','讀書習藝'],'斂財':['置產投資','獻藝邀寵','賞賜宮人','傳書母家'],'人脈':['結交宮人','結盟拉攏','賞賜宮人','串門走動'],'育子':['教養子女','為子籌謀','過問婚事','求子調理'],'守成':['示忠表心','澄清母國往來','調養身子','結交宮人'],'謀位':['奪嫡謀劃','為子籌謀','結盟拉攏','獻藝邀寵']};
 const POLD={'固寵':'聖寵為先，多邀寵梳妝','養生':'以健康為主，少折騰','斂財':'置產投資、廣結財源','人脈':'結交妃嬪、廣布人脈','育子':'專心教養子女、安排婚事','守成':'降疑心降猜忌，低調穩住','謀位':'為兒子謀劃奪嫡'};
 function polAct(){const m=S.me,pol=POLS[S.pol]||POLS['固寵'];const ok=n=>{const i=ACT.findIndex(a=>a[0]==n);if(i<0)return-1;
@@ -3515,12 +3515,12 @@ let w=0;while(S.ev&&!S.over&&w++<12){if(evCritical(S.ev)||S.apx==='ask'){why='�
 if(why)break;if(S.ev||S.scn)break}}finally{render=rd;_AUTO=0}
 if(S.over){render();return}if(S.t<target&&(why==='有重要的事要你決定'||why==='有事件等你決定'))S.aresume={left:target-S.t,g:_AGsave,pol:S.pol};const m2=S.me;if(!why){if(S.scn)why='有重要的事要你決定';else if(S.ev)why='有事件等你決定';else if(_AG&&goalHit())why='已達成目標「'+S.agoal+'」';else if(autoStop())why='出現需要留意的狀況'}
 const d=(a,b2)=>{const x=Math.round(b2-a);return x>0?'＋'+x:x<0?'－'+(-x):'±0'};
-try{ntfAdd(`一鍵「${S.pol||'固寵'}」${S.t-b.t}個月：聖寵${d(b.fv,m2.favor)}・銀兩${d(b.sv,m2.silver)}・健康${d(b.hp,m2.hp)}${m2.rank>b.rk?'・晉位':''}${evN?'・自動處理'+evN+'件事':''}${why?'。已停下：'+why:''}`,'ti');ntfDraw()}catch(e){}
+try{ntfAdd(`自動過月「${S.pol||'固寵'}」${S.t-b.t}個月：聖寵${d(b.fv,m2.favor)}・銀兩${d(b.sv,m2.silver)}・健康${d(b.hp,m2.hp)}${m2.rank>b.rk?'・晉位':''}${evN?'・自動處理'+evN+'件事':''}${why?'。已停下：'+why:''}`,'ti');ntfDraw()}catch(e){}
 render()}
 /* 主畫面：方針列、精簡 */
 const _ap10=uiPost;uiPost=function(){const r=_ap10.apply(this,arguments);try{if(TAB==0&&S&&S.me&&!S.over&&!S.reg&&!S.scn){const main=document.querySelector('main');if(main){
 if(!S.pol)S.pol='固寵';main.querySelectorAll('.autobar').forEach(e=>e.remove());const d=document.createElement('div');d.className='autobar';
-d.innerHTML=`<span class=al>方針</span><select onchange="S.pol=this.value;document.querySelector('.autobar .ad').textContent=POLD[S.pol]">${Object.keys(POLS).map(k=>`<option ${k==S.pol?'selected':''}>${k}</option>`).join('')}</select><span class=ad>${POLD[S.pol]}</span><span class=ab><button onclick="autoRun(1)">一鍵本月</button><button onclick="autoRun(12)">一鍵一年</button></span>${S.aresume&&!S.ev&&!S.ch?`<button class=rs onclick="autoResume()">繼續剛才的一鍵（剩${S.aresume.left}個月）</button>`:''}<details class=am><summary>進階</summary><div>遇事：<select onchange="S.apx=this.value"><option value=auto ${S.apx!=='ask'?'selected':''}>小事自動處理</option><option value=ask ${S.apx==='ask'?'selected':''}>每件都讓我決定</option></select></div><div>目標：<select onchange="S.agoal=this.value;render()">${['無'].concat(Object.keys(AGOALS)).map(k=>`<option ${k==(S.agoal||'無')?'selected':''}>${k}</option>`).join('')}</select>${S.agoal&&S.agoal!=='無'?'<button onclick="autoGoal()">一鍵達成</button>':''}</div>${S.alog&&S.alog.length?`<div class=alg><b>上次一鍵明細</b>${S.alog.slice(-40).map(x=>`<div class=m>第${Math.floor(x.t/12)+1}年${x.t%12+1}月　${x.a}${x.c.length?'（'+x.c.join('、')+'）':''}${x.e.length?'<br>　↳ '+x.e.join('<br>　↳ '):''}</div>`).join('')}</div>`:''}</details>`;
+d.innerHTML=`<span class=al>方針</span><select onchange="S.pol=this.value;document.querySelector('.autobar .ad').textContent=POLD[S.pol]">${Object.keys(POLS).map(k=>`<option ${k==S.pol?'selected':''}>${k}</option>`).join('')}</select><span class=ad>${POLD[S.pol]}</span><span class=ab><button onclick="autoRun(1)">自動過一個月</button><button onclick="autoRun(12)">自動過一年</button></span>${S.aresume&&!S.ev&&!S.ch?`<button class=rs onclick="autoResume()">繼續剛才的自動過月（剩${S.aresume.left}個月）</button>`:''}<details class=am><summary>進階</summary><div>遇事：<select onchange="S.apx=this.value"><option value=auto ${S.apx!=='ask'?'selected':''}>小事自動處理</option><option value=ask ${S.apx==='ask'?'selected':''}>每件都讓我決定</option></select></div><div>目標：<select onchange="S.agoal=this.value;render()">${['無'].concat(Object.keys(AGOALS)).map(k=>`<option ${k==(S.agoal||'無')?'selected':''}>${k}</option>`).join('')}</select>${S.agoal&&S.agoal!=='無'?'<button onclick="autoGoal()">自動達成目標</button>':''}</div>${S.alog&&S.alog.length?`<div class=alg><b>上次自動過月明細</b>${S.alog.slice(-40).map(x=>`<div class=m>第${Math.floor(x.t/12)+1}年${x.t%12+1}月　${x.a}${x.c.length?'（'+x.c.join('、')+'）':''}${x.e.length?'<br>　↳ '+x.e.join('<br>　↳ '):''}</div>`).join('')}</div>`:''}</details>`;
 const st=main.querySelector('.stat-strip');if(st)st.after(d);else main.prepend(d);
 if(S.t>=24)main.querySelectorAll(':scope>.tip').forEach(e=>e.remove());
 [...main.querySelectorAll(':scope>.cd')].forEach(c=>{if(!c.querySelector('h3')&&/^\s*母國/.test(c.textContent))c.classList.add('frs')});
@@ -3541,7 +3541,7 @@ html body details.frc>summary::after{content:' ▾';opacity:.5}
 html body details.frc[open]>summary{margin-bottom:6px}
 html body details.frc .m,html body details.frc .r{font-size:13px}
 `;document.head.appendChild(st)})();
-HELP.push(['方針與一鍵','主畫面「方針」可選固寵、養生、斂財、人脈、育子、守成、謀位。按「一鍵本月」或「一鍵一年」，遊戲會依方針自動挑行動、遇到選項自動選較穩妥的，直到時間到，或遇到需要你決定的事件、健康過低、疑心或猜忌過高、醜聞過高才會停下，並顯示這段期間的變化摘要。']);
+HELP.push(['方針與自動過月','主畫面「方針」可選固寵、養生、斂財、人脈、育子、守成、謀位。按「自動過一個月」或「自動過一年」，遊戲會依方針自動挑行動、遇到選項自動選較穩妥的，直到時間到，或遇到需要你決定的事件、健康過低、疑心或猜忌過高、醜聞過高才會停下，並顯示這段期間的變化摘要。']);
 
 /* ===== round11：事件稽核過濾、去重、後期節奏、通知位置 ===== */
 const EVCD=18;
@@ -3670,7 +3670,7 @@ const _up15=uiPost;uiPost=function(){const r=_up15.apply(this,arguments);try{if(
 /* 開局導覽 */
 function guideSeen(){try{return localStorage.getItem('hg_guide14')=='1'}catch(e){return false}}
 function guideOff(){try{localStorage.setItem('hg_guide14','1')}catch(e){}document.querySelectorAll('.guide14').forEach(e=>e.remove());S._g14=1}
-const _up16=uiPost;uiPost=function(){const r=_up16.apply(this,arguments);try{if(TAB==0&&S&&S.me&&!S.over&&!S.reg&&!S.scn&&S.t<6&&!S._g14&&!guideSeen()){const main=document.querySelector('main');if(main&&!main.querySelector('.guide14')){const st=main.querySelector('.stat-strip');const h=`<div class="cd guide14"><b>三步上手</b><ol><li>每月有 4 次行動，下方分組按鈕都是行動；先從「恩寵聖眷」開始，聖寵是晉位的關鍵。</li><li>最上面紅色「注意」欄會在快出事時提醒你，旁邊有按鈕可直接處理；點「皇帝詳情」可看皇上的狀態。</li><li>玩累了就選一個「方針」，按「一鍵本月／一年」，遇到大事它會停下來等你。</li></ol><button onclick="guideOff()">知道了</button></div>`;if(st)st.insertAdjacentHTML('afterend',h);else main.insertAdjacentHTML('afterbegin',h)}}}catch(e){console.log('guide',e)}return r};
+const _up16=uiPost;uiPost=function(){const r=_up16.apply(this,arguments);try{if(TAB==0&&S&&S.me&&!S.over&&!S.reg&&!S.scn&&S.t<6&&!S._g14&&!guideSeen()){const main=document.querySelector('main');if(main&&!main.querySelector('.guide14')){const st=main.querySelector('.stat-strip');const h=`<div class="cd guide14"><b>三步上手</b><ol><li>每月有 4 次行動，下方分組按鈕都是行動；先從「恩寵聖眷」開始，聖寵是晉位的關鍵。</li><li>最上面紅色「注意」欄會在快出事時提醒你，旁邊有按鈕可直接處理；點「皇帝詳情」可看皇上的狀態。</li><li>玩累了就選一個「方針」，按「自動過一個月／一年」，遇到大事它會停下來等你。</li></ol><button onclick="guideOff()">知道了</button></div>`;if(st)st.insertAdjacentHTML('afterend',h);else main.insertAdjacentHTML('afterbegin',h)}}}catch(e){console.log('guide',e)}return r};
 (function(){const st=document.createElement('style');st.id='ui16';st.textContent=`html body .guide14{padding:10px 14px!important;font-size:13px;line-height:1.6;background:#fff8e8!important;border:1px solid rgba(214,168,96,.5)}html body .guide14 ol{margin:6px 0 8px 18px;padding:0}html body .guide14 li{margin:2px 0}html body .guide14 button{padding:5px 14px;font-size:12.5px;border-radius:999px}`;document.head.appendChild(st)})();
 
 /* ===== round16：終局大計（後期主線） ===== */
@@ -4118,7 +4118,7 @@ window.darkTick28=darkTick;
 HELP.push(['暗算皇后','太后模式「皇室」類的高風險行動：陷害（成功廢后）、慢性下藥（皇后抱病、難孕，可能病逝）、收買宮人（累積把柄，提高廢后成功率）、離間帝后。做這些事之後有一段時間可能被查出，須處理以免皇帝對你寒心。']);
 })();
 
-/* ===== round29：輕鬆模式（小事自動處理、後台提前、一局縮短、隨時結算） ===== */
+/* ===== round29：遊玩模式（小事自動處理、後台提前、一局縮短、隨時結算） ===== */
 (function(){
 const gs=k=>{try{return localStorage.getItem(k)}catch(e){return null}},ss=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
 window.rlxOn=()=>(gs('hg_rlx')||'on')==='on';
@@ -4139,22 +4139,22 @@ const _bo=window.bgOn;window.bgOn=()=>{try{if(_bo&&_bo())return true;return rlxO
 /* 一局縮短：皇帝死亡率加倍 */
 const _eh=window.emH;window.emH=e=>_eh(e)*(rlxOn()?2:1);
 /* 年底摘要 */
-const _m29=mend;mend=function(){const r=_m29.apply(this,arguments);try{if(S&&!S.over&&S.t>0&&S.t%12===0&&S.rlxn){const n=S.rlxn;S.rlxn=0;ntfAdd(`第${Math.floor(S.t/12)}年：有${n}件小事已自動處理（詳見「紀事」→輕鬆模式）。`,'ti')}
- if(S&&!S.over&&!S.rlxHint&&rlxOn()&&S.t>=6){S.rlxHint=1;ntfAdd('輕鬆模式已開啟：小事會自動處理，只有重要的事才請你決定；也可以隨時在「紀事」→輕鬆模式裡結算本局。','ti')}}catch(e){console.log('r29m',e)}return r};
+const _m29=mend;mend=function(){const r=_m29.apply(this,arguments);try{if(S&&!S.over&&S.t>0&&S.t%12===0&&S.rlxn){const n=S.rlxn;S.rlxn=0;ntfAdd(`第${Math.floor(S.t/12)}年：有${n}件小事已自動處理（詳見「紀事」→遊玩模式）。`,'ti')}
+ if(S&&!S.over&&!S.rlxHint&&rlxOn()&&S.t>=6){S.rlxHint=1;ntfAdd('遊玩模式已開啟：小事會自動處理，只有重要的事才請你決定；也可以隨時在「紀事」→遊玩模式裡結算本局。','ti')}}catch(e){console.log('r29m',e)}return r};
 /* 設定卡與結算 */
 window.rlxSet=v=>{ss('hg_rlx',v);render()};
 window.rlxEnd=()=>{if(!S||!S.me||S.over)return;if(S.reg){L('你正在垂簾聽政，請待皇帝親政後再結算。');render();return}
  choose('確定要在此刻功成身退、結算本局嗎？',[{l:'結算本局（以目前的成就收尾）',f(){const m=S.me,k=(m.kids||[]).length,y=Math.floor(S.t/12);over('功成身退',`你在宮中度過了${y}年，位至${(typeof RK!=='undefined'&&RK[m.rank])||'高位'}，膝下${k}名子女。你決定放下一切，安穩度過餘生。`)}},{l:'再玩一會兒',f(){L('你決定再看看。')}}])};
 const _u29=uiPost;uiPost=function(){const r=_u29.apply(this,arguments);try{if(typeof TAB!=='undefined'&&TAB===5&&S&&S.me){const main=document.querySelector('main');if(main&&!main.querySelector('.rx29')){const on=rlxOn(),h=(S.rlxh||[]).slice(0,12).map(x=>`<div class=m>第${x.y}年：${x.t}</div>`).join('')||'<div class=m>尚無自動處理紀錄。</div>';
- const html=`<details class="cd rx29"><summary><b>輕鬆模式</b>　<span class=m>${on?'目前：開啟':'目前：關閉'}</span></summary><div class=m style="margin:6px 0">開啟後：小事自動處理（只選較穩妥的選項），只有廢立、儲君、病危、婚事、冊封等重要的事才請你決定；每月事件變少，嬪妃日常第3年起轉入後台；皇帝壽命較短，一局大約縮短到十幾二十年。</div><select onchange="rlxSet(this.value)"><option value="on"${on?' selected':''}>開啟（推薦）</option><option value="off"${on?'':' selected'}>關閉（完整體驗）</option></select> <button onclick="rlxEnd()">功成身退・結算本局</button><div style="margin-top:8px"><b class=m>最近自動處理的事</b>${h}</div></details>`;
+ const html=`<details class="cd rx29"><summary><b>遊玩模式</b>　<span class=m>${on?'目前：輕鬆玩':'目前：完整玩'}</span></summary><div class=m style="margin:6px 0">開啟後：小事自動處理（只選較穩妥的選項），只有廢立、儲君、病危、婚事、冊封等重要的事才請你決定；每月事件變少，嬪妃日常第3年起轉入後台；皇帝壽命較短，一局大約縮短到十幾二十年。</div><select onchange="rlxSet(this.value)"><option value="on"${on?' selected':''}>輕鬆玩（推薦）</option><option value="off"${on?'':' selected'}>完整玩（完整體驗）</option></select> <button onclick="rlxEnd()">功成身退・結算本局</button><div style="margin-top:8px"><b class=m>最近自動處理的事</b>${h}</div></details>`;
  const a=main.querySelector('.bg25');if(a)a.insertAdjacentHTML('beforebegin',html);else main.insertAdjacentHTML('afterbegin',html)}}}catch(e){console.log('u29',e)}return r};
-HELP.push(['輕鬆模式','預設開啟：小事自動處理、只留重要的選擇；每月事件變少；第3年起嬪妃日常轉入後台；皇帝壽命較短，一局縮短。可在「紀事」關閉，或隨時「功成身退」結算。']);
+HELP.push(['遊玩模式','預設開啟：小事自動處理、只留重要的選擇；每月事件變少；第3年起嬪妃日常轉入後台；皇帝壽命較短，一局縮短。可在「紀事」關閉，或隨時「功成身退」結算。']);
 })();
 
 /* ===== round30：定位選擇（無腦悠閒／鬥智宮心）＋重要選項標「建議」 ===== */
 (function(){
 const gs=k=>{try{return localStorage.getItem(k)}catch(e){return null}},ss=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
-/* 手動事件在輕鬆模式下，替較穩妥的選項標上「建議」，可無腦點 */
+/* 手動事件在遊玩模式下，替較穩妥的選項標上「建議」，可無腦點 */
 const _n30=next;
 window.sug31=function(e){const m=S.me,o=e.o,bad=/險|極|耗銀|耗龍|反噬|廢|殺|死|動手腳|暗中|下毒|陷害|暗算|嫁禍|栽贓|收買/;let best=-1,bs=-1e9,why='較穩妥、不傷聖寵';
  o.forEach((x,i)=>{const L=String(x[0]);let sc=0,w='';if(bad.test(L))sc-=100;
@@ -4167,14 +4167,14 @@ window.sug31=function(e){const m=S.me,o=e.o,bad=/險|極|耗銀|耗龍|反噬|�
  return bs<-50?null:{k:best,why}};
 next=function(){const r=_n30.apply(this,arguments);try{const e=S&&S.ev;if(e&&e.o&&e.o.length>1&&window.rlxOn&&rlxOn()&&!e._sg){e._sg=1;const g=sug31(e);if(g&&!/建議/.test(e.o[g.k][0])){e.o[g.k]=[e.o[g.k][0]+'　★建議（'+g.why+'）',e.o[g.k][1]];render()}}}catch(x){console.log('r30',x)}return r};
 /* 開局先選定位 */
-const _st30=start;start=function(){const r=_st30.apply(this,arguments);try{if(!gs('hg_rlxset')&&S&&S.me&&!S.ch){choose('你想怎麼玩這一局？（之後可在「紀事」→輕鬆模式更改）',[
+const _st30=start;start=function(){const r=_st30.apply(this,arguments);try{if(!gs('hg_rlxset')&&S&&S.me&&!S.ch){choose('你想怎麼玩這一局？（之後可在「紀事」→遊玩模式更改）',[
  {l:'悠閒無腦：小事自動處理，重要的才問我，選項標★建議，一局約十幾二十年',f(){ss('hg_rlx','on');ss('hg_rlxset','1');L('已選「悠閒無腦」：放心點★建議的選項即可。')}},
  {l:'鬥智宮心：每件事都由我決定，完整體驗，一局較長',f(){ss('hg_rlx','off');ss('hg_rlxset','1');L('已選「鬥智宮心」：每個抉擇都在你手上。')}}])}}catch(x){console.log('r30s',x)}return r};
 })();
 /* 開局頁：快速開始＋步驟提示＋入宮鈕固定在底部 */
 (function(){
 const _i30=intro;intro=function(){const r=_i30.apply(this,arguments);try{const sp=document.querySelector('#app .splash:not(.menuhero)');if(sp&&!document.querySelector('.qs30')){
- sp.insertAdjacentHTML('afterend',`<div class="cd qs30"><h3>怎麼開始？</h3><button class=go style="width:100%;letter-spacing:0" onclick="qs30()">🎲 快速開始（隨機身分，直接入宮）</button><div class=m style="margin-top8px;margin-top:8px">想自己捏人：往下取名、選出身、選天賦，再按「下一步」。</div></div>`);
+ sp.insertAdjacentHTML('afterend',`<div class="cd qs30"><h3>怎麼開始？</h3><button class=go style="width:100%;letter-spacing:0" onclick="qs30()">🎲 隨機入宮（隨機身分，直接開始）</button><div class=m style="margin-top8px;margin-top:8px">想自己捏人：往下取名、選出身、選天賦，再按「下一步」。</div></div>`);
  const m=document.querySelector('#app main:not(.mmenu)');if(m&&m.querySelector('button.go')){const bg=getComputedStyle(document.body).backgroundColor;m.style.cssText+=`;position:sticky;bottom:0;z-index:9;padding:8px 0 calc(8px + env(safe-area-inset-bottom,0px));background:${bg}`}}}catch(x){console.log('r30i',x)}return r};
 window.qs30=()=>{G=R(0,GS.length-1);GCt=GS[G][4];T=R(0,TS.length-1);AT=null;intro();start()};
 })();
@@ -4183,7 +4183,7 @@ window.qs30=()=>{G=R(0,GS.length-1);GCt=GS[G][4];T=R(0,TS.length-1);AT=null;intr
 if(typeof mainMenu!=='function')return;
 const _mm=mainMenu;mainMenu=function(){const r=_mm.apply(this,arguments);try{const nb=document.querySelector('main.mmenu button[onclick="menuNew()"]');if(nb&&!document.querySelector('.st30')){
  const g1=nb.parentElement;nb.remove();
- g1.insertAdjacentHTML('beforebegin',`<div class="cd st30" style="text-align:center"><button class=go style="width:100%;letter-spacing:.2em" onclick="menuNew()">開始新遊戲</button><div class=m style="margin:8px 0">第一次玩？先按「一鍵開始」，系統隨機替你選好身分，直接入宮。</div><button class=s style="width:100%" onclick="qs30()">🎲 一鍵開始（隨機入宮）</button></div>`)}}catch(x){console.log('r30m',x)}return r};
+ g1.insertAdjacentHTML('beforebegin',`<div class="cd st30" style="text-align:center"><button class=go style="width:100%;letter-spacing:.2em" onclick="menuNew()">開始新遊戲</button><div class=m style="margin:8px 0">第一次玩？先按「隨機入宮」，系統隨機替你選好身分，直接入宮。</div><button class=s style="width:100%" onclick="qs30()">🎲 隨機入宮（直接開始）</button></div>`)}}catch(x){console.log('r30m',x)}return r};
 })();
 /* 前世傳承：放在「選擇天賦」的下一張卡，開局時不會被忽略 */
 (function(){
@@ -4261,7 +4261,7 @@ const _u36=uiPost;uiPost=function(){const r=_u36.apply(this,arguments);try{const
  if(S&&!S.over&&!S.scn&&!S.ch&&!S.ev&&typeof autoRun==='function'){const nav=document.querySelector('nav.tabs');const nb=nav?Math.round(nav.getBoundingClientRect().height):0;
   const d=document.createElement('div');d.className='ac31';
   d.style.cssText='position:fixed;left:0;right:0;bottom:'+nb+'px;z-index:40;display:flex;gap:8px;justify-content:center;padding:6px max(16px,env(safe-area-inset-left,0px));pointer-events:none';document.body.style.setProperty('--acb','52px');
-  d.innerHTML='<button class=go style="flex:1;max-width:220px;min-height:0;height:40px;padding:0 10px;font-size:15px;letter-spacing:0;pointer-events:auto;box-shadow:0 2px 10px rgba(0,0,0,.25)" onclick="autoRun(1)">▶ 無腦玩一個月</button><button class=s style="flex:1;max-width:220px;min-height:0;height:40px;padding:0 10px;font-size:15px;letter-spacing:0;background:var(--bg,#fff8ee);pointer-events:auto;box-shadow:0 2px 10px rgba(0,0,0,.25)" onclick="autoRun(12)">⏩ 無腦玩一年</button>';
+  d.innerHTML='<button class=go style="flex:1;max-width:220px;min-height:0;height:40px;padding:0 10px;font-size:15px;letter-spacing:0;pointer-events:auto;box-shadow:0 2px 10px rgba(0,0,0,.25)" onclick="autoRun(1)">▶ 自動過一個月</button><button class=s style="flex:1;max-width:220px;min-height:0;height:40px;padding:0 10px;font-size:15px;letter-spacing:0;background:var(--bg,#fff8ee);pointer-events:auto;box-shadow:0 2px 10px rgba(0,0,0,.25)" onclick="autoRun(12)">⏩ 自動過一年</button>';
   document.body.appendChild(d);const m=document.querySelector('#app main');if(m)m.style.paddingBottom='calc(52px + '+(parseInt(getComputedStyle(m).paddingBottom)||0)+'px)'}}catch(x){console.log('r36',x)}return r};
 })();
 
@@ -4295,8 +4295,8 @@ const gs=k=>{try{return localStorage.getItem(k)}catch(e){return null}},ss=(k,v)=
 const css=document.createElement('style');css.textContent='@keyframes pl31{0%,100%{box-shadow:0 0 0 0 rgba(214,70,90,.55)}50%{box-shadow:0 0 0 10px rgba(214,70,90,0)}}.ac31 .pulse31{animation:pl31 1.4s infinite}.ob31{position:fixed;top:calc(env(safe-area-inset-top,0px) + 64px);left:50%;transform:translateX(-50%);width:min(92vw,420px);z-index:41;background:#4a2a3a;color:#fff;border-radius:14px;padding:10px 34px 10px 14px;font-size:14px;line-height:1.5;box-shadow:0 4px 16px rgba(0,0,0,.35)}.ob31 b{color:#ffd9a0}.ob31 .x{position:absolute;right:8px;top:6px;background:none;border:0;color:#fff;font-size:18px;min-height:0;padding:2px 6px}.ys31 .scroll p{margin:6px 0}.ev31s{cursor:pointer}.ev31s u{color:var(--accent,#c0394f);text-decoration:none;white-space:nowrap}';css.textContent+='html body:has(.scrim:not(.ys31)) #ntf.ntf14{display:none!important}';document.head.appendChild(css);
 /* 1 新手引導 */
 function ob(){const old=document.querySelector('.ob31');const bar=document.querySelector('.ac31');if(!bar||!S||S.over){if(old)old.remove();return}const st=gs('hg_ob31')||'0';if(st==='2'){if(old)old.remove();return}
- let msg='';if(st==='0'&&S.t<1){msg='<b>第一次玩？</b>先按「▶ 無腦玩一個月」，系統會幫你處理。想自己決定，就點上面導覽的「行動」。';const b=bar.querySelector('button.go');if(b)b.classList.add('pulse31')}
- else if(st==='0'&&S.t>=1){ss('hg_ob31','1');msg='<b>玩完一個月了！</b>之後可以按「⏩ 無腦玩一年」，或到「行動」分頁自己選。';setTimeout(()=>{ss('hg_ob31','2');const o=document.querySelector('.ob31');if(o)o.remove()},9000)}
+ let msg='';if(st==='0'&&S.t<1){msg='<b>第一次玩？</b>先按「▶ 自動過一個月」，系統會幫你處理。想自己決定，就點上面導覽的「行動」。';const b=bar.querySelector('button.go');if(b)b.classList.add('pulse31')}
+ else if(st==='0'&&S.t>=1){ss('hg_ob31','1');msg='<b>玩完一個月了！</b>之後可以按「⏩ 自動過一年」，或到「行動」分頁自己選。';setTimeout(()=>{ss('hg_ob31','2');const o=document.querySelector('.ob31');if(o)o.remove()},9000)}
  else if(st==='1'){ss('hg_ob31','2');return}
  if(!msg){if(old)old.remove();return}if(old&&old.dataset.k===msg)return;if(old)old.remove();const d=document.createElement('div');d.className='ob31';d.dataset.k=msg;d.innerHTML=msg+'<button class=x onclick="this.parentNode.remove();try{localStorage.setItem(\'hg_ob31\',\'2\')}catch(e){}">×</button>';document.body.appendChild(d)}
 /* 2 年度小結 */
@@ -4347,7 +4347,7 @@ function regAuto(months){
   while(!S.over&&S.reg&&S.t<target&&g++<400){
    if(m.hp<20){why='健康告急';break}
    if(yr(S.reg.k)>=18){const j=RACT.findIndex(x=>x[0]==='還政退隱');if(j>=0){try{A(j)}catch(e){console.log('regEnd',e)}why='皇帝已成年，自動還政退隱';break}}
-   if(yr(S.reg.k)>=16&&!S.rg16){S.rg16=1;why='皇帝已滿十六歲，再按「無腦玩」會在皇帝滿十八歲時自動還政；想繼續掌權就改手動';break}
+   if(yr(S.reg.k)>=16&&!S.rg16){S.rg16=1;why='皇帝已滿十六歲，再按「自動過」會在皇帝滿十八歲時自動還政；想繼續掌權就改手動';break}
    const i=regPick();if(i<0)break;
    try{A(i)}catch(e){console.log('regA',e);break}
    let z=0;while(S.ch&&z++<6){const o=S.ch.o;let k=o.findIndex(x=>!/險|極兇險|廢|殺|死/.test(x.l));if(k<0)k=0;try{C(k)}catch(e){break}}
@@ -4357,7 +4357,7 @@ function regAuto(months){
  if(S.over){render();return}
  if(!why){if(S.scn)why='有重要的事要你決定';else if(S.ev)why='有事件等你決定'}
  const d=(a,c)=>{const x=Math.round(c-a);return x>0?'＋'+x:x<0?'－'+(-x):'±0'};
- try{ntfAdd(`臨朝無腦玩${S.t-b.t}個月：權柄${d(b.pw,S.reg?S.reg.pw:b.pw)}・銀兩${d(b.sv,m.silver)}・健康${d(b.hp,m.hp)}${evN?'・自動處理'+evN+'件事':''}${why?'。已停下：'+why:''}`,'ti');ntfDraw()}catch(e){}
+ try{ntfAdd(`臨朝自動過${S.t-b.t}個月：權柄${d(b.pw,S.reg?S.reg.pw:b.pw)}・銀兩${d(b.sv,m.silver)}・健康${d(b.hp,m.hp)}${evN?'・自動處理'+evN+'件事':''}${why?'。已停下：'+why:''}`,'ti');ntfDraw()}catch(e){}
  render()}
 const _ar=autoRun;autoRun=function(n){if(S&&S.reg&&!S.over)return regAuto(n);return _ar.apply(this,arguments)};
 })();
@@ -5509,7 +5509,7 @@ HELP.push(['皇室族譜與家族餘蔭','宗室頁底部的「皇室族譜」�
 HELP.push(['孩子詳情卡','在宗室頁點任何孩子的卡片，可看他的故事、特質與你能做的事：談心、賞賜、教導、嚴管、謀劃婚事、栽培。太后聽政時則是召見、申飭、賜婚。']);
 }catch(e){console.log('r55h',e)}
 const CATS=[
-['入門與操作',['行動的代價','成就與新開局','這是什麼遊戲','第一年照著做','每月 4 次行動','六組行動','數值是什麼','方針與一鍵','輕鬆模式','警示欄','事件頻率','事件冷卻']],
+['入門與操作',['行動的代價','成就與新開局','這是什麼遊戲','第一年照著做','每月 4 次行動','六組行動','數值是什麼','方針與自動過月','遊玩模式','警示欄','事件頻率','事件冷卻']],
 ['後宮、位份與宮鬥',['位份與編制','官女子','盟友度','敵意、罪證','皇后與中宮','管教皇后','暗算皇后','結拜與宿敵','關係圖','記憶、派系','因果與人生','選秀']],
 ['皇帝、朝堂與主線',['皇帝詳情','皇帝疑心','前朝、母家','私兵與疑心','主線劇情','終局大計']],
 ['子嗣、宗室與傳承',['子嗣與奪嫡','九龍奪嫡','子女婚配','姻親勢力','皇子字輩','孩子資質','皇子差事','出身與差事','公主差事','孩子詳情卡','皇室族譜']],
@@ -5760,7 +5760,7 @@ function pts(){const m=S.me,o=[];const add=(p,t)=>o.push([p,t]);
  return o.sort((x,y)=>y[0]-x[0]).slice(0,3).map(x=>x[1])}
 const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
  try{if(S&&S.me&&!S.over&&TAB==0&&!S.scn){const main=document.querySelector('main');if(main){main.querySelectorAll('.pt61').forEach(e=>e.remove());const l=pts();
-  const d=document.createElement('div');d.className='cd pt61';d.innerHTML='<h3>本月重點</h3>'+(l.length?l.map(t=>`<div class=m>• ${t}</div>`).join(''):'<div class=m>目前一切平穩，可以放心按「無腦玩一個月」。</div>');main.insertBefore(d,main.firstChild)}}}catch(e){console.log('r61',e)}return r};
+  const d=document.createElement('div');d.className='cd pt61';d.innerHTML='<h3>本月重點</h3>'+(l.length?l.map(t=>`<div class=m>• ${t}</div>`).join(''):'<div class=m>目前一切平穩，可以放心按「自動過一個月」。</div>');main.insertBefore(d,main.firstChild)}}}catch(e){console.log('r61',e)}return r};
 })();
 
 /* ===== round62：中秋、冬至節慶分版本；皇子差事門檻看生母位份 ===== */
@@ -5879,7 +5879,7 @@ function subs(main){main.querySelectorAll('.cd.actcat').forEach(c=>{if(c.dataset
 function tab0(main){
  subs(main);
  // 1. 去除重複的一鍵按鈕（保留底部浮動列）
- main.querySelectorAll('.autobar button').forEach(b=>{const t=(b.textContent||'').trim();if(/^一鍵(本月|一年)$/.test(t))b.style.display='none'});
+ main.querySelectorAll('.autobar button').forEach(b=>{const t=(b.textContent||'').trim();if(/^自動過(一個月|一年)$/.test(t))b.style.display='none'});
  // 2. 小提示併入本月重點
  const pt=main.querySelector('.pt61');if(pt){main.querySelectorAll(':scope>.tip').forEach(t=>pt.appendChild(t))}
  // 3. 局勢總覽：概況＋主線劇情＋時代＋這一局 vs 上一局
@@ -5901,7 +5901,7 @@ function tab3(main){
 function tab4(main){grp(main,'人物傳記與大事記',['皇帝傳','太后傳','前朝人物','大事記'])}
 function tab5(main){
  grp(main,'紀錄與成就',['通知記錄','宮中紀事','本屆選秀結果','母家','成就　','歷屆選秀']);
- grp(main,'設定與存檔',['輕鬆模式','後台與年報','事件頻率','我的畫像','存檔','完整備份','隱私與通知','意見回饋','主畫面']);
+ grp(main,'設定與存檔',['遊玩模式','後台與年報','事件頻率','我的畫像','存檔','完整備份','隱私與通知','意見回饋','主畫面']);
  // 深淺色卡片（無標題）併入設定
  const g=main.querySelector('.grp65[data-t="設定與存檔"]'),dk=main.querySelector(':scope>.cd.dk18');if(g&&dk)g.querySelector('.gin65').insertAdjacentElement('afterbegin',dk)}
 const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
@@ -6826,7 +6826,7 @@ const _r=render;render=function(){const r=_r.apply(this,arguments);
 /* ---------- 2. 簡潔模式 ---------- */
 const KEY='hg74c';let CP=g(KEY)==='1';
 const apply=()=>document.documentElement.classList.toggle('cp74',CP);apply();
-window.cpToggle74=function(){CP=!CP;st(KEY,CP?'1':'0');apply();render()};
+window.cpToggle74=function(){CP=!CP;st(KEY,CP?'1':'0');apply();render()};window.cpSet74=function(v){CP=!!v;st(KEY,CP?'1':'0');apply()};
 const css=document.createElement('style');css.textContent=`html.cp74 .pn68{border-bottom:none}html.cp74 .cq73 h3,html.cp74 .cq73>.m{display:none}html.cp74 .cq73{padding:8px 12px}html.cp74 .cqh73{display:none}html.cp74 .bio69 .m span:last-child{display:none}html.cp74 .e68b{display:none}html.cp74 #tt56{display:none}`;document.head.appendChild(css);
 const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
  try{if(!S||!S.me||S.over||TAB!==5)return r;const main=document.querySelector('main');if(!main||main.querySelector('.cp74c'))return r;
@@ -6895,6 +6895,25 @@ try{const _a=autoRun;autoRun=function(){if(S&&!S.over&&!S.reg&&(S.ch||S.ev||S.sc
 /* 3. 新手說明：頂端固定「✕ 關閉」，點背景也能關 */
 try{const _h=helpOpen;helpOpen=function(){const r=_h.apply(this,arguments);try{const e=document.getElementById('help'),hb=e&&e.querySelector('.hb');if(hb&&!hb.querySelector('.hx75')){const x=document.createElement('button');x.className='hx75';x.textContent='✕ 關閉';x.onclick=()=>e.remove();hb.insertBefore(x,hb.firstChild);e.addEventListener('click',ev=>{if(ev.target===e)e.remove()})}}catch(er){console.log('r75c',er)}return r};window.helpOpen=helpOpen}catch(e){console.log('r75',e)}
 try{const st=document.createElement('style');st.textContent='#help .hx75{position:sticky;top:0;display:block;margin:0 0 8px auto;z-index:2;padding:8px 14px;border-radius:999px;border:1px solid #d9a7a0;background:#fff;color:#8a3b3b;font-weight:700;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.15)}';document.head.appendChild(st)}catch(e){}
+})();
+
+/* ===== V167：把「要多費心」整理成一個選擇、首次提示只留一個 ===== */
+(function(){
+const ss=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+/* 1. 開局只問一次：輕鬆玩／完整玩（同時決定遊玩模式與簡潔介面） */
+try{const _s2=start;start=function(){const r=_s2.apply(this,arguments);try{
+ if(S&&S.ch&&S.ch.o&&S.ch.o[0]&&/悠閒無腦/.test(S.ch.o[0].l||'')){
+  S.ch={t:'選一種玩法（之後隨時可在「紀事」→遊玩模式更改）',o:[
+   {l:'輕鬆玩（推薦新手）：小事自動處理、選項標★建議、畫面精簡',f(){ss('hg_rlx','on');ss('hg_rlxset','1');try{cpSet74(1)}catch(e){}L('已選「輕鬆玩」：放心點★建議的選項即可。')}},
+   {l:'完整玩：每件事都由我決定、資訊完整，一局較長',f(){ss('hg_rlx','off');ss('hg_rlxset','1');try{cpSet74(0)}catch(e){}L('已選「完整玩」：每個抉擇都在你手上。')}}]};
+  render()}}catch(e){console.log('r75d',e)}return r};window.start=start}catch(e){console.log('r75',e)}
+/* 紀事裡的「遊玩模式」切換，同步簡潔介面 */
+try{const _rs=window.rlxSet;window.rlxSet=function(v){try{cpSet74(v==='on'?1:0)}catch(e){}return _rs.apply(this,arguments)}}catch(e){}
+/* 2. 首次提示只留一個：不自動彈出新手說明、不顯示「三步上手」、前兩個月不顯示小提示 */
+try{helpFirst=function(){}}catch(e){}
+try{guideSeen=function(){return true}}catch(e){}
+try{const _th=tipHTML;tipHTML=function(){if(S&&S.t<2)return'';return _th.apply(this,arguments)}}catch(e){}
+try{const st=document.createElement('style');st.textContent='.cp74c{display:none!important}html.cp74 .cq73:not(:has(.chip73)){display:none}';document.head.appendChild(st)}catch(e){}
 })();
 
 deco();intro();
