@@ -5361,6 +5361,142 @@ const _kp=kinPanel;kinPanel=function(){let h=_kp.apply(this,arguments);
   return head+Object.keys(cards).sort((a,b)=>a-b).map(i=>`<div class=grp40>${cards[i].n}（${cards[i].a.length}）</div><div data-list=kin>${cards[i].a.join('')}</div>`).join('')}catch(e){console.log('r50g',e)}return h};
 })();
 
+/* ===== round51：後期平衡（人情用度、寵愛與人脈自然消退、樹大招風事件） ===== */
+(function(){
+const fl=()=>{if(!S.ev&&!S.ch&&!S.scn)next();else render()};
+const up=()=>{const m=S.me,x=m.silver;return Math.round(1+m.rank*1.2+(m.kids?m.kids.filter(k=>!k.dead).length:0)*1+Math.max(0,Math.min(x,3000)-400)*.012+Math.max(0,x-3000)*.03)};
+window.upkeep51=up;
+let lastEv=-99;
+const EV=[
+ ()=>{const m=S.me,n=Math.max(100,Math.round(m.silver*.18));return{t:`內務府為辦千秋大典，向各宮攤派銀兩。以你的家底，賬房估算你該出${n}兩。`,o:[
+  [`痛快認捐${n}兩`,()=>{if(!pay(n))return'銀兩不足，只得認了少數。';m.favor+=3;m.ally+=2;return'你出手大方，皇上與太后都看在眼裡。'}],
+  [`量力而行，只出${Math.round(n/2)}兩`,()=>{if(!pay(Math.round(n/2)))return'銀兩不足。';m.ally-=1;return'你出了一半，不好不壞，沒人說什麼。'}],
+  ['推託家用緊張',()=>{m.favor-=3;m.ally-=3;return'你一毛不拔，宮裡人背後議論你小氣。'}]]}},
+ ()=>{const m=S.me,n=Math.max(60,Math.round(m.silver*.1));return{t:'有御史風聞後宮「恃寵而驕、積財自肥」，奏摺的矛頭隱隱指向你。',o:[
+  [`主動上繳${n}兩入公中，以示清白`,()=>{if(!pay(n))return'銀兩不足，只得上書請罪。';m.favor+=2;return'皇上讚你識大體，此事就此作罷。'}],
+  ['置之不理',()=>{if(P(.5)){return'奏摺被皇上留中不發，風波漸息。'}m.favor-=6;m.ally-=3;return'皇上對你起了疑心，冷落了一陣。'}],
+  ['請母家出面打點（看母家權勢）',()=>{const mp=Math.max(0,...m.fam.map(x=>x.pw));if(ckp(.3+mp/250)){m.fam.forEach(x=>x.lo+=2);return'母家出面疏通，彈章被壓了下去。'}m.favor-=4;return'母家使不上力，你被訓斥了幾句。'}]]}},
+ ()=>{const m=S.me;return{t:'六宮之中悄悄有了聯手對你的風聲：「她太得意了，該有人給她一點顏色看看。」',o:[
+  ['先發制人，打點人脈（耗銀80）',()=>{if(!pay(80))return'銀兩不足。';m.ally+=3;return'你提前打點，幾位原本搖擺的妃嬪站到了你這邊。'}],
+  ['主動示弱，減少露面',()=>{m.favor-=3;m.hp=Math.min(100,m.hp+2);return'你收斂了鋒芒，風聲漸漸平息。'}],
+  ['不理睬，讓她們去鬧',()=>{if(P(.5)){m.ally-=4;return'一些流言傳開，你的人脈受了點影響。'}return'她們鬧了一陣，沒能掀起大浪。'}]]}}];
+const _m=mend;mend=function(){const r=_m.apply(this,arguments);
+ try{if(!S||!S.me||S.over||S.reg)return r;const m=S.me;
+  m.silver=Math.max(0,m.silver-up());
+  if(m.favor>85)m.favor-=1;if(m.ally>85)m.ally-=.4;
+  const strong=m.favor>=85&&(m.silver>1500||m.ally>=85||m.rank>=6);
+  if(strong&&S.t-lastEv>=8&&S.t>24&&P(.07)){lastEv=S.t;S.q.push(EV[Math.floor(Math.random()*EV.length)]());fl()}}catch(e){console.log('r51',e)}return r};
+})();
+
+/* ===== round52：國庫接事件（天災賑災、國庫告急、國庫充盈） ===== */
+(function(){
+const fl=()=>{if(!S.ev&&!S.ch&&!S.scn)next();else render()};
+const nt=(k,x)=>{S.nat[k]=cl((S.nat[k]||50)+x)};
+let lastLow=-99,lastHigh=-99,seenDis=null;
+const tr=()=>S.led47&&S.led47.tr,inc=()=>window.led47?window.led47().inc:3000;
+const add=x=>{if(S.led47)S.led47.tr=Math.round(S.led47.tr+x)};
+const _m=mend;mend=function(){const r=_m.apply(this,arguments);try{act()}catch(e){console.log('r52',e)}return r};
+const _rm=typeof rmend==='function'?rmend:null;
+if(_rm)rmend=function(){const r=_rm.apply(this,arguments);try{act()}catch(e){console.log('r52',e)}return r};
+function act(){if(!S||!S.me||S.over||!S.led47)return;
+ // 天災賑災：偵測新的天災
+ if(S.dis42t!=null&&S.dis42t!==seenDis&&S.dis42t===S.t){seenDis=S.dis42t;const c=Math.round(inc()*(.1+Math.random()*.12));add(-c);try{L(`天災賑濟與修繕，國庫支出${c}萬兩。`);msPush&&msPush(`天災開支${c}萬兩，庫存${S.led47.tr}萬兩。`)}catch(e){}}
+ if(S.dis42t!=null)seenDis=S.dis42t;
+ const T=tr(),I=inc();
+ if(T<I*.4&&S.t-lastLow>=18&&S.t>24){lastLow=S.t;S.q.push(S.reg?lowReg(I):lowNormal(I));fl();return}
+ if(T>I*4&&S.t-lastHigh>=24&&S.t>36){lastHigh=S.t;const c=Math.round(I*.3);
+  if(S.reg){S.q.push({t:`戶部奏報：國庫存銀已達${T}萬兩，府庫充盈。朝臣紛紛上書，請太后示下該如何用度。`,o:[
+   ['減免賦稅，與民休息',()=>{add(-Math.round(I*.5));nt('pop',5);nt('stab',2);S.reg.pw+=2;return'詔下之日，百姓額手稱慶，朝野稱頌太后仁政。'}],
+   ['擴充軍備，整飭邊防',()=>{add(-c);nt('mil',5);return'兵部得了銀子，邊軍換新甲、添戰馬，邊防大為充實。'}],
+   ['興修水利，疏浚漕運',()=>{add(-Math.round(I*.25));nt('eco',4);nt('pop',2);return'運河與水利修繕一新，來年的收成有了依靠。'}]]});fl()}
+  else{const k=Math.floor(Math.random()*3);const x=[()=>{add(-Math.round(I*.4));nt('pop',4);return'皇上下旨減免天下一年錢糧，民心大悅。'},()=>{add(-c);nt('mil',4);return'皇上下旨添兵備邊，兵部上下振奮。'},()=>{add(-Math.round(I*.25));nt('eco',3);return'皇上下旨興修水利，江南漕運更為順暢。'}][k]();try{L(x);msPush&&msPush(x)}catch(e){}}}}
+function lowNormal(I){const m=S.me;const n=Math.max(80,Math.round(m.silver*.2));return{t:`戶部奏報國庫告急，欠餉欠俸，皇上有意向後宮與皇親募捐，以度時艱。`,o:[
+ [`帶頭捐銀${n}兩`,()=>{if(!pay(n))return'銀兩不足，只能表示一番心意。';m.favor+=4;m.ally+=2;add(Math.round(n/10));nt('eco',1);return'皇上深為嘉許，後宮與皇親紛紛響應。'}],
+ ['建言開源節流（看心機）',()=>{if(ckp(.3+m.scheme/220)){m.favor+=3;nt('eco',2);add(Math.round(I*.05));return'皇上覺得你的主意可行，交戶部議行。'}m.favor-=2;return'皇上覺得後宮不宜干政，淡淡地訓了你一句。'}],
+ ['保持沉默，明哲保身',()=>{return'你什麼也沒說，國庫的窟窿由朝廷自己去補。'}]]}}
+function lowReg(I){const R_=S.reg;return{t:`戶部奏報：國庫存銀僅${tr()}萬兩，欠餉欠俸。各部都在等太后示下如何籌措。`,o:[
+ [`加征賦稅（籌${Math.round(I*.12)}萬兩，民心、朝局受損）`,()=>{add(Math.round(I*.12));nt('pop',-4);nt('stab',-2);return'賦稅一加，百姓怨聲載道，國庫暫時有了進賬。'}],
+ [`開捐納（籌${Math.round(I*.08)}萬兩，吏治受損）`,()=>{add(Math.round(I*.08));nt('stab',-1);R_.pw-=1;return'捐官之門一開，銀子收上來了，但清流側目。'}],
+ [`裁減軍費（籌${Math.round(I*.1)}萬兩，軍力受損）`,()=>{add(Math.round(I*.1));nt('mil',-4);return'軍費一削，兵部怨聲不絕，邊將頗有微詞。'}],
+ ['向內庫借銀，動用皇室私產（耗銀200）',()=>{if(!pay(200))return'你的私房銀兩不足，只得作罷。';add(Math.round(I*.06));R_.pw+=2;return'你動用私房補貼國庫，朝臣感念太后深明大義。'}]]}}
+})();
+
+/* ===== round53：族譜樹、家族餘蔭（傳承） ===== */
+(function(){
+const ESC2=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const momOf=k=>{for(const x of S.me.kids)if(x===k)return'me';for(let i=0;i<S.npcs.length;i++)if(S.npcs[i].kids.includes(k))return i;return null};
+const TV={親王:3,郡王:2,固倫公主:2,貝勒:1,和碩公主:1,貝子:1};
+// ---------- 歷代皇帝紀錄 ----------
+function dynSync(){if(!S||!S.me||!S.em43)return;S.dyn47=S.dyn47||[];const nm=typeof empName==='function'?empName():'';if(!nm)return;
+ const last=S.dyn47[S.dyn47.length-1];if(!last||last.n!==nm)S.dyn47.push({n:nm,t:S.t})}
+// ---------- 族譜 ----------
+function tree(){dynSync();const m=S.me;let h='';
+ h+=`<div class=m style="margin-bottom:6px"><b>歷代皇帝</b>：${(S.dyn47||[]).map((d,i)=>`${ESC2(d.n)}${i===S.dyn47.length-1?'（現任）':''}`).join(' → ')||'—'}</div>`;
+ const groups=[];groups.push({o:'me',nm:m.n+'（你）',rk:m.rank+.5,rkn:S.reg?S.reg.title||'太后':RK[m.rank]||'',kids:m.kids});
+ S.npcs.forEach((n,i)=>{if(n.kids&&n.kids.length)groups.push({o:i,nm:n.n,rk:n.rank,rkn:n.st||RK[n.rank]||'',kids:n.kids})});
+ groups.sort((a,b)=>(a.o==='me'?-1:b.o==='me'?1:b.rk-a.rk));
+ h+=groups.map(g=>{const ks=g.kids.slice().sort((a,b)=>a.b-b.b);
+  return`<details class="cd con" ${g.o==='me'?'open':''}><summary><span class=nm>${ESC2(g.nm)}</span><span class=pill>${ESC2(g.rkn)}</span><span class=pill>${ks.length}子女</span></summary><div class=m style="line-height:1.8">${ks.map(k=>{const sp=k.sp&&!k.sp.end?`・配${ESC2(k.sp.n||'')}${k.sp.gk?'・孫輩'+k.sp.gk+'人':''}`:'';
+    return`<div>${k.dead?'†':'・'}<b>${ESC2(typeof kTitle==='function'?kTitle(k):k.sex=='男'?'皇子':'公主')}</b> ${ESC2(k.n)}（${yr(k)}歲）${k.jin?'・圈禁':''}${k.out?'・遠在'+ESC2(k.out):''}${sp}</div>`}).join('')}</div></details>`}).join('');
+ return h}
+// ---------- 家族餘蔭 ----------
+function famScore(){if(!S||!S.me)return null;let best=S.reg?4:0,nm='',tt='';(S.me.kids||[]).forEach(k=>{const v=TV[k.t45]||0;if(v>best||(!nm&&v>=best&&v>0)){best=v;nm=k.n;tt=k.t45}});
+ if(S.reg&&S.reg.k){nm=S.reg.k.n;tt='皇帝'}return best>0?{tier:best,n:nm,t:tt}:null}
+const LABEL='家族餘蔭';
+if(!LGS.some(x=>x[0]===LABEL))LGS.push([LABEL,'人脈＋、銀兩＋（依上一世孩子最高爵位；封到親王、成為太后最多）',o=>o.fam&&o.fam.tier>=1,'上一世有孩子封爵']);
+const _ov=over;over=function(){try{if(S&&S.me&&!S.famd){S.famd=1;const f=famScore();if(f){const o=lgGet();o.fam=f;lgSet(o)}}}catch(e){}return _ov.apply(this,arguments)};
+const _la=lgApply;lgApply=function(){
+ try{if(!DLY&&LGP>=0&&LGS[LGP]&&LGS[LGP][0]===LABEL&&S&&S.me){const o=lgGet();if(o.fam&&o.fam.tier>=1){const t=o.fam.tier,m=S.me;m.ally+=[0,6,10,14,16][t];m.silver+=[0,0,100,200,300][t];if(t>=3)m.favor+=[0,0,0,4,6][t];S.lg=`${LABEL}（${o.fam.t}${o.fam.n}）`}return}}catch(e){console.log('r53',e)}
+ return _la.apply(this,arguments)};
+// ---------- 畫面：史冊頁加族譜 ----------
+const _r=render;render=function(){const r=_r.apply(this,arguments);
+ try{if(!S||!S.me||S.over||TAB!==4)return r;const main=document.querySelector('main');if(!main||main.querySelector('.tree53'))return r;
+  const d=document.createElement('details');d.className='cd tree53';d.innerHTML=`<summary style="cursor:pointer"><b>皇室族譜</b>　<span class=m>歷代皇帝與各宮子孫</span></summary>${tree()}`;
+  const f=main.querySelector(':scope>.cd,:scope>.sec13');if(f)main.insertBefore(d,f);else main.appendChild(d)}catch(e){console.log('r53b',e)}return r};
+})();
+
+/* ===== round54：公主差事 ===== */
+(function(){
+const momOf=k=>{for(const x of S.me.kids)if(x===k)return'me';for(let i=0;i<S.npcs.length;i++)if(S.npcs[i].kids.includes(k))return i;return null};
+const PP=[
+ {id:'hq',n:'和親外藩',s:'chong',ef:{mil:.5,stab:.4},dip:1,fac:2,cost:0,sus:1,d:'遠嫁邊外，換邊境安寧；孩子日後思念成疾亦不少見'},
+ {id:'xj',n:'下嫁世家，結好朝臣',s:'cai',ef:{eco:.4,stab:.4},fac:3,cost:30,sus:1,d:'嫁妝打點，換來一門權貴姻親'},
+ {id:'xw',n:'下嫁將門，鞏固邊防',s:'pow',ef:{mil:.5,stab:.2},fac:2,cost:30,sus:2,d:'將門得皇家恩寵，皇上易生猜忌'},
+ {id:'ts',n:'留京侍奉太后',s:'de',ef:{stab:.3},fac:4,cost:0,sus:0,d:'承歡膝下，穩住後宮人心'},
+ {id:'xx',n:'督辦女學、賑濟孤寡',s:'de',ef:{pop:.7,stab:.1},fac:1,cost:20,sus:0,d:'公主出面辦善事，民間稱頌'},
+ {id:'ho',n:'養尊處優，無所事事',s:'de',ef:{},fac:-1,cost:0,sus:0,d:'平安度日'}];
+window.PPOS54=PP;const PB=id=>PP.find(x=>x.id===id);
+const fl=()=>{if(!S.ev&&!S.ch&&!S.scn)next();else render()};
+const ok=k=>k.sex!='男'&&!k.dead&&yr(k)>=15;
+const cl2=v=>Math.max(0,Math.min(100,v));
+function ppSet(k,p,mine){k.pp54=p.id;k.pq54=1;if(mine&&p.fac>=0)S.me.ally+=1}
+window.ppSet54=function(nm,id){const k=allKids().find(x=>x.n===nm),p=PB(id);if(!k||!p||k.pp54===id)return;
+ if(p.cost&&!pay(p.cost)){try{L('銀兩不足，打點不開。')}catch(e){}render();return}
+ ppSet(k,p,1);try{msPush(`${nm}受命：${p.n}。`)}catch(e){}render()};
+const _m=mend;mend=function(){const r=_m.apply(this,arguments);
+ try{if(!S||!S.me||S.over)return r;let pushed=0;
+  const lst=[];S.me.kids.forEach(k=>lst.push([k,'me']));S.npcs.forEach(n=>n.kids.forEach(k=>lst.push([k,'n'])));
+  lst.forEach(([k,o])=>{if(!ok(k)||k.pp54)return;const mine=o==='me';
+   if(mine&&!S.reg){if(!pushed&&!k.pq54){pushed=1;k.pq54=1;
+     S.q.push({t:`${k.n}已及笄，皇上問你：這位公主，想怎麼安排？`,o:PP.map(p=>[`${p.n}${p.cost?'（打點耗銀'+p.cost+'）':''}`,()=>{if(p.cost&&!pay(p.cost)){ppSet(k,PB('ho'),1);return'銀兩不足，只得讓她先在宮中住著。'}
+       if(Math.random()<Math.max(.25,.85-.1*p.sus)){ppSet(k,p,1);return`${k.n}：${p.n}。${p.d}。`}ppSet(k,PB('ts'),1);S.me.favor-=1;return`皇上另有安排，${k.n}改留京侍奉太后。`}])})}}
+   else{ppSet(k,PP[Math.floor(Math.random()*(PP.length-1))],0)}});
+  if(S.t>0&&S.t%12===0&&S.t54!==S.t){S.t54=S.t;const n=S.nat;
+   lst.forEach(([k,o])=>{if(!ok(k)||!k.pp54)return;const p=PB(k.pp54);if(!p||!p.ef)return;const mine=o==='me',sc=mine?1:.6;
+    const s=((k[p.s]||50)/100*.7+Math.random()*.5-.55)*2.2;
+    Object.keys(p.ef).forEach(x=>{if(n[x]!=null)n[x]=cl2(n[x]+p.ef[x]*s*sc)});if(p.fac>=0&&S.fp)S.fp[p.fac]=cl2(S.fp[p.fac]+3*s*sc);
+    if(p.dip&&S.ntr&&typeof NAT6!=='undefined'){const a=NAT6[Math.floor(Math.random()*NAT6.length)];try{ntr()[a]=cl2(ntr()[a]+s*3)}catch(e){}}
+    if(mine&&s>=.7)try{msPush(`${k.n}在「${p.n}」上表現出色，宗室稱許。`)}catch(e){}
+    else if(mine&&s<=-.5){k.chong=Math.max(0,(k.chong||50)-3);try{msPush(`${k.n}在「${p.n}」上出了岔子，朝中有些議論。`)}catch(e){}}})}
+  if(pushed)fl()}catch(e){console.log('r54',e)}return r};
+const _ka=kidsAllPanel;kidsAllPanel=function(){let h=_ka.apply(this,arguments);
+ try{const map={};allKids().forEach(k=>map[k.n]=k);
+  h=h.split('</details>').map(seg=>{const m=seg.match(/<span class=nm>([^<]*)<\/span>/);if(!m)return seg;const k=map[m[1]];if(!k||!ok(k))return seg;
+   const p=k.pp54&&PB(k.pp54);if(p)seg=seg.replace('<span class=mm>',`<span class=pill title="${p.d}">${p.n.split('，')[0].slice(0,4)}</span><span class=mm>`);
+   if(momOf(k)==='me'&&!S.reg)seg+=`<div class=m>公主差事：<select onchange="ppSet54('${k.n}',this.value)">${k.pp54?'':'<option value="" selected>（未安排）</option>'}${PP.map(x=>`<option value="${x.id}"${k.pp54===x.id?' selected':''}>${x.n}${x.cost?'（'+x.cost+'兩）':''}</option>`).join('')}</select></div>`;
+   return seg}).join('</details>')}catch(e){console.log('r54k',e)}return h};
+})();
+
 deco();intro();
 
 
