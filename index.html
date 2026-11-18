@@ -5087,7 +5087,7 @@ const CALL={親王:'王爺',郡王:'王爺',貝勒:'貝勒爺',貝子:'貝子爺
 const _ka=kidsAllPanel;kidsAllPanel=function(){let h=_ka.apply(this,arguments);
  try{const map={};allKids().forEach(k=>map[k.n]=k);
   h=h.replace(/(<span class=nm>)([^<]*)(<\/span>[\s\S]*?)(<span class=mm>)/g,(m,a,n,b,c)=>{const k=map[n];if(!k)return m;const o=momOf(k),q=isQ(o),t=kTitle(k),bits=[`${CALL[t]?'朝臣稱「'+CALL[t]+'」':''}`,k.zi47?`字「${k.zi47}」`:'',k.sh47?`諡「${k.sh47}」`:'',q?'中宮嫡出':''].filter(Boolean).join('・');
-   const lab=(k.sex=='男'?'皇':'公主')==='皇'?`皇${CN[ord(k)]||ord(k)}子`:`${CN[ord(k)]||ord(k)}公主`;
+   const od=ord(k),lab=k.sex=='男'?(od===1?'皇長子':`皇${CN[od]||od}子`):(od===1?'長公主':`${CN[od]||od}公主`);
    return a+n+b+`<span class="pill" title="${bits}">${q?'嫡・':''}${lab}</span>`+c});
   }catch(e){console.log('r47k',e)}return h};
 // ---------- 文字一致：把「皇子某某」換成實際爵位 ----------
@@ -5131,6 +5131,7 @@ const _kid=kid;kid=function(n,sex,b,mom){const k=_kid.apply(this,arguments);
   let r=Math.random()*W.reduce((a,x)=>a+x,0),i=0;for(;i<ARCH.length;i++){r-=W[i];if(r<=0)break}i=Math.min(i,ARCH.length-1);k.zz47=i;
   const a=ARCH[i].a;['cai','de','chong','pow','bond'].forEach(x=>{if(a[x])k[x]=mm(k[x],a[x])})}catch(e){console.log('r48a',e)}return k};
 // ---------- 2. 培養方式 ----------
+window.ARCH48=ARCH;
 const PLAN={'文教':{c:20,e:{cai:.6,de:.1},min:3},'武備':{c:15,e:{pow:.5,cai:.1},min:3},'德育':{c:10,e:{de:.6,bond:.2},min:3},'歷練':{c:25,e:{pow:.3,cai:.3,de:.1,chong:.1},min:12},'放養':{c:0,e:{bond:.2},min:0}};
 window.plSet47=function(nm,v){const k=allKids().find(x=>x.n===nm);if(!k||!PLAN[v])return;k.pl47=v;try{L(`你為${nm}定下「${v}」的培養方式。`)}catch(e){}render()};
 // ---------- 3. 差事 ----------
@@ -5143,7 +5144,7 @@ const POS=[
  {id:'df',n:'巡撫地方・治水賑災',req:k=>k.de>=55,st:'de',fac:3,ef:{pop:.9,eco:.2},sus:2,cost:30},
  {id:'hl',n:'翰林院修書',req:k=>k.cai>=60,st:'cai',fac:1,ef:{pop:.3,stab:.2},sus:0,cost:0},
  {id:'xs',n:'閒散宗室，富貴閒人',req:()=>true,st:'de',fac:-1,ef:{},sus:0,cost:0}];
-const PB=id=>POS.find(x=>x.id===id);
+window.POS48=POS;const PB=id=>POS.find(x=>x.id===id);
 const elig=k=>POS.filter(x=>x.req(k));
 function approve(k,p){const sus=p.sus;return Math.random()<Math.max(.2,Math.min(.9,.5+S.me.favor/220-.07*sus))}
 function assign(k,p,mine){k.pos47=p.id;k.pe47=1;if(p.fac>=0&&mine)S.me.ally+=1}
@@ -5273,6 +5274,91 @@ const _r=render;render=function(){const r=_r.apply(this,arguments);
   const d=document.createElement('div');d.className='cmp49bar';
   d.innerHTML=`<button data-m=1 class="${CMP?'':'s'}" onclick="cmp49(1)">簡版</button><button data-m=0 class="${CMP?'s':''}" onclick="cmp49(0)">詳細版</button><span style="flex:1"></span><button class=s onclick="cmpAll49(1)">展開</button><button class=s onclick="cmpAll49(0)">收合</button>`;
   const f=m.querySelector(':scope>.sec13,:scope>.cd,:scope>.fbar');if(f)m.insertBefore(d,f);else m.appendChild(d)}catch(e){console.log('r49c',e)}return r};
+})();
+
+/* ===== round50：孩子詳情頁（故事、特質、可做的事）＋宗室分組校正 ===== */
+(function(){
+const CN=['','大','二','三','四','五','六','七','八','九','十','十一','十二','十三','十四','十五','十六','十七','十八','十九','二十'];
+const momOf=k=>{for(const x of S.me.kids)if(x===k)return'me';for(let i=0;i<S.npcs.length;i++)if(S.npcs[i].kids.includes(k))return i;return null};
+const ordOf=k=>{const same=allKids().filter(x=>x.sex===k.sex).sort((a,b)=>a.b-b.b||(a.n<b.n?-1:1));return same.indexOf(k)+1};
+const tm=t=>t<0?`入宮前${Math.ceil(-t/12)}年`:`第${Math.floor(t/12)+1}年${t%12+1}月`;
+const ESC2=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ZZ=()=>{try{return window.__ARCH47||null}catch(e){return null}};
+const find=nm=>allKids().find(k=>k.n===nm);
+function story(k){const o=momOf(k),rows=[];
+ rows.push([k.b,`${on(o)==S.me.n?'你':on(o)}誕下${k.sex=='男'?'皇子':'公主'}「${k.n}」。`]);
+ (S.chr||[]).forEach(e=>{if(e.w===k.n)rows.push([e.t,e.x])});
+ ((S.mem||{})[k.n]||[]).forEach(e=>rows.push([e.t,e.x]));
+ (S.ms||[]).forEach(e=>{if(e&&e.x&&e.x.indexOf(k.n)>=0)rows.push([e.t,e.x])});
+ const seen=new Set();return rows.sort((a,b)=>b[0]-a[0]).filter(r=>{const x=r[0]+r[1];if(seen.has(x))return false;seen.add(x);return true}).slice(0,14)}
+function bar2(l,v){return`<div style="display:flex;align-items:center;gap:6px;margin:3px 0"><span style="width:26px">${l}</span><span style="flex:1;height:7px;border-radius:4px;background:rgba(128,100,80,.2);overflow:hidden"><b style="display:block;height:100%;width:${Math.max(0,Math.min(100,v|0))}%;background:var(--gd,#d98a2b)"></b></span><span style="width:28px;text-align:right">${v|0}</span></div>`}
+let CUR=null;
+window.kclose49=function(){const m=document.getElementById('kmodal49');if(m)m.remove();CUR=null;document.body.style.overflow=''};
+window.kopen49=function(nm){const k=find(nm);if(!k||!S||!S.me)return;CUR=nm;kdraw()};
+function acts(k){const o=momOf(k),mine=o==='me',a=yr(k),reg=!!S.reg,out=[];
+ const B=(id,l,d)=>out.push([id,l,d]);
+ if(mine){B('talk','召見談心','孝＋，免費');B('gift','賞賜玩物（耗銀30）','聖寵＋、孝＋');if(a<18)B('teach','親自教導','才德孝＋，略耗健康');B('strict','嚴加管教','德＋、才＋，孝－');
+  if((k.sex=='男'?a>=16:a>=15)&&!k.sp&&!reg)B('wed','為'+(k.sex=='男'?'他':'她')+'謀劃婚事','進入議親');
+  if(k.sex=='男'&&a>=16&&!reg)B('boost','打點請託（耗銀60）','勢力＋，聖寵略降')}
+ else if(reg)B('court','賞賜籠絡（耗銀50）','忠＋、孝＋，權柄略升'),B('warn','申飭壓制','勢力－，朝局＋，孝－'),(k.sex=='男'?a>=16:a>=15)&&!k.sp&&B('wed','賜婚指配','進入議親');
+ else B('favor','關照提攜（耗銀30）','結其生母，人脈＋'),B('gift2','賞賜點心玩物（耗銀20）','孝＋，其生母好感＋');
+ return out}
+window.kdo49=function(id){const k=find(CUR);if(!k)return;
+ if(S.ch||S.ev||S.scn||S.over){kdraw('請先處理眼前的事件。');return}
+ const o=momOf(k),m=S.me;let r='',spendIt=1,b=m.favor;
+ const J=t=>{try{jot('宮',k.n,t)}catch(e){}};
+ switch(id){
+  case'talk':k.bond=cl(k.bond+4);r=`你召${k.n}到跟前談心，${k.n}說起近日的心事，母子（女）親近了些。`;break;
+  case'gift':if(!pay(30)){kdraw('銀兩不足。');return}k.chong=cl(k.chong+3);k.bond=cl(k.bond+3);m.favor+=1;r=`你賞了${k.n}一些玩物，${k.n}歡喜得很。`;break;
+  case'teach':m.hp=Math.max(3,m.hp-1);k.cai=cl(k.cai+3);k.de=cl(k.de+2);k.bond=cl(k.bond+3);r=`你親自教導${k.n}，朝夕相處，學問與品行都有長進。`;break;
+  case'strict':k.de=cl(k.de+4);k.cai=cl(k.cai+1);k.bond=cl(k.bond-2);r=`你對${k.n}嚴加管教，孩子雖然委屈，卻也收斂了不少。`;break;
+  case'boost':if(!pay(60)){kdraw('銀兩不足。');return}k.pow=cl(k.pow+5);m.favor-=1;r=`你打點各方為${k.n}說了話，他的聲勢又長了一截。`;break;
+  case'wed':spendIt=0;if(typeof mxProp==='function'){S.q.push(mxProp(k,o));kclose49();next();return}break;
+  case'court':if(!pay(50)){kdraw('銀兩不足。');return}k.ly=cl((k.ly===undefined?50:k.ly)+6);k.bond=cl(k.bond+4);if(S.reg)S.reg.pw+=1;r=`你厚賞了${k.n}，他叩謝太后恩典，言語間頗為恭順。`;break;
+  case'warn':k.pow=cl(k.pow-4);k.bond=cl(k.bond-3);S.nat.stab=cl(S.nat.stab+1);r=`你當眾申飭了${k.n}，宗室為之一肅，他口稱不敢，心中卻未必服氣。`;break;
+  case'favor':if(!pay(30)){kdraw('銀兩不足。');return}m.ally+=2;if(typeof o==='number'&&S.npcs[o])S.npcs[o].al=cl((S.npcs[o].al||0)+5);r=`你特意關照了${k.n}，其生母${on(o)}對你感激不已。`;break;
+  case'gift2':if(!pay(20)){kdraw('銀兩不足。');return}k.bond=cl(k.bond+2);if(typeof o==='number'&&S.npcs[o])S.npcs[o].al=cl((S.npcs[o].al||0)+3);r=`你賞了${k.n}一些點心玩物，${on(o)}聽說後對你和氣了幾分。`;break;
+  default:return}
+ J(r);try{L(r)}catch(e){}adj(b);kclose49();if(S.over)return;if(spendIt)spend();else render()};
+function kdraw(msg){let md=document.getElementById('kmodal49');const k=find(CUR);if(!k){kclose49();return}
+ const cs=getComputedStyle(document.querySelector('.cd')||document.body),bg=cs.backgroundColor,fg=getComputedStyle(document.body).color;
+ const m=S.me,o=momOf(k),mine=o==='me',a=yr(k),t=kTitle(k),kt=KT[k.t];
+ const q=(typeof isQ47==='function')?isQ47(o):false;
+ const AR=window.ARCH48&&k.zz47!=null?window.ARCH48[k.zz47]:null;
+ const pos=window.POS48&&k.pos47?window.POS48.find(x=>x.id===k.pos47):null;
+ const od=ordOf(k),lab=k.sex=='男'?(od===1?'皇長子':`皇${CN[od]||od}子`):(od===1?'長公主':`${CN[od]||od}公主`);
+ const info=[`<b>${ESC2(t)}</b>・${a}歲・${lab}`,`生母：${ESC2(o==='me'?m.n+'（你）':on(o))}${typeof o==='number'&&S.npcs[o]?'・'+(S.npcs[o].st||RK[S.npcs[o].rank]):''}`,
+  k.zi47?`字「${ESC2(k.zi47)}」`:'',k.sh47?`諡「${ESC2(k.sh47)}」`:'',AR?`資質：<b>${AR.n}</b>（${AR.d}）`:'',`特質：<b>${kt[0]}</b>（${kt[1]}）`,
+  k.pl47?`培養方式：${k.pl47}`:'',pos?`差事：${pos.n}`:'',k.jin?'<b>已被圈禁</b>':'',k.out?`遠在${ESC2(k.out)}`:''].filter(Boolean).join('<br>');
+ const at=k.at||{};const sp=typeof spLine==='function'?spLine(k):'';
+ const sty=story(k),ac=acts(k);
+ const html=`<div style="position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center" onclick="if(event.target===this)kclose49()"><div style="width:100%;max-width:560px;max-height:88vh;overflow:auto;background:${bg.replace(/rgba?\(([^)]*)\)/,(m,x)=>'rgb('+x.split(',').slice(0,3).join(',')+')')};color:${fg};border-radius:18px 18px 0 0;padding:14px 16px calc(18px + env(safe-area-inset-bottom,0px));box-shadow:0 -6px 24px rgba(0,0,0,.35)">
+ <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h3 style="margin:0;font-size:19px">${ESC2(k.n)}</h3><button class=s onclick="kclose49()" style="min-height:0;height:32px;padding:0 14px">關閉</button></div>
+ <div class=m style="margin:8px 0;line-height:1.7">${info}</div>
+ ${bar2('才',k.cai)}${bar2('德',k.de)}${bar2('寵',k.chong)}${bar2('勢',k.pow)}${bar2('孝',k.bond)}${k.ly!==undefined?bar2('忠',k.ly):''}
+ <div class=m style="margin:8px 0">${KT[k.t][1]}<br>顏${at.lk|0}・氣質${at.qi|0}・智${at.iq|0}${typeof whT==='function'&&at.wh!==undefined?'・'+whT(at.wh):''}｜擅長：${typeof topSk==='function'&&at.sk?topSk(at,3):''}<br>${typeof dsPills==='function'&&at.ds?dsPills(at):''}${sp?'<br>'+sp:''}</div>
+ ${msg?`<div class=m style="color:#c0392b;margin:6px 0"><b>${ESC2(msg)}</b></div>`:''}
+ ${ac.length?`<h4 style="margin:12px 0 6px">可以做的事　<span class=m>（每次耗 1 次行動，剩 ${S.w} 次）</span></h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">${ac.map(([id,l,d])=>`<button onclick="kdo49('${id}')" style="text-align:left;min-height:0;padding:8px 10px;height:auto"><div style="font-size:14px">${l}</div><small style="opacity:.75">${d}</small></button>`).join('')}</div>`:''}
+ ${mine&&yr(k)<18&&window.plSet47?`<div class=m style="margin-top:8px">培養方式：<select onchange="plSet47('${k.n}',this.value);kopen49('${k.n}')">${['文教','武備','德育','歷練','放養'].filter(x=>x!=='歷練'||a>=12).map(x=>`<option${(k.pl47||'放養')===x?' selected':''}>${x}</option>`).join('')}</select></div>`:''}
+ <h4 style="margin:14px 0 6px">${ESC2(k.n)}的故事</h4><div class=m style="line-height:1.7">${sty.length?sty.map(r=>`<div>・<span style="opacity:.7">${tm(r[0])}</span>　${ESC2(r[1])}</div>`).join(''):'暫無記載。'}</div>
+ </div></div>`;
+ if(!md){md=document.createElement('div');md.id='kmodal49';document.body.appendChild(md)}md.innerHTML=html;document.body.style.overflow='hidden'}
+// ---- 入口：點 .kid 卡片、詳細卡加按鈕 ----
+document.addEventListener('click',e=>{try{if(!S||!S.me||S.over)return;const kd=e.target.closest&&e.target.closest('.kid');if(!kd||e.target.closest('button,select,input,a,summary'))return;
+ const nm=(kd.textContent||'').trim().split('（')[0].trim();if(find(nm))kopen49(nm)}catch(x){}});
+const _r=render;render=function(){const r=_r.apply(this,arguments);
+ try{if(CUR&&!document.getElementById('kmodal49'))CUR=null;
+  if(S&&S.me&&!S.over&&(TAB===2)){const main=document.querySelector('main');if(main){main.querySelectorAll('.kid').forEach(el=>{el.style.cursor='pointer';if(!el.querySelector('.kgo49')){const nm=(el.textContent||'').trim().split('（')[0].trim();if(find(nm))el.insertAdjacentHTML('beforeend',`<div class="m kgo49" style="margin-top:4px;opacity:.75">點此查看故事與互動 ›</div>`)}});
+   main.querySelectorAll('details.con').forEach(d=>{if(d.querySelector('.kgo49'))return;const n=d.querySelector('.nm');if(!n)return;const nm=n.textContent.trim();if(find(nm)){d.insertAdjacentHTML('beforeend',`<div class="kgo49" style="padding:6px 0 2px"><button onclick="kopen49('${nm}')" style="min-height:0;height:32px;padding:0 14px">查看故事與互動</button></div>`)}})}}}catch(e){console.log('r50',e)}return r};
+// ---- 宗室分組：依實際稱號 ----
+const ORD=['親王','郡王','貝勒','貝子','皇子','固倫公主','和碩公主','公主','格格'];
+const grp=k=>{const t=kTitle(k);let i=ORD.indexOf(t);if(i<0)i=ORD.length;const lab=t==='皇子'?'皇子（未封爵）':t==='公主'?'公主':t;return[lab,i]};
+const _kp=kinPanel;kinPanel=function(){let h=_kp.apply(this,arguments);
+ try{const mp={};allKids().forEach(k=>mp[k.n]=k);
+  const parts=h.split(/(?=<div class=grp40>)/);if(parts.length<2)return h;const head=parts.shift();const cards={};
+  parts.forEach(p=>{const body=p.replace(/^<div class=grp40>[^<]*<\/div>/,'');const m=body.match(/<div data-list=kin>([\s\S]*)<\/div>\s*$/);const inner=m?m[1]:'';
+   inner.split(/(?=<div class=cd data-i )/).filter(Boolean).forEach(c=>{const nm=((c.match(/class=kid>([^（<]*)/)||[])[1]||'').trim();const k=mp[nm];const g=k?grp(k):['其他',99];(cards[g[1]]=cards[g[1]]||{n:g[0],a:[]}).a.push(c)})});
+  return head+Object.keys(cards).sort((a,b)=>a-b).map(i=>`<div class=grp40>${cards[i].n}（${cards[i].a.length}）</div><div data-list=kin>${cards[i].a.join('')}</div>`).join('')}catch(e){console.log('r50g',e)}return h};
 })();
 
 deco();intro();
