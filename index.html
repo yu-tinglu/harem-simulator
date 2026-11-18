@@ -5946,6 +5946,46 @@ const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
   if(VIEW==='hg'){const d=document.createElement('div');d.innerHTML=panel();[...d.children].reverse().forEach(el=>sw.insertAdjacentElement('afterend',el));main.classList.add('hgv66')}else main.classList.remove('hgv66')}}}catch(e){console.log('r66',e)}return r};
 })();
 
+/* ===== round67：人物處處可點進檔案（奪嫡聲勢、生母連結） ===== */
+(function(){
+const nm0=n=>(n.name||n.n);
+const kidBy=nm=>{try{return allKids().find(k=>k.n===nm)}catch(e){return null}};
+const npcIdx=nm=>S.npcs.findIndex(n=>nm0(n)===nm);
+window.goNpc67=function(nm){try{
+ const i=npcIdx(nm);if(i<0)return;
+ if(typeof kclose49==='function')kclose49();
+ if(S.reg&&typeof hgView66==='function')hgView66('tf');
+ TAB=1;render();
+ setTimeout(()=>{const main=document.querySelector('main');if(!main)return;
+  const d=[...main.querySelectorAll('details.con')].find(x=>{const n=x.querySelector('.nm');return n&&n.textContent.replace('（你）','').trim()===nm});
+  if(!d){return}
+  d.style.display='';d.hidden=false;
+  let p=d;while(p&&p!==main){if(p.tagName==='DETAILS')p.open=true;if(p.classList&&p.classList.contains('closed'))p.classList.remove('closed');p=p.parentElement}
+  d.open=true;d.scrollIntoView({block:'center'});d.style.outline='2px solid #d98a2b';setTimeout(()=>{d.style.outline=''},2200)},60)}catch(e){console.log('r67',e)}};
+// 奪嫡聲勢列：每列可點，開皇子檔案；生母名可點
+function deco(){try{
+ if(!S||!S.me||S.over||TAB!==2)return;
+ document.querySelectorAll('main .cd>.k').forEach(el=>{
+  if(el.dataset.k67)return;const t=el.textContent;
+  const m=t.match(/(?:\d+\.\s*)(?:儲君\s*)?([^・\s]+)・([^・]+)之子/);if(!m)return;
+  const kn=m[1],mom=m[2];if(!kidBy(kn))return;
+  el.dataset.k67=1;el.style.cursor='pointer';
+  el.insertAdjacentHTML('beforeend',`<div class=m style="margin-top:2px;opacity:.75">點此查看檔案　<span class=mom67 data-m="${mom}" style="text-decoration:underline">${mom}的檔案 ›</span></div>`);
+  el.addEventListener('click',e=>{const s=e.target.closest('.mom67');if(s){e.stopPropagation();goNpc67(s.dataset.m);return}kopen49(kn)})})}catch(e){console.log('r67d',e)}}
+const _r=render;render=function(){const r=_r.apply(this,arguments);deco();return r};
+// 孩子檔案內：生母可點
+function momLink(md){try{
+ if(!md||md.querySelector('.mom67'))return;
+ const box=[...md.querySelectorAll('.m')].find(x=>x.innerHTML.indexOf('生母：')>=0);if(!box)return;
+ box.innerHTML=box.innerHTML.replace(/生母：([^（・<]+)(（你）)?/,(a,n,y)=>{n=n.trim();if(y||npcIdx(n)<0)return a;return`生母：<span class=mom67 data-m="${n}" style="text-decoration:underline;cursor:pointer;color:#b8473a">${n} ›</span>`})}catch(e){}}
+new MutationObserver(()=>momLink(document.getElementById('kmodal49'))).observe(document.body,{childList:true,subtree:true});
+document.addEventListener('click',e=>{const s=e.target.closest&&e.target.closest('#kmodal49 .mom67');if(s)goNpc67(s.dataset.m)});
+// 子嗣總覽卡：加「查看生母」
+const _r2=render;render=function(){const r=_r2.apply(this,arguments);
+ try{if(S&&S.me&&!S.over&&TAB===2)document.querySelectorAll('main details.con').forEach(d=>{if(d.querySelector('.mg67'))return;const mm=d.querySelector('summary .mm');const n=d.querySelector('.nm');if(!mm||!n||!kidBy(n.textContent.trim()))return;
+  const m=mm.textContent.match(/^(.+?)所出/);if(!m||npcIdx(m[1])<0)return;d.insertAdjacentHTML('beforeend',`<div class=mg67 style="padding:4px 0"><button class=s onclick="goNpc67('${m[1]}')" style="min-height:0;height:32px;padding:0 14px">查看生母 ${m[1]} 的檔案</button></div>`)})}catch(e){console.log('r67e',e)}return r};
+})();
+
 deco();intro();
 
 
