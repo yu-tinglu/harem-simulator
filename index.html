@@ -5497,6 +5497,88 @@ const _ka=kidsAllPanel;kidsAllPanel=function(){let h=_ka.apply(this,arguments);
    return seg}).join('</details>')}catch(e){console.log('r54k',e)}return h};
 })();
 
+/* ===== round55：新手說明分大類、新功能說明、底部留白 ===== */
+(function(){
+try{
+HELP.push(['皇子字輩與爵位','皇子名＝字輩＋一字，換皇帝即換下一代字輩（朝堂頁可自訂字輩）。孩子成年後由皇上封爵：皇子有貝子、貝勒、郡王、親王，公主有格格、和碩公主、固倫公主。親王與郡王有人數上限，高位爵者每年領歲俸，也更容易被皇上猜忌。']);
+HELP.push(['孩子資質與培養方式','每個孩子有天資類型（如文才、武略、穩重、晚成…），生母的才、德、心機等會影響孩子初始值。4 歲起可定培養方式：文教、武備、德育、放養，12 歲起可歷練；多數要每年耗銀。晚成型的孩子少年慢、後期追上。']);
+HELP.push(['皇子差事與影響國政','皇子 16 歲起可謀差事：軍機處、禁軍兵部、戶部內務府、出使外藩、巡撫地方等。每年依孩子能力影響國情（朝局、經濟、軍力、民心）與對應派系。差事越高越容易招皇上疑心，需要聖寵與打點。']);
+HELP.push(['公主差事','公主 15 歲起可安排：和親外藩、下嫁世家、下嫁將門、留京侍奉太后、督辦女學，或養尊處優。每年影響國情與派系，和親也會影響邦誼。']);
+HELP.push(['國情實數與國庫','朝堂頁的「國情實數」每年結算：歲入、歲出（軍費、官俸、宮廷、宗室歲俸、賑災）與國庫存銀。國庫低迷會引發事件，天災會扣庫，盈餘過多則有人提議用度。太后聽政時可定財政方針。']);
+HELP.push(['皇室族譜與家族餘蔭','宗室頁底部的「皇室族譜」會記歷代皇帝與孩子們的親疏。結局時依家族成就給「家族餘蔭」，下一局開局會得到同盟度、銀兩、聖寵加成。']);
+HELP.push(['孩子詳情卡','在宗室頁點任何孩子的卡片，可看他的故事、特質與你能做的事：談心、賞賜、教導、嚴管、謀劃婚事、栽培。太后聽政時則是召見、申飭、賜婚。']);
+}catch(e){console.log('r55h',e)}
+const CATS=[
+['入門與操作',['這是什麼遊戲','第一年照著做','每月 4 次行動','六組行動','數值是什麼','方針與一鍵','輕鬆模式','警示欄','事件頻率','事件冷卻']],
+['後宮、位份與宮鬥',['位份與編制','官女子','盟友度','敵意、罪證','皇后與中宮','管教皇后','暗算皇后','結拜與宿敵','關係圖','記憶、派系','因果與人生']],
+['皇帝、朝堂與主線',['皇帝詳情','皇帝疑心','前朝、母家','私兵與疑心','主線劇情','終局大計']],
+['子嗣、宗室與傳承',['子嗣與奪嫡','九龍奪嫡','子女婚配','姻親勢力','皇子字輩','孩子資質','皇子差事','公主差事','孩子詳情卡','皇室族譜']],
+['外邦與公主',['外邦公主','降低母國猜忌','公主攝政','攝政公主']],
+['金錢與國庫',['下人與商鋪','金錢用途','國情實數']],
+['存檔與其他',['通知、紀事','壽命與後台','年表摺疊']]];
+const _ho=helpOpen;helpOpen=function(){const r=_ho.apply(this,arguments);
+ try{const hb=document.querySelector('#help .hb');if(!hb||hb.querySelector('.hcat55'))return r;
+  const ds=[...hb.querySelectorAll(':scope>details')];if(!ds.length)return r;const used=new Set();
+  const anchor=ds[0],wrap=[];
+  CATS.concat([['其他',[]]]).forEach(([nm,keys],ci)=>{const mine=ds.filter(d=>!used.has(d)&&(keys.length?keys.some(k=>d.querySelector('summary').textContent.includes(k)):true));
+   if(!mine.length)return;mine.forEach(d=>used.add(d));
+   const c=document.createElement('details');c.className='hcat55';if(ci===0)c.open=true;
+   c.innerHTML=`<summary><b>${nm}</b>　<span class=m>${mine.length} 則</span></summary><div class=hin55></div>`;const box=c.querySelector('.hin55');
+   mine.forEach(d=>{d.open=false;box.appendChild(d)});wrap.push(c)});
+  const btn=[...hb.children].filter(e=>e.tagName==='BUTTON').pop();wrap.forEach(c=>btn?hb.insertBefore(c,btn):hb.appendChild(c))}catch(e){console.log('r55',e)}return r};
+window.helpOpen=helpOpen;
+const st=document.createElement('style');st.textContent=`.hcat55{border:1px solid var(--line,#e6cfc2);border-radius:12px;margin:8px 0;padding:2px 10px;background:rgba(255,255,255,.35)}.hcat55>summary{font-size:15px;padding:10px 2px;cursor:pointer}.hin55{padding:0 0 6px 6px;border-left:3px solid rgba(214,70,90,.25);margin-left:2px}.hin55 details{margin:4px 0}html body main{padding-bottom:calc(200px + env(safe-area-inset-bottom,0px))!important}`;document.head.appendChild(st);
+})();
+
+/* ===== round56：首次提示、成就、選擇後果、回退保險、結局分享卡 ===== */
+(function(){
+const g=k=>{try{return localStorage.getItem(k)}catch(e){return null}},s=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+const ESC=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+// ---- toast ----
+function toast(txt){try{let e=document.getElementById('tt56');if(e)e.remove();e=document.createElement('div');e.id='tt56';e.innerHTML=txt+'<button onclick="this.parentNode.remove()">×</button>';document.body.appendChild(e);setTimeout(()=>{try{e.remove()}catch(x){}},9000)}catch(x){}}
+const st=document.createElement('style');st.textContent=`#tt56{position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 56px);z-index:9999;max-width:min(92vw,420px);background:#fffaf4;color:#4a2a2a;border:1px solid #e6b9b0;border-radius:14px;padding:10px 34px 10px 14px;font-size:13px;line-height:1.6;box-shadow:0 6px 22px rgba(120,50,50,.25)}#tt56 button{position:absolute;right:6px;top:4px;border:0;background:none;font-size:18px;color:#a55}.ach56 span{display:inline-block;margin:3px 4px 3px 0;padding:2px 9px;border-radius:99px;font-size:12px;background:rgba(214,70,90,.1)}.ach56 span.no{opacity:.45}`;document.head.appendChild(st);
+// ---- 首次提示 ----
+const TIPS={
+ kid4:['有孩子滿 4 歲了：到「宗室」頁可以替他定培養方式（文教、武備、德育…），會影響他長大後的能力。'],
+ son16:['有皇子成年了：到「宗室」頁可替他謀差事，差事會每年影響國情與派系，但也會招皇上猜忌。'],
+ dau15:['有公主及笄了：到「宗室」頁可安排她和親、下嫁或辦女學，也可以點她的卡片看故事與互動。'],
+ treas:['朝堂頁有「國情實數」：每年結算歲入歲出與國庫，國庫吃緊會出事件。']};
+function tip(k){if(g('hg56t_'+k))return false;s('hg56t_'+k,'1');toast('💡 '+TIPS[k][0]);return true}
+// ---- 成就（跨局，存在瀏覽器） ----
+const ACH=[
+ ['a1','子孫滿堂','親生孩子達 6 人',()=>S.me.kids.length>=6],
+ ['a2','親王之母','親生孩子封為親王',()=>S.me.kids.some(k=>k.t45==='親王')],
+ ['a3','和親有功','親生公主受命和親外藩',()=>S.me.kids.some(k=>k.pp54==='hq')],
+ ['a4','家財萬貫','銀兩達 1 萬',()=>S.me.silver>=10000],
+ ['a5','母儀天下','當上皇后（含）以上位份',()=>S.me.rank>=((typeof RK!=='undefined'&&RK.length-1)||8)],
+ ['a6','皇家棟樑','親生孩子在差事上獲得稱許',()=>S.me.kids.some(k=>k.pos47&&yr(k)>=18&&(k.pow||0)>=75)],
+ ['a7','國庫充盈','國庫存銀超過年入的 4 倍',()=>S.led47&&typeof led47==='function'&&S.led47.tr>led47().inc*4],
+ ['a8','長壽福氣','撐過 30 年',()=>S.t>=360]];
+const got=()=>{try{return JSON.parse(g('hg56ach')||'{}')}catch(e){return{}}};
+function chk(){try{if(!S||!S.me||S.over)return;const G=got();let ch=0;ACH.forEach(([id,n,d,f])=>{if(G[id])return;let ok=false;try{ok=!!f()}catch(e){}if(ok){G[id]=1;ch=1;toast('🏅 成就解鎖：<b>'+n+'</b>（'+d+'）')}});if(ch)s('hg56ach',JSON.stringify(G))}catch(e){console.log('r56a',e)}}
+function achHtml(){const G=got();return`<div class="ach56">${ACH.map(([id,n,d])=>`<span class="${G[id]?'':'no'}" title="${d}">${G[id]?'🏅':'🔒'} ${n}</span>`).join('')}<div class=m style="margin-top:4px">已解鎖 ${ACH.filter(a=>G[a[0]]).length}／${ACH.length}（跨局累計，存在這個瀏覽器）</div></div>`}
+const _m=mend;mend=function(){const r=_m.apply(this,arguments);
+ try{if(S&&S.me&&!S.over){const ks=S.me.kids.filter(k=>!k.dead);
+  if(ks.some(k=>yr(k)>=4))tip('kid4');else if(S.t>=24&&0);
+  if(ks.some(k=>k.sex=='男'&&yr(k)>=16))tip('son16');if(ks.some(k=>k.sex!='男'&&yr(k)>=15))tip('dau15');if(S.t>=24)tip('treas');chk()}}catch(e){console.log('r56m',e)}return r};
+// ---- 選擇後果可見 ----
+const _V=V;V=function(i){let b=null,fa=0;try{b=S.fp?S.fp.slice():null;fa=S.me.ally}catch(e){}const r=_V.apply(this,arguments);
+ try{if(b&&S&&S.fp&&typeof FAC!=='undefined'){const o=[];S.fp.forEach((v,j)=>{const d=v-b[j];if(Math.abs(d)>=2)o.push(`「${FAC[j]}」${d>0?'勢力上升':'勢力下滑'}`)});if(o.length)msPush('這個選擇的後果：'+o.join('、')+'。')}}catch(e){console.log('r56v',e)}return r};
+// ---- 回退保險 ----
+const PREV='shengong_prev';
+const _as=autoSave;autoSave=function(){let before=null;try{before=stg.get(AUTOK)}catch(e){}const r=_as.apply(this,arguments);try{const after=stg.get(AUTOK);if(before&&after&&before!==after)stg.set(PREV,before)}catch(e){}return r};
+window.loadPrev56=function(){try{const j=JSON.parse(stg.get(PREV));const o=JSON.parse(j.data);if(o.ver!==1||!o.S||!o.S.me)throw 0;restore(o);_asK='';render()}catch(e){toast('沒有可回退的存檔。')}};
+// ---- 紀事頁：成就＋回退 ----
+const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
+ try{if(S&&S.me&&!S.over&&TAB==5){const main=document.querySelector('main');if(main&&!main.querySelector('.sv56')){let pv=null;try{pv=JSON.parse(stg.get(PREV))}catch(e){}
+  const d=document.createElement('div');d.className='cd sv56';d.innerHTML=`<h3>成就與保險</h3>${achHtml()}<p class=m style="margin-top:8px">${pv?`遇到卡住或選錯，可回到上一個月：${ESC(pv.sum)}（${ESC(pv.time)}）<br><button class=s onclick="loadPrev56()">回到上一個月</button>`:'還沒有可回退的存檔（遊戲推進一個月後就會有）。'}</p>`;main.insertBefore(d,main.firstChild)}}}catch(e){console.log('r56u',e)}return r};
+// ---- 結局分享卡 ----
+window.shareTxt56=function(){try{const m=S.me,sc=scoreOf();const t=`【後宮模擬器】${m.n}・${S.reg?S.reg.title:RKD(m)}，在位 ${Math.floor(S.t/12)} 年，子女 ${m.kids.length} 人，評分 ${sc}（${SCT(sc)}）。你能走得比我遠嗎？`;
+ const ok=()=>toast('已複製，貼給朋友吧。');if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(ok,()=>toast(t));else toast(t)}catch(e){toast('複製失敗')}};
+const _ec=endCard;endCard=function(){let h=_ec.apply(this,arguments);try{chk();const m=S.me;const tops=m.kids.filter(k=>k.t45&&!k.dead).map(k=>k.t45);
+ h+=`<div class=m style="margin-top:8px">一生子女 ${m.kids.length} 人${tops.length?'，最高爵位：'+['親王','郡王','固倫公主','貝勒','和碩公主','貝子','格格'].find(x=>tops.includes(x))||'':''}。</div>${achHtml()}<p><button onclick="shareTxt56()">複製結局分享文字</button></p>`}catch(e){console.log('r56e',e)}return h};
+})();
+
 deco();intro();
 
 
