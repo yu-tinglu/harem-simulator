@@ -4622,6 +4622,54 @@ const _m38=mend;mend=function(){const r=_m38.apply(this,arguments);
 const _g38=goalChip;goalChip=function(){let s='';try{const a=S.arc37;if(a&&!S.reg)s=`<div class=cd data-open=1><h3>長線劇情</h3><div class=m>「${NM[a.id]}」${a.done?'・已落幕':`・第${Math.min(a.st+1,4)}幕 / 共4幕`}</div></div>`}catch(e){}return _g38.apply(this,arguments)+s};
 })();
 
+/* ===== round39：後宮人物專屬事件（依性格特質與關係親疏，每位妃嬪都有自己的故事） ===== */
+(function(){
+const gF=x=>S.me.favor+=x,scn=x=>{S.me.scand=Math.max(0,(S.me.scand||0)+x)};
+const mem=(n,x)=>{try{S.mem=S.mem||{};(S.mem[n.n]=S.mem[n.n]||[]).push({t:S.t,x})}catch(e){}};
+const trait=n=>{const a=n.at||{},t=[];if((a.iq||0)>=70)t.push('wise');if((a.lk||0)>=75)t.push('beauty');if(n.hp<50)t.push('frail');if((n.sc||0)>=60)t.push('deep');if((a.qi||0)>=75)t.push('calm');if(n.kids&&n.kids.length)t.push('mom');return t};
+const T={
+wise:n=>({t:`${n.n}素來聰慧，今日拿著一局殘棋來找你，笑說：「聽聞姐姐棋藝不俗，可否指點一二？」`,o:[
+ ['認真對弈，點到為止',()=>{n.al=cl(n.al+6);mem(n,'與你對弈，棋逢對手');if(P(.5)){S.me.fame=(S.me.fame||0)+1}return'一局下來兩人都有收穫，她笑說下回再戰。'}],
+ ['故意讓她半子，賣個人情',()=>{n.al=cl(n.al+9);n.host=cl(n.host-4);mem(n,'你讓她半子，她心裡明白');return'她看出來了，卻沒有點破，只是眼裡多了幾分感激。'}],
+ ['婉拒，說自己不擅此道',()=>{S.me.scheme+=1;mem(n,'你婉拒了她的邀約');return'她點點頭告辭，似乎看穿了你的藏拙。'}]]}),
+beauty:n=>({t:`皇上近來對${n.n}格外留意，她特意來你宮裡走動，言語間試探你的態度。`,o:[
+ ['大方道賀，言語和氣',()=>{n.al=cl(n.al+5);n.host=cl(n.host-3);gF(1);mem(n,'你大方向她道賀');return'她鬆了口氣，說往後還要姐姐多照拂。'}],
+ ['提點她：宮中恩寵易來易去',()=>{n.al=cl(n.al+3);S.me.ally+=1;mem(n,'你勸她莫要得意');return'她若有所思，行禮謝過。'}],
+ ['冷淡以對，不給好臉色',()=>{n.host=cl(n.host+8);mem(n,'你對她冷淡以對');return'她面上客氣，離開時腳步卻重了幾分。'}]]}),
+frail:n=>({t:`${n.n}體弱多病，近日又病倒了，身邊的宮女偷偷來求你賞些藥材。`,o:[
+ ['送去上好的藥材（耗銀30）',()=>{if(!pay(30)){return'銀兩不足，只能送去幾味尋常藥材。'}n.hp=Math.min(100,n.hp+12);n.al=cl(n.al+10);mem(n,'你在她病中送藥');return'她病中聽說是你送的藥，竟紅了眼眶。'}],
+ ['親自前去探望',()=>{n.al=cl(n.al+7);n.hp=Math.min(100,n.hp+4);S.me.fame=(S.me.fame||0)+1;mem(n,'你親自探望她');return'她拉著你的手說了許多心裡話。'}],
+ ['派個宮人問候一聲便罷',()=>{n.al=cl(n.al+1);return'她收到了問候，沒說什麼。'}]]}),
+deep:n=>({t:`${n.n}心思深沉，今日悄悄遞來一句話：「宮裡人多眼雜，不如你我暗中結個伴？」`,o:[
+ ['答應結盟，彼此照應',()=>{n.al=cl(n.al+14);n.host=cl(n.host-6);S.me.ally+=4;S.me.scheme+=2;mem(n,'你與她暗中結盟');if(P(.25)){scn(3)}return'你們約定互通消息，不過你也留了一手。'}],
+ ['禮貌拒絕，保持距離',()=>{n.al=cl(n.al-3);S.me.scheme+=1;mem(n,'你拒絕了她的結盟');return'她笑笑說「是我唐突了」，眼神卻意味深長。'}],
+ ['假意答應，探探她的底（看心機）',()=>{if(P(.5+S.me.scheme/300)){S.me.scheme+=4;n.host=cl(n.host+2);mem(n,'你假意答應，想探她的底');return'你套出了她不少底細，卻也讓她多了份戒心。'}n.host=cl(n.host+10);mem(n,'你的試探被她識破');return'她識破了你的把戲，從此對你多了提防。'}]]}),
+calm:n=>({t:`${n.n}氣質出塵、與世無爭，今日來找你，說想去護國寺禮佛數日，請你在皇上面前說句話。`,o:[
+ ['替她說情，成全她',()=>{n.al=cl(n.al+9);gF(-1);mem(n,'你替她說情，讓她得以去禮佛');return'皇上准了，她臨走前鄭重向你拜謝。'}],
+ ['勸她留下，宮裡離不開她',()=>{n.al=cl(n.al+2);mem(n,'你勸她留在宮中');return'她輕輕嘆息，沒有再堅持。'}],
+ ['推說不便開口',()=>{n.al=cl(n.al-3);return'她默默告退，沒再多說什麼。'}]]}),
+mom:n=>({t:`${n.n}的孩子與你宮裡的孩子在學堂起了爭執，她帶著孩子來你這兒，神色有些不安。`,o:[
+ ['各打五十大板，讓孩子們握手言和',()=>{n.al=cl(n.al+6);S.me.kids.forEach(k=>k.bond+=1);mem(n,'你公道處理了孩子們的爭執');return'兩個孩子互相道了歉，兩位母親也相視一笑。'}],
+ ['護著自己的孩子',()=>{S.me.kids.forEach(k=>k.bond+=3);n.host=cl(n.host+7);mem(n,'你在孩子的爭執中偏幫自己人');return'你替孩子撐了腰，卻讓她心裡不舒服。'}],
+ ['替她的孩子說好話（耗銀20）',()=>{if(!pay(20))return'銀兩不足，只說了幾句好話。';n.al=cl(n.al+10);n.host=cl(n.host-5);mem(n,'你替她的孩子說了好話');return'她很是感動，往後兩家孩子走得更近了。'}]]})};
+const REL={
+friend:n=>({t:`${n.n}與你交情不淺，今日留你說了半宿體己話，末了嘆道：「在這宮裡，能說真心話的人太少了。」`,o:[
+ ['說出自己的一個小秘密，換她的信任',()=>{n.al=cl(n.al+10);S.me.ally+=3;mem(n,'你對她說了心裡話');if(P(.15))scn(2);return'兩人交換了秘密，往後又近了一層。'}],
+ ['只聽不說，點到為止',()=>{n.al=cl(n.al+4);S.me.scheme+=1;mem(n,'你傾聽了她的心事');return'你聽得認真，卻守住了自己的底線。'}],
+ ['勸她多留個心眼',()=>{n.al=cl(n.al+3);mem(n,'你勸她多留心眼');return'她笑你太過小心，卻也聽了進去。'}]]}),
+foe:n=>({t:`${n.n}與你素有嫌隙，今日路遇，她停下腳步，似笑非笑地說：「妹妹近來氣色真好，不知是不是有什麼喜事？」`,o:[
+ ['皮笑肉不笑地回敬',()=>{n.host=cl(n.host+3);S.me.scheme+=1;mem(n,'你與她針鋒相對');return'兩人唇槍舌劍，旁人都屏住了呼吸。'}],
+ ['平靜以對，不接茬',()=>{n.host=cl(n.host-3);gF(1);mem(n,'你不與她計較');return'你神色如常，她一拳打在棉花上，訕訕離去。'}],
+ ['順勢示好，緩和關係（耗銀15）',()=>{if(!pay(15))return'銀兩不足，示好未成。';n.host=cl(n.host-8);n.al=cl(n.al+4);mem(n,'你向她示好');return'她愣了一下，語氣緩和了些。'}]]}),
+plain:n=>({t:`${n.n}托人遞話，說家中有件小事想請你幫忙，不知是否方便。`,o:[
+ ['爽快應下，盡力而為',()=>{n.al=cl(n.al+7);S.me.ally+=2;mem(n,'你應下了她的請託');return'她連連道謝，你多了個欠你人情的人。'}],
+ ['視情況，只幫一半',()=>{n.al=cl(n.al+3);mem(n,'你只幫了她一半');return'事情辦成了一半，她也不好多說什麼。'}],
+ ['婉言回絕',()=>{n.al=cl(n.al-4);return'她失望地離開。'}]]})};
+function pickNpc(){const l=ids().filter(i=>S.npcs[i]&&!S.npcs[i].st&&(S.t-(S.npcs[i].pe35==null?-99:S.npcs[i].pe35))>=14);if(!l.length)return null;const w=l.map(i=>{const n=S.npcs[i];return 1+Math.abs(n.al-50)/25+Math.abs(n.host-50)/25});let r=Math.random()*w.reduce((a,b)=>a+b,0),k=0;while(k<w.length-1&&r>w[k]){r-=w[k];k++}return l[k]}
+const _m39=mend;mend=function(){const r=_m39.apply(this,arguments);
+ try{if(!S||!S.me||S.over||S.reg||S.t<8)return r;if(S.t-(S.pe35t==null?-99:S.pe35t)<3||!P(.4))return r;const i=pickNpc();if(i==null)return r;const n=S.npcs[i],tr=trait(n);let e;if(tr.length&&P(.6))e=T[tr[R(0,tr.length-1)]](n);else e=(n.host>=55?REL.foe:n.al>=55?REL.friend:REL.plain)(n);n.pe35=S.t;S.pe35t=S.t;S.q.push(e);if(!S.ev&&!S.ch&&!S.scn)next();else render()}catch(x){console.log('r39',x)}return r};
+})();
+
 deco();intro();
 
 
