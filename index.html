@@ -4815,6 +4815,81 @@ const _m=mend;mend=function(){const r=_m.apply(this,arguments);
  try{if(S&&S.me&&!S.over&&S.t>12&&S.t-(S.dis42t==null?-99:S.dis42t)>=10&&P(.02*(S.era41==='disaster'?3:1))){S.dis42t=S.t;S.q.push(pk(DIS)());if(!S.ev&&!S.ch&&!S.scn)next();else render()}}catch(e){console.log('r42b',e)}return r};
 })();
 
+/* ===== round43：新開局身分＋出宮後故事＋局設定代碼 ===== */
+(function(){
+// ---- 1. 新開局身分 ----
+const NEW=[
+ ['將門孤女','父兄戰死沙場，朝廷憐其忠烈，接你入宮撫恤。健康＋15、武藝傍身，但家中再無人可倚。起始位份：常在',{s:25,a:6,hp:15,sc:4,r:1,f:6,e:6},[['祖母','老誥命',15,60,90],['族叔','邊軍千總',20,45,80]],3,1],
+ ['欽天監官之女','父為欽天監監正，自幼識星象曆法，被視為「通天意」之人。心機＋8。起始位份：常在',{s:35,a:8,sc:8,r:1,f:3},[['父親','欽天監監正',40,70,85],['兄長','靈臺郎',15,65,85]],3,1],
+ ['戲班班主之女','隨班行走四方，見慣世情，一曲驚動聖駕。能言善道，家世卑微。起始位份：答應',{s:12,a:3,sc:6,r:0,f:14,e:-4},[['父親','戲班班主',8,50,90],['師兄','武生',4,45,90]],3,-1],
+ ['修行女冠','自幼入道觀修行，因一場祈福被請進宮中，清淨之人入紅塵。健康＋12，淡泊少欲。起始位份：答應',{s:15,a:4,hp:12,r:0,f:4,e:8},[['師父','觀主',12,75,95]],3,-1]
+];
+NEW.forEach(x=>{if(!GS.some(g=>g[0]===x[0]))GS.push(x)});
+const OPEN={
+ '將門孤女':()=>({t:'邊關舊部聽聞你入宮，託人送來亡父的舊佩刀與一封信。',o:[
+  ['收下刀，把信燒了，安分度日',()=>{S.me.hp=Math.min(100,S.me.hp+3);S.me.scheme+=2;return'你將刀藏在箱底，不再提起。'}],
+  ['將信呈給皇上，請求撫恤舊部',()=>{S.me.favor+=6;S.me.emp+=4;S.me.ally+=2;return'皇上動容，下旨撫恤舊部，你在宮中得了「忠烈之後」的名聲。'}],
+  ['暗中回信，與舊部保持聯絡',()=>{S.me.ally+=4;S.me.scheme+=3;S.me.favor-=2;return'你在宮外有了一條只屬於自己的消息線，也多了一分風險。'}]]}),
+ '欽天監官之女':()=>({t:'近日天象異動，父親託人遞進宮一句話：「熒惑守心，宜慎。」',o:[
+  ['把話遞給皇上，勸其修德',()=>{if(P(.55)){S.me.favor+=6;S.me.emp+=3;return'皇上將信將疑，數日後果真應驗，對你另眼相看。'}S.me.favor-=3;return'皇上不悅：「後宮不得妄議天象。」你被淡淡訓了一句。'}],
+  ['只對自己信任的人透露',()=>{S.me.ally+=4;return'身邊人都記下了你的謹慎與先見。'}],
+  ['不聲張，只做好準備',()=>{S.me.silver+=15;S.me.scheme+=3;return'你悄悄囤了些銀錢與藥材，心裡有了底。'}]]}),
+ '戲班班主之女':()=>({t:'入宮不久，太后宮中設宴，有人點名要你「再唱一段」。',o:[
+  ['放開唱，唱出從前的江湖氣',()=>{if(P(.6)){S.me.favor+=7;S.me.ally+=3;return'滿座皆驚，連太后都笑著打賞。'}S.me.favor-=3;return'有人嫌太過放肆，掩口低笑。'}],
+  ['改唱宮裡規矩的雅曲',()=>{S.me.favor+=3;S.me.emp+=2;return'四平八穩，無功無過。'}],
+  ['推說嗓子不適，婉拒',()=>{S.me.scheme+=2;S.me.favor-=1;return'你避開了出頭的風險。'}]]}),
+ '修行女冠':()=>({t:'你日日清晨仍習慣誦經，這份靜氣被幾位嬪妃看在眼裡。',o:[
+  ['為貴人們抄經祈福',()=>{S.me.ally+=6;S.me.hp=Math.min(100,S.me.hp+2);return'不少人託你抄經，漸漸有了往來。'}],
+  ['藉誦經結識太后',()=>{S.me.emp+=5;S.me.favor+=2;return'太后喜歡清淨的人，常叫你去說話。'}],
+  ['不理他人，維持自己的清淨',()=>{S.me.hp=Math.min(100,S.me.hp+4);S.me.ally-=1;return'你過得自在，只是少了些人脈。'}]]})
+};
+const _s=start;
+// ---- 3. 局設定代碼 ----
+let CODE43=0;
+const b36=n=>(n>>>0).toString(36).toUpperCase();
+function mkCode(g,t,d,gl,sd){return['HG',g,t,d,gl,b36(sd)].join('-')}
+function parseCode(c){const p=String(c||'').trim().toUpperCase().split('-');if(p.length!==6||p[0]!=='HG')return null;const g=+p[1],t=+p[2],d=+p[3],gl=+p[4],sd=parseInt(p[5],36);
+ if(![g,t,d,gl].every(Number.isInteger)||isNaN(sd)||g<0||g>=GS.length||t<0||t>=TS.length||d<0||d>2||gl<0||gl>9)return null;return{g,t,d,gl,sd}}
+window.hgParse=parseCode;
+start=function(){
+ let seed=null,own=0;
+ if(!DLY&&!CODE43){seed=(Math.random()*4294967296)>>>0;own=1}
+ else if(CODE43&&typeof CODE43==='object')seed=CODE43.sd;
+ let orig=Math.random;
+ if(seed!=null&&!DLY)Math.random=mulb(seed);
+ try{_s.apply(this,arguments)}finally{Math.random=orig}
+ try{if(seed!=null&&S&&S.me){S.code43=mkCode(G,T,DIFF,GOAL,seed);try{localStorage.setItem('hg43last',S.code43)}catch(e){}}
+  const o=S&&S.me&&OPEN[GS[G][0]];
+  if(o&&!S.op43){S.op43=1;S.q=S.q||[];S.q.push(o());if(!S.ev&&!S.ch&&!S.scn)next();else render()}}catch(e){console.log('r43a',e)}
+};
+window.hgCodeStart=function(code){const c=parseCode(code||(document.getElementById('hgc43')||{}).value);const e=document.getElementById('hgm43');
+ if(!c){if(e)e.textContent='代碼格式不正確（應像 HG-3-7-1-0-K3F9Q）。';return}
+ G=c.g;T=c.t;DIFF=c.d;GOAL=c.gl;AT=null;N=N||'沈氏';CODE43=c;try{start()}finally{CODE43=0}};
+window.hgCodeCopy=function(c){try{navigator.clipboard.writeText(c).then(()=>{const e=document.getElementById('hgm43');if(e)e.textContent='已複製代碼，傳給朋友貼上就能玩同一個開局。'},()=>{})}catch(e){}};
+function codeCard(){let last='';try{last=localStorage.getItem('hg43last')||''}catch(e){}
+ return`<div class=cd><h3>局設定代碼</h3><div class=m>貼上朋友的代碼，就會從<b>同樣的出身、天賦、難度與後宮人物</b>開始。${last?`<br>上一局代碼：<b>${last}</b> <button class=s onclick="hgCodeCopy('${last}')">複製</button>`:''}</div><p><input id=hgc43 placeholder="HG-3-7-1-0-K3F9Q" style="width:60%;max-width:260px"> <button onclick="hgCodeStart()">以此代碼開始</button></p><div id=hgm43 class=m></div></div>`}
+const _dc=dailyCard;dailyCard=function(){return _dc.apply(this,arguments)+codeCard()};
+// ---- 2. 出宮後故事 ----
+const EXIT=['撂牌子','宮外舊夢'];
+const _ov=over;
+over=function(t,x){
+ if(EXIT.includes(t)&&!S.ex43&&S&&S.me&&!S.over){
+  S.ex43=1;const m=S.me,rich=(m.silver||0)>=120,sk=m.at&&m.at.sk||[],med=sk[12]>=6;
+  const fin2=(a)=>_ov.call(this,t,x+'<br><br><b>出宮之後</b><br>'+a);
+  S.scn={h:`<p>${t==='撂牌子'?'離開皇城的第一年':'隱姓埋名的第一年'}，你站在陌生的街口，要如何安身？</p>`,o:[
+   {l:rich?'用帶出來的積蓄置辦田產':'賃一間小屋，做點針線營生',f(){
+     S.scn={h:'<p>十年過去，你的日子過得——</p>',o:[
+      {l:'守著本分，安穩度日',f(){fin2(rich?'你在鄉間置了幾畝薄田，倉有餘糧，鄰里都敬你一聲「夫人」。偶爾想起宮牆，只覺是一場很遠的夢。':'你靠針線養活自己，日子清淡卻踏實，鄰里說你是個有見識的人。')}},
+      {l:'把宮裡學到的東西教給鄉里女孩',f(){fin2('你開了間小小的私塾，教女孩識字、女紅與禮數。多年後她們中有人考上了女官，逢年過節回來看你。')}}]};render()}},
+   {l:med?'憑一手醫術，行走鄉里':'去投奔遠方的親戚',f(){
+     if(med)fin2('你在鎮上掛起「女醫」的布幡，救過無數產婦與孩子，被人尊稱「活菩薩」。史書不曾記載你，百姓卻記得。');
+     else fin2(P(.5)?'親戚待你不薄，你在他家平淡度日，後來嫁給了一位老實的鄉紳，生兒育女，白頭偕老。':'親戚家境也不寬裕，日子過得拮据，但你始終挺直了腰，沒有人敢輕看。')}},
+   {l:'寫信給宮中舊識，探聽宮裡的消息',f(){
+     fin2(m.ally>=40?'舊識們仍記得你，陸續托人帶來消息與銀兩。你雖遠在宮外，卻始終知道那座深宮裡誰起誰落。':'信如石沉大海，你終於明白，宮裡的人從來不回頭。你把往事收進箱底，開始過自己的日子。')}}]};
+  render();return}
+ return _ov.apply(this,arguments)};
+})();
+
 deco();intro();
 
 
