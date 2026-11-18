@@ -4351,7 +4351,7 @@ function regAuto(months){
    const i=regPick();if(i<0)break;
    try{A(i)}catch(e){console.log('regA',e);break}
    let z=0;while(S.ch&&z++<6){const o=S.ch.o;let k=o.findIndex(x=>!/險|極兇險|廢|殺|死/.test(x.l));if(k<0)k=0;try{C(k)}catch(e){break}}
-   let w=0;while(S.ev&&!S.over&&w++<12){if(evCritical(S.ev)||S.apx==='ask'){why='有重要的事要你決定';break}evN++;const o=S.ev.o;let k=o.findIndex(x=>!/險|極|動手腳|暗中|下毒|陷害|暗算|嫁禍|栽贓/.test(x[0]));if(k<0)k=0;try{V(k)}catch(e){console.log('regV',e);break}}
+   let w=0;while(S.ev&&!S.over&&w++<12){const hard=/逼宮|宮變|禪位|駕崩|謀逆|廢黜|廢立|稱帝|改朝/.test(S.ev.t||'');if(hard||S.apx==='ask'){why='有重要的事要你決定';break}evN++;const o=S.ev.o;let k=-1;try{const g=typeof sug31==='function'?sug31(S.ev):null;if(g&&g.k>=0&&g.k<o.length)k=g.k}catch(e){}if(k<0)k=o.findIndex(x=>!/險|極|動手腳|暗中|下毒|陷害|暗算|嫁禍|栽贓|廢|殺|死/.test(x[0]));if(k<0)k=0;try{V(k)}catch(e){console.log('regV',e);break}}
    if(why)break;if(S.ev||S.scn||S.ch)break}
  }finally{render=rd;_RG=0}
  if(S.over){render();return}
@@ -4388,6 +4388,18 @@ const RT={'召見重臣':[15,1,'nat'],'賑濟施恩':[20,1.5,'nat'],'整軍經�
 const D0={};
 try{RACT.forEach(a=>{const t=RT[a[0]];if(!t)return;D0[a[0]]=a[1];const of=a[2];a[2]=function(){const nc=cost(t[0],t[1]);if(nc===t[0])return of.apply(this,arguments);return wrapPay(of,t[0],nc,t[2]).apply(this,arguments)}})}catch(e){console.log('r33b',e)}
 const _ra=regActs;regActs=function(){try{RACT.forEach(a=>{const t=RT[a[0]];if(t&&D0[a[0]])a[1]=D0[a[0]].replace(/耗銀\d+/,'耗銀'+cost(t[0],t[1]))})}catch(e){}return _ra.apply(this,arguments)};
+})();
+
+/* ===== round34：善舉義行（身家豐厚後的大額用途，後宮與臨朝皆可） ===== */
+(function(){
+const G=[['修寺造塔，廣積功德（耗銀600）',600,m=>{m.fame=(m.fame||0)+8;m.favor+=4;if(S.reg)S.reg.pw+=2;S.nat&&(S.nat.stab+=1);return'你捐資修寺造塔，僧眾誦經祈福，京中百姓都說你慈悲為懷。'}],
+ ['設義倉義學，澤被百姓（耗銀900）',900,m=>{m.fame=(m.fame||0)+6;m.favor+=3;if(S.nat){S.nat.pop+=6;S.nat.eco+=2}if(S.reg)S.reg.pw+=1;return'義倉開張、義學招生，貧苦人家念你的好，民心國力都有起色。'}],
+ ['捐輸邊關軍餉（耗銀1400）',1400,m=>{m.fame=(m.fame||0)+6;m.favor+=S.reg?0:6;if(S.nat){S.nat.mil+=7;S.nat.stab+=2}if(S.reg)S.reg.pw+=3;return'你私財捐輸邊關，將士感念，皇上也記下這份心意。'}]];
+const fn=()=>{const m=ec();if(m.silver<G[0][1]){L(`善舉義行是大手筆，至少要有銀${G[0][1]}兩（現有${Math.floor(m.silver)}）。`);return 1}
+ choose('銀兩寬裕，行哪一樁善舉？',G.map(([l,c,ef])=>({l,f(){if(!pay(c))return L('銀兩不足。');L(ef(ec()))}})));return 1};
+try{const a=['善舉義行','銀兩充裕時：修寺、義倉、捐軍餉，換名望與民心',fn];
+ ACT.push(a);const i=ACT.length-1;const c=ACTCAT.find(x=>/人脈/.test(x[0]));if(c)c[1].push(i);
+ RACT.push(a.slice());RAC_ORDER[0][1].push('善舉義行')}catch(e){console.log('r34',e)}
 })();
 
 deco();intro();
