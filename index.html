@@ -1,4 +1,4 @@
-<!doctype html><html><head><link rel="icon" type="image/png" sizes="192x192" href="icon-192.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta property="og:image" content="icon-1024.png"><meta property="og:title" content="後宮模擬器"><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><style>.copyright{text-align:center;font-size:12px;line-height:1.7;opacity:.6;padding:18px 16px calc(24px + env(safe-area-inset-bottom,0px));letter-spacing:.04em}.copyright b{font-weight:600}</style><style>.qrow{padding:9px 0;border-top:1px dashed rgba(150,100,80,.3)}.qrow b{margin-right:8px}.qp{display:inline-block;padding:1px 10px;border-radius:99px;font-size:12px;background:rgba(190,120,90,.16);margin-right:5px}.qp.full{background:rgba(160,40,50,.18);color:#8a1d2b}.qp.vac{background:rgba(60,140,100,.2);color:#2a6b4c}.qn{display:inline-block;margin:4px 10px 0 0;font-size:13px}.qn[onclick]{text-decoration:underline dotted;cursor:pointer}.qn.me{font-weight:700;color:#a2263a}.hist{margin-top:8px;padding-top:6px;border-top:1px dashed rgba(150,100,80,.3);font-size:12.5px;line-height:1.75}.hist small{opacity:.7}.fh{display:block;font-size:11.5px;opacity:.72;line-height:1.5}</style><style>.mcover{display:block;width:78%;max-width:300px;margin:4px auto 10px;border-radius:18px;border:1px solid rgba(227,180,90,.6);box-shadow:0 8px 24px rgba(0,0,0,.35)}.mmenu .g1 button small{display:block;opacity:.8;font-size:12px;margin-top:2px}</style></head><body>
+<!doctype html><html><head><link rel="icon" type="image/png" sizes="192x192" href="icon-192.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta property="og:image" content="icon-1024.png"><meta property="og:title" content="後宮模擬器"><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><style>.copyright{text-align:center;font-size:12px;line-height:1.7;opacity:.6;padding:18px 16px calc(24px + env(safe-area-inset-bottom,0px));letter-spacing:.04em}.copyright b{font-weight:600}</style><style>.qrow{padding:9px 0;border-top:1px dashed rgba(150,100,80,.3)}.qrow b{margin-right:8px}.qp{display:inline-block;padding:1px 10px;border-radius:99px;font-size:12px;background:rgba(190,120,90,.16);margin-right:5px}.qp.full{background:rgba(160,40,50,.18);color:#8a1d2b}.qp.vac{background:rgba(60,140,100,.2);color:#2a6b4c}.qn{display:inline-block;margin:4px 10px 0 0;font-size:13.5px}.qn[onclick]{text-decoration:underline dotted;cursor:pointer}.qn.me{font-weight:700;color:#a2263a}.hist{margin-top:8px;padding-top:6px;border-top:1px dashed rgba(150,100,80,.3);font-size:12px;line-height:1.75}.hist small{opacity:.7}.fh{display:block;font-size:12px;opacity:.72;line-height:1.5}</style><style>.mcover{display:block;width:78%;max-width:300px;margin:4px auto 10px;border-radius:18px;border:1px solid rgba(227,180,90,.6);box-shadow:0 8px 24px rgba(0,0,0,.35)}.mmenu .g1 button small{display:block;opacity:.8;font-size:12px;margin-top:2px}</style></head><body>
 <meta name="claude:viewport-fit-sides" content="cover">
 <title>後宮模擬器</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;900&display=swap">
@@ -6,7 +6,7 @@
 /* Layout: a fixed painted palace scene sits behind a single centered column of lacquer panels; five tabs along the bottom; events arrive as imperial scrolls. */
 :root{--ink:#12060a;--lac:#2a0b10;--verm:#c8323c;--verm2:#8f1c26;--gold:#e3b45a;--gold2:#a97c2a;--cream:#f4e8cc;--mute:#c9ac8c;--jade:#62bd8f;--paper:#f3e5c3;--paper2:#e4cf9f;--seal-ink:#2a140f;--f:"Noto Serif TC","Songti TC","Noto Serif CJK TC",serif;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box}
-body{margin:0;background:var(--ink);color:var(--cream);font:400 15.5px/1.7 var(--f);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0;min-height:100%}
+body{margin:0;background:var(--ink);color:var(--cream);font:400 15px/1.7 var(--f);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0;min-height:100%}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--ink)}
 #bg{position:fixed;inset:0;z-index:0;overflow:hidden;background:var(--ink)}
 #bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,3,5,.5),rgba(12,3,5,.22) 28%,rgba(12,3,5,.78))}
@@ -24,17 +24,17 @@ h3::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(227
 .res{border-color:var(--verm);color:#ffe6c0}
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:9px 12px;background:rgba(18,6,10,.92);border-bottom:1px solid rgba(227,180,90,.45);backdrop-filter:blur(6px)}
 .brand{font-weight:900;letter-spacing:.3em;color:var(--gold);font-size:17px}
-.date{font-size:13px;color:var(--cream);font-variant-numeric:tabular-nums}
+.date{font-size:13.5px;color:var(--cream);font-variant-numeric:tabular-nums}
 .chipm{font-size:12px;color:var(--ink);background:var(--gold);padding:1px 9px;border-radius:2px;font-weight:600}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
-.chip{display:inline-flex;gap:6px;align-items:baseline;font-size:13px;padding:2px 10px;background:rgba(18,6,10,.78);border:1px solid rgba(227,180,90,.35);border-radius:2px;font-variant-numeric:tabular-nums}
+.chip{display:inline-flex;gap:6px;align-items:baseline;font-size:13.5px;padding:2px 10px;background:rgba(18,6,10,.78);border:1px solid rgba(227,180,90,.35);border-radius:2px;font-variant-numeric:tabular-nums}
 .chip b{font-weight:400;color:var(--mute);font-size:12px}
 .pill{display:inline-block;font-size:12px;line-height:1.5;padding:0 8px;border:1px solid rgba(227,180,90,.5);color:var(--gold);border-radius:2px;white-space:nowrap}
 .pill.r{background:var(--verm2);border-color:var(--verm);color:#ffe6c0}
 .pill.g{background:rgba(98,189,143,.14);border-color:rgba(98,189,143,.55);color:var(--jade)}
 .sub{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 6px}
 .cd h2{font-size:22px;font-weight:900;letter-spacing:.2em;color:var(--cream)}
-.r{display:flex;align-items:center;gap:8px;font-size:13px;min-width:0}
+.r{display:flex;align-items:center;gap:8px;font-size:13.5px;min-width:0}
 .r span{flex:0 0 5.4em;color:var(--mute)}
 .r span.hl{color:var(--gold);font-weight:600}
 .r i{flex:1;height:7px;background:rgba(244,232,204,.12);border-radius:1px;overflow:hidden;min-width:0}
@@ -49,18 +49,18 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 button small{display:block;color:rgba(244,232,204,.74);font-size:12px;line-height:1.45;margin-top:1px}
 button.s{background:rgba(18,6,10,.55);border-color:rgba(227,180,90,.3);color:var(--mute)}
 button.tile{text-align:center;padding:12px 8px}
-button.tile b{display:block;font-size:16px;letter-spacing:.18em;font-weight:600}
-button.go{width:100%;text-align:center;font-size:18px;letter-spacing:.5em;padding:12px;font-weight:900}
+button.tile b{display:block;font-size:15px;letter-spacing:.18em;font-weight:600}
+button.go{width:100%;text-align:center;font-size:17px;letter-spacing:.5em;padding:12px;font-weight:900}
 input{font:inherit;color:var(--cream);background:rgba(18,6,10,.7);border:1px solid rgba(227,180,90,.5);border-radius:3px;padding:6px 10px;width:8em}
-.m{color:var(--mute);font-size:13px;line-height:1.55}
+.m{color:var(--mute);font-size:13.5px;line-height:1.55}
 .k{font-size:13.5px;border-top:1px dashed rgba(227,180,90,.25);padding:5px 0}
-.l p{margin:6px 0;font-size:14px;padding-left:12px;position:relative}
+.l p{margin:6px 0;font-size:13.5px;padding-left:12px;position:relative}
 .l p::before{content:"";position:absolute;left:0;top:.7em;width:5px;height:5px;background:var(--verm);transform:rotate(45deg)}
 details.con{padding:0}
 details.con summary{list-style:none;cursor:pointer;display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;padding:10px 14px}
 details.con summary::-webkit-details-marker{display:none}
-details.con .nm{font-weight:900;letter-spacing:.1em;font-size:16px}
-details.con .mm{flex-basis:100%;font-size:12.5px;color:var(--mute);font-variant-numeric:tabular-nums}
+details.con .nm{font-weight:900;letter-spacing:.1em;font-size:15px}
+details.con .mm{flex-basis:100%;font-size:12px;color:var(--mute);font-variant-numeric:tabular-nums}
 details.con>div{padding:0 14px 12px}
 details.con.dead{opacity:.6}
 .kid{padding:8px 0;border-top:1px dashed rgba(227,180,90,.25)}
@@ -71,7 +71,7 @@ details.con.dead{opacity:.6}
 .kb>*{min-width:0}
 .tabs{position:fixed;left:0;right:0;bottom:0;z-index:25;display:flex;gap:2px;background:rgba(14,5,8,.95);border-top:1px solid rgba(227,180,90,.5);padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
 .tabs button{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:0;box-shadow:none;color:var(--mute);padding:4px 0;font-size:12px;letter-spacing:.2em}
-.tabs button i{font-style:normal;display:grid;place-items:center;width:30px;height:30px;border:1px solid rgba(227,180,90,.45);border-radius:3px;font-weight:900;font-size:16px;letter-spacing:0;color:var(--gold)}
+.tabs button i{font-style:normal;display:grid;place-items:center;width:30px;height:30px;border:1px solid rgba(227,180,90,.45);border-radius:3px;font-weight:900;font-size:15px;letter-spacing:0;color:var(--gold)}
 .tabs button[aria-current=true]{color:var(--gold)}
 .tabs button[aria-current=true] i{background:var(--verm);border-color:var(--gold);color:#fff}
 .scrim{position:fixed;inset:0;z-index:30;background:rgba(8,2,4,.68);display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
@@ -80,14 +80,14 @@ details.con.dead{opacity:.6}
 .scroll.bad .tag{background:#5a0d14}
 .scroll p{margin:0 0 12px}
 .scroll h2{font-size:26px;font-weight:900;letter-spacing:.2em;color:var(--verm2);margin:0 0 10px}
-.scroll .m,.scroll .m2{color:#6b4a38;font-size:13px}
+.scroll .m,.scroll .m2{color:#6b4a38;font-size:13.5px}
 .scroll .k{border-top:1px dashed rgba(42,20,15,.35);color:var(--seal-ink)}
 .scroll button{display:block;width:100%;margin:6px 0;color:#fff}
 .scroll button.s{background:transparent;color:#6b4a38;border-color:rgba(42,20,15,.4)}
 .splash{text-align:center;padding:26px 0 4px}
 .seal{display:inline-grid;place-items:center;width:46px;height:46px;background:var(--verm);color:#fff;font-weight:900;font-size:24px;border-radius:3px;transform:rotate(-4deg);box-shadow:0 2px 0 var(--verm2)}
 .splash h1{margin:8px 0 0;padding-left:.35em;font-size:46px;line-height:1.15;font-weight:900;letter-spacing:.35em;background:linear-gradient(180deg,#ffeab0,#d9a441 60%,#9a6a1e);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 8px rgba(0,0,0,.6))}
-.splash p{margin:4px 0 0;color:var(--cream);letter-spacing:.3em;font-size:13px}
+.splash p{margin:4px 0 0;color:var(--cream);letter-spacing:.3em;font-size:13.5px}
 .who{display:flex;gap:12px;align-items:center}
 .wm{flex:1;min-width:0}
 .av{flex:0 0 auto;width:76px;height:76px;object-fit:cover;border:2px solid var(--gold);border-radius:3px;box-shadow:0 0 0 3px rgba(18,6,10,.8),0 0 0 4px rgba(227,180,90,.45)}
@@ -190,7 +190,7 @@ details.con .nm{color:#6a2c24}
 *{-webkit-tap-highlight-color:transparent}
 .mini{padding:2px 10px;font-size:12px;border-radius:99px}
 .slot{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:8px 0;border-top:1px dashed rgba(214,150,100,.35)}
-.sl{min-width:0}.sb{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.sb button{padding:6px 10px;font-size:13px}
+.sl{min-width:0}.sb{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.sb button{padding:6px 10px;font-size:13.5px}
 /* v20 polish */
 .pt,.bokeh{z-index:0}
 #bg::after{background:linear-gradient(180deg,rgba(255,243,228,.8),rgba(255,226,204,.72) 45%,rgba(255,240,224,.92))}
@@ -219,22 +219,22 @@ img.av[big]{width:150px;height:274px}
 .avw::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(255,214,196,.30),rgba(255,170,170,.10) 50%,rgba(255,226,206,.42));mix-blend-mode:soft-light}
 img.av,img.av[big]{width:100%;height:100%;border:0;border-radius:0;box-shadow:none;filter:saturate(.9) brightness(1.08) contrast(.92) sepia(.16) hue-rotate(-8deg)}
 #ntf{position:fixed;top:max(10px,env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);width:min(92vw,480px);z-index:9999;display:flex;flex-direction:column;gap:6px}
-#ntf .nc{padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.5;background:#fff8f0;color:#5a2a2a;border:1px solid #f0c8b8;box-shadow:0 6px 18px rgba(120,50,40,.28)}
+#ntf .nc{padding:10px 14px;border-radius:12px;font-size:13.5px;line-height:1.5;background:#fff8f0;color:#5a2a2a;border:1px solid #f0c8b8;box-shadow:0 6px 18px rgba(120,50,40,.28)}
 #ntf .nc.me{background:linear-gradient(135deg,#d6455a,#f08a6a);color:#fff;border:0;font-weight:700}
 #ntf .nc.ti{background:#fff0d0;border-color:#e3b45a}
 #ntf .nc.medn{background:#4a2a3a;color:#ffd6d6;border:0;font-weight:700}
 #ntf .nc.dn{background:#f1e3e3;color:#7a3a3a}
-#ntf button{align-self:flex-end;border:0;border-radius:999px;padding:6px 16px;background:#8f1c26;color:#fff;font-size:13px}
+#ntf button{align-self:flex-end;border:0;border-radius:999px;padding:6px 16px;background:#8f1c26;color:#fff;font-size:13.5px}
 .avw{width:132px;height:150px}
 .avw:has(img[big]){width:180px;height:200px}
 img.av,img.av[big]{object-fit:cover;object-position:var(--avpos,50% 25%)}
 .cd.fold>h3{cursor:pointer;user-select:none}
-.cd.fold>h3 .fa{order:9;margin-left:8px;font-size:14px;opacity:.75;transition:transform .2s;flex:0 0 auto}
+.cd.fold>h3 .fa{order:9;margin-left:8px;font-size:13.5px;opacity:.75;transition:transform .2s;flex:0 0 auto}
 .cd.fold.closed>h3 .fa{transform:rotate(-90deg)}
 .cd.fold.closed>*:not(h3){display:none!important}
 .cd.fold.closed{padding-bottom:10px}
 .fbar{margin:8px 0}
-.fbar input{width:100%;box-sizing:border-box;padding:9px 12px;border-radius:12px;border:1px solid #e8c9b8;background:#fffaf5;color:inherit;font-size:14px}
+.fbar input{width:100%;box-sizing:border-box;padding:9px 12px;border-radius:12px;border:1px solid #e8c9b8;background:#fffaf5;color:inherit;font-size:13.5px}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .chip{border:1px solid #e8c9b8;background:#fff6ee;color:#7a4030;border-radius:999px;padding:4px 11px;font-size:12px}
 .chip.on{background:linear-gradient(135deg,#d6455a,#f08a6a);color:#fff;border-color:transparent}
@@ -243,18 +243,18 @@ img.av,img.av[big]{object-fit:cover;object-position:var(--avpos,50% 25%)}
 #ntf .nc.more{background:#f6ece6;color:#8a6a5a;font-size:12px;padding:5px 12px;text-align:center}
 #help{position:fixed;inset:0;z-index:10000;background:rgba(40,16,16,.55);display:flex;align-items:center;justify-content:center;padding:16px}
 #help .hb{background:#fffaf5;color:#4a2a2a;border-radius:18px;padding:18px 18px 14px;max-width:440px;width:100%;max-height:86vh;overflow:auto;box-shadow:0 20px 50px rgba(0,0,0,.4)}
-#help h3{margin:0 0 8px}#help summary{font-weight:700;padding:8px 0;cursor:pointer}#help p{margin:0 0 8px;line-height:1.7;font-size:14px}
+#help h3{margin:0 0 8px}#help summary{font-weight:700;padding:8px 0;cursor:pointer}#help p{margin:0 0 8px;line-height:1.7;font-size:13.5px}
 #help details{border-bottom:1px solid #f0dccf}#help button{margin-top:12px;width:100%}
 .top .mini{margin-left:4px}
 @media(max-width:400px){.top{gap:6px}.top .brand{letter-spacing:0!important;font-size:15px!important}.top .date{font-size:12px}.top .chipm{padding:3px 8px;font-size:12px}.top .mini{padding:4px 9px;margin-left:0}}
-#ntf{gap:4px}#ntf .nc{padding:7px 12px;font-size:13px;line-height:1.45}#ntf button{padding:4px 14px}
-.avs{display:flex;flex-direction:column;gap:6px;font-size:13px}.avs label{display:flex;align-items:center;gap:10px}.avs input{flex:1}
+#ntf{gap:4px}#ntf .nc{padding:7px 12px;font-size:13.5px;line-height:1.45}#ntf button{padding:4px 14px}
+.avs{display:flex;flex-direction:column;gap:6px;font-size:13.5px}.avs label{display:flex;align-items:center;gap:10px}.avs input{flex:1}
 .wm input{max-width:100%;box-sizing:border-box;width:100%}
-.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.rp{min-width:0;font-size:13px}.rp b{display:block;margin:6px 0 2px}
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.rp{min-width:0;font-size:13.5px}.rp b{display:block;margin:6px 0 2px}
 .pfw{width:100%;aspect-ratio:5/6;border-radius:14px;overflow:hidden;border:1px solid #e3b45a;background:#2a0a14;box-shadow:0 6px 16px rgba(120,50,40,.25)}
 .pfi{width:100%;height:100%;object-fit:cover;object-position:var(--pos-emp,50% 25%);display:block}
 .rp:nth-child(2) .pfi{object-position:var(--pos-dow,50% 25%)}
-.ptd{margin-top:8px;border-top:1px solid #f0dccf;padding-top:6px}.ptd summary{cursor:pointer;font-size:13px;padding:4px 0}
+.ptd{margin-top:8px;border-top:1px solid #f0dccf;padding-top:6px}.ptd summary{cursor:pointer;font-size:13.5px;padding:4px 0}
 </style>
 
 <style>
@@ -265,7 +265,7 @@ img.av,img.av[big]{object-fit:cover;object-position:var(--avpos,50% 25%)}
 textarea{font:inherit;background:rgba(255,255,255,.55);border:1px solid rgba(143,28,38,.3);border-radius:4px;padding:6px;color:inherit;box-sizing:border-box}
 </style>
 <style>
-@media(max-width:430px){.top{flex-wrap:nowrap!important;gap:5px!important}.top .brand{font-size:14px!important;white-space:nowrap;letter-spacing:0!important}.top .date{font-size:11px!important;white-space:nowrap;letter-spacing:0!important}.top .chipm{font-size:11px!important;padding:3px 7px!important;white-space:nowrap}.top .mini{padding:4px 7px!important;min-height:32px!important;white-space:nowrap;font-size:12px!important}}
+@media(max-width:430px){.top{flex-wrap:nowrap!important;gap:5px!important}.top .brand{font-size:13.5px!important;white-space:nowrap;letter-spacing:0!important}.top .date{font-size:12px!important;white-space:nowrap;letter-spacing:0!important}.top .chipm{font-size:12px!important;padding:3px 7px!important;white-space:nowrap}.top .mini{padding:4px 7px!important;min-height:32px!important;white-space:nowrap;font-size:12px!important}}
 </style>
 <div id="bg" aria-hidden="true">
 <svg class="sc sc-room" viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice">
@@ -328,7 +328,7 @@ textarea{font:inherit;background:rgba(255,255,255,.55);border:1px solid rgba(143
 </svg>
 </div>
 <div class="bokeh"></div><div id="pts"></div>
-<style>@keyframes b74{0%,100%{opacity:.35}50%{opacity:1}}</style><div id="app"><div id=boot74 style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:#7a2e2e;font-family:serif;text-align:center"><div style="font-size:30px;letter-spacing:6px;font-weight:700">後宮模擬器</div><div style="font-size:14px;letter-spacing:3px;animation:b74 1.4s infinite">載入中…</div></div></div><footer class=copyright><b>© 2026 yu-tinglu</b>　後宮模擬器 版權所有<br>未經授權，請勿轉載、改作或作商業使用</footer>
+<style>@keyframes b74{0%,100%{opacity:.35}50%{opacity:1}}</style><div id="app"><div id=boot74 style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:#7a2e2e;font-family:serif;text-align:center"><div style="font-size:30px;letter-spacing:6px;font-weight:700">後宮模擬器</div><div style="font-size:13.5px;letter-spacing:3px;animation:b74 1.4s infinite">載入中…</div></div></div><footer class=copyright><b>© 2026 yu-tinglu</b>　後宮模擬器 版權所有<br>未經授權，請勿轉載、改作或作商業使用</footer>
 <script>
 const HMAX=40;
 const AVS=["data:image/jpeg;base64,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"];
@@ -2235,7 +2235,7 @@ function recapImg(){const m=S.me,W=720,H=1180,c=document.createElement('canvas')
 x.textAlign='center';x.fillStyle='#e3b45a';x.font='bold 40px "Noto Serif TC","PingFang TC","Microsoft JhengHei",serif';x.fillText('後宮模擬器',W/2,100);
 const sc=scoreOf(),img=new Image(),go=()=>{x.fillStyle='#fff';x.font='bold 46px "Noto Serif TC","PingFang TC","Microsoft JhengHei",serif';x.fillText(m.n,W/2,640);x.fillStyle='#e3b45a';x.font='bold 34px "Noto Serif TC","PingFang TC","Microsoft JhengHei",serif';x.fillText(S.over.t,W/2,696);x.fillStyle='#f3e3c3';x.font='26px "Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif';x.fillText(`入宮 ${Math.floor(S.t/12)+1} 年・最終${S.reg?S.reg.title:RK[m.rank]}・子女 ${m.kids.length} 人`,W/2,744);x.fillText(`評分 ${sc}（${SCT(sc)}）${S.goal?'・目標「'+GOALS[S.goal][0]+'」'+(S.gdone?'達成':'未達成'):''}`,W/2,786);
 x.textAlign='left';x.font='23px "Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif';x.fillStyle='#e8d6b0';recapList().slice(0,10).forEach((t,i)=>{let s=t;while(x.measureText(s).width>W-130&&s.length>6)s=s.slice(0,-1);x.fillText(s,66,846+i*30)});x.textAlign='center';x.fillStyle='#9a7b4a';x.font='20px sans-serif';x.fillText('一入宮門深似海',W/2,H-56);
-let o=document.getElementById('rimg');if(o)o.remove();o=document.createElement('div');o.id='rimg';o.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px;overflow:auto';o.innerHTML=`<img src="${c.toDataURL('image/png')}" style="max-width:100%;max-height:78vh;border-radius:4px"><div style="color:#f3e3c3;font-size:13px">長按（或右鍵）圖片即可儲存</div><button onclick="this.parentNode.remove()">關閉</button>`;document.body.appendChild(o)};
+let o=document.getElementById('rimg');if(o)o.remove();o=document.createElement('div');o.id='rimg';o.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px;overflow:auto';o.innerHTML=`<img src="${c.toDataURL('image/png')}" style="max-width:100%;max-height:78vh;border-radius:4px"><div style="color:#f3e3c3;font-size:13.5px">長按（或右鍵）圖片即可儲存</div><button onclick="this.parentNode.remove()">關閉</button>`;document.body.appendChild(o)};
 img.onload=()=>{const s=Math.min(img.width/432,img.height/512,99),sw=img.width,sh=Math.round(sw*512/432>img.height?img.height:sw*512/432);x.save();x.beginPath();x.rect(W/2-170,140,340,440);x.clip();const ar=img.width/img.height,tw=340,th=440;let dw=tw,dh=tw/ar;if(dh<th){dh=th;dw=th*ar}x.drawImage(img,W/2-dw/2,140-(dh-th)*.2,dw,dh);x.restore();x.strokeStyle='#e3b45a';x.lineWidth=3;x.strokeRect(W/2-170,140,340,440);go()};img.onerror=go;const av=document.querySelector('img[data-av]');img.src=av&&av.src?av.src:AVS[0]}
 /* 存檔匯出／匯入 */
 function expSave(){const e=document.getElementById('expMsg');if(!S||S.over){e.textContent='目前無法匯出。';return}if(S.ev||S.ch||S.scn||S.q.length){e.textContent='請先處理完眼前的事件。';return}let t;try{t='HGS1:'+btoa(unescape(encodeURIComponent(snap())))}catch(x){e.textContent='匯出失敗。';return}const ta=document.getElementById('impTa');ta.value=t;ta.select();let ok=0;try{navigator.clipboard.writeText(t).then(()=>{e.textContent='已複製存檔文字，請貼到備忘錄保存。'},()=>{e.textContent='請手動複製上方文字。'});ok=1}catch(x){}if(!ok)e.textContent='請手動複製上方文字。'}
@@ -2741,7 +2741,7 @@ function vacTick(){if(!S||S.reg||S.over||!S.cr)return;if(S.t>6&&P(.035)){const e
 const _mdA=mend;mend=function(){const r=_mdA.apply(this,arguments);try{if(S&&S.me&&!S.over){if(S.dying&&!S.reg){S.dying=0;S.ill=null;if(S.abd)S.eage+=0;if(!S.scn){succ();return r}}relTick();fxTick();emTick();vacTick()}}catch(e){console.log('bigA',e)}return r};
 
 /* ===== 擴充B：名冊排序篩選・新手提示・大事年表 ===== */
-try{document.head.insertAdjacentHTML('beforeend','<style>.rbar{display:flex;gap:8px;align-items:center;margin:6px 0}.rbar select{flex:0 0 auto;padding:8px 10px;border-radius:12px;border:1px solid #e8c9b8;background:#fffaf5;color:inherit;font-size:13px}.rbar input{flex:1;min-width:0}.rcnt{font-size:12px;opacity:.7;margin:2px 2px 6px}.cscr{display:flex;gap:6px;overflow-x:auto;white-space:nowrap;padding-bottom:4px;-webkit-overflow-scrolling:touch}.cscr .chip{flex:0 0 auto}.tip{position:relative;margin:8px 0;padding:10px 12px;border-radius:14px;background:rgba(255,246,222,.92);border:1px solid rgba(214,170,90,.55);font-size:13px;line-height:1.6;color:#5b4120}.tip b{color:#8a5a12}.tip .tb{display:flex;gap:8px;margin-top:6px}.tip button{padding:4px 12px;font-size:12px;min-height:30px}.tl{font-size:13px;line-height:1.7}.tl .y{font-weight:700;margin-top:6px;opacity:.85}.tl .e{padding-left:8px;border-left:2px solid rgba(190,120,90,.4)}.tl .i{display:inline-block;min-width:22px;text-align:center;font-size:11px;border-radius:99px;background:rgba(190,120,90,.18);margin-right:6px;padding:0 4px}</style>')}catch(e){}
+try{document.head.insertAdjacentHTML('beforeend','<style>.rbar{display:flex;gap:8px;align-items:center;margin:6px 0}.rbar select{flex:0 0 auto;padding:8px 10px;border-radius:12px;border:1px solid #e8c9b8;background:#fffaf5;color:inherit;font-size:13.5px}.rbar input{flex:1;min-width:0}.rcnt{font-size:12px;opacity:.7;margin:2px 2px 6px}.cscr{display:flex;gap:6px;overflow-x:auto;white-space:nowrap;padding-bottom:4px;-webkit-overflow-scrolling:touch}.cscr .chip{flex:0 0 auto}.tip{position:relative;margin:8px 0;padding:10px 12px;border-radius:14px;background:rgba(255,246,222,.92);border:1px solid rgba(214,170,90,.55);font-size:13.5px;line-height:1.6;color:#5b4120}.tip b{color:#8a5a12}.tip .tb{display:flex;gap:8px;margin-top:6px}.tip button{padding:4px 12px;font-size:12px;min-height:30px}.tl{font-size:13.5px;line-height:1.7}.tl .y{font-weight:700;margin-top:6px;opacity:.85}.tl .e{padding-left:8px;border-left:2px solid rgba(190,120,90,.4)}.tl .i{display:inline-block;min-width:22px;text-align:center;font-size:12px;border-radius:99px;background:rgba(190,120,90,.18);margin-right:6px;padding:0 4px}</style>')}catch(e){}
 /* 名冊：排序＋篩選 */
 function rowT(n){const me=n===S.me,q=S.rel&&S.rel[n.n];return `${n.name||n.n} ${me?'你 主角':''} ${n.st||RK[n.rank]} ${me&&S.reg?S.reg.title:RKD(n)} ${FAC[n.fac]} ${n.rank>=5?'高位':n.rank>=3?'中位':'低位'} ${n.preg?'有孕':''} ${n.kids.length?'有子嗣':''} ${n.kf&&kfOf(n)?'官家之女 '+kfOf(n).role+kfOf(n).n:''} ${!me&&(n.al||0)>=40?'盟友':''} ${!me&&((n.host||0)>=55||(q&&q.g>=6))?'對頭':''} ${!me&&(n.favor||0)>=65?'得寵':''} ${!me&&(n.favor||0)<=20&&!n.st?'失寵':''} ${n.st?'已故廢黜':''}`}
 const SORTS=[['位份高低',(a,b)=>b.rank-a.rank||b.favor-a.favor],['聖寵',(a,b)=>b.favor-a.favor],['盟友度',(a,b)=>(b.al||0)-(a.al||0)],['敵意',(a,b)=>(b.host||0)-(a.host||0)],['年齡（長→幼）',(a,b)=>(nAge(b)||0)-(nAge(a)||0)],['母族勢力',(a,b)=>((b.pow===undefined?b.clan:b.pow)||0)-((a.pow===undefined?a.clan:a.pow)||0)],['子女數',(a,b)=>b.kids.length-a.kids.length]];
@@ -2929,12 +2929,12 @@ ACTCAT.forEach((c,i)=>{c[2]=i==0?1:0});
 .stat-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin:6px 0 10px}
 .stat-strip div{background:var(--card,rgba(255,255,255,.7));border:1px solid rgba(190,120,100,.25);border-radius:10px;padding:6px 4px 5px;text-align:center;line-height:1.2}
 .stat-strip b{display:block;font-size:15px}
-.stat-strip span{font-size:11px;opacity:.75}
+.stat-strip span{font-size:12px;opacity:.75}
 .stat-strip i{display:block;height:3px;border-radius:2px;margin-top:4px;background:rgba(150,110,90,.18);overflow:hidden}
 .stat-strip i u{display:block;height:100%;background:linear-gradient(90deg,#e8905a,#d9546b)}
 .stat-strip .low b{color:#c0392b}
 .cd.actcat .g button{min-height:50px;padding:8px 10px}
-.cd.actcat .g button small{font-size:11.5px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cd.actcat .g button small{font-size:12px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .cd.actcat>h3 em{font-style:normal;font-size:12px;opacity:.6;margin-left:6px;letter-spacing:0}
 `;document.head.appendChild(st)})();
 function stripHTML(){const m=S.me,v=(l,x,max,lowAt)=>`<div class="${x<lowAt?'low':''}"><b>${x|0}</b><span>${l}</span><i><u style="width:${Math.max(0,Math.min(100,x/(max||100)*100))}%"></u></i></div>`;
@@ -3237,7 +3237,7 @@ const SHZ=['示忠表心','侍疾、修橋、請教政事，慢慢消除皇上�
 const shzIdx=ACT.length;ACT.push(SHZ);(function(){const c=ACTCAT.find(x=>/暗招/.test(x[0]));if(c)c[1].push(shzIdx)})();
 (function(){const i=ACT.findIndex(a=>a[0]=='禮佛祈福');if(i>=0){const f=ACT[i][2];ACT[i][2]=function(){const r=f.apply(this,arguments);if(S.me.dsus>0)S.me.dsus=Math.max(0,S.me.dsus-2);return r}}})();
 /* 疑心來源顯示 */
-const _up3=uiPost;uiPost=function(){const r=_up3.apply(this,arguments);try{if(TAB==0&&S&&S.me&&!S.over&&!S.reg&&!S.scn){const main=document.querySelector('main');const bz=main&&main.querySelector('.cd.hero');if(bz){bz.querySelectorAll('.dsl').forEach(e=>e.remove());const d=Math.round(S.me.dsus||0),p=dsusParts();if(d>=8||armyPow()>0){const lv=d>=70?'岌岌可危':d>=55?'已遭猜忌':d>=40?'有所耳聞':'平安';bz.insertAdjacentHTML('beforeend',`<div class="m dsl" style="margin-top:6px">皇帝疑心 ${d}（${lv}）｜兵力＋${p.army|0}　母家＋${p.fam|0}　局勢＋${p.ctx|0}${S.me.lgd?'　御賜護衛已抵40':''}${(S.me.dstr||0)?'　警告'+S.me.dstr+'次':''}</div>`);const box=bz.querySelector('.dsl');const mk=(t,i)=>{const b=document.createElement('button');b.textContent=t;b.style.cssText='margin:6px 6px 0 0;padding:6px 10px;border-radius:8px;border:1px solid currentColor;background:transparent;color:inherit;font-size:13px';b.onclick=()=>A(i);box.appendChild(document.createElement('br'));box.lastChild;return b};const w=document.createElement('div');w.appendChild(mk('示忠降疑心',shzIdx));if(armyPow()>0)w.appendChild(mk('調度／遣散私兵',a2Base));box.appendChild(w)}}}}catch(e){console.log('dsl',e)}return r};
+const _up3=uiPost;uiPost=function(){const r=_up3.apply(this,arguments);try{if(TAB==0&&S&&S.me&&!S.over&&!S.reg&&!S.scn){const main=document.querySelector('main');const bz=main&&main.querySelector('.cd.hero');if(bz){bz.querySelectorAll('.dsl').forEach(e=>e.remove());const d=Math.round(S.me.dsus||0),p=dsusParts();if(d>=8||armyPow()>0){const lv=d>=70?'岌岌可危':d>=55?'已遭猜忌':d>=40?'有所耳聞':'平安';bz.insertAdjacentHTML('beforeend',`<div class="m dsl" style="margin-top:6px">皇帝疑心 ${d}（${lv}）｜兵力＋${p.army|0}　母家＋${p.fam|0}　局勢＋${p.ctx|0}${S.me.lgd?'　御賜護衛已抵40':''}${(S.me.dstr||0)?'　警告'+S.me.dstr+'次':''}</div>`);const box=bz.querySelector('.dsl');const mk=(t,i)=>{const b=document.createElement('button');b.textContent=t;b.style.cssText='margin:6px 6px 0 0;padding:6px 10px;border-radius:8px;border:1px solid currentColor;background:transparent;color:inherit;font-size:13.5px';b.onclick=()=>A(i);box.appendChild(document.createElement('br'));box.lastChild;return b};const w=document.createElement('div');w.appendChild(mk('示忠降疑心',shzIdx));if(armyPow()>0)w.appendChild(mk('調度／遣散私兵',a2Base));box.appendChild(w)}}}}catch(e){console.log('dsl',e)}return r};
 /* 成就 */
 [['a50','擁兵自重','私兵戰力達100',()=>armyPow()>=100],['a51','千里馬','戰馬達50匹',()=>!!(S.me.army&&S.me.army.hs>=50)],['a52','死士三十','死士達30人',()=>!!(S.me.army&&S.me.army.sw>=30)],['a53','全身而退','疑心曾過40後降至10以下且已解散私兵',()=>!!(S.me.dsus<10&&S.me.army&&S.me.army.sw<1&&S.me.dsusSeen)],['a54','高處不勝寒','皇帝疑心達70',()=>(S.me.dsus||0)>=70]].forEach(a=>AL.push(a));
 [['兵變敗亡','a55','玩火自焚','結局：擁兵過盛被剷除']].forEach(x=>AL.push([x[1],x[2],x[3],()=>false]));
@@ -3250,7 +3250,7 @@ const CLR=['化解母國猜忌','降低皇上對你與母國的猜忌',()=>{cons
 {l:'將母國貢品獻給皇上（耗銀60，疑心－8、聖寵＋4）',f(){if(!pay(60))return L('銀兩不足。');const a=f.sus|0;f.sus=cl((f.sus||0)-8);m.favor+=4;L(`你把母國送來的珍品悉數獻給皇上，皇上龍心大悅。猜忌 ${a}→${f.sus|0}。`)}},
 {l:'靜待風頭（疑心每月自然緩降）',f(){L('你決定暫時按兵不動，等風聲過去。')}}]);return 1}];
 const clrIdx=ACT.length;ACT.push(CLR);(function(){const c=ACTCAT.find(x=>/人脈/.test(x[0]));if(c)c[1].push(clrIdx)})();
-const _frR3=frCard;frCard=function(){let h=_frR3.apply(this,arguments);try{const f=S.fr;if(h&&f&&!f.dead&&!f.ann&&S.me.fo&&(f.sus||0)>=20){h=h.replace(/<\/div>$/,`<div class=m style="margin-top:6px"><button onclick="A(${clrIdx})" style="padding:6px 12px;border-radius:8px;border:1px solid currentColor;background:transparent;color:inherit;font-size:13px">降低猜忌：化解母國猜忌</button></div></div>`)}}catch(e){console.log('frR3',e)}return h};
+const _frR3=frCard;frCard=function(){let h=_frR3.apply(this,arguments);try{const f=S.fr;if(h&&f&&!f.dead&&!f.ann&&S.me.fo&&(f.sus||0)>=20){h=h.replace(/<\/div>$/,`<div class=m style="margin-top:6px"><button onclick="A(${clrIdx})" style="padding:6px 12px;border-radius:8px;border:1px solid currentColor;background:transparent;color:inherit;font-size:13.5px">降低猜忌：化解母國猜忌</button></div></div>`)}}catch(e){console.log('frR3',e)}return h};
 HELP.push(['降低母國猜忌','主畫面「母國」卡的「皇上猜忌」是你與母國往來太密的後果。猜忌到60聖寵會受損，到80會被徹查。可按母國卡上的「降低猜忌：化解母國猜忌」，或到行動→人脈勢力→「化解母國猜忌」：表忠、疏遠使者或獻貢品。']);
 /* 派系：點開看成員 */
 fxCard=function(){fxInit();const rows=[0,1,2,3,4].map(f=>{const l=facLead(f),ms=facMem(f),me=S.me.fac===f,al=S.fx.ally.filter(p=>p[0]===f||p[1]===f).map(p=>facName(p[0]===f?p[1]:p[0]));
@@ -3266,7 +3266,7 @@ const _kap3=kidsAllPanel;kidsAllPanel=function(){let h=_kap3.apply(this,argument
 
 /* ===== 第四輪：警示欄、孩子快捷鍵、中段節奏、結局回顧與重玩 ===== */
 const actIx=n=>ACT.findIndex(a=>a[0]==n);
-const BTNS='padding:5px 10px;border-radius:8px;border:1px solid currentColor;background:transparent;color:inherit;font-size:13px;margin:4px 6px 0 0';
+const BTNS='padding:5px 10px;border-radius:8px;border:1px solid currentColor;background:transparent;color:inherit;font-size:13.5px;margin:4px 6px 0 0';
 /* 警示欄 */
 function alertItems(){const m=S.me,o=[];
 if(m.fo&&S.fr&&!S.fr.dead&&!S.fr.ann&&(S.fr.sus||0)>=60)o.push([`母國往來引起的疑心 ${S.fr.sus|0}，皇上已起疑`,'澄清往來',actIx('化解母國猜忌')]);
@@ -3468,25 +3468,25 @@ const _ui9=uiPost;uiPost=function(){const r=_ui9.apply(this,arguments);try{docum
 (function(){const st=document.createElement('style');st.id='ui9';st.textContent=`
 html body .cd{background:rgba(255,251,245,.95);border:1px solid rgba(196,138,112,.28);border-radius:14px;padding:12px 14px;margin:8px 0;box-shadow:0 2px 10px rgba(110,55,45,.1)}
 html body .cd::before,html body .cd::after{display:none}
-html body .cd h3{font-size:15.5px;letter-spacing:.05em;margin:0 0 6px;color:#8a3a30;font-weight:600}
+html body .cd h3{font-size:15px;letter-spacing:.05em;margin:0 0 6px;color:#8a3a30;font-weight:600}
 html body .cd.fold.closed{padding-top:9px;padding-bottom:9px}
 html body .cd.fold.closed>h3{margin:0}
 html body .cd .m{font-size:13.5px;line-height:1.65;color:#5a3a32}
 html body .chips{gap:6px;margin:8px 0 2px}
-html body .chip{font-size:12.5px;padding:3px 11px;border-radius:999px;background:rgba(255,255,255,.78);color:#6a3a30;border:1px solid rgba(196,138,112,.3)}
+html body .chip{font-size:12px;padding:3px 11px;border-radius:999px;background:rgba(255,255,255,.78);color:#6a3a30;border:1px solid rgba(196,138,112,.3)}
 html body .chip b{color:#a98274}
-html body .tip{font-size:12.5px;padding:7px 12px;margin:6px 0;opacity:.92}
-html body .alertbar{border-radius:12px;padding:7px 11px;font-size:12.5px;line-height:1.6;background:rgba(214,84,70,.09);border:1px solid rgba(200,70,60,.45);color:#7a2a24}
+html body .tip{font-size:12px;padding:7px 12px;margin:6px 0;opacity:.92}
+html body .alertbar{border-radius:12px;padding:7px 11px;font-size:12px;line-height:1.6;background:rgba(214,84,70,.09);border:1px solid rgba(200,70,60,.45);color:#7a2a24}
 html body .alertbar b{margin-right:6px}html body .alertbar div{display:inline}html body .alertbar div+div::before{content:'｜';opacity:.4;margin:0 4px}html body .alertbar button{padding:3px 10px;font-size:12px;margin:0 0 0 6px;border-radius:999px}
 html body .cd.res{padding:9px 12px}
 html body #ntf{gap:5px;top:max(8px,env(safe-area-inset-top,0px))}
-html body #ntf .nc{padding:7px 12px;border-radius:10px;font-size:13px;line-height:1.45;box-shadow:0 3px 10px rgba(120,50,40,.2)}
-html body #ntf button{padding:5px 12px;font-size:12.5px;align-self:flex-end;border-radius:999px}
+html body #ntf .nc{padding:7px 12px;border-radius:10px;font-size:13.5px;line-height:1.45;box-shadow:0 3px 10px rgba(120,50,40,.2)}
+html body #ntf button{padding:5px 12px;font-size:12px;align-self:flex-end;border-radius:999px}
 html body .stat-strip div{border-radius:12px}
-html body .tabs button{font-size:11.5px;letter-spacing:.08em}
+html body .tabs button{font-size:12px;letter-spacing:.08em}
 html body .tabs button i{width:28px;height:28px;font-size:15px}
-html body .g button{border-radius:11px;padding:9px 11px;font-size:14.5px}
-html body .g button small{font-size:11.5px;opacity:.75}
+html body .g button{border-radius:11px;padding:9px 11px;font-size:13.5px}
+html body .g button small{font-size:12px;opacity:.75}
 html body .kid,html body .k{font-size:13.5px}
 `;document.head.appendChild(st)})();
 HELP.push(['姻親勢力','子女的配偶家世會影響你：武將姻親加成宮變、逼宮、奪嫡；文官姻親有各自好處（御史壓醜聞、鹽商增進項、翰林增賢名、巡撫穩朝局），但勢力過強也會招來皇帝疑心。']);
@@ -3528,18 +3528,18 @@ const fr=[...main.querySelectorAll(':scope>.cd')].find(c=>c.firstElementChild&&/
 if(fr){const h=fr.firstElementChild,rest=[...fr.children].slice(1).map(x=>x.outerHTML).join('');const open=S.fr&&((S.fr.sus||0)>=60)?'open':'';fr.innerHTML=`<details class=frc ${open}><summary>${h.innerHTML}</summary>${rest}</details>`}
 main.querySelectorAll(':scope>.cd.fold').forEach(c=>{const h=c.firstElementChild;if(h&&/^上月回顧/.test(h.textContent)&&FOLDS[c.dataset.fk]===undefined)c.classList.add('closed')})}}}catch(e){console.log('ui10',e)}return r};
 (function(){const st=document.createElement('style');st.id='ui10';st.textContent=`
-html body .autobar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0;padding:7px 10px;border-radius:12px;background:rgba(255,255,255,.82);border:1px solid rgba(196,138,112,.3);font-size:13px;color:#5a3a32}
+html body .autobar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0;padding:7px 10px;border-radius:12px;background:rgba(255,255,255,.82);border:1px solid rgba(196,138,112,.3);font-size:13.5px;color:#5a3a32}
 html body .autobar .al{font-weight:700;color:#8a3a30}
-html body .autobar select{font:inherit;font-size:13px;padding:3px 6px;border-radius:8px;border:1px solid rgba(196,138,112,.4);background:#fff;color:#5a3a32}
+html body .autobar select{font:inherit;font-size:13.5px;padding:3px 6px;border-radius:8px;border:1px solid rgba(196,138,112,.4);background:#fff;color:#5a3a32}
 html body .autobar .ad{display:none}
-html body .autobar details.am{flex-basis:100%;font-size:12.5px}html body .autobar details.am summary{cursor:pointer;color:#8a3a30;opacity:.8}html body .autobar details.am div{margin-top:5px}html body .autobar button.rs{flex-basis:100%;background:#8a3a30}html body .autobar .alg .m{font-size:12px;margin-top:3px;line-height:1.5}
+html body .autobar details.am{flex-basis:100%;font-size:12px}html body .autobar details.am summary{cursor:pointer;color:#8a3a30;opacity:.8}html body .autobar details.am div{margin-top:5px}html body .autobar button.rs{flex-basis:100%;background:#8a3a30}html body .autobar .alg .m{font-size:12px;margin-top:3px;line-height:1.5}
 html body .autobar .ab{display:flex;gap:6px;margin-left:auto}
-html body .autobar button{padding:5px 11px;font-size:12.5px;border-radius:999px;border:1px solid #c0584e;background:#c8465a;color:#fff;box-shadow:none}
-html body .cd.frs{padding:7px 12px;font-size:12.5px;line-height:1.55;margin:6px 0}html body .cd.frs *{font-size:12.5px}html body details.frc>summary{cursor:pointer;list-style:none;font-weight:700;font-size:14px;color:#8a3a30}
+html body .autobar button{padding:5px 11px;font-size:12px;border-radius:999px;border:1px solid #c0584e;background:#c8465a;color:#fff;box-shadow:none}
+html body .cd.frs{padding:7px 12px;font-size:12px;line-height:1.55;margin:6px 0}html body .cd.frs *{font-size:12px}html body details.frc>summary{cursor:pointer;list-style:none;font-weight:700;font-size:13.5px;color:#8a3a30}
 html body details.frc>summary::-webkit-details-marker{display:none}
 html body details.frc>summary::after{content:' ▾';opacity:.5}
 html body details.frc[open]>summary{margin-bottom:6px}
-html body details.frc .m,html body details.frc .r{font-size:13px}
+html body details.frc .m,html body details.frc .r{font-size:13.5px}
 `;document.head.appendChild(st)})();
 HELP.push(['方針與自動過月','主畫面「方針」可選固寵、養生、斂財、人脈、育子、守成、謀位。按「自動過一個月」或「自動過一年」，遊戲會依方針自動挑行動、遇到選項自動選較穩妥的，直到時間到，或遇到需要你決定的事件、健康過低、疑心或猜忌過高、醜聞過高才會停下，並顯示這段期間的變化摘要。']);
 
@@ -3590,7 +3590,7 @@ return`<details class="cd emp"><summary><b>皇帝詳情</b><span class=m>${eg}�
 <div class=m>中宮：${S.qi==='me'?'你':Q()&&!Q().st&&Q().rank>=8?Q().n:'空懸'}　${heir}</div><div class=m>${nat}</div>
 <div class=eab>${btn('獻藝邀寵')}${btn('寬慰聖心')}${btn('侍奉湯藥')}${btn('進言政事')}${btn('枕邊進言')}${btn('勸皇上養生')}${btn('進獻珍玩')}${btn('示忠表心')}</div></details>`}
 const _up12=uiPost;uiPost=function(){const r=_up12.apply(this,arguments);try{if(TAB==0&&S&&S.me&&!S.over&&!S.reg&&!S.scn){const main=document.querySelector('main');if(main){main.querySelectorAll('.cd.emp').forEach(e=>e.remove());const ch=main.querySelector('.chips');const h=empCard();if(ch)ch.insertAdjacentHTML('afterend',h);else{const ab=main.querySelector('.autobar');if(ab)ab.insertAdjacentHTML('afterend',h)}const d=main.querySelector('.cd.emp');if(d&&S._empOpen)d.open=true;if(d)d.addEventListener('toggle',()=>{S._empOpen=d.open})}}}catch(e){console.log('ui12',e)}return r};
-(function(){const st=document.createElement('style');st.id='ui12';st.textContent=`html body details.cd.emp{padding:9px 13px!important;margin:6px 0!important}html body details.cd.emp>summary{cursor:pointer;list-style:none;display:block!important;font-size:13px;color:#8a3a30;line-height:1.5;padding:0!important;margin:0!important;position:relative;padding-right:18px!important}html body details.cd.emp>summary b{display:inline!important;margin-right:8px;font-size:14px}html body details.cd.emp>summary span{display:inline!important;font-size:12.5px}html body details.cd.emp>summary::-webkit-details-marker{display:none}html body details.cd.emp>summary::after{content:'▾';opacity:.5;position:absolute;right:0;top:0}html body details.cd.emp[open]>summary{margin-bottom:6px!important}html body details.cd.emp .m{font-size:12.5px}html body .eab{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}html body .eab button{padding:5px 10px;font-size:12.5px;border-radius:999px}`;document.head.appendChild(st)})();
+(function(){const st=document.createElement('style');st.id='ui12';st.textContent=`html body details.cd.emp{padding:9px 13px!important;margin:6px 0!important}html body details.cd.emp>summary{cursor:pointer;list-style:none;display:block!important;font-size:13.5px;color:#8a3a30;line-height:1.5;padding:0!important;margin:0!important;position:relative;padding-right:18px!important}html body details.cd.emp>summary b{display:inline!important;margin-right:8px;font-size:13.5px}html body details.cd.emp>summary span{display:inline!important;font-size:12px}html body details.cd.emp>summary::-webkit-details-marker{display:none}html body details.cd.emp>summary::after{content:'▾';opacity:.5;position:absolute;right:0;top:0}html body details.cd.emp[open]>summary{margin-bottom:6px!important}html body details.cd.emp .m{font-size:12px}html body .eab{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}html body .eab button{padding:5px 10px;font-size:12px;border-radius:999px}`;document.head.appendChild(st)})();
 HELP.push(['皇帝詳情','行動頁的「皇帝詳情」可展開查看龍體、聖心、對你寵愛、對你疑心、近來最受寵的嬪妃、儲君與國事，並直接對皇上做事：獻藝、寬慰、侍奉湯藥、進言政事、枕邊進言、勸養生、進獻珍玩、示忠。龍體過低時要及早為子女謀劃。']);
 
 /* ===== 編制人物多樣化：宮中執事・官女子有名字、性情、籍貫，會告老、調任、被選中 ===== */
@@ -3641,7 +3641,7 @@ out.push(sec('行動'));G.act.forEach(e=>out.push(e));
 if(G.prof.length){const d=document.createElement('details');d.className='cd prof13';if(S._profOpen)d.open=true;d.innerHTML='<summary><b>我的檔案</b><span class=m>出身・天賦・容貌・翻牌設定</span></summary>';G.prof.forEach(e=>d.appendChild(e));d.addEventListener('toggle',()=>{S._profOpen=d.open});out.push(sec('個人'));out.push(d)}
 out.forEach(e=>main.appendChild(e))}
 const _up13=uiPost;uiPost=function(){const r=_up13.apply(this,arguments);try{if(TAB==0&&S&&S.me&&!S.over&&!S.reg&&!S.scn)reorg13()}catch(e){console.log('ui13',e)}return r};
-(function(){const st=document.createElement('style');st.id='ui13';st.textContent=`html body .sec13{margin:14px 2px 4px;font-size:12.5px;letter-spacing:.2em;color:#8a3a30;font-weight:700;display:flex;align-items:center;gap:8px}html body .sec13::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(196,138,112,.45),transparent)}html body .sec13.sub{margin:8px 2px 2px;font-size:11.5px;letter-spacing:.12em;opacity:.8;font-weight:600}html body details.prof13{padding:9px 13px!important}html body details.prof13>summary{cursor:pointer;list-style:none;display:block!important;padding:0!important;margin:0!important;position:relative;font-size:13px;color:#8a3a30}html body details.prof13>summary b{display:inline!important;margin-right:8px;font-size:14px}html body details.prof13>summary span{display:inline!important;font-size:12.5px}html body details.prof13>summary::-webkit-details-marker{display:none}html body details.prof13>summary::after{content:'▾';opacity:.5;position:absolute;right:0;top:0}html body details.prof13[open]>summary{margin-bottom:8px}html body details.prof13>.cd{box-shadow:none;margin:6px 0}`;document.head.appendChild(st)})();
+(function(){const st=document.createElement('style');st.id='ui13';st.textContent=`html body .sec13{margin:14px 2px 4px;font-size:12px;letter-spacing:.2em;color:#8a3a30;font-weight:700;display:flex;align-items:center;gap:8px}html body .sec13::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(196,138,112,.45),transparent)}html body .sec13.sub{margin:8px 2px 2px;font-size:12px;letter-spacing:.12em;opacity:.8;font-weight:600}html body details.prof13{padding:9px 13px!important}html body details.prof13>summary{cursor:pointer;list-style:none;display:block!important;padding:0!important;margin:0!important;position:relative;font-size:13.5px;color:#8a3a30}html body details.prof13>summary b{display:inline!important;margin-right:8px;font-size:13.5px}html body details.prof13>summary span{display:inline!important;font-size:12px}html body details.prof13>summary::-webkit-details-marker{display:none}html body details.prof13>summary::after{content:'▾';opacity:.5;position:absolute;right:0;top:0}html body details.prof13[open]>summary{margin-bottom:8px}html body details.prof13>.cd{box-shadow:none;margin:6px 0}`;document.head.appendChild(st)})();
 
 /* ===== round14：通知條單則化 ===== */
 ntfDraw=function(){let e=document.getElementById('ntf');if(e)e.remove();clearTimeout(_ntT);if(!S||!S.nt||!S.nt.length)return;
@@ -3650,7 +3650,7 @@ e=document.createElement('div');e.id='ntf';e.className='ntf14';
 e.innerHTML=`<div class="nc ${top.k}">${top.t}<div class=nsub>${rest>0?`另有 ${rest} 則已記在「紀事」・`:''}點一下收起</div></div>`;
 e.onclick=()=>{S.nt=[];ntfDraw()};document.body.appendChild(e);
 _ntT=setTimeout(()=>{if(!S||!S.nt)return;const now=Date.now();S.nt=S.nt.filter(n=>n.k=='me'||n.k=='medn'||(n.ts&&now-n.ts<7000));ntfDraw()},8000)};
-(function(){const st=document.createElement('style');st.id='ui14';st.textContent=`html body #ntf.ntf14{display:block;gap:0;cursor:pointer}html body #ntf.ntf14 .nc{padding:9px 14px;border-radius:14px;font-size:13px;line-height:1.5;box-shadow:0 4px 14px rgba(120,50,40,.25)}html body #ntf.ntf14 .nsub{font-size:11px;opacity:.65;text-align:right;margin-top:3px;font-weight:400}html body #ntf.ntf14 button{display:none}`;document.head.appendChild(st)})();
+(function(){const st=document.createElement('style');st.id='ui14';st.textContent=`html body #ntf.ntf14{display:block;gap:0;cursor:pointer}html body #ntf.ntf14 .nc{padding:9px 14px;border-radius:14px;font-size:13.5px;line-height:1.5;box-shadow:0 4px 14px rgba(120,50,40,.25)}html body #ntf.ntf14 .nsub{font-size:12px;opacity:.65;text-align:right;margin-top:3px;font-weight:400}html body #ntf.ntf14 button{display:none}`;document.head.appendChild(st)})();
 const _na14=ntfAdd;ntfAdd=function(t,k){try{if(S){S.nlog=S.nlog||[];S.nlog.push({t:String(t).replace(/<[^>]*>/g,''),m:S.t});if(S.nlog.length>120)S.nlog.shift()}}catch(e){}return _na14.apply(this,arguments)};
 const _up14=uiPost;uiPost=function(){const r=_up14.apply(this,arguments);try{if(TAB==5&&S&&S.nlog&&S.nlog.length){const main=document.querySelector('main');if(main&&!main.querySelector('.nlog14')){const mo=m=>`第${Math.floor(m/12)+1}年${m%12+1}月`;main.insertAdjacentHTML('afterbegin',`<details class="cd nlog14" style="padding:9px 13px"><summary style="cursor:pointer;color:#8a3a30"><b>通知記錄</b>　<span class=m>最近 ${S.nlog.length} 則</span></summary>${S.nlog.slice().reverse().map(n=>`<div class=m style="margin-top:5px">${mo(n.m)}　${n.t}</div>`).join('')}</details>`)}}}catch(e){console.log('ui14',e)}return r};
 
@@ -3671,7 +3671,7 @@ const _up15=uiPost;uiPost=function(){const r=_up15.apply(this,arguments);try{if(
 function guideSeen(){try{return localStorage.getItem('hg_guide14')=='1'}catch(e){return false}}
 function guideOff(){try{localStorage.setItem('hg_guide14','1')}catch(e){}document.querySelectorAll('.guide14').forEach(e=>e.remove());S._g14=1}
 const _up16=uiPost;uiPost=function(){const r=_up16.apply(this,arguments);try{if(TAB==0&&S&&S.me&&!S.over&&!S.reg&&!S.scn&&S.t<6&&!S._g14&&!guideSeen()){const main=document.querySelector('main');if(main&&!main.querySelector('.guide14')){const st=main.querySelector('.stat-strip');const h=`<div class="cd guide14"><b>三步上手</b><ol><li>每月有 4 次行動，下方分組按鈕都是行動；先從「恩寵聖眷」開始，聖寵是晉位的關鍵。</li><li>最上面紅色「注意」欄會在快出事時提醒你，旁邊有按鈕可直接處理；點「皇帝詳情」可看皇上的狀態。</li><li>玩累了就選一個「方針」，按「自動過一個月／一年」，遇到大事它會停下來等你。</li></ol><button onclick="guideOff()">知道了</button></div>`;if(st)st.insertAdjacentHTML('afterend',h);else main.insertAdjacentHTML('afterbegin',h)}}}catch(e){console.log('guide',e)}return r};
-(function(){const st=document.createElement('style');st.id='ui16';st.textContent=`html body .guide14{padding:10px 14px!important;font-size:13px;line-height:1.6;background:#fff8e8!important;border:1px solid rgba(214,168,96,.5)}html body .guide14 ol{margin:6px 0 8px 18px;padding:0}html body .guide14 li{margin:2px 0}html body .guide14 button{padding:5px 14px;font-size:12.5px;border-radius:999px}`;document.head.appendChild(st)})();
+(function(){const st=document.createElement('style');st.id='ui16';st.textContent=`html body .guide14{padding:10px 14px!important;font-size:13.5px;line-height:1.6;background:#fff8e8!important;border:1px solid rgba(214,168,96,.5)}html body .guide14 ol{margin:6px 0 8px 18px;padding:0}html body .guide14 li{margin:2px 0}html body .guide14 button{padding:5px 14px;font-size:12px;border-radius:999px}`;document.head.appendChild(st)})();
 
 /* ===== round16：終局大計（後期主線） ===== */
 const LAP=s=>{if(!s)return;const m=S.me;s.split(',').forEach(x=>{const[k,v]=x.split(':'),n=+v;if(k=='fam')m.fam.forEach(f=>f.pw=cl(f.pw+n));else if(k=='dsus')m.dsus=cl((m.dsus||0)+n);else if(k=='mood')S.mood=cl(S.mood+n);else if(k=='stab'){if(S.nat)S.nat.stab=cl(S.nat.stab+n)}else if(k=='ehp')S.ehp=cl(S.ehp+n);else if(k=='hp')m.hp=cl(m.hp+n);else if(k=='kid'){const q=lateKid();if(q)q.chong=cl(q.chong+n)}else if(k=='kidpow'){const q=lateKid();if(q)q.pow=cl(q.pow+n)}else if(k=='sus'){if(S.fr)S.fr.sus=cl((S.fr.sus||0)+n)}else if(m[k]!==undefined)m[k]+=n})};
@@ -3772,7 +3772,7 @@ if(TAB==5&&S&&S.me){const main=document.querySelector('main');if(main&&!main.que
 /* 夜間模式 */
 function dkToggle(){const on=!document.documentElement.classList.contains('dk18');document.documentElement.classList.toggle('dk18',on);try{localStorage.setItem('hg_dk18',on?'1':'0')}catch(e){}render()}
 try{if(localStorage.getItem('hg_dk18')==='1')document.documentElement.classList.add('dk18')}catch(e){}
-(function(){const st=document.createElement('style');st.id='ui18';st.textContent=`html.dk18{filter:invert(.9) hue-rotate(180deg);background:#fff}html.dk18 img,html.dk18 video,html.dk18 .av18{filter:invert(1) hue-rotate(180deg)}html body details.rg18{padding:9px 13px!important}html body details.rg18>summary{cursor:pointer;list-style:none;display:block!important;padding:0!important;font-size:13px;color:#8a3a30}html body details.rg18>summary b{display:inline!important;margin-right:8px;font-size:14px}html body details.rg18>summary span{display:inline!important}html body details.rg18>summary::-webkit-details-marker{display:none}html body .av18{display:inline-flex;margin-right:5px;vertical-align:middle}`;document.head.appendChild(st)})();
+(function(){const st=document.createElement('style');st.id='ui18';st.textContent=`html.dk18{filter:invert(.9) hue-rotate(180deg);background:#fff}html.dk18 img,html.dk18 video,html.dk18 .av18{filter:invert(1) hue-rotate(180deg)}html body details.rg18{padding:9px 13px!important}html body details.rg18>summary{cursor:pointer;list-style:none;display:block!important;padding:0!important;font-size:13.5px;color:#8a3a30}html body details.rg18>summary b{display:inline!important;margin-right:8px;font-size:13.5px}html body details.rg18>summary span{display:inline!important}html body details.rg18>summary::-webkit-details-marker{display:none}html body .av18{display:inline-flex;margin-right:5px;vertical-align:middle}`;document.head.appendChild(st)})();
 /* 走勢 */
 
 const _mt18=mend;mend=function(){const r=_mt18.apply(this,arguments);try{if(S&&S.me){const h=S.hist=S.hist||[];h.push({t:S.t,f:S.me.favor,d:S.me.dsus||0,s:S.me.silver,a:S.me.ally,h:S.me.hp});if(h.length>60)h.shift()}}catch(e){}return r};
@@ -3997,7 +3997,7 @@ HELP.push(['壽命與後台','每個人依年齡有合理的病故機率（嬰�
 const st=document.createElement('style');st.id='ui26';st.textContent=`
 html body details.con,html body details.cd.con{content-visibility:visible!important;contain-intrinsic-size:none!important}
 html body details.cd.con{padding:7px 12px!important;margin-bottom:6px!important}
-html body details.cd.con>summary .pill{font-size:11px!important;padding:0 6px!important;line-height:18px;margin:0!important}
+html body details.cd.con>summary .pill{font-size:12px!important;padding:0 6px!important;line-height:18px;margin:0!important}
 html body details.cd.con>summary .nm{font-size:15px}
 html body details.cd.con>summary .mm{flex:1 0 100%;font-size:12px;opacity:.85;margin:0!important}
 html body .kb{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(108px,1fr))!important;gap:3px 10px!important}
@@ -4214,7 +4214,7 @@ const _s32=start;start=function(){IST=0;return _s32.apply(this,arguments)};
 })();
 
 /* 手機：輸入框 16px 避免 iOS 點擊時整頁放大；開局頁標題縮小 */
-(function(){const st=document.createElement('style');st.id='fs31';st.textContent='html{-webkit-text-size-adjust:100%;text-size-adjust:100%}input,select,textarea{font-size:16px!important}@media(max-width:600px){.wz31h~.splash h1,.splash h1{font-size:clamp(30px,10vw,40px)!important}.menuhero .mcover{max-height:34vh;width:auto}}';document.head.appendChild(st)})();
+(function(){const st=document.createElement('style');st.id='fs31';st.textContent='html{-webkit-text-size-adjust:100%;text-size-adjust:100%}input,select,textarea{font-size:15px!important}@media(max-width:600px){.wz31h~.splash h1,.splash h1{font-size:clamp(30px,10vw,40px)!important}.menuhero .mcover{max-height:34vh;width:auto}}';document.head.appendChild(st)})();
 /* 「幫助作者改進遊戲」：開局不再詢問，改在結局畫面詢問；同意後補送這一局 */
 (function(){
 const _i33=intro;intro=function(){const r=_i33.apply(this,arguments);try{[...document.querySelectorAll('#app .cd')].forEach(c=>{const h=c.querySelector('h3');if(h&&/幫助作者改進遊戲/.test(h.textContent))c.remove()})}catch(x){}return r};
@@ -4292,7 +4292,7 @@ const _ba=bizAct;bizAct=function(){if(!_AUTO)return _ba.apply(this,arguments);
 /* ===== round31：新手引導、年度小結、事件摘要、結局對照 ===== */
 (function(){
 const gs=k=>{try{return localStorage.getItem(k)}catch(e){return null}},ss=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
-const css=document.createElement('style');css.textContent='@keyframes pl31{0%,100%{box-shadow:0 0 0 0 rgba(214,70,90,.55)}50%{box-shadow:0 0 0 10px rgba(214,70,90,0)}}.ac31 .pulse31{animation:pl31 1.4s infinite}.ob31{position:fixed;top:calc(env(safe-area-inset-top,0px) + 64px);left:50%;transform:translateX(-50%);width:min(92vw,420px);z-index:41;background:#4a2a3a;color:#fff;border-radius:14px;padding:10px 34px 10px 14px;font-size:14px;line-height:1.5;box-shadow:0 4px 16px rgba(0,0,0,.35)}.ob31 b{color:#ffd9a0}.ob31 .x{position:absolute;right:8px;top:6px;background:none;border:0;color:#fff;font-size:18px;min-height:0;padding:2px 6px}.ys31 .scroll p{margin:6px 0}.ev31s{cursor:pointer}.ev31s u{color:var(--accent,#c0394f);text-decoration:none;white-space:nowrap}';css.textContent+='html body:has(.scrim:not(.ys31)) #ntf.ntf14{display:none!important}';document.head.appendChild(css);
+const css=document.createElement('style');css.textContent='@keyframes pl31{0%,100%{box-shadow:0 0 0 0 rgba(214,70,90,.55)}50%{box-shadow:0 0 0 10px rgba(214,70,90,0)}}.ac31 .pulse31{animation:pl31 1.4s infinite}.ob31{position:fixed;top:calc(env(safe-area-inset-top,0px) + 64px);left:50%;transform:translateX(-50%);width:min(92vw,420px);z-index:41;background:#4a2a3a;color:#fff;border-radius:14px;padding:10px 34px 10px 14px;font-size:13.5px;line-height:1.5;box-shadow:0 4px 16px rgba(0,0,0,.35)}.ob31 b{color:#ffd9a0}.ob31 .x{position:absolute;right:8px;top:6px;background:none;border:0;color:#fff;font-size:17px;min-height:0;padding:2px 6px}.ys31 .scroll p{margin:6px 0}.ev31s{cursor:pointer}.ev31s u{color:var(--accent,#c0394f);text-decoration:none;white-space:nowrap}';css.textContent+='html body:has(.scrim:not(.ys31)) #ntf.ntf14{display:none!important}';document.head.appendChild(css);
 /* 1 新手引導 */
 function ob(){const old=document.querySelector('.ob31');const bar=document.querySelector('.ac31');if(!bar||!S||S.over){if(old)old.remove();return}const st=gs('hg_ob31')||'0';if(st==='2'){if(old)old.remove();return}
  let msg='';if(st==='0'&&S.t<1){msg='<b>第一次玩？</b>先按「▶ 自動過一個月」，系統會幫你處理。想自己決定，就點上面導覽的「行動」。';const b=bar.querySelector('button.go');if(b)b.classList.add('pulse31')}
@@ -4682,7 +4682,7 @@ details.con.pc40 .pc-sub{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:cen
 details.con.pc40 .pc-fv{display:inline-flex;align-items:center;gap:5px}
 details.con.pc40 .pc-fv i{display:inline-block;width:54px;height:6px;border-radius:99px;background:rgba(160,120,100,.22);overflow:hidden}
 details.con.pc40 .pc-fv i b{display:block;height:100%;background:linear-gradient(90deg,#e8a04c,#c8323c)}
-details.con.pc40 .pc-chip{display:inline-block;font-size:11px;line-height:18px;padding:0 7px;border-radius:99px;background:rgba(190,140,110,.16);color:#7a4a38;white-space:nowrap}
+details.con.pc40 .pc-chip{display:inline-block;font-size:12px;line-height:18px;padding:0 7px;border-radius:99px;background:rgba(190,140,110,.16);color:#7a4a38;white-space:nowrap}
 details.con.pc40 .pc-chip.rel{font-weight:700}
 details.con.pc40 .pc-chip.ally{background:rgba(70,150,100,.18);color:#2f7a52}
 details.con.pc40 .pc-chip.foe{background:rgba(200,50,60,.16);color:#a3242e}
@@ -4690,7 +4690,7 @@ details.con.pc40 .pc-chip.gold{background:rgba(227,180,90,.25);color:#8a5a12}
 details.con.pc40 .pc-body{padding:2px 14px 12px;display:flex;flex-direction:column;gap:10px}
 details.con.pc40 .pc-sec{border-top:1px dashed rgba(170,120,90,.3);padding-top:8px}
 details.con.pc40 .pc-sec>h4{margin:0 0 4px;font-size:12px;letter-spacing:.2em;color:#a8531c;font-weight:700}
-details.con.pc40 .pc-sec .pc-l{font-size:13px;line-height:1.65;color:#5a3a32}
+details.con.pc40 .pc-sec .pc-l{font-size:13.5px;line-height:1.65;color:#5a3a32}
 details.con.pc40 .pc-bars{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;margin-bottom:4px}
 details.con.pc40 .pc-bar{display:flex;align-items:center;gap:6px;font-size:12px;color:#7a5a50}
 details.con.pc40 .pc-bar span{flex:0 0 3.2em}
@@ -4699,7 +4699,7 @@ details.con.pc40 .pc-bar i b{display:block;height:100%;background:#c9a24a}
 details.con.pc40 .pc-bar.g i b{background:#4aa070}
 details.con.pc40 .pc-bar.r i b{background:#c8323c}
 details.con.pc40 .pc-bar em{font-style:normal;flex:0 0 2em;text-align:right}
-.grp40{display:flex;align-items:center;gap:8px;margin:16px 2px 4px;font-size:12.5px;letter-spacing:.25em;color:#a8531c;font-weight:700}
+.grp40{display:flex;align-items:center;gap:8px;margin:16px 2px 4px;font-size:12px;letter-spacing:.25em;color:#a8531c;font-weight:700}
 .grp40::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(168,83,28,.4),transparent)}
 .grp40 i{font-style:normal;letter-spacing:0;font-weight:400;color:#8a6a60;font-size:12px}
 details.con[data-t*="皇子"]:not(.pc40){border-left:4px solid #3d7bb5}details.con[data-t*="公主"]:not(.pc40){border-left:4px solid #d46a8a}details.con[data-t*="儲君"]:not(.pc40){border-left-color:#c9a24a;border-left-width:6px}
@@ -5222,10 +5222,10 @@ const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
 const st=document.createElement('style');st.textContent=`
 .top{flex-wrap:nowrap!important;gap:4px!important;padding-left:10px!important;padding-right:10px!important}
 .top .brand{font-size:15px!important;white-space:nowrap;flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
-.top .date{font-size:11px!important;white-space:nowrap;flex:0 0 auto;opacity:.85}
-.top .chipm{font-size:11px!important;padding:3px 8px!important;white-space:nowrap;flex:0 0 auto}
+.top .date{font-size:12px!important;white-space:nowrap;flex:0 0 auto;opacity:.85}
+.top .chipm{font-size:12px!important;padding:3px 8px!important;white-space:nowrap;flex:0 0 auto}
 .top .mini{min-width:30px!important;height:30px!important;padding:0 6px!important;font-size:12px!important;white-space:nowrap;flex:0 0 auto}
-@media(max-width:430px){.top .brand{font-size:13px!important}.top .date{font-size:10px!important}}
+@media(max-width:430px){.top .brand{font-size:13.5px!important}.top .date{font-size:12px!important}}
 `;document.head.appendChild(st);
 const _r=render;render=function(){const r=_r.apply(this,arguments);
  try{const tp=document.querySelector('.top');if(tp){tp.querySelectorAll('button').forEach(b=>{if(b.textContent==='存檔'){b.textContent='存';b.setAttribute('aria-label','存檔與設定')}});const d=tp.querySelector('.date');if(d)d.textContent=d.textContent.replace(/・[春夏秋冬]$/,'')}}catch(e){}
@@ -5261,11 +5261,11 @@ body.cmp49 .pc40 .pc-sub .pc-chip:not(.rel){display:none}
 body.cmp49 .pc40 .pc-av{transform:scale(.8);margin:-3px -2px -3px -4px}
 body.cmp49 .pc40>summary{padding-top:6px!important;padding-bottom:6px!important}
 body.cmp49 .kid .kb{display:none}
-body.cmp49 .kid{font-size:13px}
+body.cmp49 .kid{font-size:13.5px}
 body.cmp49 details.con>summary .mm{display:none}
-.cmp49bar{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:6px 0;font-size:13px}
+.cmp49bar{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:6px 0;font-size:13.5px}
 .cmp49bar .m{margin-right:2px}
-.cmp49bar button{min-height:0!important;height:30px!important;padding:0 12px!important;font-size:13px!important}
+.cmp49bar button{min-height:0!important;height:30px!important;padding:0 12px!important;font-size:13.5px!important}
 `;document.head.appendChild(st);
 window.cmp49=function(v){CMP=!!v;try{localStorage.setItem('hg49cmp',CMP?'1':'0')}catch(e){}document.body.classList.toggle('cmp49',CMP);document.querySelectorAll('.cmp49bar button[data-m]').forEach(b=>b.className=(b.dataset.m==='1')===CMP?'':'s')};
 window.cmpAll49=function(o){document.querySelectorAll('main details.con').forEach(d=>d.open=!!o)};
@@ -5333,12 +5333,12 @@ function kdraw(msg){let md=document.getElementById('kmodal49');const k=find(CUR)
  const at=k.at||{};const sp=typeof spLine==='function'?spLine(k):'';
  const sty=story(k),ac=acts(k);
  const html=`<div style="position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center" onclick="if(event.target===this)kclose49()"><div style="width:100%;max-width:560px;max-height:88vh;overflow:auto;background:${bg.replace(/rgba?\(([^)]*)\)/,(m,x)=>'rgb('+x.split(',').slice(0,3).join(',')+')')};color:${fg};border-radius:18px 18px 0 0;padding:14px 16px calc(18px + env(safe-area-inset-bottom,0px));box-shadow:0 -6px 24px rgba(0,0,0,.35)">
- <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h3 style="margin:0;font-size:19px">${ESC2(k.n)}</h3><button class=s onclick="kclose49()" style="min-height:0;height:32px;padding:0 14px">關閉</button></div>
+ <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h3 style="margin:0;font-size:17px">${ESC2(k.n)}</h3><button class=s onclick="kclose49()" style="min-height:0;height:32px;padding:0 14px">關閉</button></div>
  <div class=m style="margin:8px 0;line-height:1.7">${info}</div>
  ${bar2('才',k.cai)}${bar2('德',k.de)}${bar2('寵',k.chong)}${bar2('勢',k.pow)}${bar2('孝',k.bond)}${k.ly!==undefined?bar2('忠',k.ly):''}
  <div class=m style="margin:8px 0">${KT[k.t][1]}<br>顏${at.lk|0}・氣質${at.qi|0}・智${at.iq|0}${typeof whT==='function'&&at.wh!==undefined?'・'+whT(at.wh):''}｜擅長：${typeof topSk==='function'&&at.sk?topSk(at,3):''}<br>${typeof dsPills==='function'&&at.ds?dsPills(at):''}${sp?'<br>'+sp:''}</div>
  ${msg?`<div class=m style="color:#c0392b;margin:6px 0"><b>${ESC2(msg)}</b></div>`:''}
- ${ac.length?`<h4 style="margin:12px 0 6px">可以做的事　<span class=m>（每次耗 1 次行動，剩 ${S.w} 次）</span></h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">${ac.map(([id,l,d])=>`<button onclick="kdo49('${id}')" style="text-align:left;min-height:0;padding:8px 10px;height:auto"><div style="font-size:14px">${l}</div><small style="opacity:.75">${d}</small></button>`).join('')}</div>`:''}
+ ${ac.length?`<h4 style="margin:12px 0 6px">可以做的事　<span class=m>（每次耗 1 次行動，剩 ${S.w} 次）</span></h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">${ac.map(([id,l,d])=>`<button onclick="kdo49('${id}')" style="text-align:left;min-height:0;padding:8px 10px;height:auto"><div style="font-size:13.5px">${l}</div><small style="opacity:.75">${d}</small></button>`).join('')}</div>`:''}
  ${mine&&yr(k)<18&&window.plSet47?`<div class=m style="margin-top:8px">培養方式：<select onchange="plSet47('${k.n}',this.value);kopen49('${k.n}')">${['文教','武備','德育','歷練','放養'].filter(x=>x!=='歷練'||a>=12).map(x=>`<option${(k.pl47||'放養')===x?' selected':''}>${x}</option>`).join('')}</select></div>`:''}
  <h4 style="margin:14px 0 6px">${ESC2(k.n)}的故事</h4><div class=m style="line-height:1.7">${sty.length?sty.map(r=>`<div>・<span style="opacity:.7">${tm(r[0])}</span>　${ESC2(r[1])}</div>`).join(''):'暫無記載。'}</div>
  </div></div>`;
@@ -5536,7 +5536,7 @@ const g=k=>{try{return localStorage.getItem(k)}catch(e){return null}},s=(k,v)=>{
 const ESC=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 // ---- toast ----
 function toast(txt){try{let e=document.getElementById('tt56');if(e)e.remove();e=document.createElement('div');e.id='tt56';e.innerHTML=txt+'<button onclick="this.parentNode.remove()">×</button>';document.body.appendChild(e);setTimeout(()=>{try{e.remove()}catch(x){}},9000)}catch(x){}}
-const st=document.createElement('style');st.textContent=`#tt56{position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 56px);z-index:9999;max-width:min(92vw,420px);background:#fffaf4;color:#4a2a2a;border:1px solid #e6b9b0;border-radius:14px;padding:10px 34px 10px 14px;font-size:13px;line-height:1.6;box-shadow:0 6px 22px rgba(120,50,50,.25)}#tt56 button{position:absolute;right:6px;top:4px;border:0;background:none;font-size:18px;color:#a55}.ach56 span{display:inline-block;margin:3px 4px 3px 0;padding:2px 9px;border-radius:99px;font-size:12px;background:rgba(214,70,90,.1)}.ach56 span.no{opacity:.45}`;document.head.appendChild(st);
+const st=document.createElement('style');st.textContent=`#tt56{position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 56px);z-index:9999;max-width:min(92vw,420px);background:#fffaf4;color:#4a2a2a;border:1px solid #e6b9b0;border-radius:14px;padding:10px 34px 10px 14px;font-size:13.5px;line-height:1.6;box-shadow:0 6px 22px rgba(120,50,50,.25)}#tt56 button{position:absolute;right:6px;top:4px;border:0;background:none;font-size:17px;color:#a55}.ach56 span{display:inline-block;margin:3px 4px 3px 0;padding:2px 9px;border-radius:99px;font-size:12px;background:rgba(214,70,90,.1)}.ach56 span.no{opacity:.45}`;document.head.appendChild(st);
 // ---- 首次提示 ----
 const TIPS={
  kid4:['有孩子滿 4 歲了：到「宗室」頁可以替他定培養方式（文教、武備、德育…），會影響他長大後的能力。'],
@@ -5861,7 +5861,7 @@ try{HELP.push(['成就與新開局身分','累積成就能解鎖新的開局身�
 
 /* ===== round65：介面整理（同類卡片合併成可摺疊群組、去除重複的一鍵按鈕） ===== */
 (function(){
-const st=document.createElement('style');st.textContent=`details.grp65{margin:10px 0}details.grp65>summary{cursor:pointer;list-style:none;padding:12px 14px;font-weight:700;font-size:16px;display:flex;align-items:center;gap:8px}details.grp65>summary::-webkit-details-marker{display:none}details.grp65>summary::before{content:"▸";font-size:13px;opacity:.7}details.grp65[open]>summary::before{content:"▾"}details.grp65>summary small{font-weight:400;opacity:.7}details.grp65>.gin65{padding:0 8px 8px}details.grp65>.gin65>.cd,details.grp65>.gin65>details{margin:6px 0}html.in63:not(.dk18) #app .cd,html.in63:not(.dk18) #app .stat-strip>*{background:rgba(255,250,245,.90)!important}details.sub65{margin:6px 0;border-top:1px solid rgba(180,90,90,.18)}details.sub65>summary{cursor:pointer;list-style:none;padding:10px 2px;font-weight:700;letter-spacing:.2em;display:flex;align-items:center;gap:8px}details.sub65>summary::-webkit-details-marker{display:none}details.sub65>summary::before{content:"▸";font-size:12px;opacity:.7}details.sub65[open]>summary::before{content:"▾"}details.sub65>summary small{font-weight:400;letter-spacing:0;opacity:.65}.tool65{display:flex;flex-direction:column;gap:6px}.pt61 .tip{margin:8px 0 0!important;font-size:12.5px}`;document.head.appendChild(st);
+const st=document.createElement('style');st.textContent=`details.grp65{margin:10px 0}details.grp65>summary{cursor:pointer;list-style:none;padding:12px 14px;font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px}details.grp65>summary::-webkit-details-marker{display:none}details.grp65>summary::before{content:"▸";font-size:13.5px;opacity:.7}details.grp65[open]>summary::before{content:"▾"}details.grp65>summary small{font-weight:400;opacity:.7}details.grp65>.gin65{padding:0 8px 8px}details.grp65>.gin65>.cd,details.grp65>.gin65>details{margin:6px 0}html.in63:not(.dk18) #app .cd,html.in63:not(.dk18) #app .stat-strip>*{background:rgba(255,250,245,.90)!important}details.sub65{margin:6px 0;border-top:1px solid rgba(180,90,90,.18)}details.sub65>summary{cursor:pointer;list-style:none;padding:10px 2px;font-weight:700;letter-spacing:.2em;display:flex;align-items:center;gap:8px}details.sub65>summary::-webkit-details-marker{display:none}details.sub65>summary::before{content:"▸";font-size:12px;opacity:.7}details.sub65[open]>summary::before{content:"▾"}details.sub65>summary small{font-weight:400;letter-spacing:0;opacity:.65}.tool65{display:flex;flex-direction:column;gap:6px}.pt61 .tip{margin:8px 0 0!important;font-size:12px}`;document.head.appendChild(st);
 const T=e=>(((e.querySelector&&e.querySelector('h3,summary'))||{}).textContent||'').replace(/[▾▸]/g,'').trim();
 function grp(main,title,keys,open){if(main.querySelector('.grp65[data-t="'+title+'"]'))return;
  const nodes=[...main.children].filter(e=>!e.classList.contains('grp65')&&keys.some(k=>T(e).startsWith(k)));
@@ -5996,7 +5996,7 @@ const nm0=n=>(n.name||n.n);
 const tmS=t=>`第${Math.floor(t/12)+1}年${t%12+1}月`;
 const kidBy=nm=>{try{return allKids().find(k=>k.n===nm)}catch(e){return null}};
 const cbs=()=>{try{const x=rx();return(x&&x.cb)||[]}catch(e){return[]}};
-const bar=(l,v,c)=>`<div style="display:flex;align-items:center;gap:6px;margin:3px 0"><span style="width:40px;font-size:13px">${l}</span><span style="flex:1;height:7px;border-radius:4px;background:rgba(128,100,80,.2);overflow:hidden"><b style="display:block;height:100%;width:${Math.max(0,Math.min(100,v|0))}%;background:${c||'var(--gd,#d98a2b)'}"></b></span><span style="width:28px;text-align:right;font-size:13px">${v|0}</span></div>`;
+const bar=(l,v,c)=>`<div style="display:flex;align-items:center;gap:6px;margin:3px 0"><span style="width:40px;font-size:13.5px">${l}</span><span style="flex:1;height:7px;border-radius:4px;background:rgba(128,100,80,.2);overflow:hidden"><b style="display:block;height:100%;width:${Math.max(0,Math.min(100,v|0))}%;background:${c||'var(--gd,#d98a2b)'}"></b></span><span style="width:28px;text-align:right;font-size:13.5px">${v|0}</span></div>`;
 /* ---------- 人名登錄 ---------- */
 function registry(){const m=new Map();if(!S||!S.me)return m;const put=(n,v)=>{n=String(n||'').trim();if(n.length>=2&&!m.has(n))m.set(n,v)};
  try{allKids().forEach(k=>put(k.n,{t:'kid'}))}catch(e){}
@@ -6037,7 +6037,7 @@ function showM(html){try{kclose49()}catch(e){}
  if(!md){md=document.createElement('div');md.id='pm68';document.body.appendChild(md)}
  md.innerHTML=`<div style="position:fixed;inset:0;z-index:72;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center" onclick="if(event.target===this)pm68close()"><div style="width:100%;max-width:560px;max-height:90vh;overflow:auto;background:${bg};color:${fg};border-radius:18px 18px 0 0;padding:14px 16px calc(22px + env(safe-area-inset-bottom,0px))">${html}</div></div>`;
  document.body.style.overflow='hidden';if(sc)md.firstElementChild.firstElementChild.scrollTop=sc;try{linkify(md)}catch(e){}}
-const head=(t,sub)=>`<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h3 style="margin:0;font-size:19px">${ESC(t)}</h3><button class=s onclick="pm68close()" style="min-height:0;height:32px;padding:0 14px">關閉</button></div><div class=m style="margin:8px 0;line-height:1.7">${sub}</div>`;
+const head=(t,sub)=>`<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h3 style="margin:0;font-size:17px">${ESC(t)}</h3><button class=s onclick="pm68close()" style="min-height:0;height:32px;padding:0 14px">關閉</button></div><div class=m style="margin:8px 0;line-height:1.7">${sub}</div>`;
 const sec=(t,b)=>`<h4 style="margin:14px 0 6px">${t}</h4><div class=m style="line-height:1.75">${b}</div>`;
 const busy=()=>S.ch||S.ev||S.scn||S.over;
 /* ---------- 人生背景（種子化，同一人永遠同一份） ---------- */
@@ -6073,7 +6073,7 @@ function pOpen(i,msg){const n=S.npcs[i];if(!n)return;const nm=nm0(n),ta=TS[n.g],
  +sec('子女',kids.length?kids.map(k=>`<span class=pn68 data-n="${ESC(k.n)}">${ESC(k.n)}</span>（${k.sex=='男'?'皇子':'公主'}・${yr(k)}歲）`).join('、'):'膝下尚無子女。')
  +(peers.length?sec('同派系的人',peers.join('、')):'')
  +(window.pExtra68?window.pExtra68(n):'')+sec('人生軌跡',tl.length?tl.map(r=>`<div>・<span style="opacity:.7">${tmS(r[0])}</span>　${ESC(r[1])}</div>`).join(''):'暫無記載。')
- +(dead?'':`<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px"><button onclick="pTalk68(${i})" style="text-align:left;min-height:0;padding:8px 10px;height:auto"><div style="font-size:14px">談心拉近</div><small style="opacity:.75">盟友度＋，敵意－，了解更深（耗 1 次行動，剩 ${S.w}）</small></button><button onclick="pGo68(${i})" style="text-align:left;min-height:0;padding:8px 10px;height:auto"><div style="font-size:14px">到後宮名冊操作</div><small style="opacity:.75">賞賜、拉攏、打壓等</small></button></div>`);
+ +(dead?'':`<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px"><button onclick="pTalk68(${i})" style="text-align:left;min-height:0;padding:8px 10px;height:auto"><div style="font-size:13.5px">談心拉近</div><small style="opacity:.75">盟友度＋，敵意－，了解更深（耗 1 次行動，剩 ${S.w}）</small></button><button onclick="pGo68(${i})" style="text-align:left;min-height:0;padding:8px 10px;height:auto"><div style="font-size:13.5px">到後宮名冊操作</div><small style="opacity:.75">賞賜、拉攏、打壓等</small></button></div>`);
  showM(html)}
 /* ---------- 官員檔案 ---------- */
 const OB=[['寒門出身，一步步靠政績爬上來','世家嫡子，家學淵源','武舉出身，從軍中熬出頭','皇親國戚，沾了血緣的光','科舉榜上有名，少年得志','邊地小吏之子，靠一篇策論被賞識'],['私下極愛收藏古籍字畫','不近女色，唯好養花鳥','酒量極好，酒後話多','每月必去寺中小住','與政敵私交甚篤','對下屬極嚴，對家人極溫柔'],['擔心政敵翻舊帳','擔心告老之後家族失勢','擔心皇上疑心','擔心後繼無人','擔心邊境不穩','擔心自己年輕時的一件舊事被揭出']];
@@ -6119,7 +6119,7 @@ function eOpen(msg){if(S.reg&&S.reg.k)return window.eOpenR69?window.eOpenR69(msg
  +sec('公開的簡歷',`${em.era||''}元年登基，如今在位第${Math.floor(S.t/12)+1}年。性情：${EPS[S.ep][0]}。<br><span style="opacity:.7">更深的事——他的出身、少年、心結——要等他願意對你說，並不在任何檔案裡。</span>`)
  +sec('他向你說起過的往事',rv.length?rv.map(c=>`<div style="margin:5px 0"><b>${c.k}</b>：${ESC(c.t(b))}</div>`).join(''):'他還沒向你敞開過心扉。')
  +(window.eExtra70?window.eExtra70(e):'')+sec('皇上近事',tl.length?tl.map(r=>`<div>・<span style="opacity:.7">${tmS(r[0])}</span>　${ESC(r[1])}</div>`).join(''):'暫無記載。')
- +`<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px"><button onclick="eTalk68()" style="text-align:left;min-height:0;padding:8px 10px;height:auto"><div style="font-size:14px">陪皇上說說話</div><small style="opacity:.75">知心度＋，孤寂－，或聽他說起往事（耗 1 次行動，剩 ${S.w}）</small></button><button onclick="eGift68()" style="text-align:left;min-height:0;padding:8px 10px;height:auto"><div style="font-size:14px">投其所好（耗銀20）</div><small style="opacity:.75">備一份與「${b.hob}」有關的心意</small></button></div>`;
+ +`<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px"><button onclick="eTalk68()" style="text-align:left;min-height:0;padding:8px 10px;height:auto"><div style="font-size:13.5px">陪皇上說說話</div><small style="opacity:.75">知心度＋，孤寂－，或聽他說起往事（耗 1 次行動，剩 ${S.w}）</small></button><button onclick="eGift68()" style="text-align:left;min-height:0;padding:8px 10px;height:auto"><div style="font-size:13.5px">投其所好（耗銀20）</div><small style="opacity:.75">備一份與「${b.hob}」有關的心意</small></button></div>`;
  showM(html)}
 window.eOpen68=eOpen;
 function chapterEv(force){const e=eb();if(S.reg||S.over)return null;const c=CH.find(x=>!e.rev.includes(x.k)&&e.bond>=x.g);if(!c)return null;const b=e.b,mw0=mw();
@@ -6197,7 +6197,7 @@ window.eOpenR69=function(msg){const k=K();if(!k)return;const e=er(),b=e.b,em=S.e
  +sec('母子之間',bar('知心度',e.bond,'#c0392b')+`目前：<b>${stg(e.bond)}</b>　已向你說起 ${rv.length}／8 段心事`)
  +sec('他向你說起過的心事',rv.length?rv.map(c=>`<div style="margin:5px 0"><b>${c.k}</b>：${c.t}</div>`).join(''):'他還沒向你敞開過心扉。')
  +(window.eExtra70?window.eExtra70(e):'')+sec('近事',tl.length?tl.map(r=>`<div>・<span style="opacity:.7">${tmS(r[0])}</span>　${ESC(r[1])}</div>`).join(''):'暫無記載。')
- +`<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px"><button onclick="eTalkR69()" style="text-align:left;min-height:0;padding:8px 10px;height:auto"><div style="font-size:14px">陪皇帝說說話</div><small style="opacity:.75">知心度＋，孤寂－，或聽他說起心事（耗 1 次行動，剩 ${S.w}）</small></button><button onclick="pm68close();kopen49('${k.n}')" style="text-align:left;min-height:0;padding:8px 10px;height:auto"><div style="font-size:14px">更多互動</div><small style="opacity:.75">賞賜籠絡、申飭、賜婚等</small></button></div>`)}
+ +`<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px"><button onclick="eTalkR69()" style="text-align:left;min-height:0;padding:8px 10px;height:auto"><div style="font-size:13.5px">陪皇帝說說話</div><small style="opacity:.75">知心度＋，孤寂－，或聽他說起心事（耗 1 次行動，剩 ${S.w}）</small></button><button onclick="pm68close();kopen49('${k.n}')" style="text-align:left;min-height:0;padding:8px 10px;height:auto"><div style="font-size:13.5px">更多互動</div><small style="opacity:.75">賞賜籠絡、申飭、賜婚等</small></button></div>`)}
 function chapEv(){const e=er(),k=K(),c=chap().find(x=>!e.rev.includes(x.k)&&e.bond>=x.g);if(!c)return null;
  const mk=(f)=>()=>{const r=f();e.rev.push(c.k);e.cd=S.t;try{msPush(`${k.n}向你說起了「${c.k}」的心事。`)}catch(x){}return r};
  return{t:`${pk(['夜深了，皇帝遣開宮人，悄悄來到你身邊：「母后，朕有些話想說。」','皇帝批完摺子，沒有回寢宮，而是徑直來了你這裡，坐了許久才開口。','燈下，皇帝低著頭，輕聲說：「母后，朕今日想起了一些事。」'])}<br><br>【${c.k}】${c.t}`,o:[
@@ -6782,7 +6782,7 @@ function repText(){const R0=S.rep73||{kind:0,cold:0,secret:0},o=[];
 const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
  try{if(!S||!S.me||S.over)return r;const main=document.querySelector('main');if(!main)return r;
   const L=S.cq73last;
-  if(L&&S.t-L.t<=1&&!main.querySelector('.cq73')&&!main.classList.contains('hgv66')){const d=document.createElement('div');d.className='cd cq73';d.innerHTML=`<h3 style="margin:0 0 4px">你剛才的選擇</h3><div class=m>「${ESC(L.l)}」${L.r?'<br>'+ESC(L.r):''}</div>${L.c.length?`<div style="margin-top:6px"><b style="font-size:13px">這帶來的後果</b><br>${chips(L.c)}</div>`:'<div class=m style="margin-top:4px">這次選擇沒有立刻帶來明顯變化，但人們會記得。</div>'}<div style="margin-top:6px"><button class=s onclick="cqClose73()" style="min-height:0;height:30px;padding:0 12px">知道了</button></div>`;main.insertBefore(d,main.firstChild)}
+  if(L&&S.t-L.t<=1&&!main.querySelector('.cq73')&&!main.classList.contains('hgv66')){const d=document.createElement('div');d.className='cd cq73';d.innerHTML=`<h3 style="margin:0 0 4px">你剛才的選擇</h3><div class=m>「${ESC(L.l)}」${L.r?'<br>'+ESC(L.r):''}</div>${L.c.length?`<div style="margin-top:6px"><b style="font-size:13.5px">這帶來的後果</b><br>${chips(L.c)}</div>`:'<div class=m style="margin-top:4px">這次選擇沒有立刻帶來明顯變化，但人們會記得。</div>'}<div style="margin-top:6px"><button class=s onclick="cqClose73()" style="min-height:0;height:30px;padding:0 12px">知道了</button></div>`;main.insertBefore(d,main.firstChild)}
   if(TAB===5&&!main.querySelector('.cqh73')){const rp=repText(),H=(S.cq73||[]).slice().reverse().slice(0,14);const d=document.createElement('div');d.className='cd cqh73';
    d.innerHTML=`<h3>你選擇的後果</h3><div class=m>宮中對你的評價：<b>${rp.tags}</b><br>${rp.say}</div>${(S.rp73&&S.rp73.length)?`<div class=m style="margin-top:4px">有 ${S.rp73.length} 件舊事，之後可能會找上門來。</div>`:''}<div style="margin-top:6px">${H.length?H.map(e=>`<details style="margin:4px 0"><summary style="cursor:pointer">${tmS(e.t)}　${ESC(e.l.slice(0,22))}</summary><div class=m style="margin:4px 0 6px">${ESC(e.e)}${e.r?'<br>→ '+ESC(e.r):''}<br>${e.c.length?chips(e.c):'沒有立刻的變化'}</div></details>`).join(''):'<div class=m>你還沒做過重要的選擇。</div>'}</div>`;
    const f=main.querySelector('.sv56');if(f)main.insertBefore(d,f);else main.appendChild(d)}
@@ -6790,7 +6790,7 @@ const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
  }catch(e){console.log('r73u',e)}return r};
 function memHtml(p){return(p._mem73||[]).slice().reverse().map(m=>`<div>${m.s>0?'🙂':'😒'} <span style="opacity:.7">${tmS(m.t)}</span>　${ESC(m.e)}「${ESC(m.l)}」${m.s>0?'——她記著這份好':'——她耿耿於懷'}</div>`).join('')}
 const _pe=window.pExtra68;window.pExtra68=function(p){let h=_pe?_pe(p):'';try{if(p&&p._mem73&&p._mem73.length)h=`<h4 style="margin:14px 0 6px">她記得你的選擇</h4><div class=m style="line-height:1.75">${memHtml(p)}</div>`+h}catch(e){}return h};
-const st=document.createElement('style');st.textContent='.chip73{display:inline-block;padding:2px 9px;border-radius:11px;margin:2px 3px 2px 0;font-size:12.5px;line-height:1.5;border:1px solid}.chip73.up{color:#27774a;background:rgba(60,160,100,.14);border-color:rgba(60,160,100,.4)}.chip73.dn{color:#b03a2e;background:rgba(200,70,60,.12);border-color:rgba(200,70,60,.4)}html.dk18 .chip73.up{color:#86d9a8}html.dk18 .chip73.dn{color:#f1948a}';document.head.appendChild(st);
+const st=document.createElement('style');st.textContent='.chip73{display:inline-block;padding:2px 9px;border-radius:11px;margin:2px 3px 2px 0;font-size:12px;line-height:1.5;border:1px solid}.chip73.up{color:#27774a;background:rgba(60,160,100,.14);border-color:rgba(60,160,100,.4)}.chip73.dn{color:#b03a2e;background:rgba(200,70,60,.12);border-color:rgba(200,70,60,.4)}html.dk18 .chip73.up{color:#86d9a8}html.dk18 .chip73.dn{color:#f1948a}';document.head.appendChild(st);
 try{HELP.push(['選擇的後果','做完選擇後，畫面頂端會列出這個選擇帶來的實際變化：聖寵、人脈、銀兩、哪位妃嬪對你的好感變了多少，綠色是好事、紅色是壞事。被點名的人會記得你的選擇，過幾個月可能回頭報答你、通風報信，也可能記恨、散播流言、與你的對手結盟。你的行事風格（仁厚／冷面／深沉）會累積成宮中的評價，在「紀事」頁可以查看歷次選擇與後果。'])}catch(e){}
 window.__CQ73={snap,diff,record,echo};
 })();
@@ -6894,7 +6894,7 @@ try{const _s=start;start=function(){const r=_s.apply(this,arguments);try{if(S&&S
 try{const _a=autoRun;autoRun=function(){if(S&&!S.over&&!S.reg&&(S.ch||S.ev||S.scn)){try{render();if(typeof toast==='function')toast('請先處理眼前的選擇')}catch(e){}return}return _a.apply(this,arguments)};window.autoRun=autoRun}catch(e){console.log('r75b',e)}
 /* 3. 新手說明：頂端固定「✕ 關閉」，點背景也能關 */
 try{const _h=helpOpen;helpOpen=function(){const r=_h.apply(this,arguments);try{const e=document.getElementById('help'),hb=e&&e.querySelector('.hb');if(hb&&!hb.querySelector('.hx75')){const x=document.createElement('button');x.className='hx75';x.textContent='✕ 關閉';x.onclick=()=>e.remove();hb.insertBefore(x,hb.firstChild);e.addEventListener('click',ev=>{if(ev.target===e)e.remove()})}}catch(er){console.log('r75c',er)}return r};window.helpOpen=helpOpen}catch(e){console.log('r75',e)}
-try{const st=document.createElement('style');st.textContent='#help .hx75{position:sticky;top:0;display:block;margin:0 0 8px auto;z-index:2;padding:8px 14px;border-radius:999px;border:1px solid #d9a7a0;background:#fff;color:#8a3b3b;font-weight:700;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.15)}';document.head.appendChild(st)}catch(e){}
+try{const st=document.createElement('style');st.textContent='#help .hx75{position:sticky;top:0;display:block;margin:0 0 8px auto;z-index:2;padding:8px 14px;border-radius:999px;border:1px solid #d9a7a0;background:#fff;color:#8a3b3b;font-weight:700;font-size:13.5px;box-shadow:0 2px 8px rgba(0,0,0,.15)}';document.head.appendChild(st)}catch(e){}
 })();
 
 /* ===== V167：把「要多費心」整理成一個選擇、首次提示只留一個 ===== */
@@ -6918,7 +6918,7 @@ try{const st=document.createElement('style');st.textContent='.cp74c{display:none
 
 /* ===== V168：方針放到「自動過一個月／一年」的下一行 ===== */
 (function(){
-try{const st=document.createElement('style');st.textContent='.ac31{flex-wrap:wrap}.ac31 .pol75{flex:0 0 100%;max-width:448px;display:flex;align-items:center;gap:8px;pointer-events:auto;background:rgba(255,250,244,.96);border:1px solid rgba(196,138,112,.35);border-radius:10px;padding:4px 10px;box-shadow:0 2px 10px rgba(0,0,0,.18);font-size:13px;color:#5a3a32;box-sizing:border-box}.ac31 .pol75 b{color:#8a3a30;white-space:nowrap}.ac31 .pol75 select{font:inherit;font-size:13px;padding:3px 6px;border-radius:8px;border:1px solid rgba(196,138,112,.4);background:#fff;color:#5a3a32}.ac31 .pol75 span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px;opacity:.85}.autobar>.al,.autobar>select{display:none}';document.head.appendChild(st)}catch(e){}
+try{const st=document.createElement('style');st.textContent='.ac31{flex-wrap:wrap}.ac31 .pol75{flex:0 0 100%;max-width:448px;display:flex;align-items:center;gap:8px;pointer-events:auto;background:rgba(255,250,244,.96);border:1px solid rgba(196,138,112,.35);border-radius:10px;padding:4px 10px;box-shadow:0 2px 10px rgba(0,0,0,.18);font-size:13.5px;color:#5a3a32;box-sizing:border-box}.ac31 .pol75 b{color:#8a3a30;white-space:nowrap}.ac31 .pol75 select{font:inherit;font-size:13.5px;padding:3px 6px;border-radius:8px;border:1px solid rgba(196,138,112,.4);background:#fff;color:#5a3a32}.ac31 .pol75 span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px;opacity:.85}.autobar>.al,.autobar>select{display:none}';document.head.appendChild(st)}catch(e){}
 try{const _u=uiPost;uiPost=function(){const r=_u.apply(this,arguments);try{
  const bar=document.querySelector('.ac31');if(bar&&S&&S.me&&typeof POLS!=='undefined'&&!bar.querySelector('.pol75')){
   if(!S.pol)S.pol='固寵';
@@ -6939,7 +6939,7 @@ const sons=()=>{try{return allKids().filter(k=>k.sex=='男'&&alive(k)).sort((a,b
 const momIdx=k=>{try{if(S.me.kids.includes(k))return'me';return S.npcs.findIndex(n=>n.kids.includes(k))}catch(e){return -1}};
 const momNm=o=>{try{return o==='me'?S.me.n+'（你）':on(o)}catch(e){return'—'}};
 const stat=k=>{try{if(S.heir===k)return'儲君';if(k.jin)return'圈禁';if(yr(k)<14)return'未成年';return typeof ambTx==='function'?ambTx(k):'成年'}catch(e){return'—'}};
-const css=document.createElement('style');css.textContent='.dj75 table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:6px}.dj75 th{text-align:left;font-weight:700;font-size:12px;opacity:.7;padding:4px 4px;border-bottom:1px solid rgba(160,120,100,.3)}.dj75 td{padding:7px 4px;border-bottom:1px dashed rgba(160,120,100,.25);vertical-align:middle}.dj75 tr.r75{cursor:pointer}.dj75 tr.r75:active{background:rgba(214,70,90,.08)}.dj75 td.nm b{font-size:14px}.dj75 td.nm small{display:block;opacity:.7;font-size:11.5px}.dj75 .tag75{display:inline-block;padding:1px 7px;border-radius:999px;font-size:11.5px;background:rgba(214,70,90,.13);color:#a33}.dj75 .gy75{opacity:.55}.dj75 .ft75{font-size:12px;opacity:.7;margin-top:6px;line-height:1.6}.kx75{margin:10px 0;padding:10px 12px;border-radius:12px;background:rgba(214,70,90,.07);line-height:1.75;font-size:13.5px}.kx75 h4{margin:0 0 4px}';document.head.appendChild(css);
+const css=document.createElement('style');css.textContent='.dj75 table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:6px}.dj75 th{text-align:left;font-weight:700;font-size:12px;opacity:.7;padding:4px 4px;border-bottom:1px solid rgba(160,120,100,.3)}.dj75 td{padding:7px 4px;border-bottom:1px dashed rgba(160,120,100,.25);vertical-align:middle}.dj75 tr.r75{cursor:pointer}.dj75 tr.r75:active{background:rgba(214,70,90,.08)}.dj75 td.nm b{font-size:13.5px}.dj75 td.nm small{display:block;opacity:.7;font-size:12px}.dj75 .tag75{display:inline-block;padding:1px 7px;border-radius:999px;font-size:12px;background:rgba(214,70,90,.13);color:#a33}.dj75 .gy75{opacity:.55}.dj75 .ft75{font-size:12px;opacity:.7;margin-top:6px;line-height:1.6}.kx75{margin:10px 0;padding:10px 12px;border-radius:12px;background:rgba(214,70,90,.07);line-height:1.75;font-size:13.5px}.kx75 h4{margin:0 0 4px}';document.head.appendChild(css);
 try{const _u=uiPost;uiPost=function(){const r=_u.apply(this,arguments);try{
  if(typeof TAB==='undefined'||TAB!==2||!S||!S.me||S.over||S.reg)return r;
  const main=document.querySelector('main');if(!main||main.querySelector('.dj75'))return r;
@@ -7040,7 +7040,7 @@ HELP.push(['奪嫡與朝臣擁護','朝中五個派系（外戚勳貴、清流�
 /* ===== round77：輕鬆／簡潔模式下，行動頁只留常用行動，其餘收進「更多行動」 ===== */
 (function(){
 const g=k=>{try{return localStorage.getItem(k)}catch(e){return null}},st=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
-const css=document.createElement('style');css.textContent='html.cp74 main>.sec13{display:none}html.cp74 main>.more77 .sec13{display:none}.more77{margin:8px 0;border-radius:14px;background:rgba(255,255,255,.7);border:1px dashed rgba(196,138,112,.5);padding:2px 12px}.more77>summary{cursor:pointer;font-weight:700;padding:11px 0;color:#8a3a30;font-size:15px}.more77>summary .m{font-weight:400;font-size:12.5px;opacity:.8;margin-left:6px}.more77>div{padding-bottom:6px}.more77 .cd{margin-left:0;margin-right:0}';document.head.appendChild(css);
+const css=document.createElement('style');css.textContent='html.cp74 main>.sec13{display:none}html.cp74 main>.more77 .sec13{display:none}.more77{margin:8px 0;border-radius:14px;background:rgba(255,255,255,.7);border:1px dashed rgba(196,138,112,.5);padding:2px 12px}.more77>summary{cursor:pointer;font-weight:700;padding:11px 0;color:#8a3a30;font-size:15px}.more77>summary .m{font-weight:400;font-size:12px;opacity:.8;margin-left:6px}.more77>div{padding-bottom:6px}.more77 .cd{margin-left:0;margin-right:0}';document.head.appendChild(css);
 const KEEP=['恩寵聖眷','修身養性'];
 const _u=uiPost;uiPost=function(){const r=_u.apply(this,arguments);try{
  if(typeof TAB==='undefined'||TAB!==0||!S||!S.me||S.over||S.reg||S.scn||!document.documentElement.classList.contains('cp74'))return r;
@@ -7109,7 +7109,7 @@ new MutationObserver(injK).observe(document.body,{childList:true,subtree:true});
 
 /* ===== round79：做完一個動作，結果直接浮在畫面上，不用往上滑 ===== */
 (function(){
-const css=document.createElement('style');css.textContent='#rt77{position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 62px);width:min(92vw,440px);z-index:46;background:rgba(74,42,58,.96);color:#fff;border-radius:14px;padding:11px 14px;font-size:14px;line-height:1.6;box-shadow:0 6px 22px rgba(0,0,0,.35);white-space:pre-line;max-height:38vh;overflow:auto;animation:rt77 .25s ease-out;cursor:pointer}#rt77 small{display:block;opacity:.6;font-size:11.5px;margin-top:4px}@keyframes rt77{from{opacity:0;transform:translate(-50%,-8px)}to{opacity:1;transform:translate(-50%,0)}}';document.head.appendChild(css);
+const css=document.createElement('style');css.textContent='#rt77{position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 62px);width:min(92vw,440px);z-index:46;background:rgba(74,42,58,.96);color:#fff;border-radius:14px;padding:11px 14px;font-size:13.5px;line-height:1.6;box-shadow:0 6px 22px rgba(0,0,0,.35);white-space:pre-line;max-height:38vh;overflow:auto;animation:rt77 .25s ease-out;cursor:pointer}#rt77 small{display:block;opacity:.6;font-size:12px;margin-top:4px}@keyframes rt77{from{opacity:0;transform:translate(-50%,-8px)}to{opacity:1;transform:translate(-50%,0)}}';document.head.appendChild(css);
 let tm=null;
 const clean=h=>String(h).replace(/<br\s*\/?>/gi,'\n').replace(/<[^>]+>/g,'').replace(/&nbsp;/g,' ').trim();
 function show(txt){try{if(!txt)return;let e=document.getElementById('rt77');if(e)e.remove();e=document.createElement('div');e.id='rt77';e.textContent=txt.slice(0,300);const s=document.createElement('small');s.textContent='點一下關閉';e.appendChild(s);e.onclick=()=>e.remove();document.body.appendChild(e);clearTimeout(tm);tm=setTimeout(()=>{const x=document.getElementById('rt77');if(x)x.remove()},Math.min(9000,3500+txt.length*60))}catch(er){console.log('r79',er)}}
@@ -7151,8 +7151,8 @@ main,#pm68>div>div>div,#kmodal49>div>div,#help .hb{zoom:var(--fz81,1.1)}
 #pm68>div>div,#kmodal49>div>div{zoom:var(--fz81,1.1)}
 #pm68>div>div>div{zoom:1}
 main small,#pm68 small,#kmodal49 small{font-size:12px}
-main .pill,#pm68 .pill,#kmodal49 .pill{font-size:11.5px}
-main .pc-chip,main .pn68{font-size:11.5px}
+main .pill,#pm68 .pill,#kmodal49 .pill{font-size:12px}
+main .pc-chip,main .pn68{font-size:12px}
 main button,#pm68 button,#kmodal49 button{min-height:36px}
 .cmp49bar button{min-height:34px!important;height:34px!important}
 .more77>summary{min-height:44px;display:flex;align-items:center}
@@ -7165,6 +7165,11 @@ const _u=uiPost;uiPost=function(){const r=_u.apply(this,arguments);try{
  d.innerHTML=`<h3>字體大小</h3><div class=m style="margin:4px 0 8px">調整整個遊戲畫面的字體大小。目前：${LV[c][0]}。</div><div class=fzb>${Object.keys(LV).map(k=>`<button class="${k===c?'':'s'}" onclick="fz81('${k}')">${LV[k][0]}</button>`).join('')}</div>`;
  const gp=main.querySelector('.grp65[data-t="設定與存檔"] .gin65');if(gp)gp.insertAdjacentElement('afterbegin',d);else main.appendChild(d)}catch(e){console.log('r81',e)}return r};window.uiPost=uiPost;
 })();
+
+/* ===== round82：移除走勢圖 ===== */
+try{const _ec82=empCard;empCard=function(){let h=_ec82.apply(this,arguments);try{h=h.replace(/<div style="margin-top:6px"><div class=m>近 \d+ 個月走勢<\/div>[\s\S]*?<\/div>(?=<div class=eab>)/,'')}catch(e){console.log('r82',e)}return h}}catch(e){console.log('r82',e)}
+/* 數值條填色（--gd 先前未定義，導致條是空的） */
+try{const st=document.createElement('style');st.textContent=':root{--gd:linear-gradient(90deg,#eaa06c,#d98a2b)}';document.head.appendChild(st)}catch(e){console.log('r82',e)}
 
 deco();intro();
 
