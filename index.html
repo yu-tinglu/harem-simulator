@@ -6074,7 +6074,7 @@ function pOpen(i,msg){const n=S.npcs[i];if(!n)return;const nm=nm0(n),ta=TS[n.g],
  +sec('家世',fam.length?fam.map(f=>`${ESC(f[0]||f.rel)}：${ESC(f.job)}（勢力${f.pw|0}）`).join('<br>'):'家世不顯。')
  +sec('子女',kids.length?kids.map(k=>`<span class=pn68 data-n="${ESC(k.n)}">${ESC(k.n)}</span>（${k.sex=='男'?'皇子':'公主'}・${yr(k)}歲）`).join('、'):'膝下尚無子女。')
  +(peers.length?sec('同派系的人',peers.join('、')):'')
- +sec('人生軌跡',tl.length?tl.map(r=>`<div>・<span style="opacity:.7">${tmS(r[0])}</span>　${ESC(r[1])}</div>`).join(''):'暫無記載。')
+ +(window.pExtra68?window.pExtra68(n):'')+sec('人生軌跡',tl.length?tl.map(r=>`<div>・<span style="opacity:.7">${tmS(r[0])}</span>　${ESC(r[1])}</div>`).join(''):'暫無記載。')
  +(dead?'':`<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px"><button onclick="pTalk68(${i})" style="text-align:left;min-height:0;padding:8px 10px;height:auto"><div style="font-size:14px">談心拉近</div><small style="opacity:.75">盟友度＋，敵意－，了解更深（耗 1 次行動，剩 ${S.w}）</small></button><button onclick="pGo68(${i})" style="text-align:left;min-height:0;padding:8px 10px;height:auto"><div style="font-size:14px">到後宮名冊操作</div><small style="opacity:.75">賞賜、拉攏、打壓等</small></button></div>`);
  showM(html)}
 /* ---------- 官員檔案 ---------- */
@@ -6120,7 +6120,7 @@ function eOpen(msg){if(S.reg&&S.reg.k)return window.eOpenR69?window.eOpenR69(msg
  +sec('與你的距離',bar('知心度',e.bond,'#c0392b')+`目前：<b>${stage(e.bond)}</b>　已向你說起 ${rv.length}／${CH.length} 段往事`)
  +sec('公開的簡歷',`${em.era||''}元年登基，如今在位第${Math.floor(S.t/12)+1}年。性情：${EPS[S.ep][0]}。<br><span style="opacity:.7">更深的事——他的出身、少年、心結——要等他願意對你說，並不在任何檔案裡。</span>`)
  +sec('他向你說起過的往事',rv.length?rv.map(c=>`<div style="margin:5px 0"><b>${c.k}</b>：${ESC(c.t(b))}</div>`).join(''):'他還沒向你敞開過心扉。')
- +sec('皇上近事',tl.length?tl.map(r=>`<div>・<span style="opacity:.7">${tmS(r[0])}</span>　${ESC(r[1])}</div>`).join(''):'暫無記載。')
+ +(window.eExtra70?window.eExtra70(e):'')+sec('皇上近事',tl.length?tl.map(r=>`<div>・<span style="opacity:.7">${tmS(r[0])}</span>　${ESC(r[1])}</div>`).join(''):'暫無記載。')
  +`<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px"><button onclick="eTalk68()" style="text-align:left;min-height:0;padding:8px 10px;height:auto"><div style="font-size:14px">陪皇上說說話</div><small style="opacity:.75">知心度＋，孤寂－，或聽他說起往事（耗 1 次行動，剩 ${S.w}）</small></button><button onclick="eGift68()" style="text-align:left;min-height:0;padding:8px 10px;height:auto"><div style="font-size:14px">投其所好（耗銀20）</div><small style="opacity:.75">備一份與「${b.hob}」有關的心意</small></button></div>`;
  showM(html)}
 window.eOpen68=eOpen;
@@ -6198,7 +6198,7 @@ window.eOpenR69=function(msg){const k=K();if(!k)return;const e=er(),b=e.b,em=S.e
  +`<div class=m style="margin:8px 0;font-style:italic">「${ESC(heartR())}」</div>`
  +sec('母子之間',bar('知心度',e.bond,'#c0392b')+`目前：<b>${stg(e.bond)}</b>　已向你說起 ${rv.length}／8 段心事`)
  +sec('他向你說起過的心事',rv.length?rv.map(c=>`<div style="margin:5px 0"><b>${c.k}</b>：${c.t}</div>`).join(''):'他還沒向你敞開過心扉。')
- +sec('近事',tl.length?tl.map(r=>`<div>・<span style="opacity:.7">${tmS(r[0])}</span>　${ESC(r[1])}</div>`).join(''):'暫無記載。')
+ +(window.eExtra70?window.eExtra70(e):'')+sec('近事',tl.length?tl.map(r=>`<div>・<span style="opacity:.7">${tmS(r[0])}</span>　${ESC(r[1])}</div>`).join(''):'暫無記載。')
  +`<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px"><button onclick="eTalkR69()" style="text-align:left;min-height:0;padding:8px 10px;height:auto"><div style="font-size:14px">陪皇帝說說話</div><small style="opacity:.75">知心度＋，孤寂－，或聽他說起心事（耗 1 次行動，剩 ${S.w}）</small></button><button onclick="pm68close();kopen49('${k.n}')" style="text-align:left;min-height:0;padding:8px 10px;height:auto"><div style="font-size:14px">更多互動</div><small style="opacity:.75">賞賜籠絡、申飭、賜婚等</small></button></div>`)}
 function chapEv(){const e=er(),k=K(),c=chap().find(x=>!e.rev.includes(x.k)&&e.bond>=x.g);if(!c)return null;
  const mk=(f)=>()=>{const r=f();e.rev.push(c.k);e.cd=S.t;try{msPush(`${k.n}向你說起了「${c.k}」的心事。`)}catch(x){}return r};
@@ -6233,6 +6233,157 @@ const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
    const btn=d.querySelector('button');const host=btn&&btn.parentElement!==d?btn.parentElement:btn;if(host&&host.parentElement===d)d.insertBefore(Object.assign(document.createElement('div'),{innerHTML:html}).firstElementChild,host);else d.insertAdjacentHTML('beforeend',html)})
  }catch(e){console.log('r69u',e)}return r};
 try{HELP.push(['太后期的皇帝','太后期的皇帝是你的孩子（或你撫養的皇子）。除了數值，他也有孤寂、疑慮、壓力三種情緒，會隨你的陪伴與朝局起伏；知心度越高，越會向你說起童年、父皇、登基那天、兄弟姊妹、對首輔的看法、志向等心事。其中兄弟姊妹、輔政大臣用的是這一局真實存在的人。點皇帝的名字或「在位皇帝」卡可看檔案。'])}catch(e){}
+})();
+
+/* ===== round70：長篇分岔故事引擎（妃嬪・皇帝・太后期皇帝） ===== */
+(function(){
+const X=window.__P68;if(!X)return;
+const {ESC,tmS,sec}=X;
+const pk=a=>a[Math.floor(Math.random()*a.length)];
+const cbs=()=>{try{return(rx()&&rx().cb)||[]}catch(e){return[]}};
+const nm=(p,k)=>k==='npc'?(p.name||p.n):k==='cb'?p.n:'';
+const AF=(p,k,d)=>{if(k==='npc')p.al=cl((p.al||0)+d);else if(k==='cb')p.ld=cl((p.ld||0)+d);else if(k==='emp'){S.em68.bond=cl(S.em68.bond+d)}else if(k==='empR'){S.em69.bond=cl(S.em69.bond+d)}};
+const FV=(p,k,d)=>{if(k==='npc')p.favor=cl(p.favor+d);else if(k==='cb')p.fv=cl((p.fv||0)+d)};
+const eb=()=>S.em68&&S.em68.b,rb=()=>S.em69&&S.em69.b;
+/* act: (c)=>({t, o:[[label, ()=>result, flagKey, flagVal]]})  c={n,p,k,f(flags)} */
+const ST=[
+/* ---- 妃嬪 ---- */
+{id:'舊信',title:'一封燒不盡的舊信',kinds:['npc','cb'],cond:()=>true,acts:[
+ c=>({t:`夜裡你路過${c.n}宮外，見她在燈下燒信，聽見腳步聲，慌忙把一角殘紙塞進袖中，神色驚惶。`,o:[
+  ['裝作沒看見，悄悄走開',()=>{AF(c.p,c.k,3);return`她後來才知道你看見了，卻一句沒提，對你多了幾分感激。（盟友度＋3）`},'seen',0],
+  ['走進去問：「出什麼事了？」',()=>{AF(c.p,c.k,1);return`她支吾說是家中舊信，眼神卻躲閃，你沒再追問。`},'seen',1],
+  ['事後派人去打聽那封信的來歷',()=>{AF(c.p,c.k,-2);return`你查到信是宮外一位舊識所寫，二人曾有婚約。這個把柄，如今握在了你手裡。（盟友度－2）`},'seen',2]]}),
+ c=>({t:`數月後，宮裡傳出風聲，說有人拿到了${c.n}那封舊信的另一半，正私下要挾她。${c.f.seen===0?'她猶豫了許久，還是紅著眼睛找上了你：「求您……」':c.f.seen===2?'你早知內情，她卻不知道你知道。她來試探你口風。':'她來找你，把事情的來龍去脈說了出來。'}`,o:[
+  ['答應替她擺平此事（耗銀40）',()=>{if(!pay(40))return'你一時湊不出銀子，只能先安撫她。（盟友度＋1）'&&(AF(c.p,c.k,1),'你一時湊不出銀子，只能先安撫她。（盟友度＋1）');AF(c.p,c.k,8);S.me.ally+=1;return`你花銀子堵住了對方的嘴。她跪著給你磕了個頭。（耗銀40、盟友度＋8）`},'help',1],
+  ['說「此事我幫不了你，自己小心」',()=>{AF(c.p,c.k,-5);return`她低著頭退了出去，背影很單薄。（盟友度－5）`},'help',0],
+  ['趁機要她為你辦一件事',()=>{AF(c.p,c.k,-4);S.me.ally+=2;return`她答應了，眼神卻冷了下來。（人脈＋2、盟友度－4）`},'help',2]]}),
+ c=>({t:c.f.help===1?`因你事先打點，風波被壓成一場虛驚，皇上只是召她問了兩句話。她回來後，站在你面前半晌，說：「這份情，我記著。」`:`風波還是傳開了，${c.n}被召去問話，臉色慘白，一旁的人都在看你會不會出面。`,o:[
+  ['陪她一起到皇上（太后）面前，替她作保',()=>{FV(c.p,c.k,3);AF(c.p,c.k,6);S.me.favor-=1;return`你陪在她身邊，替她說了話。她沒說什麼，只悄悄握緊了你的手。（盟友度＋6）`},'stand',1],
+  ['袖手旁觀，讓她自己面對',()=>{AF(c.p,c.k,-6);FV(c.p,c.k,-6);return`她孤零零地站著，被問得啞口無言。（盟友度－6、聖寵－6）`},'stand',0]]}),
+ c=>{const good=(c.f.help===1?1:0)+(c.f.stand===1?1:0)+(c.f.seen===0?0.5:0);return{t:`又過了些日子，風波終於平息。${c.n}${good>=2?'特意到你宮裡坐了一下午，把那封信的故事全部說給你聽，還說起宮外那位舊識如今已娶妻生子，她終於放下了。':good>=1?'依舊每日請安，只是話比從前多了一些。':'見了你，只剩下規規矩矩的禮數，再沒多的話。'}`,o:[
+  ['說「往事都過去了，往後好好過日子」',()=>{if(good>=2){AF(c.p,c.k,18);S.me.ally+=3;return`她眼眶一熱，把一個關於旁人的祕密也告訴了你，作為回報。（盟友度＋18、人脈＋3）`}if(good>=1){AF(c.p,c.k,6);return`她淺淺一笑，此後待你親近了些。（盟友度＋6）`}AF(c.p,c.k,2);return`她只是點了點頭。你們之間，終究隔著什麼。（盟友度＋2）`}],
+  ['把那封殘信還給她',()=>{if(c.f.seen===2){AF(c.p,c.k,-8);return`她這才知道你早已知情，臉色瞬間白了。（盟友度－8）`}AF(c.p,c.k,10);return`她接過信，沒有再看，當著你的面丟進了炭盆。（盟友度＋10）`}]]}}]},
+{id:'姐妹',title:'宮牆內的姐妹情',kinds:['npc','cb'],cond:()=>true,acts:[
+ c=>({t:`${c.n}身邊有個貼身宮女，兩人情同姐妹。今日那宮女替主子送東西時衝撞了別宮的人，被拖去掌嘴，${c.n}急得來找你。`,o:[
+  ['出面替宮女說情',()=>{AF(c.p,c.k,5);S.me.favor-=1;return`你出面說了話，對方賣了你個面子。（盟友度＋5）`},'a',1],
+  ['說「宮規如此，我也無能為力」',()=>{AF(c.p,c.k,-4);return`她咬了咬唇，沒說話。（盟友度－4）`},'a',0]]}),
+ c=>({t:`${c.f.a===1?'那宮女被你救下後，對你感恩戴德，':'那宮女傷好後'}悄悄告訴你：${c.n}夜裡常獨自垂淚，似有心事，卻從不對旁人說。`,o:[
+  ['備些禮物去看看她',()=>{AF(c.p,c.k,5);return`她說很久沒有人這樣惦記過她了。（盟友度＋5）`},'b',1],
+  ['不去打擾，讓她自己緩一緩',()=>{return`你沒有去。有些事，旁人幫不了。`},'b',0]]}),
+ c=>({t:`那宮女突然染了急病，${c.n}跪在你面前，求你請太醫。宮規：低等宮人不得輕易請太醫。`,o:[
+  ['破例請太醫（耗銀30）',()=>{if(!pay(30))return'銀兩不足，只能讓她先喝些草藥。';AF(c.p,c.k,10);return`太醫來得及時，宮女撿回一條命。${c.n}哭著給你磕了頭。（耗銀30、盟友度＋10）`},'c',1],
+  ['按宮規辦，讓她出宮養病',()=>{AF(c.p,c.k,-3);return`宮女被送出宮，臨走時回頭望了一眼，再沒回來。（盟友度－3）`},'c',0]]}),
+ c=>({t:`${c.f.c===1?'宮女病癒，':'宮女走後，'}${c.n}${c.f.c===1?'與你走得格外近，日日來請安，閒時還親手為你做點心。':'整個人靜了不少，眼底的光暗了。'}`,o:[
+  ['說「有什麼事，儘管來找我」',()=>{if(c.f.c===1){AF(c.p,c.k,14);S.me.ally+=2;return`她笑著點頭，從此成了你最可靠的耳目。（盟友度＋14、人脈＋2）`}AF(c.p,c.k,4);return`她輕輕道了謝，卻沒再多說。（盟友度＋4）`}],
+  ['送她一個新的宮女作伴',()=>{AF(c.p,c.k,6);return`她收下了，眼眶有些紅。（盟友度＋6）`}]]})]},
+{id:'野心',title:'她想要的更多',kinds:['npc','cb'],cond:(p,k)=>k==='npc'?(p.sc||0)>45:/心機|強勢/.test(p.tr||''),acts:[
+ c=>({t:`${c.n}近日常來你宮中請安，話裡話外總在探聽皇后（中宮）的事，還「無意間」說起：「若是姐姐坐在那個位置上，才是名正言順。」`,o:[
+  ['順著她說，把話題引開',()=>{AF(c.p,c.k,2);return`她看你沒表態，笑了笑，不再提。`},'a',1],
+  ['明確表態：「這種話不要再說」',()=>{AF(c.p,c.k,-4);S.me.ally+=1;return`她臉色微變，連忙賠禮。（盟友度－4）`},'a',0],
+  ['試探她：「你想要什麼？」',()=>{AF(c.p,c.k,1);return`她直視著你，緩緩說：「我想要一個孩子能站得住的位置。」`},'a',2]]}),
+ c=>({t:`${c.n}開始頻繁結交各宮，連一向冷淡的幾位妃嬪也被她拉攏。她又來找你，這次直接了當：「姐姐若願與我結盟，將來必不虧待。」`,o:[
+  ['結盟（人脈＋，但被她綁上）',()=>{AF(c.p,c.k,8);S.me.ally+=3;return`你與她結了盟。從此，你的名字和她的野心連在了一起。（人脈＋3、盟友度＋8）`},'b',1],
+  ['婉拒，但保持來往',()=>{AF(c.p,c.k,1);return`她笑得有些勉強：「姐姐謹慎。」`},'b',0],
+  ['暗中把她的動向告訴中宮',()=>{AF(c.p,c.k,-10);FV(c.p,c.k,-4);S.me.favor+=2;return`你悄悄遞了話。她不知道是誰。（盟友度－10、聖寵＋2）`},'b',2]]}),
+ c=>({t:c.f.b===1?`你們結盟後，${c.n}的勢力水漲船高，連皇上也留意到了。她求你在皇上面前替她說句話。`:c.f.b===2?`${c.n}被中宮敲打後，察覺有人暗中遞話，開始私下查是誰。`:`${c.n}在宮中勢力日盛，已經開始與幾位妃嬪暗中較勁。`,o:[
+  ['替她在皇上面前美言',()=>{AF(c.p,c.k,6);FV(c.p,c.k,6);S.me.favor-=1;return`皇上對她另眼相看，她很是得意。（盟友度＋6、聖寵＋6）`},'c',1],
+  ['按兵不動，看她能走多遠',()=>{return`你沒有動作，只是靜靜看著。`},'c',0],
+  ['暗中抬高另一位妃嬪來壓她',()=>{AF(c.p,c.k,-8);return`你抬了另一個人上來。她察覺到了。（盟友度－8）`},'c',2]]}),
+ c=>{const w=(c.f.b===1?1:0)+(c.f.c===1?1:0);return{t:`${c.n}的野心終於到了攤牌的時候。${w>=2?'她成了你最強的盟友，也成了你最大的隱患——她的名聲與你的緊緊綁在一起。':w===1?'她與你互有恩怨，既是對手，也是同路人。':'她與你已成對立，每次碰面都客客氣氣，暗地裡全是算計。'}`,o:[
+  ['與她約法三章，共存共榮',()=>{if(w>=2){AF(c.p,c.k,12);S.me.ally+=4;return`你們約定彼此不傷，互為倚仗。（盟友度＋12、人脈＋4）`}AF(c.p,c.k,3);return`她答應了，但你知道這份承諾有多脆弱。（盟友度＋3）`}],
+  ['趁她勢頭正盛，先下手為強（有風險）',()=>{if(P(.5+S.me.ally/300)){AF(c.p,c.k,-15);FV(c.p,c.k,-12);S.me.favor+=3;return`你搶先一步揭了她的短，她元氣大傷。（盟友度－15、聖寵＋3）`}S.me.favor-=5;S.me.ally-=2;return`你出手失敗，反被她抓住了把柄。（聖寵－5、人脈－2）`}]]}}]},
+/* ---- 皇帝（妃子期） ---- */
+{id:'兄長之信',title:'兄長的遺信',kinds:['emp'],cond:()=>true,acts:[
+ c=>({t:`邊地送來一封信，是皇上那位早年失勢的兄長（兄弟）臨終前寫下的。皇上讀完，在殿中獨坐了整整一日，誰也不見。<br>（${ESC(eb().bro)}）`,o:[
+  ['靜靜陪在殿外，不打擾',()=>{S.em68.bond=cl(S.em68.bond+4);return`你在殿外站了一整日，天黑時他終於開了門，看見你，什麼也沒說，只是讓你進去。（知心度＋4）`},'m',0],
+  ['進去問他：「信裡寫了什麼？」',()=>{S.em68.bond=cl(S.em68.bond+2);return`他沉默片刻，把信遞給你。字跡潦草，只有一句：「兄愧對你。」（知心度＋2）`},'m',1],
+  ['勸他：「逝者已矣，莫傷了龍體」',()=>{S.mood=cl(S.mood-4);return`他苦笑一聲：「你不懂。」（心情－4）`},'m',2]]}),
+ c=>({t:`皇上想以親王之禮安葬兄長，追復他生前的名分。朝中大臣紛紛反對，說這是「翻案」。深夜，他來找你，問：「你覺得朕該怎麼做？」`,o:[
+  ['支持他：「骨肉親情，不該被朝議壓住」',()=>{S.em68.bond=cl(S.em68.bond+6);S.me.favor+=3;return`他望著你，眼中有光：「滿朝文武，只有你站在朕這邊。」（知心度＋6、聖寵＋3）`},'ap',1],
+  ['勸他緩一緩，先以私祭',()=>{S.em68.bond=cl(S.em68.bond+4);return`他沉吟良久：「你說得有理，朕確實太急了。」（知心度＋4）`},'ap',0],
+  ['說「國事臣妾不敢妄議」',()=>{S.em68.bond=cl(S.em68.bond-2);return`他嘆了口氣：「也是。」（知心度－2）`},'ap',-1]]}),
+ c=>({t:c.f.ap===1?`朝堂上為此爭執不休，皇上龍顏大怒，連罷了兩位上奏的大臣。他回到後宮，臉色鐵青。`:c.f.ap===0?`皇上依你所言，在城外設了私祭。有御史上奏說「於禮不合」，但並未深究。`:`朝堂上這件事被擱置了，皇上沒有再提，卻日漸沉默。`,o:[
+  ['勸他「以退為進，名正言順」',()=>{S.em68.bond=cl(S.em68.bond+4);S.mood=cl(S.mood+3);return`他怔了怔，點頭：「你說得是，朕該換個法子。」（知心度＋4）`},'b',1],
+  ['陪他喝一盞酒，不談國事',()=>{S.em68.lone=cl(S.em68.lone-10);S.em68.bond=cl(S.em68.bond+3);return`你只是陪著他。窗外起了風，他說：「若是兄長還在……」（孤寂－10、知心度＋3）`},'b',0]]}),
+ c=>{const a=c.f.ap,m=c.f.m;return{t:`時日漸過，兄長的事終於有了結局。${a===1?'皇上最終以親王禮追復了名分，朝中雖有微詞，他卻像卸下了千斤重擔。':a===0?'皇上以私祭了結，在兄長墓前獨坐了半日。':'皇上把那封信連同匣子一起鎖進了最深的櫃子。'}`,o:[
+  ['陪他去兄長墓前（靈前）上一炷香',()=>{S.em68.bond=cl(S.em68.bond+(a===-1?5:12));S.em68.dbt=cl(S.em68.dbt-(a===-1?3:12));S.me.favor+=(a===1?6:4);return`你陪在他身旁，他靜靜站了很久，轉頭說：「謝謝你。」（知心度＋${a===-1?5:12}）`}],
+  ['送上一幅親手繪的小像，聊作紀念',()=>{S.em68.bond=cl(S.em68.bond+8);S.mood=cl(S.mood+4);return`他看著小像，眼角微紅，小心收進袖中。（知心度＋8）`}]]}}]},
+{id:'母親忌日',title:'生母的忌日',kinds:['emp'],cond:()=>true,acts:[
+ c=>({t:`又到了皇上生母的忌日前夜。他沒有批摺子，也不見任何人，只讓人把殿裡的燈全熄了。<br>（${ESC(eb().mom)}）`,o:[
+  ['備一份素齋送去',()=>{S.em68.bond=cl(S.em68.bond+3);return`他只吃了兩口，卻讓內侍轉告你：「放著吧。」（知心度＋3）`},'a',1],
+  ['陪他在殿外站著',()=>{S.em68.bond=cl(S.em68.bond+5);return`你一直站到夜深，殿裡傳來他壓抑的聲音。（知心度＋5）`},'a',2],
+  ['不打擾，讓他一個人靜靜',()=>{return`你沒有去。他一個人，在黑暗中待到了天亮。`},'a',0]]}),
+ c=>({t:`第二天，皇上換了素服去佛堂。${c.f.a>0?'他讓你隨行。':'你在宮門口遇見他，他看了你一眼，沒說話。'}佛堂裡只有一盞長明燈。他說：「她生前，朕從沒好好叫過她一聲『母親』。」`,o:[
+  ['說「她會知道的，您心裡有她」',()=>{S.em68.bond=cl(S.em68.bond+6);return`他沉默了很久，肩膀輕輕顫了一下。（知心度＋6）`},'b',1],
+  ['陪他一起跪下，替她唸一卷經',()=>{S.em68.bond=cl(S.em68.bond+8);S.me.favor+=3;return`你們並肩跪在蒲團上，誰也沒說話。（知心度＋8、聖寵＋3）`},'b',2],
+  ['勸他別太傷心，注意身體',()=>{S.em68.bond=cl(S.em68.bond+2);return`他點點頭，卻沒聽進去。（知心度＋2）`},'b',0]]}),
+ c=>({t:`回宮的路上，皇上忽然說：「朕想為她修一座祠堂，追封一個名分。可朕是皇帝，卻連為自己的母親做這點事都要看人臉色。」`,o:[
+  ['說「這是孝道，天下人都會理解」',()=>{S.em68.bond=cl(S.em68.bond+6);S.mood=cl(S.mood+5);return`他神色一振：「你說得對，朕是天子，也是人子。」（知心度＋6）`},'c',1],
+  ['建議先不聲張，悄悄修一處小祠',()=>{S.em68.bond=cl(S.em68.bond+5);return`他點頭：「這樣最穩妥。」（知心度＋5）`},'c',0]]}),
+ c=>({t:`祠堂落成那日，皇上獨自去了，沒讓任何人跟隨。回來後，他來到你宮中，說：「朕今日對她說了很多話。」`,o:[
+  ['為他備一碗熱湯，不多問',()=>{S.em68.bond=cl(S.em68.bond+10);S.em68.lone=cl(S.em68.lone-15);S.em68.dbt=cl(S.em68.dbt-6);return`他喝完湯，靠著椅背閉上了眼。（知心度＋10、孤寂－15、疑心－6）`}],
+  ['說起自己的母親，與他同悲',()=>{S.em68.bond=cl(S.em68.bond+12);S.me.favor+=4;return`你們彼此傾訴到深夜。（知心度＋12、聖寵＋4）`}]]})]},
+/* ---- 太后期皇帝 ---- */
+{id:'親政之爭',title:'親政之爭',kinds:['empR'],cond:()=>yr(S.reg.k)>=15,acts:[
+ c=>({t:`皇帝滿${yr(S.reg.k)}歲後，鄭重地對你說：「母后，朕想親自批閱奏摺。」${rb().rv}在一旁垂著眼，不發一言。`,o:[
+  ['答應，每日由他與你一起批閱',()=>{S.reg.k.bond=cl(S.reg.k.bond+3);S.reg.pw=cl(S.reg.pw-2);return`他喜形於色。（孝＋3、權柄－2）`},'a',1],
+  ['拒絕：「再等兩年，等你更穩重些」',()=>{S.reg.k.bond=cl(S.reg.k.bond-3);S.reg.pw=cl(S.reg.pw+2);return`他抿著唇，行了一禮：「兒臣遵旨。」眼神卻暗了。（孝－3、權柄＋2）`},'a',0],
+  ['全部交給他，你只在旁看著',()=>{S.reg.k.ly=cl((S.reg.k.ly||50)+5);S.reg.pw=cl(S.reg.pw-6);S.reg.rv=cl(S.reg.rv+3);return`他驚喜得說不出話。朝中卻悄悄起了風聲。（忠＋5、權柄－6、權臣＋3）`},'a',2]]}),
+ c=>({t:`${rb().rv}上了一道奏摺，請太后「再聽政三年，以固國本」。皇帝在殿上不語，退朝後，他來問你：「母后，您是怎麼想的？」`,o:[
+  ['駁回首輔，支持皇帝逐步親政',()=>{S.reg.rv=cl(S.reg.rv+4);S.reg.k.bond=cl(S.reg.k.bond+4);S.reg.k.ly=cl((S.reg.k.ly||50)+3);return`首輔面色一沉，皇帝卻對你深深一揖。（權臣＋4、孝＋4、忠＋3）`},'b',1],
+  ['順著首輔，再聽政一年',()=>{S.reg.pw=cl(S.reg.pw+4);S.reg.k.bond=cl(S.reg.k.bond-4);return`你保住了權柄，也看見了皇帝眼中的失望。（權柄＋4、孝－4）`},'b',0],
+  ['召首輔私下談，要他讓一步',()=>{if(P(.5+S.reg.pw/300)){S.reg.rv=cl(S.reg.rv-2);return`首輔讓了一步，朝堂暫時平靜。（權臣－2）`}S.reg.rv=cl(S.reg.rv+2);return`首輔客客氣氣地回絕了你。（權臣＋2）`},'b',2]]}),
+ c=>({t:`皇帝獨自批的第一批奏摺里出了差錯，被${rb().rv}當廷指出。皇帝臉漲得通紅，退朝後把自己關在了書房，不肯見人。`,o:[
+  ['親自去書房，不提錯處，只問他餓不餓',()=>{S.em69.bond=cl(S.em69.bond+8);S.reg.k.bond=cl(S.reg.k.bond+4);return`他看見你，眼淚一下子湧了出來：「兒臣讓母后丟臉了。」（知心度＋8、孝＋4）`},'c',1],
+  ['讓人傳話：「錯了就要認，改了便是」',()=>{S.reg.k.de=cl(S.reg.k.de+3);S.em69.bond=cl(S.em69.bond-2);return`他一整夜沒睡，第二天重新寫了一份。（德＋3、知心度－2）`},'c',0]]}),
+ c=>{const s=(c.f.a===1||c.f.a===2?1:0)+(c.f.b===1?1:0)+(c.f.c===1?1:0);return{t:`皇帝親政之事終於塵埃落定。${s>=3?'他在你的支持下，漸漸站穩了腳跟，朝中也逐漸認可了這位少年天子。':s>=2?'他走得磕磕絆絆，但母子之間始終留著一份信任。':'你與他之間，隔著一層看不見的牆，彼此都小心翼翼。'}`,o:[
+  ['在朝會上當眾宣布還政於帝',()=>{if(s>=2){S.reg.pw=cl(S.reg.pw-8);S.reg.k.bond=cl(S.reg.k.bond+10);S.reg.k.ly=cl((S.reg.k.ly||50)+8);S.em69.bond=cl(S.em69.bond+12);return`你在滿朝文武面前把玉璽交到他手中，他深深跪拜。（權柄－8、孝＋10、忠＋8、知心度＋12）`}S.reg.pw=cl(S.reg.pw-4);S.reg.k.bond=cl(S.reg.k.bond+3);return`你宣布還政，朝中議論紛紛，皇帝的眼神複雜。（權柄－4、孝＋3）`}],
+  ['保留一半權柄，作為過渡',()=>{S.reg.pw=cl(S.reg.pw+2);S.reg.k.bond=cl(S.reg.k.bond-(s>=2?2:5));return`你選擇了更穩妥的路，卻也讓他看見了你的猶豫。（權柄＋2）`}]]}}]},
+{id:'少年出走',title:'少年出走',kinds:['empR'],cond:()=>yr(S.reg.k)>=11,acts:[
+ c=>({t:`宮人慌慌張張來報：皇帝不見了！搜遍了養心殿也沒找著，只在案上留了一張字條：「朕想出去看看。」`,o:[
+  ['立刻派親信悄悄去找，不驚動朝臣',()=>{S.reg.pw=cl(S.reg.pw-1);return`你壓下了消息，派人暗中搜尋。`},'a',1],
+  ['封鎖宮門，全城搜尋',()=>{S.nat.stab=cl(S.nat.stab-2);return`動靜鬧得很大，朝中很快就有了風聲。（國情穩定－2）`},'a',0]]}),
+ c=>({t:`天黑前，皇帝被找到了——他穿著小廝的衣服，蹲在街邊吃糖人，被人認出時還不肯走。他回宮後，既不肯認錯，也不肯說話。`,o:[
+  ['罰他抄書三日，不許出殿',()=>{S.reg.k.de=cl(S.reg.k.de+3);S.reg.k.bond=cl(S.reg.k.bond-4);return`他悶頭抄了三天，一個字也沒跟你說。（德＋3、孝－4）`},'b',0],
+  ['問他：「外面好玩嗎？看到了什麼？」',()=>{S.em69.bond=cl(S.em69.bond+8);S.reg.k.bond=cl(S.reg.k.bond+3);return`他愣了愣，眼睛慢慢亮起來，說了整整一個時辰。（知心度＋8、孝＋3）`},'b',1],
+  ['什麼也不說，只讓廚房給他備他愛吃的',()=>{S.em69.bond=cl(S.em69.bond+4);return`他吃著吃著，偷偷看了你一眼。（知心度＋4）`},'b',2]]}),
+ c=>({t:`${c.f.b===1?'聽他說完，':'幾日後，'}你發現皇帝說起宮外的百姓時，眼神與平日全然不同——他是真的在意。他小聲問：「母后，朕……可以偶爾出宮看看嗎？」`,o:[
+  ['答應，每年春秋各一次，由侍衛護送',()=>{S.reg.k.bond=cl(S.reg.k.bond+6);S.reg.k.de=cl(S.reg.k.de+3);S.nat.pop=cl(S.nat.pop+2);S.em69.bond=cl(S.em69.bond+8);return`他高興得跳了起來。（孝＋6、德＋3、民心＋2、知心度＋8）`},'c',1],
+  ['不答應，天子不可輕出宮禁',()=>{S.reg.k.bond=cl(S.reg.k.bond-3);S.reg.pw=cl(S.reg.pw+1);return`他低下頭：「兒臣明白了。」（孝－3）`},'c',0]]})]}
+];
+const TP=Object.fromEntries(ST.map(s=>[s.id,s]));
+/* ---------- 引擎 ---------- */
+function holders(){const h=[];if(!S||!S.me)return h;S.npcs.forEach(n=>{if(!n.st)h.push({k:'npc',p:n})});if(S.reg){cbs().forEach(c=>h.push({k:'cb',p:c}));if(S.reg.k&&S.em69)h.push({k:'empR',p:S.em69})}else if(S.em68)h.push({k:'emp',p:S.em68});return h}
+const hn=(h)=>h.k==='emp'?'皇上':h.k==='empR'?'皇帝':nm(h.p,h.k);
+function mkEv(h){const st=h.p.st70,t=TP[st.id];if(!t)return null;const c={p:h.p,k:h.k,n:hn(h),f:st.fl,st};let a;try{a=t.acts[st.act](c)}catch(e){console.log('r70a',e);return null}
+ const last=st.act===t.acts.length-1;
+ return{t:`<b>【${t.title}】</b><br>${a.t}`,o:a.o.map(([l,f,fk,fv])=>[l,()=>{let r=f();if(typeof r!=='string')r='';if(fk!==undefined)st.fl[fk]=fv;
+  st.log.push({t:S.t,l,r:String(r).replace(/（.*?）/g,'')});
+  const line=`故事「${t.title}」：${l.slice(0,22)}`;try{if(h.k==='npc')(h.p._tl=h.p._tl||[]).push({t:S.t,x:line});else if(h.k==='cb')(h.p.log=h.p.log||[]).push({t:S.t,x:line});else msPush(`${h.k==='emp'?'皇上':'皇帝'}：${line}`)}catch(e){}
+  st.act++;st.nx=S.t+R(3,6);
+  if(last){(h.p.sd70=h.p.sd70||[]).push({id:st.id,title:t.title,t:S.t,log:st.log});delete h.p.st70;try{msPush(`${hn(h)}的故事「${t.title}」落幕。`)}catch(e){}}
+  return r}])}}
+function tick(){try{if(!S||!S.me||S.over||S.q.length>8)return;
+ const H=holders();const due=H.filter(h=>h.p.st70&&h.p.st70.nx<=S.t);
+ if(due.length&&P(.7)){const h=due[0],ev=mkEv(h);if(ev){S.q.push(ev);if(!S.ev&&!S.ch&&!S.scn)next();else render();return}}
+ const act=H.filter(h=>h.p.st70).length;if(act>=2||S.t<8||S.t-(S.sg70||-99)<5||!P(.2))return;
+ const opts=[];H.forEach(h=>{if(h.p.st70)return;ST.forEach(t=>{if(t.kinds.includes(h.k)&&!((h.p.sd70||[]).some(x=>x.id===t.id))){let ok=false;try{ok=t.cond(h.p,h.k)}catch(e){}if(ok)opts.push([h,t])}})});
+ if(!opts.length)return;
+ const em=opts.filter(o=>o[0].k==='emp'||o[0].k==='empR');const [h,t]=(em.length&&P(.4))?pk(em):pk(opts);
+ h.p.st70={id:t.id,act:0,fl:{},nx:S.t,log:[]};S.sg70=S.t;const ev=mkEv(h);if(ev){S.q.push(ev);if(!S.ev&&!S.ch&&!S.scn)next();else render()}}catch(e){console.log('r70',e)}}
+const _m=mend;mend=function(){const r=_m.apply(this,arguments);tick();return r};
+const _rm=rmend;rmend=function(){const r=_rm.apply(this,arguments);tick();return r};
+/* ---------- 顯示：故事回顧 ---------- */
+window.sRecap70=function(p){const done=p.sd70||[],cur=p.st70;let h='';
+ const one=(s,fin)=>`<div style="margin:6px 0"><b>${ESC(s.title||TP[s.id].title)}</b>${fin?'（已落幕）':'（進行中）'}${(s.log||[]).map(x=>`<div style="opacity:.85">・${tmS(x.t)}　你選擇「${ESC(x.l)}」${x.r?'<br>　→ '+ESC(x.r):''}</div>`).join('')}</div>`;
+ done.forEach(s=>h+=one(s,1));if(cur&&TP[cur.id])h+=one({title:TP[cur.id].title,log:cur.log},0);return h};
+const xp=(p,t)=>{const h=window.sRecap70(p);return h?sec(t||'你們之間的故事',h):''};
+window.pExtra68=p=>xp(p);window.eExtra70=p=>xp(p,'共同經歷的故事');
+const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
+ try{if(!S||!S.reg||S.over)return r;const main=document.querySelector('main');if(!main)return r;const list=cbs(),e0=(rx()||{}).emp;
+  main.querySelectorAll('details.hg66').forEach(d=>{if(d.querySelector('.sg70'))return;const n=(d.querySelector('.nm')||{}).textContent;const c=list.find(x=>x.n===n)||(e0&&e0.n===n?e0:null);if(!c)return;const h=window.sRecap70(c);if(!h)return;const dv=document.createElement('div');dv.className='sg70 m';dv.style.cssText='margin:8px 0;line-height:1.7';dv.innerHTML='<b>你們之間的故事</b>'+h;const b=d.querySelector('.bio69');if(b&&b.parentNode===d)d.insertBefore(dv,b.nextSibling);else d.appendChild(dv)})}catch(e){console.log('r70u',e)}return r};
+try{HELP.push(['長篇故事','遊戲進行中，會隨機在妃嬪、皇上（或太后期的皇帝）身上展開 3～4 幕的長篇故事（如「一封燒不盡的舊信」「兄長的遺信」「親政之爭」）。每一幕你的選擇都會被記下，影響下一幕的內容與最終結局。同一人同時只會有一個進行中的故事，已發生的故事可在人物檔案的「你們之間的故事」裡回顧。'])}catch(e){}
+window.__ST70=ST;
 })();
 
 deco();intro();
