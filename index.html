@@ -7192,10 +7192,29 @@ body.hid82 .ac31{transform:translateY(170%);transition:transform .22s ease}
 let ly=0;window.addEventListener('scroll',()=>{try{const y=window.scrollY;if(y<40||y<ly-4)document.body.classList.remove('hid82');else if(y>ly+8)document.body.classList.add('hid82');ly=y}catch(e){}},{passive:true});
 const _g82=uiPost;uiPost=function(){const r=_g82.apply(this,arguments);try{document.body.classList.remove('hid82');document.querySelectorAll('.goal82').forEach(e=>e.remove());
 if(typeof TAB!=='undefined'&&TAB==0&&S&&S.me&&!S.over&&S.npcs){const m=S.me;if(!S.g82)S.g82={r:m.rank};const kids=(m.kids||[]).length;
-const G=[['聖寵升到 60',m.favor>=60,'目前 '+(m.favor|0)],['晉升一級（現為「'+RK[S.g82.r]+'」）',m.rank>S.g82.r,''],['生下第一個孩子',kids>0,''],['晉升到「嬪」以上',m.rank>=3,'目前「'+RK[m.rank]+'」'],['聖寵升到 85',m.favor>=85,'目前 '+(m.favor|0)]];
+const G=[['聖寵升到 60',m.favor>=60,'目前 '+(m.favor|0),'恩寵聖眷'],['晉升一級（現為「'+RK[S.g82.r]+'」）',m.rank>S.g82.r,'','恩寵聖眷'],['生下第一個孩子',kids>0,'','子嗣'],['晉升到「嬪」以上',m.rank>=3,'目前「'+RK[m.rank]+'」','恩寵聖眷'],['聖寵升到 85',m.favor>=85,'目前 '+(m.favor|0),'恩寵聖眷']];
 const g=G.find(x=>!x[1]);const mn=document.querySelector('main');const ss=mn&&mn.querySelector('.stat-strip');
-window.__G82=g?'🎯 下一個目標：<b>'+g[0]+'</b>'+(g[2]?'　<small>'+g[2]+'</small>':''):'';const put=()=>{try{document.querySelectorAll('.goal82').forEach(e=>e.remove());const s2=document.querySelector('main>.stat-strip')||document.querySelector('.stat-strip');if(window.__G82&&s2&&TAB==0){const d=document.createElement('div');d.className='goal82';d.innerHTML=window.__G82;s2.insertAdjacentElement('afterend',d)}}catch(e){}};put();setTimeout(put,120);setTimeout(put,600)}}catch(e){console.log('r82g',e)}return r}
+window.__G82K=g?g[3]:'';window.__G82=g?'🎯 下一個目標：<b>'+g[0]+'</b>'+(g[2]?'　<small>'+g[2]+'</small>':''):'';const put=()=>{try{document.querySelectorAll('.goal82').forEach(e=>e.remove());const s2=document.querySelector('main>.stat-strip')||document.querySelector('.stat-strip');if(window.__G82&&s2&&TAB==0){const d=document.createElement('div');d.className='goal82';d.innerHTML=window.__G82+'<small style="margin-left:auto">點我前往 ›</small>';d.setAttribute('data-k',window.__G82K||'');d.onclick=()=>go82(d.getAttribute('data-k'));s2.insertAdjacentElement('afterend',d)}}catch(e){}};put();setTimeout(put,120);setTimeout(put,600)}}catch(e){console.log('r82g',e)}return r}
 }catch(e){console.log('r82',e)}
+
+window.go82=function(key){try{const main=document.querySelector('main');if(!main)return;const T=e=>(e.querySelector(':scope>h3,:scope>summary,:scope>.h')||e).textContent.trim();
+const cands=[...main.querySelectorAll('details,.cd,.fold,.actcat')];let t=cands.find(e=>T(e).startsWith(key));if(!t&&key==='子嗣')t=cands.find(e=>T(e).startsWith('恩寵聖眷'));if(!t)t=cands.find(e=>T(e).startsWith('恩寵聖眷'));if(!t)return;
+let p=t;while(p&&p!==main){if(p.tagName==='DETAILS')p.open=true;if(p.classList&&p.classList.contains('closed'))p.classList.remove('closed');p=p.parentElement}
+if(t.getAttribute&&t.hasAttribute('data-open'))t.setAttribute('data-open','1');
+const h=t.querySelector(':scope>h3,:scope>summary');if(t.tagName!=='DETAILS'&&h&&t.getAttribute('data-open')!=='1'){h.click()}
+document.body.classList.remove('hid82');setTimeout(()=>{t.scrollIntoView({block:'center',behavior:'smooth'})},60)}catch(e){console.log('r82go',e)}};
+/* 後宮卡片更緊湊、提示不重疊 */
+try{const st=document.createElement('style');st.textContent=`
+details.pc40>summary{padding:7px 10px!important;gap:8px!important}
+.pc40 .pc-main{gap:3px!important}
+body:has(#rt77) #ntf{display:none!important}
+.fz82{display:flex;gap:6px;align-items:center;margin:0 0 10px;padding:8px 10px;border-radius:10px;background:rgba(190,120,100,.12);font-size:13.5px}
+.fz82 span{flex:0 0 auto;font-weight:700}
+.fz82 button{flex:1;white-space:nowrap;padding:0 4px;min-height:34px;border-radius:8px;border:1px solid rgba(190,120,100,.4);background:#fff;color:#6b3b32;font-size:13.5px}
+.fz82 button.on{background:#d24b60;color:#fff;border-color:#d24b60}
+`;document.head.appendChild(st)}catch(e){}
+/* 說明視窗內放字體大小 */
+try{const _h82=helpOpen;helpOpen=function(){const r=_h82.apply(this,arguments);try{const hb=document.querySelector('#help .hb');if(hb&&!hb.querySelector('.fz82')){const cur=(()=>{try{return localStorage.getItem('hg81fz')||'m'}catch(e){return 'm'}})();const L={s:'小',m:'中',l:'大',x:'特大'};const d=document.createElement('div');d.className='fz82';d.innerHTML='<span>字體大小</span>'+Object.keys(L).map(k=>`<button class="${k===cur?'on':''}" data-k="${k}">${L[k]}</button>`).join('');d.onclick=e=>{const b=e.target.closest('button');if(!b)return;fz81(b.dataset.k);d.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b))};const first=hb.querySelector('h2,h3,.hx75')?hb.querySelector('h2,h3'):null;if(first)first.insertAdjacentElement('afterend',d);else hb.insertBefore(d,hb.children[1]||null)}}catch(e){console.log('r82h',e)}return r}}catch(e){console.log('r82',e)}
 
 deco();intro();
 
