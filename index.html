@@ -6702,6 +6702,101 @@ const _sfx=sfx;sfx=function(kind){try{if(!SND||!SND.on||!SND.ctx)return;if(!SND.
 window.__GF={phrase,bus,MODE,fq};
 })();
 
+/* ===== round73：選擇的後果——看得見的變化・人物記得你的選擇・延遲回響・宮中評價 ===== */
+(function(){
+const X=window.__P68||{};const ESC=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pk=a=>a[Math.floor(Math.random()*a.length)];
+const nm0=n=>(n.name||n.n);
+const cbs=()=>{try{return(rx()&&rx().cb)||[]}catch(e){return[]}};
+const strip=s=>String(s||'').replace(/<br>/g,'，').replace(/<[^>]+>/g,'');
+const tmS=t=>`第${Math.floor(t/12)+1}年${t%12+1}月`;
+const KIND=/幫|救|保下|作保|援|賞|贈|求情|寬|原諒|扶|送|安慰|陪|成全|周旋|說情|美言|引薦|照顧|體恤|開恩|善待|厚待|勸慰|傾聽|替她|替他|為她|為他/;
+const COLD=/拒|不理|袖手|揭發|打壓|嚴懲|申飭|罰|廢|除掉|殺|斷|冷落|暗算|栽贓|陷害|阻攔|利用|要挾|抬高另一位妃嬪來壓|先下手|告訴中宮|遞話|聽之任之|不幫|無能為力|不能插手/;
+const SECR=/暗中|私下|悄悄|不動聲色|靜觀|按兵不動|暗地/;
+function snap(){const m=S.me;return{fv:m.favor,al:m.ally,sc:m.scheme,hp:m.hp,sv:m.silver,rk:m.rank,mood:S.mood,ehp:S.ehp,nat:S.nat?{eco:S.nat.eco,mil:S.nat.mil,pop:S.nat.pop,stab:S.nat.stab}:null,fp:S.fp?S.fp.slice():null,reg:S.reg?{pw:S.reg.pw,rv:S.reg.rv}:null,npc:S.npcs.map(n=>[n.al||0,n.favor,n.host||0,n.st||'']),cb:cbs().map(c=>[c.ld||0,c.fv||0]),kb:m.kids.map(k=>k.bond||0)}}
+function diff(a,b){const o=[];const D=(l,d,min,unit)=>{if(Math.abs(d)>=(min||1))o.push({l,d:Math.round(d),w:Math.abs(d)})};
+ D('聖寵',b.fv-a.fv);D('人脈',b.al-a.al);D('心機',b.sc-a.sc);D('健康',b.hp-a.hp);D('銀兩',b.sv-a.sv,5);
+ if(b.rk!==a.rk)o.push({l:'位份',d:b.rk>a.rk?1:-1,t:b.rk>a.rk?'位份晉升':'位份下降',w:99});
+ D('皇上心情',b.mood-a.mood,2);D('龍體',b.ehp-a.ehp,2);
+ if(a.nat&&b.nat){D('財政',b.nat.eco-a.nat.eco);D('軍力',b.nat.mil-a.nat.mil);D('民心',b.nat.pop-a.nat.pop);D('朝局穩定',b.nat.stab-a.nat.stab)}
+ if(a.reg&&b.reg){D('權柄',b.reg.pw-a.reg.pw);D('權臣勢力',b.reg.rv-a.reg.rv)}
+ if(a.fp&&b.fp&&typeof FAC!=='undefined')a.fp.forEach((v,j)=>{const d=b.fp[j]-v;if(Math.abs(d)>=2)o.push({l:`「${FAC[j]}」勢力`,d:Math.round(d),w:Math.abs(d)})});
+ const nr=[];a.npc.forEach((v,i)=>{const w=b.npc[i];if(!w||!S.npcs[i])return;const n=nm0(S.npcs[i]);
+  if(Math.abs(w[0]-v[0])>=3)nr.push({l:`${n}對你好感`,d:Math.round(w[0]-v[0]),w:Math.abs(w[0]-v[0])*.8,p:n});
+  if(Math.abs(w[1]-v[1])>=5)nr.push({l:`${n}聖寵`,d:Math.round(w[1]-v[1]),w:Math.abs(w[1]-v[1])*.5});
+  if(Math.abs(w[2]-v[2])>=5)nr.push({l:`${n}對你敵意`,d:Math.round(w[2]-v[2]),w:Math.abs(w[2]-v[2])*.6,neg:1});
+  if(w[3]&&w[3]!==v[3])nr.push({l:`${n}`,d:-1,t:`${n}：${w[3]}`,w:90})});
+ a.cb.forEach((v,i)=>{const w=b.cb[i],c=cbs()[i];if(!w||!c)return;if(Math.abs(w[0]-v[0])>=3)nr.push({l:`${c.n}對你忠誠`,d:Math.round(w[0]-v[0]),w:Math.abs(w[0]-v[0])*.8,p:c.n})});
+ a.kb.forEach((v,i)=>{const w=b.kb[i];if(w!==undefined&&Math.abs(w-v)>=3&&S.me.kids[i])nr.push({l:`${S.me.kids[i].n}與你親近`,d:Math.round(w-v),w:Math.abs(w-v)*.7})});
+ return o.concat(nr.sort((x,y)=>y.w-x.w).slice(0,4)).sort((x,y)=>y.w-x.w).slice(0,9)}
+const fmt=c=>c.t||`${c.l}${c.d>0?'＋':'－'}${Math.abs(c.d)}`;
+const good=c=>c.t?(c.d>0):(c.neg?c.d<0:c.d>0);
+/* ---------- 記錄 ---------- */
+function names(text){const ns=[];S.npcs.forEach((n,i)=>{const nm=nm0(n);if(nm&&nm.length>=2&&text.indexOf(nm)>=0&&!n.st)ns.push({k:'npc',p:n,nm})});cbs().forEach(c=>{if(c.n&&text.indexOf(c.n)>=0)ns.push({k:'cb',p:c,nm:c.n})});return ns}
+function rep(label){const R=(S.rep73=S.rep73||{kind:0,cold:0,secret:0});R.kind*=.96;R.cold*=.96;R.secret*=.96;let k=0;if(KIND.test(label)){R.kind++;k=1}if(COLD.test(label)){R.cold++;k=-1}if(SECR.test(label))R.secret++;return k}
+function record(kind,label,evText,res,a,b){try{const ch=diff(a,b);const stance=rep(label);
+  const ent={t:S.t,k:kind,l:label.slice(0,40),e:strip(evText).slice(0,60),r:strip(res).slice(0,80),c:ch.map(c=>({x:fmt(c),g:good(c)?1:0}))};
+  S.cq73=S.cq73||[];S.cq73.push(ent);if(S.cq73.length>40)S.cq73.shift();S.cq73last=ent;
+  /* 人物記憶 */
+  const text=strip(evText)+label;names(text).forEach(({k,p,nm})=>{
+   const idx=k==='npc'?S.npcs.indexOf(p):cbs().indexOf(p);const da=k==='npc'?((b.npc[idx]&&a.npc[idx])?b.npc[idx][0]-a.npc[idx][0]:0):((b.cb[idx]&&a.cb[idx])?b.cb[idx][0]-a.cb[idx][0]:0);
+   const ok2=k==='npc'&&b.npc[idx]&&a.npc[idx];const dh=ok2?(b.npc[idx][2]-a.npc[idx][2]):0,df=ok2?(b.npc[idx][1]-a.npc[idx][1])/2:0;
+   let sc=da+df-dh/2;if(Math.abs(sc)<2)sc=stance*2;if(Math.abs(sc)<2)return;
+   const s=sc>0?1:-1;(p._mem73=p._mem73||[]).push({t:S.t,s,l:label.slice(0,30),e:strip(evText).slice(0,26)});if(p._mem73.length>8)p._mem73.shift();
+   if(Math.abs(sc)>=4||P(.3)){S.rp73=S.rp73||[];if(S.rp73.length>=10)S.rp73.shift();S.rp73.push({n:nm,s,at:S.t+R(3,9),l:label.slice(0,26),e:strip(evText).slice(0,22)})}})
+ }catch(e){console.log('r73rec',e)}}
+const _V=V;V=function(i){let a=null,lab='',et='',fn=null;try{if(S.ev&&S.ev.o&&S.ev.o[i]){lab=S.ev.o[i][0];et=S.ev.t||'';a=snap()}}catch(e){}
+ const r=_V.apply(this,arguments);try{if(a&&S&&S.me){record('事',lab,et,S.res||'',a,snap())}}catch(e){console.log('r73V',e)}return r};
+const _C=C;C=function(i){try{const o=S.ch&&S.ch.o&&S.ch.o[i];if(o&&typeof o.f==='function'&&!o._w73){const f0=o.f,lab=String(o.l||''),et=S.ch.t||'';o._w73=1;o.f=function(){const a=snap();const r=f0.apply(this,arguments);try{if(S&&S.me&&lab)record('抉',lab,et,'',a,snap())}catch(e){console.log('r73C',e)}return r}}}catch(e){}
+ return _C.apply(this,arguments)};
+/* ---------- 回響事件 ---------- */
+function getP(nm){let n=S.npcs.find(x=>nm0(x)===nm&&!x.st);if(n)return{k:'npc',p:n};const c=cbs().find(x=>x.n===nm);if(c)return{k:'cb',p:c};return null}
+const AF=(h,d)=>{if(h.k==='npc')h.p.al=cl((h.p.al||0)+d);else h.p.ld=cl((h.p.ld||0)+d)};
+function rival(me){const o=S.npcs.filter(x=>!x.st&&nm0(x)!==me);o.sort((a,b)=>(b.host||0)-(a.host||0));return o[0]?nm0(o[0]):'某位妃嬪'}
+function echo(rp){const h=getP(rp.n);if(!h)return null;const n=rp.n,l=rp.l,mark=(f)=>()=>{const r=f();return r};
+ if(rp.s>0){const v=pk(['gift','intel','word']);
+  if(v==='gift')return{t:`<b>【舊日的回響】</b><br>${n}沒忘記你當初在「${ESC(rp.e)}」時選擇「${ESC(l)}」，托人送來一份謝禮。`,o:[['收下，並回贈一句暖心的話',()=>{AF(h,4);S.me.silver+=R(30,70);return`你收下了謝禮。${n}看起來很高興。（銀兩＋、盟友度＋4）`}],['婉拒，說「舉手之勞，不必掛懷」',()=>{AF(h,8);S.me.ally+=1;return`${n}更加敬重你。（盟友度＋8、人脈＋1）`}]]};
+  if(v==='intel'){const rv=rival(n);return{t:`<b>【舊日的回響】</b><br>${n}悄悄找上你：「當初你「${ESC(l)}」，我一直記著。我聽說${rv}近來在暗中對你不利，你小心些。」`,o:[['多謝，細問她知道的內情',()=>{const j=S.npcs.findIndex(x=>nm0(x)===rv);if(j>=0)S.evid[j]=(S.evid[j]||0)+1;AF(h,3);return`${n}說了她所知的細節，你手上多了一份${rv}的把柄。（罪證＋1、盟友度＋3）`}],['謝她，並說「我自有分寸」',()=>{AF(h,5);return`${n}點頭，不再多言。（盟友度＋5）`}]]}}
+  return{t:`<b>【舊日的回響】</b><br>${n}記得你當初「${ESC(l)}」的好，在皇上（太后）面前替你說了一番話。`,o:[['承她這份情',()=>{S.me.favor+=4;AF(h,2);return`風向對你有利了些。（聖寵＋4、盟友度＋2）`}]]}}
+ const v=pk(['rumor','ally','cold']);
+ if(v==='rumor')return{t:`<b>【舊日的回響】</b><br>${n}始終記得你當初在「${ESC(rp.e)}」時選擇了「${ESC(l)}」，近來在宮裡四處說你的閒話。`,o:[['不理會，清者自清',()=>{S.me.favor-=1;AF(h,-2);return`流言傳了一陣，慢慢平息。（聖寵－1、盟友度－2）`}],['找她當面說清楚',()=>{if(P(.5+S.me.ally/300)){AF(h,5);return`${n}態度緩和了些。（盟友度＋5）`}AF(h,-4);S.me.favor-=2;return`談崩了，反而讓她更恨你。（聖寵－2、盟友度－4）`}],['以牙還牙，也放些風聲',()=>{S.me.ally-=1;AF(h,-6);h.p.host=cl((h.p.host||0)+6);return`兩邊鬧得很難看。（人脈－1、盟友度－6）`}]]};
+ if(v==='ally'){const rv=rival(n);return{t:`<b>【舊日的回響】</b><br>${n}與${rv}走得近了，兩人似乎有了共同的對手——你。起因是你當初「${ESC(l)}」。`,o:[[`拉攏${rv}（耗銀30）`,()=>{if(!pay(30))return'銀兩不足。';const j=S.npcs.findIndex(x=>nm0(x)===rv);if(j>=0)S.npcs[j].al=cl((S.npcs[j].al||0)+6);return`你從中周旋，兩人暫時沒有結成一線。（耗銀30）`}],['靜觀其變',()=>{S.me.ally-=1;return`兩人漸漸走近。（人脈－1）`}]]}}
+ return{t:`<b>【舊日的回響】</b><br>${n}見到你時神色冷淡，顯然沒有忘記你當初在「${ESC(rp.e)}」時「${ESC(l)}」。`,o:[['送一份禮示好（耗銀20）',()=>{if(!pay(20))return'銀兩不足。';AF(h,5);return`${n}收下了，神色稍緩。（盟友度＋5）`}],['不予理會',()=>{AF(h,-2);return`你們之間的隔閡又深了一層。（盟友度－2）`}]]}}
+function tickRp(){try{if(!S||!S.me||S.over||!S.rp73||!S.rp73.length||S.q.length>6)return;
+ if(S.t-(S.ec73||-9)<3)return;const i=S.rp73.findIndex(r=>r.at<=S.t);if(i<0||!P(.6))return;S.ec73=S.t;const rp=S.rp73.splice(i,1)[0];const ev=echo(rp);if(!ev)return;
+ const h=getP(rp.n);if(h&&h.p._mem73){const m=h.p._mem73.find(x=>x.s===rp.s&&!x.rp);if(m)m.rp=1}
+ S.q.push(ev);if(!S.ev&&!S.ch&&!S.scn)next();else render()}catch(e){console.log('r73e',e)}}
+/* ---------- 宮中評價的漸進影響 ---------- */
+function drift(){try{const R0=S.rep73;if(!R0)return;const kd=R0.kind||0,cd=R0.cold||0;
+ if(kd>=8)S.npcs.forEach(n=>{if(!n.st&&n.al>20&&n.al<90)n.al+=.15});
+ if(cd>=8)S.npcs.forEach(n=>{if(!n.st){n.host=Math.max(0,(n.host||0)-.2);if(n.al>0)n.al-=.08}})}catch(e){}}
+const _m=mend;mend=function(){const r=_m.apply(this,arguments);drift();tickRp();return r};
+const _rm=rmend;rmend=function(){const r=_rm.apply(this,arguments);drift();tickRp();return r};
+/* ---------- 畫面 ---------- */
+window.cqClose73=function(){if(S)S.cq73last=null;const c=document.querySelector('.cq73');if(c)c.remove()};
+const chips=a=>a.map(c=>`<span class="chip73 ${c.g?'up':'dn'}">${ESC(c.x)}</span>`).join('');
+function repText(){const R0=S.rep73||{kind:0,cold:0,secret:0},o=[];
+ if(R0.kind>=3)o.push(`仁厚（${R0.kind|0}）`);if(R0.cold>=3)o.push(`冷面（${R0.cold|0}）`);if(R0.secret>=3)o.push(`深沉（${R0.secret|0}）`);
+ let say='你的行事風格還沒有定型，宮裡人還在觀望。';
+ const mx=Math.max(R0.kind,R0.cold,R0.secret);
+ if(mx>=3){if(R0.kind===mx)say=R0.kind>=9?'宮裡傳話：「這位主子心善，有難處找她準沒錯。」':'宮裡漸漸有人說你「心軟好說話」。';else if(R0.cold===mx)say=R0.cold>=9?'宮裡傳話：「這位主子手段硬，輕易別去惹。」':'宮裡漸漸有人說你「不好親近」。';else say=R0.secret>=9?'宮裡傳話：「這位主子城府深，猜不透。」':'宮裡漸漸有人覺得你「看不透」。'}
+ return{tags:o.join('・')||'尚未形成',say}}
+const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
+ try{if(!S||!S.me||S.over)return r;const main=document.querySelector('main');if(!main)return r;
+  const L=S.cq73last;
+  if(L&&S.t-L.t<=1&&!main.querySelector('.cq73')&&!main.classList.contains('hgv66')){const d=document.createElement('div');d.className='cd cq73';d.innerHTML=`<h3 style="margin:0 0 4px">你剛才的選擇</h3><div class=m>「${ESC(L.l)}」${L.r?'<br>'+ESC(L.r):''}</div>${L.c.length?`<div style="margin-top:6px"><b style="font-size:13px">這帶來的後果</b><br>${chips(L.c)}</div>`:'<div class=m style="margin-top:4px">這次選擇沒有立刻帶來明顯變化，但人們會記得。</div>'}<div style="margin-top:6px"><button class=s onclick="cqClose73()" style="min-height:0;height:30px;padding:0 12px">知道了</button></div>`;main.insertBefore(d,main.firstChild)}
+  if(TAB===5&&!main.querySelector('.cqh73')){const rp=repText(),H=(S.cq73||[]).slice().reverse().slice(0,14);const d=document.createElement('div');d.className='cd cqh73';
+   d.innerHTML=`<h3>你選擇的後果</h3><div class=m>宮中對你的評價：<b>${rp.tags}</b><br>${rp.say}</div>${(S.rp73&&S.rp73.length)?`<div class=m style="margin-top:4px">有 ${S.rp73.length} 件舊事，之後可能會找上門來。</div>`:''}<div style="margin-top:6px">${H.length?H.map(e=>`<details style="margin:4px 0"><summary style="cursor:pointer">${tmS(e.t)}　${ESC(e.l.slice(0,22))}</summary><div class=m style="margin:4px 0 6px">${ESC(e.e)}${e.r?'<br>→ '+ESC(e.r):''}<br>${e.c.length?chips(e.c):'沒有立刻的變化'}</div></details>`).join(''):'<div class=m>你還沒做過重要的選擇。</div>'}</div>`;
+   const f=main.querySelector('.sv56');if(f)main.insertBefore(d,f);else main.appendChild(d)}
+  if(S.reg){main.querySelectorAll('details.hg66').forEach(dt=>{if(dt.querySelector('.mem73'))return;const n=(dt.querySelector('.nm')||{}).textContent;const c=cbs().find(x=>x.n===n);if(!c||!c._mem73||!c._mem73.length)return;const dv=document.createElement('div');dv.className='mem73 m';dv.style.cssText='margin:8px 0;line-height:1.7';dv.innerHTML='<b>她記得你的選擇</b>'+memHtml(c);dt.appendChild(dv)})}
+ }catch(e){console.log('r73u',e)}return r};
+function memHtml(p){return(p._mem73||[]).slice().reverse().map(m=>`<div>${m.s>0?'🙂':'😒'} <span style="opacity:.7">${tmS(m.t)}</span>　${ESC(m.e)}「${ESC(m.l)}」${m.s>0?'——她記著這份好':'——她耿耿於懷'}</div>`).join('')}
+const _pe=window.pExtra68;window.pExtra68=function(p){let h=_pe?_pe(p):'';try{if(p&&p._mem73&&p._mem73.length)h=`<h4 style="margin:14px 0 6px">她記得你的選擇</h4><div class=m style="line-height:1.75">${memHtml(p)}</div>`+h}catch(e){}return h};
+const st=document.createElement('style');st.textContent='.chip73{display:inline-block;padding:2px 9px;border-radius:11px;margin:2px 3px 2px 0;font-size:12.5px;line-height:1.5;border:1px solid}.chip73.up{color:#27774a;background:rgba(60,160,100,.14);border-color:rgba(60,160,100,.4)}.chip73.dn{color:#b03a2e;background:rgba(200,70,60,.12);border-color:rgba(200,70,60,.4)}html.dk18 .chip73.up{color:#86d9a8}html.dk18 .chip73.dn{color:#f1948a}';document.head.appendChild(st);
+try{HELP.push(['選擇的後果','做完選擇後，畫面頂端會列出這個選擇帶來的實際變化：聖寵、人脈、銀兩、哪位妃嬪對你的好感變了多少，綠色是好事、紅色是壞事。被點名的人會記得你的選擇，過幾個月可能回頭報答你、通風報信，也可能記恨、散播流言、與你的對手結盟。你的行事風格（仁厚／冷面／深沉）會累積成宮中的評價，在「紀事」頁可以查看歷次選擇與後果。'])}catch(e){}
+window.__CQ73={snap,diff,record,echo};
+})();
+
 deco();intro();
 
 
