@@ -428,7 +428,7 @@ const ids=()=>S.npcs.map((n,i)=>i).filter(i=>!S.npcs[i].st);
 const Q=()=>typeof S.qi=='number'?S.npcs[S.qi]:null;
 const qo=()=>S.qi!=='me'&&Q();
 const rn=()=>{const a=ids().filter(i=>i!==S.qi);return a.length?a[R(0,a.length-1)]:ids()[0]};
-const yr=k=>Math.floor((S.t-k.b)/12),on=o=>o==='me'?S.me.n:S.npcs[o].n,tag=k=>`${k.n}（${S.reg&&S.reg.k===k?'皇帝':k.sex=='男'?(S.reg?'親王':'皇子'):'公主'}${yr(k)}歲・${KT[k.t][0]}）`;
+const yr=k=>Math.floor((S.t-k.b)/12),on=o=>o==='me'?S.me.n:S.npcs[o].n,tag=k=>`${k.n}（${kTitle(k)}${yr(k)}歲・${KT[k.t][0]}）`;
 const sc=k=>k.cai*.25+k.de*.2+k.chong*.3+k.pow*.35+(yr(k)<3?-30:yr(k)<6?-15:yr(k)<12?-5:0);
 const L=s=>{if(typeof bgL==='function'&&bgL(s))return;S.log.unshift(s);S.log.length=Math.min(S.log.length,18)},pay=n=>S.me.silver>=n?(S.me.silver-=n,1):0;
 function kid(n,sex,b,mom,o){const me=mom==='me',t=R(0,KT.length-1),q=KT[t][2],nm=(typeof mom=='number'&&S&&S.npcs&&S.npcs[mom])||0;
@@ -4961,6 +4961,47 @@ const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
  try{if(S&&S.me&&!S.over){empSync();const main=document.querySelector('main');if(main&&TAB==3&&!main.querySelector('.emp45')){const e=S.em43,ep=(typeof EPS!=='undefined'&&EPS[S.ep])?EPS[S.ep][0]:'';
   const d=document.createElement('div');d.className='cd emp45';d.innerHTML=`<h3>在位皇帝</h3><div class=m><b>${e.era}帝・${e.sur}${e.giv}</b>${ep?'｜性格：'+ep:''}${S.reg?'（幼主，由太后聽政）':''}</div>${zbCardInner()}`;const f=main.querySelector(':scope>.cd');if(f)main.insertBefore(d,f);else main.appendChild(d)}}}catch(e){console.log('r45b',e)}return r};
 const _g=goalChip;goalChip=function(){let s='';try{if(S&&S.me){empSync();const e=S.em43;s=`<div class=cd><span class=m>在位：<b>${e.era}帝・${e.sur}${e.giv}</b>（${e.era}${S.t>=12?Math.floor(S.t/12)+1:1}年）</span></div>`}}catch(x){}return _g.apply(this,arguments)+s};
+})();
+
+/* ===== round46：皇子公主封爵制度（皇子→貝子/貝勒/郡王/親王；格格→和碩/固倫公主） ===== */
+(function(){
+const MT=['貝子','貝勒','郡王','親王'],FT=['和碩公主','固倫公主'];
+const MP=[1,3,5,8],MA=[0,1,2,3],FP=[2,5],FA=[0,2];
+const momOf=(k)=>{for(const x of S.me.kids)if(x===k)return'me';for(let i=0;i<S.npcs.length;i++)if(S.npcs[i].kids.includes(k))return i;return null};
+const mr=o=>o==='me'?S.me.rank:(S.npcs[o]?S.npcs[o].rank:0);
+const isQ=o=>{try{return o==='me'?S.qi==='me':S.qi===o}catch(e){return false}};
+window.kTitle=function(k){try{if(S&&S.reg&&S.reg.k===k)return'皇帝';if(k.t45)return k.t45;
+ if(k.sex=='男')return S&&S.reg?'親王':'皇子';return yr(k)<15&&!(k.sp)?'格格':'公主'}catch(e){return k.sex=='男'?'皇子':'公主'}};
+function tierM(k,o){const s=sc(k)+mr(o)*2+(S.heir===k?6:0);let t=s>=60?3:s>=48?2:s>=36?1:0;
+ const all=allKids().filter(x=>x.sex=='男'&&x.t45);const cnt=n=>all.filter(x=>x.t45===MT[n]).length;
+ if(t===3&&cnt(3)>=3)t=2;if(t===2&&cnt(2)>=5)t=1;return t}
+function tierF(k,o){let t=(mr(o)>=7||isQ(o)||(k.sp&&k.sp.ty==='和親'))?1:0;if(t===0&&k.chong>=80&&mr(o)>=5)t=1;return t}
+function apply(k,o,t){const mine=o==='me';
+ if(k.sex=='男'){k.t45=MT[t];k.pow=cl(k.pow+MP[t]);if(mine){S.me.ally+=MA[t];if(t>=2)S.me.favor+=2}else if(S.npcs[o])S.npcs[o].al=cl((S.npcs[o].al||0)+MA[t])}
+ else{k.t45=FT[t];k.pow=cl(k.pow+FP[t]);if(mine){S.me.ally+=FA[t];if(t>=1)S.me.favor+=2}else if(S.npcs[o])S.npcs[o].al=cl((S.npcs[o].al||0)+FA[t])}}
+const NOTE={男:['被封為貝子，算是有了爵位。','被封為貝勒，開府分府。','被封為郡王，位列宗室顯貴。','被晉封親王，位極人臣，宗室之首。'],女:['受冊封為和碩公主，賜公主府與歲俸。','受冊封為固倫公主，禮制僅次於皇后，尊榮無比。']};
+function propose(k,o,t){const nm=k.n,m=k.sex=='男',max=m?3:1,def=t;
+ const opts=[[`依例受封（${m?MT[def]:FT[def]}）`,()=>{apply(k,o,def);const r=`${nm}${NOTE[m?'男':'女'][def]}`;try{msPush(r)}catch(e){}return r}]];
+ if(def<max)opts.push([`為${m?'他':'她'}請封高一等（${m?MT[def+1]:FT[def+1]}，耗銀${m?80:60}，看聖寵）`,()=>{if(!pay(m?80:60)){apply(k,o,def);return'銀兩不足，只能依例受封。'}if(P(cl(.25+S.me.favor/220,.1,.7))){apply(k,o,def+1);const r=`皇上准了你的請封，${nm}${NOTE[m?'男':'女'][def+1]}`;try{msPush(r)}catch(e){}return r}S.me.favor-=2;apply(k,o,def);return`皇上覺得「於禮不合」，${nm}仍依例受封，你被淡淡訓了一句。`}]);
+ if(def>0)opts.push([`${m?'請封低一等（':'請封和碩（'}${m?MT[def-1]:FT[0]}，${m?'低調保平安':'低調從簡'}）`,()=>{apply(k,o,def-1);k.bond=cl(k.bond+5);return`你請旨低調封賞，${nm}只受了${m?MT[def-1]:FT[0]}之爵，反倒更親近你了。`}]);
+ return{t:`${nm}已到受封之齡（${yr(k)}歲）。依祖制，${m?'皇子成年當封爵':'公主長成當冊封'}，內務府擬了${m?MT[def]:FT[def]}的品級，請你示下。`,o:opts}}
+const _m=mend;mend=function(){const r=_m.apply(this,arguments);
+ try{if(S&&S.me&&!S.over){let pushed=0;const lst=[];S.me.kids.forEach(k=>lst.push([k,'me']));S.npcs.forEach((n,i)=>n.kids.forEach(k=>lst.push([k,i])));
+  lst.forEach(([k,o])=>{if(k.t45)return;const a=yr(k);if(!(k.sex=='男'?a>=16:(a>=15||k.sp)))return;
+   if(S.reg&&S.reg.k===k)return;
+   const t=k.sex=='男'?tierM(k,o):tierF(k,o);
+   if(o==='me'&&!pushed&&!S.reg){pushed=1;k.t45='待封';S.q.push(propose(k,o,t))}
+   else if(o==='me'&&!S.reg){return}
+   else if(o==='me'){/* 太后攝政：自行定奪 */apply(k,o,t);try{msPush(`${k.n}${NOTE[k.sex=='男'?'男':'女'][t]}`)}catch(e){}}
+   else{apply(k,o,t);if(t>=(k.sex=='男'?2:1))try{L(`${k.n}${NOTE[k.sex=='男'?'男':'女'][t]}`)}catch(e){}}});
+  if(pushed){if(!S.ev&&!S.ch&&!S.scn)next();else render()}}}catch(e){console.log('r46',e)}return r};
+// 「待封」標記：事件結果決定前顯示原稱
+const _kt=window.kTitle;window.kTitle=function(k){if(k&&k.t45==='待封')return k.sex=='男'?'皇子':'公主';return _kt(k)};
+// 子嗣總覽：標題徽章與篩選
+const _ka=kidsAllPanel;kidsAllPanel=function(){let h=_ka.apply(this,arguments);
+ try{const map={};allKids().forEach(k=>map[k.n]=k);
+  h=h.replace(/(<details class="cd con" data-i data-t=")([^"]*)("><summary><span class=nm>)([^<]*)(<\/span>)([\s\S]*?<span class="pill[^"]*">)(皇子|公主)(<\/span>)/g,(m,a,t,b,n,c,d,e,f)=>{const k=map[n];const ti=k?kTitle(k):e;return a+t+' '+ti+b+n+c+d+ti+f});
+  h=h.replace(/(<button class="chip[^"]*" onclick="fqc\('kids','成年'\)">成年<\/button>)/,m=>m+['親王','郡王','貝勒','貝子','固倫','和碩','格格'].map(c=>`<button class="chip${(FQ.kids||{}).c===c?' on':''}" onclick="fqc('kids','${c}')">${c}</button>`).join(''))}catch(e){console.log('r46k',e)}return h};
 })();
 
 deco();intro();
