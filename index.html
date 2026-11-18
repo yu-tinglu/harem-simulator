@@ -4890,6 +4890,26 @@ over=function(t,x){
  return _ov.apply(this,arguments)};
 })();
 
+/* ===== round44：皇室成員分類＋頂端深淺色切換 ===== */
+(function(){
+const gk=(k,o)=>{const a=yr(k),sp=k.sp&&!k.sp.end;
+ if(k.sex!='男'){if(k.out||(k.sp&&k.sp.ty==='和親'&&!k.sp.end))return['公主・和親遠嫁',4];if(sp)return['公主・已婚留京',3];return a<15?['幼年公主',5]:['公主・待字閨中',2]}
+ return a<16?['年幼皇子',6]:sp?['親王・已成家',1]:['皇子・未婚',0]};
+kinPanel=function(){const R_=S.reg;let h=`<div class=cd><h3>皇室成員</h3><div class=m>皇帝的兄弟姊妹與先帝諸子女，依身分分組。可用「賜婚宗室」「扶持宗室」影響他們。</div></div>`;
+ const rows=kidsOf().filter(([k])=>k!==R_.k);if(!rows.length)return h+`<div class=cd><span class=m>宗室中暫無其他皇子公主。</span></div>`;
+ const G={};rows.forEach(([k,o])=>{const g=gk(k,o);(G[g[1]]=G[g[1]]||{n:g[0],a:[]}).a.push([k,o,g[0]])});
+ const chips=['皇子','公主','我所出','已成家','未婚','和親遠嫁','幼年'];
+ h+=fbar('kin',chips,'搜尋姓名／生母');
+ return h+Object.keys(G).sort((a,b)=>a-b).map(i=>{const g=G[i];
+  return`<div class=grp40>${g.n}（${g.a.length}）</div><div data-list=kin>`+g.a.sort((a,b)=>yr(b[0])-yr(a[0])).map(([k,o,gn])=>{
+   const t=`${k.n} ${k.sex=='男'?'皇子':'公主'} ${o==='me'?'我所出':on(o)} ${k.sp&&!k.sp.end?'已成家':'未婚'} ${gn.includes('和親')?'和親遠嫁':''} ${yr(k)<15?'幼年':''}`;
+   return`<div class=cd data-i data-t="${t}"><div class=kid>${tag(k)}・${o==='me'?'你所出':on(o)+'所出'}<div class=kb>${[['勢',k.pow],['孝',k.bond],['忠',k.ly===undefined?50:k.ly]].map(([l,v])=>abar(l,v)).join('')}</div>${spLine(k)}</div></div>`}).join('')+`</div>`}).join('')};
+const _r=render;render=function(){const r=_r.apply(this,arguments);
+ try{if(!S||S.over)return r;const top=document.querySelector('.top'),on=document.documentElement.classList.contains('dk18');let b=document.getElementById('dkb');
+  if(top&&!b){const a=document.getElementById('sndb')||top.querySelector('button');if(a){a.insertAdjacentHTML('beforebegin',`<button class="s mini" id=dkb onclick="dkToggle()" aria-label="深色／淺色切換"></button>`);b=document.getElementById('dkb')}}
+  if(b)b.textContent=on?'☀':'☾'}catch(e){console.log('r44',e)}return r};
+})();
+
 deco();intro();
 
 
