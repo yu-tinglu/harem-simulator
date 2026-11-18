@@ -5977,7 +5977,7 @@ const _r=render;render=function(){const r=_r.apply(this,arguments);deco();return
 function momLink(md){try{
  if(!md||md.querySelector('.mom67'))return;
  const box=[...md.querySelectorAll('.m')].find(x=>x.innerHTML.indexOf('生母：')>=0);if(!box)return;
- box.innerHTML=box.innerHTML.replace(/生母：([^（・<]+)(（你）)?/,(a,n,y)=>{n=n.trim();if(y||npcIdx(n)<0)return a;return`生母：<span class=mom67 data-m="${n}" style="text-decoration:underline;cursor:pointer;color:#b8473a">${n} ›</span>`})}catch(e){}}
+ const h0=box.innerHTML,h1=h0.replace(/生母：([^（・<]+)(（你）)?/,(a,n,y)=>{n=n.trim();if(y||npcIdx(n)<0)return a;return`生母：<span class=mom67 data-m="${n}" style="text-decoration:underline;cursor:pointer;color:#b8473a">${n} ›</span>`});if(h1!==h0)box.innerHTML=h1}catch(e){}}
 new MutationObserver(()=>momLink(document.getElementById('kmodal49'))).observe(document.body,{childList:true,subtree:true});
 document.addEventListener('click',e=>{const s=e.target.closest&&e.target.closest('#kmodal49 .mom67');if(s)goNpc67(s.dataset.m)});
 // 子嗣總覽卡：加「查看生母」
@@ -6930,7 +6930,7 @@ try{const _u=uiPost;uiPost=function(){const r=_u.apply(this,arguments);try{
 /* ===== V169：數值列放到「本月重點」之上 ===== */
 (function(){try{const _u=uiPost;uiPost=function(){const r=_u.apply(this,arguments);try{
  const main=document.querySelector('main');if(main){const ss=main.querySelector(':scope>.stat-strip'),pt=main.querySelector(':scope>.pt61');
-  if(ss&&pt&&(pt.compareDocumentPosition(ss)&Node.DOCUMENT_POSITION_FOLLOWING))main.insertBefore(ss,pt)}}catch(e){console.log('r75s',e)}return r};window.uiPost=uiPost}catch(e){console.log('r75',e)}})();
+  if(ss&&main.firstElementChild!==ss)main.insertBefore(ss,main.firstElementChild)}}catch(e){console.log('r75s',e)}return r};window.uiPost=uiPost}catch(e){console.log('r75',e)}})();
 /* ===== V170：奪嫡合併成一張表；派系與擁護者寫進皇子檔案 ===== */
 (function(){
 const E=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -6953,9 +6953,9 @@ try{const _u=uiPost;uiPost=function(){const r=_u.apply(this,arguments);try{
    else head+='<div class=m>儲位虛懸，各方人馬都在觀望。</div>'}catch(e){}}
  else head='<div class=m>皇子的排名與處境。</div>';
  const rows=ss.slice(0,10).map((k,i)=>{const st=stat(k),gy=(k.jin||yr(k)<14)?' gy75':'';const o=momIdx(k);
-  return`<tr class="r75${gy}" onclick="kopen49('${E(k.n)}')"><td>${i+1}</td><td class=nm><b>${E(k.n)}</b><small>${E(momNm(o))}之子</small></td><td>${yr(k)}</td><td><b>${sc(k)|0}</b></td><td>${st==='儲君'?'<span class=tag75>儲君</span>':E(st)}</td></tr>`}).join('');
+  return`<tr class="r75${gy}" onclick="kopen49('${E(k.n)}')"><td>${i+1}</td><td class=nm><b>${E(k.n)}</b><small>${E(momNm(o))}之子</small></td><td>${yr(k)}</td><td><b>${sc(k)|0}</b></td><td>${(window.__BK76&&__BK76.n(k))?__BK76.n(k)+'派':'—'}</td><td>${st==='儲君'?'<span class=tag75>儲君</span>':E(st)}</td></tr>`}).join('');
  const card=document.createElement('div');card.className='cd dj75';card.setAttribute('data-open','1');
- card.innerHTML=`<h3>奪嫡</h3>${head}<div style="overflow-x:auto"><table><tr><th>名次</th><th>皇子</th><th>歲</th><th>聲勢</th><th>狀態</th></tr>${rows}</table></div><div class=ft75>點任一位皇子，可看他的才德寵勢、派系與擁護者。<br>聲勢＝才25%＋德20%＋寵30%＋勢力35%，年紀太小會扣分；未滿14歲、被圈禁者不參與奪嫡。公主不參與奪嫡。${ss.length>10?'<br>（僅列前10位）':''}</div>`;
+ card.innerHTML=`<h3>奪嫡</h3>${head}<div style="overflow-x:auto"><table><tr><th>名次</th><th>皇子</th><th>歲</th><th>聲勢</th><th>擁護</th><th>狀態</th></tr>${rows}</table></div><div class=ft75>點任一位皇子，可看他的才德寵勢、派系與擁護者。<br>聲勢＝才25%＋德20%＋寵30%＋勢力35%，年紀太小會扣分；擁護＝朝中有幾個派系擁立他；未滿14歲、被圈禁者不參與奪嫡。公主不參與奪嫡。${ss.length>10?'<br>（僅列前10位）':''}</div>`;
  (c1||c2).replaceWith(card);if(c1&&c2)c2.remove();
 }catch(e){console.log('r75d2',e)}return r};window.uiPost=uiPost}catch(e){console.log('r75',e)}
 /* 皇子檔案：加「奪嫡與擁護」區塊 */
@@ -6973,7 +6973,8 @@ function block(k){try{
  lines.push(`<b>擁護者</b>：<br>・生母 ${E(momNm(o))}${o==='me'?'':(S.npcs[o].st||RK[S.npcs[o].rank]?'（'+E(S.npcs[o].st||RK[S.npcs[o].rank])+'）':'')}`);
  if(fam.length)lines.push(`・母家：${fam.join('、')}`);
  if(mates.length)lines.push(`・同派系妃嬪：${mates.join('、')}`);
- if(fn)lines.push(`・朝中「${E(fn)}」一系的官員`);
+ if(window.__BK76){const sp=__BK76.sup(k);lines.push(sp.length?`・朝中擁護（${sp.length}派）：${sp.map(i=>E(__BK76.NM[i])+'（勢力'+((S.fp&&S.fp[i]!=null?S.fp[i]:50)|0)+'）').join('、')}`:'・朝中暫無派系擁護');
+   const lean=__BK76.lean();const oth=lean.map((n,i)=>n&&n!==k.n?E(__BK76.NM[i])+'→'+E(n):'').filter(Boolean);if(oth.length)lines.push(`・其他派系：${oth.join('、')}`)}
  if(rv)lines.push(`<b>最大對手</b>：${E(rv.n)}（${E(momNm(momIdx(rv)))}之子・聲勢${sc(rv)|0}）`);
  return`<div class=kx75><h4>奪嫡與擁護</h4>${lines.join('<br>')}</div>`}catch(e){console.log('r75k',e);return''}}
 function inject(){try{const md=document.getElementById('kmodal49');if(!md||md.querySelector('.kx75'))return;
@@ -6981,6 +6982,59 @@ function inject(){try{const md=document.getElementById('kmodal49');if(!md||md.qu
  const nm=(md.querySelector('h3')||{}).textContent;const k=allKids().find(x=>x.n===nm);if(!k)return;
  const b=block(k);if(b)h.insertAdjacentHTML('beforebegin',b)}catch(e){console.log('r75i',e)}}
 ['kopen49','kdo49','kdraw'].forEach(fn=>{try{const f=window[fn];if(typeof f!=='function')return;window[fn]=function(){const r=f.apply(this,arguments);inject();return r}}catch(e){}});
+})();
+
+/* ===== round76：奪嫡擁護系統——五個朝中派系各自擁立一位皇子 ===== */
+(function(){
+const NM=['外戚勳貴','清流文官','武將集團','寒門新貴','宗室親王'];
+const alive=k=>!k.dead&&!k.died&&k.alive!==false;
+const cand=()=>{try{return allKids().filter(k=>k.sex=='男'&&alive(k)&&!k.jin&&yr(k)>=10)}catch(e){return[]}};
+const momOf=k=>{try{if(S.me.kids.includes(k))return S.me;return S.npcs.find(n=>n.kids.includes(k))||null}catch(e){return null}};
+const mine=k=>{try{return S.me.kids.includes(k)}catch(e){return false}};
+const ini=()=>{if(!S.bk76)S.bk76={lean:[null,null,null,null,null],lock:[0,0,0,0,0],ev:-99};return S.bk76};
+/* 各派系對皇子的好感 */
+function aff(i,k){const mom=momOf(k)||{},fam=(mom.fam||[]).reduce((a,x)=>Math.max(a,x.pw||0),0),a=yr(k);
+ let v=(mom.fac===i?30:0);
+ if(i===0)v+=fam*.3+k.chong*.2+k.pow*.1;
+ else if(i===1)v+=k.de*.35+k.cai*.2+(a>=16?4:0);
+ else if(i===2)v+=k.pow*.3+k.cai*.1+(a>=18?10:0);
+ else if(i===3)v+=k.cai*.35+k.chong*.1+((mom.rank||0)<=4?10:0);
+ else v+=k.de*.25+a*.4+(S.heir===k?20:0);
+ return v}
+const sup=k=>{const b=ini();const r=[];b.lean.forEach((n,i)=>{if(n===k.n)r.push(i)});return r};
+window.__BK76={NM,sup,n:k=>{try{return sup(k).length}catch(e){return 0}},lean:()=>ini().lean.slice()};
+function tick(){if(!S||!S.me||S.over||S.reg||S.t<1)return;const b=ini(),cs=cand();if(!cs.length)return;
+ for(let i=0;i<5;i++){
+  const cur=cs.find(k=>k.n===b.lean[i]);
+  if(b.lean[i]&&!cur){b.lean[i]=null;b.lock[i]=0}
+  if(b.lock[i]>S.t)continue;
+  let best=null,bs=-1;cs.forEach(k=>{const s=aff(i,k)+(k===cur?12:0);if(s>bs){bs=s;best=k}});
+  if(best&&best!==cur&&(!(b.lean[i])||S.t%6===0)&&bs>30){const old=b.lean[i];b.lean[i]=best.n;b.lock[i]=S.t+10;
+   if(old!==best.n&&(mine(best)||S.heir===best)){try{ntfAdd(`${NM[i]}一系轉而擁護${best.n}。`,'ti')}catch(e){}}}}
+ /* 擁護的效果 */
+ cs.forEach(k=>{const l=sup(k);l.forEach(i=>{const f=(S.fp&&S.fp[i]!=null?S.fp[i]:50);k.pow=cl(k.pow+(f-45)/90)});if(l.length>=3){k.am=cl((k.am===undefined?50:k.am)+.4);if(S.heir===k)k.sus=cl((k.sus||0)+(l.length-2)*.8)}});
+ /* 事件 */
+ if(S.t-b.ev>=10&&P(.22)&&S.q.length<3){const mk=cs.filter(k=>mine(k)&&sup(k).length>=2);if(mk.length){const k=mk[0],l=sup(k),f=NM[l[0]];b.ev=S.t;
+  const heir=S.heir===k;
+  const ev=l.length>=3&&heir?{t:`皇上察覺朝中好幾派的大臣都向你的兒子${k.n}靠攏，臉色一日比一日沉。`,o:[
+    ['請皇上疏遠自己人，主動切割',()=>{k.pow=cl(k.pow-5);k.sus=cl((k.sus||0)-12);S.me.favor=cl(S.me.favor+2);return`你主動遞話，請皇上疏遠與${k.n}過從甚密的大臣。皇上猜忌稍減（聲勢－5、聖寵＋2）。`}],
+    ['裝作不知，靜觀其變',()=>{k.sus=cl((k.sus||0)+8);S.dj&&(S.dj.heat=cl(S.dj.heat+3));return`你沒有表態。皇上對${k.n}的猜忌又深了些（猜忌＋8）。`}],
+    ['趁勢結盟，把這股勢頭用足',()=>{k.pow=cl(k.pow+6);k.sus=cl((k.sus||0)+15);S.dj&&(S.dj.heat=cl(S.dj.heat+6));return`你放手讓${k.n}與重臣走近，聲勢大漲（＋6），但皇上的疑心也迅速升高（猜忌＋15）。`}]]}
+   :{t:`朝中「${f}」一系的官員私下遞話，願擁立你的兒子${k.n}。`,o:[
+    ['暗中應允，收下這份善意',()=>{k.pow=cl(k.pow+5);S.me.ally=(S.me.ally||0)+2;S.dj&&(S.dj.heat=cl(S.dj.heat+4));if(heir)k.sus=cl((k.sus||0)+5);return`你不置可否地收下善意。${k.n}聲勢＋5，人脈＋2，但爭儲的風聲更緊了。`}],
+    ['婉言謝絕，避嫌',()=>{k.pow=cl(k.pow-2);k.am=cl((k.am===undefined?50:k.am)-4);S.me.favor=cl(S.me.favor+1);S.dj&&(S.dj.heat=cl(S.dj.heat-2));return`你婉拒了。${k.n}更顯得與世無爭，皇上聽聞後頗為滿意（聖寵＋1）。`}]]};
+  S.q.push(ev);if(!S.ev&&!S.ch&&!S.scn)next();else render()}}}
+const _m=mend;mend=function(){const r=_m.apply(this,arguments);try{tick()}catch(e){console.log('r76',e)}return r};window.mend=mend;
+/* 主動：籠絡朝臣派系 */
+try{ACT.push(['籠絡朝臣派系','耗銀60，爭取朝中某一派系擁立你的兒子',()=>{const m=S.me,ks=cand().filter(k=>mine(k));if(!ks.length){L('你還沒有十歲以上的皇子可為之籠絡朝臣。');return 1}
+ ini();choose('為哪位皇子籠絡朝臣？',ks.map(k=>({l:`${tag(k)}　現有${sup(k).length}派擁護・勢${k.pow|0}`,f(){choose(`籠絡哪一派？（耗銀60）`,NM.map((n,i)=>{const cur=ini().lean[i];return{l:`${n}（朝中勢力${(S.fp&&S.fp[i]!=null?S.fp[i]:50)|0}）${cur?'・現擁護'+cur:'・尚未表態'}`,f(){
+   if(!pay(60)){L('銀兩不足。');return}
+   const mom=momOf(k)||{},p=.3+m.scheme/250+(mom.fac===i?.15:0)+((S.fp&&S.fp[i]||50)/500);
+   if(ini().lean[i]===k.n){L(`${n}本就擁護${k.n}，你只是又送了一份厚禮。`);k.pow=cl(k.pow+1);return}
+   if(ckp(p)){const b=ini();b.lean[i]=k.n;b.lock[i]=S.t+24;S.fp[i]=cl(S.fp[i]+3);k.pow=cl(k.pow+4);S.dj&&(S.dj.heat=cl(S.dj.heat+3));if(S.heir===k)k.sus=cl((k.sus||0)+4);L(`「${n}」一系答應擁立${k.n}（約兩年內不易反悔）。聲勢＋4。`)}
+   else{m.favor=cl(m.favor-3);S.dj&&(S.dj.heat=cl(S.dj.heat+2));L(`你向「${n}」遞話，卻走漏了風聲，皇上聽聞後不悅（聖寵－3）。`)}}}})) }})) );return 1}]);
+ const c=ACTCAT.find(x=>x[0]=='子嗣');if(c)c[1].push(ACT.length-1)}catch(e){console.log('r76a',e)}
+HELP.push(['奪嫡與朝臣擁護','朝中五個派系（外戚勳貴、清流文官、武將集團、寒門新貴、宗室親王）各自擁立一位皇子，依各派偏好決定：外戚看母家與寵愛，清流看德才，武將看勢力與年紀，寒門看才學，宗室看長幼與德行。擁護者越多、派系越強，皇子聲勢越高，但也越招皇上猜忌，儲君尤其危險。皇子的檔案裡會列出誰在擁護他；「子嗣」分頁的行動「籠絡朝臣派系」可花銀兩爭取某一派（約兩年內不易反悔）。']);
 })();
 
 deco();intro();
