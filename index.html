@@ -5004,6 +5004,101 @@ const _ka=kidsAllPanel;kidsAllPanel=function(){let h=_ka.apply(this,arguments);
   h=h.replace(/(<button class="chip[^"]*" onclick="fqc\('kids','成年'\)">成年<\/button>)/,m=>m+['親王','郡王','貝勒','貝子','固倫','和碩','格格'].map(c=>`<button class="chip${(FQ.kids||{}).c===c?' on':''}" onclick="fqc('kids','${c}')">${c}</button>`).join(''))}catch(e){console.log('r46k',e)}return h};
 })();
 
+/* ===== round47：封爵深化（歲俸與猜忌、爵位升降、新帝登基、公主婚姻、排行稱謂、賜名字號諡號） ===== */
+(function(){
+const MT=['貝子','貝勒','郡王','親王'],FT=['和碩公主','固倫公主'];
+const MPW=[1,3,5,8],FPW=[2,5];
+const CN=['','大','二','三','四','五','六','七','八','九','十','十一','十二','十三','十四','十五','十六','十七','十八','十九','二十'];
+const fl=()=>{if(!S.ev&&!S.ch&&!S.scn)next();else render()};
+const momOf=k=>{for(const x of S.me.kids)if(x===k)return'me';for(let i=0;i<S.npcs.length;i++)if(S.npcs[i].kids.includes(k))return i;return null};
+const tIdx=k=>k.sex=='男'?MT.indexOf(k.t45):FT.indexOf(k.t45);
+const titled=()=>allKids().filter(k=>!k.dead&&tIdx(k)>=0);
+const isQ=o=>{try{return o==='me'?S.qi==='me':S.qi===o}catch(e){return false}};
+function setTier(k,t,why){const m=k.sex=='男',arr=m?MT:FT,pw=m?MPW:FPW,old=tIdx(k);
+ if(m&&t>old){const cnt=n=>allKids().filter(x=>x!==k&&!x.dead&&x.t45===MT[n]).length;if(t>=3&&cnt(3)>=4)t=2;if(t===2&&cnt(2)>=6)t=1;if(t<=old)return}
+ if(t<0){k.t45='革爵';k.pow=cl(k.pow-(old>=0?pw[old]:0)-6);if(m&&P(.4))k.jin=1;return}
+ t=Math.max(0,Math.min(arr.length-1,t));k.pow=cl(k.pow+pw[t]-(old>=0?pw[old]:0));k.t45=arr[t]}
+const logN=(t,mine)=>{try{if(mine)msPush(t);else L(t)}catch(e){}};
+// ---------- 賜名（自己的孩子出生） ----------
+const _b=birth;birth=function(arr,mom){const r=_b.apply(this,arguments);
+ try{if(mom==='me'&&arr===S.me.kids&&S.me.kids.length){const k=S.me.kids[S.me.kids.length-1];if(!k.nm47){k.nm47=1;
+  const a=kidNm(k.sex),b=kidNm(k.sex),c=kidNm(k.sex),old=k.n;
+  S.q.push({t:`${old}呱呱墜地。依祖制，皇子公主的名字由內務府擬定，但皇上特准你為孩子另擇一名，你要如何取名？`,o:[
+   [`依內務府擬名「${old}」`,()=>`孩子仍稱「${old}」。`],
+   [`取意才學：「${a}」`,()=>{k.n=a;k.cai=cl(k.cai+3);return`你為孩子賜名「${a}」，盼其飽讀詩書。`}],
+   [`取意仁德：「${b}」`,()=>{k.n=b;k.de=cl(k.de+3);return`你為孩子賜名「${b}」，盼其仁厚立身。`}],
+   [`取意福澤：「${c}」`,()=>{k.n=c;k.chong=cl(k.chong+3);return`你為孩子賜名「${c}」，盼其一世平安。`}]]});fl()}}}catch(e){console.log('r47a',e)}return r};
+// ---------- 字號、諡號 ----------
+const ZA=['子','伯','仲','叔','季','文','明','景','懷','弘','元','君','敬','承','希','靜'],ZB=['瞻','淵','謀','安','瑾','毅','遠','亮','夜','直','實','之','平','山','川','齋'];
+const SH=['忠','敬','恭','端','惠','簡','懿','榮','安','靖','襄','康','僖','誠','貞'];
+function dress(k){if(k.sex=='男'&&!k.zi47&&tIdx(k)>=0)k.zi47=pk(ZA)+pk(ZB);
+ if(k.dead&&!k.sh47&&tIdx(k)>=0){k.sh47=pk(SH);const mine=momOf(k)==='me';logN(`${k.t45}${k.n}薨，朝廷賜諡「${k.sh47}」。`,mine)}}
+// ---------- 月度：升降爵、歲俸、猜忌 ----------
+let lastSus=-99;
+function yearly(){const ks=titled(),m=ks.filter(k=>k.sex=='男');let e=0,j=0,b=0;m.forEach(k=>{const i=tIdx(k);if(i===3)e++;else if(i===2)j++;else if(i===1)b++});
+ const load=e*.8+j*.4+b*.15;if(load>0){S.nat.eco=cl(S.nat.eco-load);if(load>=2)L(`宗室歲俸、府邸開銷沉重，戶部叫苦不迭。`)}
+ let inc=0;ks.forEach(k=>{if(momOf(k)==='me'){const i=tIdx(k);inc+=k.sex=='男'?[0,3,6,12][i]:[3,6][i]}});
+ if(inc>0){S.me.silver+=inc;try{msPush(`本年孩子們的歲俸分潤，進帳${inc}兩。`)}catch(x){}}}
+function suspicion(){let pw=0;titled().filter(k=>k.sex=='男').forEach(k=>{pw+=[0,1,2,3][tIdx(k)]*k.pow/60});return pw}
+function sneak(){const c=titled().filter(k=>k.sex=='男'&&tIdx(k)>=2).sort((a,b)=>b.pow-a.pow)[0];if(!c)return null;const o=momOf(c),mine=o==='me';
+ if(!mine){const r=P(.5);if(r)setTier(c,tIdx(c)-1);logN(`皇上憂心宗室坐大，${r?'下旨削減'+c.n+'的爵位':'申飭了'+c.n}。`,0);return null}
+ return{t:`皇上近來頻頻提起：「宗室諸王權勢日重，不可不防。」矛頭隱隱指向你的${c.t45}${c.n}。`,o:[
+  ['主動請旨削減他的歲俸，以示無二心',()=>{S.nat.eco=cl(S.nat.eco+1);c.bond=cl(c.bond-3);S.me.favor+=3;return`皇上聽了很滿意，${c.n}雖心中不快，仍領旨謝恩。`}],
+  ['為兒子辯白，言其忠心可鑒（看聖寵）',()=>{if(P(cl(.3+S.me.favor/220,.1,.7))){S.me.favor+=1;return`皇上被你說動，不再追究。`}S.me.favor-=3;setTier(c,tIdx(c)-1);return`皇上不為所動，下旨將${c.n}降為${c.t45}。`}],
+  ['暗中聯絡宗室，同進同退（看心機）',()=>{if(ckp(.3+S.me.scheme/250)){S.me.ally+=4;c.pow=cl(c.pow+3);return`你與幾位宗室心照不宣，皇上暫時按下不提。`}S.me.favor-=5;setTier(c,tIdx(c)-1);S.nat.stab-=1;return`串聯之事被察覺，皇上震怒，${c.n}被降爵，朝局也因此不穩。`}]]}}
+function tick(){if(!S||!S.me||S.over)return;let pushed=0;
+ if(S.t>0&&S.t%12===0&&S.ts47!==S.t){S.ts47=S.t;yearly()}
+ // 新帝登基：兄弟加封或削減
+ if(S.reg&&S.reg.k&&S.r47k!==S.reg.k.n){const first=S.r47k===undefined;S.r47k=S.reg.k.n;
+  if(!first||true){let up=0,dn=0;allKids().forEach(k=>{if(k===S.reg.k||k.dead||k.sex!='男'||tIdx(k)<0)return;
+    const i=tIdx(k);if(P(.35)&&i<3){setTier(k,i+1);up++}else if(P(.3)){setTier(k,i-1);dn++}});
+   if(up||dn)try{msPush(`新帝登基，加封宗室${up}人，削減${dn}人。`)}catch(e){}}}
+ // 逐人升降
+ const lst=[];S.me.kids.forEach(k=>lst.push([k,'me']));S.npcs.forEach((n,i)=>n.kids.forEach(k=>lst.push([k,i])));
+ lst.forEach(([k,o])=>{if(k.dead||S.reg&&S.reg.k===k)return;dress(k);const i=tIdx(k);if(i<0||yr(k)<18)return;const mine=o==='me';
+  if(k.sex=='男'&&i<3&&P(.003+Math.max(0,k.cai-50)/9000+(S.era41==='war'?.003:0))){
+   if(mine&&!pushed&&!S.reg){pushed=1;S.q.push({t:`${k.t45}${k.n}近來辦事得力，朝臣紛紛稱頌，皇上有意晉封他為${MT[i+1]}。`,o:[
+     ['代他謝恩受封',()=>{setTier(k,i+1);S.me.ally+=2;S.me.favor+=2;return`${k.n}晉封${k.t45}，你在宮中也添了幾分體面。`}],
+     ['替他謙辭，以免樹大招風',()=>{k.de=cl(k.de+3);k.bond=cl(k.bond+3);S.me.favor+=1;return`皇上讚他謙退知禮，另賞了些銀兩。`}]]})}
+   else if(!mine||S.reg){setTier(k,i+1);logN(`${k.n}立有功勞，晉封${k.t45}。`,mine)}}
+  else if(P(.0035)&&(k.de<40||(k.pow>75&&P(.5)))){
+   if(mine&&!pushed&&!S.reg){pushed=1;S.q.push({t:`${k.t45}${k.n}行事失當，被御史彈劾，皇上震怒，欲降其爵位。`,o:[
+     ['替他求情（看聖寵）',()=>{if(P(cl(.3+S.me.favor/250,.1,.65))){S.me.favor-=1;return`皇上看在你的面上，只罰了他一年俸祿。`}S.me.favor-=2;setTier(k,k.sex=='男'?i-1:i-1);return`皇上不肯寬貸，${k.n}被降為${k.t45}。`}],
+     ['讓他認罰，閉門思過',()=>{k.de=cl(k.de+4);k.bond=cl(k.bond+5);setTier(k,i-1);return`${k.n}認了錯，被降為${k.t45}，倒也因此收斂了性子。`}]]})}
+   else if(!mine||S.reg){setTier(k,i-1);logN(`${k.n}因過失被降為${k.t45}。`,mine)}}
+  // 親王府
+  else if(mine&&!pushed&&!S.reg&&k.sex=='男'&&i>=3&&!k.fu47&&P(.02)){k.fu47=1;pushed=1;S.q.push({t:`${k.t45}${k.n}到了開府的年紀，內務府問是按祖制建府，還是從簡。`,o:[
+     ['按親王規制建府（耗銀100）',()=>{if(!pay(100))return'銀兩不足，只得從簡。';k.pow=cl(k.pow+5);S.me.ally+=3;return`親王府巍峨落成，來賀者絡繹不絕。`}],
+     ['從簡建府，省下銀兩',()=>{k.de=cl(k.de+3);S.me.silver+=30;return`府邸樸素，朝臣稱讚${k.n}不事奢華。`}]]})}});
+ // 猜忌
+ if(S.t-lastSus>=24&&suspicion()>6&&P(.2)){lastSus=S.t;const e=sneak();if(e){S.q.push(e);pushed=1}}
+ if(pushed)fl()}
+window.tick47=tick;
+const _m=mend;mend=function(){const r=_m.apply(this,arguments);try{tick()}catch(e){console.log('r47',e)}return r};
+// ---------- 公主婚姻與封號 ----------
+const _mx=mxOffers;mxOffers=function(k,own){const r=_mx.apply(this,arguments);
+ try{if(k.sex=='女'&&r&&r.length&&(k.t45==='固倫公主'||k.t45==='和碩公主')){const g=k.t45==='固倫公主';
+  const ex=g?{l:'下嫁一品勳貴嫡子（固倫禮制隆重，嫁妝100）',d:'母家人脈＋＋，朝局＋',f:()=>{const dw=pd(own,100),s=mkSp(k,'勳貴',{b:dw?8:-4});fam4(own,7,4);S.nat.stab+=2;return`${k.n}以固倫公主之禮下嫁勳貴之子${s.n}，儀仗綿延數里，${qtx(s.q)}。`}}
+   :{l:'許配有功之臣之子（籠絡重臣，嫁妝40）',d:'人脈＋，軍力＋',f:()=>{const dw=pd(own,40),s=mkSp(k,'功臣',{b:dw?4:-3});fam4(own,3,3);S.nat.mil+=2;return`${k.n}以和碩公主之禮許配功臣之子${s.n}，朝中重臣自此更感念皇恩，${qtx(s.q)}。`}};
+  const g0=ex.f;ex.f=()=>{const x=g0();if(k.sp)k.sp.ty0=k.sp.ty;return x};r.pop();r.unshift(ex)}}catch(e){console.log('r47b',e)}return r};
+// ---------- 排行、嫡庶、稱呼 ----------
+function ord(k){const same=allKids().filter(x=>x.sex===k.sex).sort((a,b)=>a.b-b.b||(a.n<b.n?-1:1));return same.indexOf(k)+1}
+const CALL={親王:'王爺',郡王:'王爺',貝勒:'貝勒爺',貝子:'貝子爺',和碩公主:'公主',固倫公主:'公主',格格:'格格',皇子:'阿哥',公主:'公主'};
+const _ka=kidsAllPanel;kidsAllPanel=function(){let h=_ka.apply(this,arguments);
+ try{const map={};allKids().forEach(k=>map[k.n]=k);
+  h=h.replace(/(<span class=nm>)([^<]*)(<\/span>[\s\S]*?)(<span class=mm>)/g,(m,a,n,b,c)=>{const k=map[n];if(!k)return m;const o=momOf(k),q=isQ(o),t=kTitle(k),bits=[`${CALL[t]?'朝臣稱「'+CALL[t]+'」':''}`,k.zi47?`字「${k.zi47}」`:'',k.sh47?`諡「${k.sh47}」`:'',q?'中宮嫡出':''].filter(Boolean).join('・');
+   const lab=(k.sex=='男'?'皇':'公主')==='皇'?`皇${CN[ord(k)]||ord(k)}子`:`${CN[ord(k)]||ord(k)}公主`;
+   return a+n+b+`<span class="pill" title="${bits}">${q?'嫡・':''}${lab}</span>`+c});
+  }catch(e){console.log('r47k',e)}return h};
+// ---------- 文字一致：把「皇子某某」換成實際爵位 ----------
+const _r=render;render=function(){const r=_r.apply(this,arguments);
+ try{if(!S||!S.me||S.over)return r;const ks=allKids().filter(k=>k.t45&&k.t45!=='待封'&&k.n&&k.n.length>=2);if(!ks.length)return r;
+  const mp={};ks.forEach(k=>mp[k.n]=k);const names=Object.keys(mp).map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|');
+  const re=new RegExp('(皇子|公主|親王)(「?)('+names+')','g'),root=document.querySelector('main')||document.body;
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null);let n,batch=[];while((n=w.nextNode())){if(n.nodeValue.length>3&&/皇子|公主|親王/.test(n.nodeValue))batch.push(n)}
+  batch.forEach(t=>{const v=t.nodeValue.replace(re,(m,a,q,nm)=>{const k=mp[nm];return kTitle(k)+q+nm});if(v!==t.nodeValue)t.nodeValue=v})}catch(e){console.log('r47t',e)}return r};
+})();
+
 deco();intro();
 
 
