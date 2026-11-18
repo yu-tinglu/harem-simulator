@@ -4960,7 +4960,7 @@ const _dc=dailyCard;dailyCard=function(){return _dc.apply(this,arguments)+zbCard
 const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
  try{if(S&&S.me&&!S.over){empSync();const main=document.querySelector('main');if(main&&TAB==3&&!main.querySelector('.emp45')){const e=S.em43,ep=(typeof EPS!=='undefined'&&EPS[S.ep])?EPS[S.ep][0]:'';
   const d=document.createElement('div');d.className='cd emp45';d.innerHTML=`<h3>在位皇帝</h3><div class=m><b>${e.era}帝・${e.sur}${e.giv}</b>${ep?'｜性格：'+ep:''}${S.reg?'（幼主，由太后聽政）':''}</div>${zbCardInner()}`;const f=main.querySelector(':scope>.cd');if(f)main.insertBefore(d,f);else main.appendChild(d)}}}catch(e){console.log('r45b',e)}return r};
-const _g=goalChip;goalChip=function(){let s='';try{if(S&&S.me){empSync();const e=S.em43;s=`<div class=cd><span class=m>在位：<b>${e.era}帝・${e.sur}${e.giv}</b>（${e.era}${S.t>=12?Math.floor(S.t/12)+1:1}年）</span></div>`}}catch(x){}return _g.apply(this,arguments)+s};
+const _g=goalChip;goalChip=function(){let s='';try{if(S&&S.me&&!S.reg){empSync();const e=S.em43;s=`<div class=cd><span class=m>在位：<b>${e.era}帝・${e.sur}${e.giv}</b>（${e.era}${S.t>=12?Math.floor(S.t/12)+1:1}年）</span></div>`}}catch(x){}return _g.apply(this,arguments)+s};
 })();
 
 /* ===== round46：皇子公主封爵制度（皇子→貝子/貝勒/郡王/親王；格格→和碩/固倫公主） ===== */
@@ -5115,8 +5115,20 @@ const ARCH=[
  {n:'大器晚成',w:8,d:'起步慢，十二歲後突飛猛進',a:{cai:-6,de:-3,pow:-6,chong:-4},g:{cai:1.6,de:1.5,pow:1.6,bond:1.2},late:1},
  {n:'體弱早慧',w:7,d:'身子單薄卻極聰明，與母親最親',a:{cai:10,de:4,bond:6,pow:-8},g:{cai:1.3,de:1,pow:.5,bond:1.4}},
  {n:'驕縱頑劣',w:5,d:'被慣壞了，需要嚴加管教',a:{chong:6,de:-10,pow:6},g:{cai:.8,de:.7,pow:1.1,bond:.9}}];
-const _kid=kid;kid=function(){const k=_kid.apply(this,arguments);
- try{let r=Math.random()*ARCH.reduce((a,x)=>a+x.w,0),i=0;for(;i<ARCH.length;i++){r-=ARCH[i].w;if(r<=0)break}i=Math.min(i,ARCH.length-1);k.zz47=i;
+const _kid=kid;kid=function(n,sex,b,mom){const k=_kid.apply(this,arguments);
+ try{const W=ARCH.map(x=>x.w);
+  try{const m=!S||!S.me?null:mom==='me'?S.me:(typeof mom=='number'&&S.npcs?S.npcs[mom]:null);
+   if(m&&m.at){const at=m.at,sk=at.sk||[],avg=(...ix)=>ix.reduce((a,i)=>a+(sk[i]||40),0)/ix.length,iq=at.iq||50,sc=mom==='me'?S.me.scheme:(m.sc||40),rk=m.rank||0,fv=m.favor||0;
+    let mil=0;try{mil=(m.fam||[]).filter(x=>MIL.test(x.job||'')).reduce((a,x)=>a+(x.pw||0),0)/Math.max(1,(m.fam||[]).length)}catch(e){}
+    const lit=avg(2,13,0);
+    W[0]*=Math.max(.5,1+((iq-50)+(rk-3)*6)/80);
+    W[1]*=1+Math.max(0,iq-50)/40+Math.max(0,lit-50)/60;
+    W[2]*=1+mil/80+Math.max(0,avg(6,7)-45)/60;
+    W[3]*=1+Math.max(0,50-sc)/50+Math.max(0,avg(4)-50)/80;
+    W[4]*=1+Math.max(0,sc-50)/50;
+    W[6]*=rk<3?1+(3-rk)/6:1;
+    W[8]*=fv>=80?1.5:1}}catch(e){console.log('r48m',e)}
+  let r=Math.random()*W.reduce((a,x)=>a+x,0),i=0;for(;i<ARCH.length;i++){r-=W[i];if(r<=0)break}i=Math.min(i,ARCH.length-1);k.zz47=i;
   const a=ARCH[i].a;['cai','de','chong','pow','bond'].forEach(x=>{if(a[x])k[x]=mm(k[x],a[x])})}catch(e){console.log('r48a',e)}return k};
 // ---------- 2. 培養方式 ----------
 const PLAN={'文教':{c:20,e:{cai:.6,de:.1},min:3},'武備':{c:15,e:{pow:.5,cai:.1},min:3},'德育':{c:10,e:{de:.6,bond:.2},min:3},'歷練':{c:25,e:{pow:.3,cai:.3,de:.1,chong:.1},min:12},'放養':{c:0,e:{bond:.2},min:0}};
@@ -5202,6 +5214,22 @@ function ledCard(){ledInit();const f=figs(),L7=S.led47,b=f.inc-f.exp,pols=[['tax
  return`<div class="cd led47"><h3>國情實數（每年結算）</h3><div class=m>人口 ${f.pop}萬　兵力 ${f.army}萬<br>歲入 ${f.inc}萬兩　歲出 ${f.exp}萬兩<br>〔軍費${f.mil}・官俸行政${f.adm}・宮廷${f.court}・宗室歲俸${f.zong}・賑災河工${f.relief}〕<br>預計年結餘：<b>${b>=0?'+':''}${b}</b>萬兩　國庫存銀：<b>${L7.tr}</b>萬兩</div>${S.reg?`<p class=m>太后聽政，可定本年財政方針：${pols.map(([k,n])=>`<button class="${L7.pol===k?'':'s'}" onclick="ledPol47('${k}')">${n}</button>`).join(' ')}<br>加征賦稅：歲入＋12%，但民心、朝局下降；裁減冗費：宮廷與官俸支出略減，軍力與朝局微降；賑濟安民：多支出400萬兩，民心朝局上升。</p>`:`<div class=m>你不掌朝政，財政由朝廷決定；孩子們的差事與宗室歲俸會影響國庫。</div>`}</div>`}
 const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
  try{if(S&&S.me&&!S.over&&TAB==3){const main=document.querySelector('main');if(main&&!main.querySelector('.led47')){const d=document.createElement('div');d.innerHTML=ledCard();const el=d.firstChild,e=main.querySelector('.emp45');if(e)e.insertAdjacentElement('afterend',el);else{const f=main.querySelector(':scope>.cd');if(f)main.insertBefore(el,f);else main.appendChild(el)}}}}catch(e){console.log('r48b',e)}return r};
+})();
+
+/* ===== round49：畫面整理（頂端列不換行、皇帝名銜統一） ===== */
+(function(){
+const st=document.createElement('style');st.textContent=`
+.top{flex-wrap:nowrap!important;gap:4px!important;padding-left:10px!important;padding-right:10px!important}
+.top .brand{font-size:15px!important;white-space:nowrap;flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.top .date{font-size:11px!important;white-space:nowrap;flex:0 0 auto;opacity:.85}
+.top .chipm{font-size:11px!important;padding:3px 8px!important;white-space:nowrap;flex:0 0 auto}
+.top .mini{min-width:30px!important;height:30px!important;padding:0 6px!important;font-size:12px!important;white-space:nowrap;flex:0 0 auto}
+@media(max-width:430px){.top .brand{font-size:13px!important}.top .date{font-size:10px!important}}
+`;document.head.appendChild(st);
+const _r=render;render=function(){const r=_r.apply(this,arguments);
+ try{const tp=document.querySelector('.top');if(tp){tp.querySelectorAll('button').forEach(b=>{if(b.textContent==='存檔'){b.textContent='存';b.setAttribute('aria-label','存檔與設定')}});const d=tp.querySelector('.date');if(d)d.textContent=d.textContent.replace(/・[春夏秋冬]$/,'')}}catch(e){}
+ try{if(S&&S.me&&!S.over&&S.reg&&S.reg.k&&typeof empName==='function'){const e=empName(),nm=S.reg.k.n,root=document.querySelector('main')||document.body;
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null);let n;while((n=w.nextNode())){const v=n.nodeValue;if(v.indexOf('皇帝')>=0&&v.indexOf(nm)>=0&&v.indexOf(e)<0){const nv=v.replace('皇帝 '+nm,e).replace('當今皇帝　'+nm,'當今皇帝　'+e);if(nv!==v)n.nodeValue=nv}}}}catch(e){console.log('r49',e)}return r};
 })();
 
 deco();intro();
