@@ -7037,6 +7037,28 @@ try{ACT.push(['籠絡朝臣派系','耗銀60，爭取朝中某一派系擁立你
 HELP.push(['奪嫡與朝臣擁護','朝中五個派系（外戚勳貴、清流文官、武將集團、寒門新貴、宗室親王）各自擁立一位皇子，依各派偏好決定：外戚看母家與寵愛，清流看德才，武將看勢力與年紀，寒門看才學，宗室看長幼與德行。擁護者越多、派系越強，皇子聲勢越高，但也越招皇上猜忌，儲君尤其危險。皇子的檔案裡會列出誰在擁護他；「子嗣」分頁的行動「籠絡朝臣派系」可花銀兩爭取某一派（約兩年內不易反悔）。']);
 })();
 
+/* ===== round77：輕鬆／簡潔模式下，行動頁只留常用行動，其餘收進「更多行動」 ===== */
+(function(){
+const g=k=>{try{return localStorage.getItem(k)}catch(e){return null}},st=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+const css=document.createElement('style');css.textContent='html.cp74 main>.sec13{display:none}html.cp74 main>.more77 .sec13{display:none}.more77{margin:8px 0;border-radius:14px;background:rgba(255,255,255,.7);border:1px dashed rgba(196,138,112,.5);padding:2px 12px}.more77>summary{cursor:pointer;font-weight:700;padding:11px 0;color:#8a3a30;font-size:15px}.more77>summary .m{font-weight:400;font-size:12.5px;opacity:.8;margin-left:6px}.more77>div{padding-bottom:6px}.more77 .cd{margin-left:0;margin-right:0}';document.head.appendChild(css);
+const KEEP=['恩寵聖眷','修身養性'];
+const _u=uiPost;uiPost=function(){const r=_u.apply(this,arguments);try{
+ if(typeof TAB==='undefined'||TAB!==0||!S||!S.me||S.over||S.reg||S.scn||!document.documentElement.classList.contains('cp74'))return r;
+ const main=document.querySelector('main');if(!main||main.querySelector(':scope>.more77'))return r;
+ const cards=[...main.querySelectorAll(':scope>.actcat')];if(cards.length<3)return r;
+ const head=e=>((e.innerText||'').trim().split(/[\s　]/)[0]||'');
+ const keep=KEEP.slice();if(S.me.kids&&S.me.kids.length)keep.push('子嗣');
+ const rest=cards.filter(e=>!keep.includes(head(e)));if(rest.length<2)return r;
+ const ab=main.querySelector(':scope>.autobar');
+ const d=document.createElement('details');d.className='more77';d.open=g('hg77more')==='1';
+ d.innerHTML=`<summary>更多行動<span class=m>人脈、宮人、遊歷、財貨、宮鬥${S.me.kids&&S.me.kids.length?'':'、子嗣'}</span></summary><div></div>`;
+ const box=d.querySelector('div');if(ab)box.appendChild(ab);rest.forEach(e=>box.appendChild(e));
+ d.addEventListener('toggle',()=>st('hg77more',d.open?'1':'0'));
+ const anchor=[...main.children].find(e=>e.classList.contains('sec13')&&/個人/.test(e.innerText||''))||main.querySelector(':scope>.prof13');
+ if(anchor)main.insertBefore(d,anchor);else main.appendChild(d);
+}catch(e){console.log('r77',e)}return r};window.uiPost=uiPost;
+})();
+
 deco();intro();
 
 
