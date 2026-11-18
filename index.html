@@ -3520,7 +3520,7 @@ render()}
 /* 主畫面：方針列、精簡 */
 const _ap10=uiPost;uiPost=function(){const r=_ap10.apply(this,arguments);try{if(TAB==0&&S&&S.me&&!S.over&&!S.reg&&!S.scn){const main=document.querySelector('main');if(main){
 if(!S.pol)S.pol='固寵';main.querySelectorAll('.autobar').forEach(e=>e.remove());const d=document.createElement('div');d.className='autobar';
-d.innerHTML=`<span class=al>方針</span><select onchange="S.pol=this.value;document.querySelector('.autobar .ad').textContent=POLD[S.pol]">${Object.keys(POLS).map(k=>`<option ${k==S.pol?'selected':''}>${k}</option>`).join('')}</select><span class=ad>${POLD[S.pol]}</span><span class=ab><button onclick="autoRun(1)">自動過一個月</button><button onclick="autoRun(12)">自動過一年</button></span>${S.aresume&&!S.ev&&!S.ch?`<button class=rs onclick="autoResume()">繼續剛才的自動過月（剩${S.aresume.left}個月）</button>`:''}<details class=am><summary>進階</summary><div>遇事：<select onchange="S.apx=this.value"><option value=auto ${S.apx!=='ask'?'selected':''}>小事自動處理</option><option value=ask ${S.apx==='ask'?'selected':''}>每件都讓我決定</option></select></div><div>目標：<select onchange="S.agoal=this.value;render()">${['無'].concat(Object.keys(AGOALS)).map(k=>`<option ${k==(S.agoal||'無')?'selected':''}>${k}</option>`).join('')}</select>${S.agoal&&S.agoal!=='無'?'<button onclick="autoGoal()">自動達成目標</button>':''}</div>${S.alog&&S.alog.length?`<div class=alg><b>上次自動過月明細</b>${S.alog.slice(-40).map(x=>`<div class=m>第${Math.floor(x.t/12)+1}年${x.t%12+1}月　${x.a}${x.c.length?'（'+x.c.join('、')+'）':''}${x.e.length?'<br>　↳ '+x.e.join('<br>　↳ '):''}</div>`).join('')}</div>`:''}</details>`;
+d.innerHTML=`<span class=al>方針</span><select onchange="S.pol=this.value;document.querySelector('.autobar .ad').textContent=POLD[S.pol]">${Object.keys(POLS).map(k=>`<option ${k==S.pol?'selected':''}>${k}</option>`).join('')}</select><span class=ad>${POLD[S.pol]}</span><span class=ab><button onclick="autoRun(3)">自動過一季</button><button onclick="autoRun(12)">自動過一年</button></span>${S.aresume&&!S.ev&&!S.ch?`<button class=rs onclick="autoResume()">繼續剛才的自動過月（剩${S.aresume.left}個月）</button>`:''}<details class=am><summary>進階</summary><div>遇事：<select onchange="S.apx=this.value"><option value=auto ${S.apx!=='ask'?'selected':''}>小事自動處理</option><option value=ask ${S.apx==='ask'?'selected':''}>每件都讓我決定</option></select></div><div>目標：<select onchange="S.agoal=this.value;render()">${['無'].concat(Object.keys(AGOALS)).map(k=>`<option ${k==(S.agoal||'無')?'selected':''}>${k}</option>`).join('')}</select>${S.agoal&&S.agoal!=='無'?'<button onclick="autoGoal()">自動達成目標</button>':''}</div>${S.alog&&S.alog.length?`<div class=alg><b>上次自動過月明細</b>${S.alog.slice(-40).map(x=>`<div class=m>第${Math.floor(x.t/12)+1}年${x.t%12+1}月　${x.a}${x.c.length?'（'+x.c.join('、')+'）':''}${x.e.length?'<br>　↳ '+x.e.join('<br>　↳ '):''}</div>`).join('')}</div>`:''}</details>`;
 const st=main.querySelector('.stat-strip');if(st)st.after(d);else main.prepend(d);
 if(S.t>=24)main.querySelectorAll(':scope>.tip').forEach(e=>e.remove());
 [...main.querySelectorAll(':scope>.cd')].forEach(c=>{if(!c.querySelector('h3')&&/^\s*母國/.test(c.textContent))c.classList.add('frs')});
@@ -3541,7 +3541,7 @@ html body details.frc>summary::after{content:' ▾';opacity:.5}
 html body details.frc[open]>summary{margin-bottom:6px}
 html body details.frc .m,html body details.frc .r{font-size:13.5px}
 `;document.head.appendChild(st)})();
-HELP.push(['方針與自動過月','主畫面「方針」可選固寵、養生、斂財、人脈、育子、守成、謀位。按「自動過一個月」或「自動過一年」，遊戲會依方針自動挑行動、遇到選項自動選較穩妥的，直到時間到，或遇到需要你決定的事件、健康過低、疑心或猜忌過高、醜聞過高才會停下，並顯示這段期間的變化摘要。']);
+HELP.push(['方針與自動過月','主畫面「方針」可選固寵、養生、斂財、人脈、育子、守成、謀位。按「自動過一季」或「自動過一年」，遊戲會依方針自動挑行動、遇到選項自動選較穩妥的，直到時間到，或遇到需要你決定的事件、健康過低、疑心或猜忌過高、醜聞過高才會停下，並顯示這段期間的變化摘要。']);
 
 /* ===== round11：事件稽核過濾、去重、後期節奏、通知位置 ===== */
 const EVCD=18;
@@ -3670,7 +3670,7 @@ const _up15=uiPost;uiPost=function(){const r=_up15.apply(this,arguments);try{if(
 /* 開局導覽 */
 function guideSeen(){try{return localStorage.getItem('hg_guide14')=='1'}catch(e){return false}}
 function guideOff(){try{localStorage.setItem('hg_guide14','1')}catch(e){}document.querySelectorAll('.guide14').forEach(e=>e.remove());S._g14=1}
-const _up16=uiPost;uiPost=function(){const r=_up16.apply(this,arguments);try{if(TAB==0&&S&&S.me&&!S.over&&!S.reg&&!S.scn&&S.t<6&&!S._g14&&!guideSeen()){const main=document.querySelector('main');if(main&&!main.querySelector('.guide14')){const st=main.querySelector('.stat-strip');const h=`<div class="cd guide14"><b>三步上手</b><ol><li>每月有 4 次行動，下方分組按鈕都是行動；先從「恩寵聖眷」開始，聖寵是晉位的關鍵。</li><li>最上面紅色「注意」欄會在快出事時提醒你，旁邊有按鈕可直接處理；點「皇帝詳情」可看皇上的狀態。</li><li>玩累了就選一個「方針」，按「自動過一個月／一年」，遇到大事它會停下來等你。</li></ol><button onclick="guideOff()">知道了</button></div>`;if(st)st.insertAdjacentHTML('afterend',h);else main.insertAdjacentHTML('afterbegin',h)}}}catch(e){console.log('guide',e)}return r};
+const _up16=uiPost;uiPost=function(){const r=_up16.apply(this,arguments);try{if(TAB==0&&S&&S.me&&!S.over&&!S.reg&&!S.scn&&S.t<6&&!S._g14&&!guideSeen()){const main=document.querySelector('main');if(main&&!main.querySelector('.guide14')){const st=main.querySelector('.stat-strip');const h=`<div class="cd guide14"><b>三步上手</b><ol><li>每月有 4 次行動，下方分組按鈕都是行動；先從「恩寵聖眷」開始，聖寵是晉位的關鍵。</li><li>最上面紅色「注意」欄會在快出事時提醒你，旁邊有按鈕可直接處理；點「皇帝詳情」可看皇上的狀態。</li><li>玩累了就選一個「方針」，按「自動過一季／一年」，遇到大事它會停下來等你。</li></ol><button onclick="guideOff()">知道了</button></div>`;if(st)st.insertAdjacentHTML('afterend',h);else main.insertAdjacentHTML('afterbegin',h)}}}catch(e){console.log('guide',e)}return r};
 (function(){const st=document.createElement('style');st.id='ui16';st.textContent=`html body .guide14{padding:10px 14px!important;font-size:13.5px;line-height:1.6;background:#fff8e8!important;border:1px solid rgba(214,168,96,.5)}html body .guide14 ol{margin:6px 0 8px 18px;padding:0}html body .guide14 li{margin:2px 0}html body .guide14 button{padding:5px 14px;font-size:12px;border-radius:999px}`;document.head.appendChild(st)})();
 
 /* ===== round16：終局大計（後期主線） ===== */
@@ -4261,7 +4261,7 @@ const _u36=uiPost;uiPost=function(){const r=_u36.apply(this,arguments);try{const
  if(S&&!S.over&&!S.scn&&!S.ch&&!S.ev&&typeof autoRun==='function'){const nav=document.querySelector('nav.tabs');const nb=nav?Math.round(nav.getBoundingClientRect().height):0;
   const d=document.createElement('div');d.className='ac31';
   d.style.cssText='position:fixed;left:0;right:0;bottom:'+nb+'px;z-index:40;display:flex;gap:8px;justify-content:center;padding:6px max(16px,env(safe-area-inset-left,0px));pointer-events:none';document.body.style.setProperty('--acb','52px');
-  d.innerHTML='<button class=go style="flex:1;max-width:220px;min-height:0;height:40px;padding:0 10px;font-size:15px;letter-spacing:0;pointer-events:auto;box-shadow:0 2px 10px rgba(0,0,0,.25)" onclick="autoRun(1)">▶ 自動過一個月</button><button class=s style="flex:1;max-width:220px;min-height:0;height:40px;padding:0 10px;font-size:15px;letter-spacing:0;background:var(--bg,#fff8ee);pointer-events:auto;box-shadow:0 2px 10px rgba(0,0,0,.25)" onclick="autoRun(12)">⏩ 自動過一年</button>';
+  d.innerHTML='<button class=go style="flex:1;max-width:220px;min-height:0;height:40px;padding:0 10px;font-size:15px;letter-spacing:0;pointer-events:auto;box-shadow:0 2px 10px rgba(0,0,0,.25)" onclick="autoRun(3)">▶ 自動過一季</button><button class=s style="flex:1;max-width:220px;min-height:0;height:40px;padding:0 10px;font-size:15px;letter-spacing:0;background:var(--bg,#fff8ee);pointer-events:auto;box-shadow:0 2px 10px rgba(0,0,0,.25)" onclick="autoRun(12)">⏩ 自動過一年</button>';
   document.body.appendChild(d);const m=document.querySelector('#app main');if(m)m.style.paddingBottom='calc(52px + '+(parseInt(getComputedStyle(m).paddingBottom)||0)+'px)'}}catch(x){console.log('r36',x)}return r};
 })();
 
@@ -4295,7 +4295,7 @@ const gs=k=>{try{return localStorage.getItem(k)}catch(e){return null}},ss=(k,v)=
 const css=document.createElement('style');css.textContent='@keyframes pl31{0%,100%{box-shadow:0 0 0 0 rgba(214,70,90,.55)}50%{box-shadow:0 0 0 10px rgba(214,70,90,0)}}.ac31 .pulse31{animation:pl31 1.4s infinite}.ob31{position:fixed;top:calc(env(safe-area-inset-top,0px) + 64px);left:50%;transform:translateX(-50%);width:min(92vw,420px);z-index:41;background:#4a2a3a;color:#fff;border-radius:14px;padding:10px 34px 10px 14px;font-size:13.5px;line-height:1.5;box-shadow:0 4px 16px rgba(0,0,0,.35)}.ob31 b{color:#ffd9a0}.ob31 .x{position:absolute;right:8px;top:6px;background:none;border:0;color:#fff;font-size:17px;min-height:0;padding:2px 6px}.ys31 .scroll p{margin:6px 0}.ev31s{cursor:pointer}.ev31s u{color:var(--accent,#c0394f);text-decoration:none;white-space:nowrap}';css.textContent+='html body:has(.scrim:not(.ys31)) #ntf.ntf14{display:none!important}';document.head.appendChild(css);
 /* 1 新手引導 */
 function ob(){const old=document.querySelector('.ob31');const bar=document.querySelector('.ac31');if(!bar||!S||S.over){if(old)old.remove();return}const st=gs('hg_ob31')||'0';if(st==='2'){if(old)old.remove();return}
- let msg='';if(st==='0'&&S.t<1){msg='<b>第一次玩？</b>先按「▶ 自動過一個月」，系統會幫你處理。想自己決定，就點上面導覽的「行動」。';const b=bar.querySelector('button.go');if(b)b.classList.add('pulse31')}
+ let msg='';if(st==='0'&&S.t<1){msg='<b>第一次玩？</b>先按「▶ 自動過一季」，系統會幫你處理。想自己決定，就點上面導覽的「行動」。';const b=bar.querySelector('button.go');if(b)b.classList.add('pulse31')}
  else if(st==='0'&&S.t>=1){ss('hg_ob31','1');msg='<b>玩完一個月了！</b>之後可以按「⏩ 自動過一年」，或到「行動」分頁自己選。';setTimeout(()=>{ss('hg_ob31','2');const o=document.querySelector('.ob31');if(o)o.remove()},9000)}
  else if(st==='1'){ss('hg_ob31','2');return}
  if(!msg){if(old)old.remove();return}if(old&&old.dataset.k===msg)return;if(old)old.remove();const d=document.createElement('div');d.className='ob31';d.dataset.k=msg;d.innerHTML=msg+'<button class=x onclick="this.parentNode.remove();try{localStorage.setItem(\'hg_ob31\',\'2\')}catch(e){}">×</button>';document.body.appendChild(d)}
@@ -5760,7 +5760,7 @@ function pts(){const m=S.me,o=[];const add=(p,t)=>o.push([p,t]);
  return o.sort((x,y)=>y[0]-x[0]).slice(0,3).map(x=>x[1])}
 const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
  try{if(S&&S.me&&!S.over&&TAB==0&&!S.scn){const main=document.querySelector('main');if(main){main.querySelectorAll('.pt61').forEach(e=>e.remove());const l=pts();
-  const d=document.createElement('div');d.className='cd pt61';d.innerHTML='<h3>本月重點</h3>'+(l.length?l.map(t=>`<div class=m>• ${t}</div>`).join(''):'<div class=m>目前一切平穩，可以放心按「自動過一個月」。</div>');main.insertBefore(d,main.firstChild)}}}catch(e){console.log('r61',e)}return r};
+  const d=document.createElement('div');d.className='cd pt61';d.innerHTML='<h3>本月重點</h3>'+(l.length?l.map(t=>`<div class=m>• ${t}</div>`).join(''):'<div class=m>目前一切平穩，可以放心按「自動過一季」。</div>');main.insertBefore(d,main.firstChild)}}}catch(e){console.log('r61',e)}return r};
 })();
 
 /* ===== round62：中秋、冬至節慶分版本；皇子差事門檻看生母位份 ===== */
@@ -6916,7 +6916,7 @@ try{const _th=tipHTML;tipHTML=function(){if(S&&S.t<2)return'';return _th.apply(t
 try{const st=document.createElement('style');st.textContent='.cp74c{display:none!important}html.cp74 .cq73:not(:has(.chip73)){display:none}';document.head.appendChild(st)}catch(e){}
 })();
 
-/* ===== V168：方針放到「自動過一個月／一年」的下一行 ===== */
+/* ===== V168：方針放到「自動過一季／一年」的下一行 ===== */
 (function(){
 try{const st=document.createElement('style');st.textContent='.ac31{flex-wrap:wrap}.ac31 .pol75{flex:0 0 100%;max-width:448px;display:flex;align-items:center;gap:8px;pointer-events:auto;background:rgba(255,250,244,.96);border:1px solid rgba(196,138,112,.35);border-radius:10px;padding:4px 10px;box-shadow:0 2px 10px rgba(0,0,0,.18);font-size:13.5px;color:#5a3a32;box-sizing:border-box}.ac31 .pol75 b{color:#8a3a30;white-space:nowrap}.ac31 .pol75 select{font:inherit;font-size:13.5px;padding:3px 6px;border-radius:8px;border:1px solid rgba(196,138,112,.4);background:#fff;color:#5a3a32}.ac31 .pol75 span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px;opacity:.85}.autobar>.al,.autobar>select{display:none}';document.head.appendChild(st)}catch(e){}
 try{const _u=uiPost;uiPost=function(){const r=_u.apply(this,arguments);try{
@@ -7257,7 +7257,7 @@ window.adv82=function(){try{let e=document.getElementById('adv82');if(e){e.remov
 const sels=am.querySelectorAll('select'),sx=sels[0],sg=sels[1];const gb=[...am.querySelectorAll('button')].find(x=>/達成/.test(x.textContent));const rb=[...ab.querySelectorAll('button')].find(x=>/繼續/.test(x.textContent));const alg=am.querySelector('.alg');
 e=document.createElement('div');e.id='adv82';
 const mk=(h,d)=>{const s=document.createElement('div');s.className='s82';s.innerHTML='<b>'+h+'</b><div class=d82>'+d+'</div>';return s};
-e.innerHTML='<div class=h82><b>自動過月設定</b><button class=x82>✕</button></div><div class=t82>平常直接按下方「自動過一個月」就好，這裡是選填的細部設定。</div>';
+e.innerHTML='<div class=h82><b>自動過月設定</b><button class=x82>✕</button></div><div class=t82>平常直接按下方「自動過一季」就好，這裡是選填的細部設定。</div>';
 if(rb){const s=mk('上次中斷了','自動過月被大事打斷時，可以從這裡接著跑。');const b=rb.cloneNode(true);b.className='go82 rs82';b.removeAttribute('style');s.appendChild(b);e.appendChild(s)}
 if(sx){const s=mk('遇到事件時','小事讓遊戲替你選；選「每件都讓我決定」就會每件停下來問你。');const c=sx.cloneNode(true);c.value=S.apx||sx.value;c.setAttribute('onchange',sx.getAttribute('onchange'));s.appendChild(c);e.appendChild(s)}
 if(sg){const s=mk('一路自動做到某個目標','先選目標，再按「開始」，達成或遇到大事就會停下。');const c=sg.cloneNode(true);c.value=S.agoal||sg.value;c.setAttribute('onchange',sg.getAttribute('onchange'));s.appendChild(c);if(gb){const b=gb.cloneNode(true);b.className='go82';b.removeAttribute('style');b.textContent='開始自動達成這個目標';s.appendChild(b)}e.appendChild(s)}
