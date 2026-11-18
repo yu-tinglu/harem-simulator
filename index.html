@@ -6628,7 +6628,7 @@ try{HELP.push(['個人化故事','每位妃嬪的「心願」與「秘密」不�
 if(typeof SND==='undefined')return;
 const rnd=(a,b)=>a+Math.random()*(b-a),ri=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),pk=a=>a[Math.floor(Math.random()*a.length)];
 /* 五聲音階：宮調（明朗）與羽調（幽怨） */
-const MODE={gong:{off:[0,2,4,7,9],root:146.83,bpm:66},yu:{off:[0,3,5,7,10],root:110,bpm:54},xi:{off:[0,2,4,7,9],root:164.81,bpm:84},di:{off:[0,2,5,7,9],root:123.47,bpm:58}};
+const MODE={gong:{off:[0,2,4,7,9],root:146.83,bpm:50,lv:1.6},yu:{off:[0,3,5,7,10],root:110,bpm:44,lv:1.6},xi:{off:[0,2,4,7,9],root:164.81,bpm:62,lv:1.45},di:{off:[0,2,5,7,9],root:123.47,bpm:46,lv:1.6}};
 const fq=(m,i)=>m.root*Math.pow(2,(m.off[((i%5)+5)%5]+12*Math.floor(i/5))/12);
 /* 旋律動機：[音級, 拍數]，音級 0=主音，5=高八度 */
 const MOT=[
@@ -6672,18 +6672,18 @@ function bus(ctx,out){const comp=ctx.createDynamicsCompressor();comp.threshold.v
  const wet=ctx.createGain();wet.gain.value=.34;conv.connect(wet);wet.connect(comp);
  const inp=ctx.createGain();inp.connect(dry);inp.connect(conv);return inp}
 /* 一段樂句：回傳持續秒數 */
-function phrase(ctx,dest,t0,modeName){const M=MODE[modeName]||MODE.gong,beat=60/(M.bpm*rnd(.96,1.04));let t=t0;
+function phrase(ctx,dest0,t0,modeName){const M=MODE[modeName]||MODE.gong;const dest=ctx.createGain();dest.gain.value=M.lv;dest.connect(dest0);const beat=60/(M.bpm*rnd(.96,1.04));let t=t0;
  const useFlute=Math.random()<.6,mel=[];const a=pk(MOT),b=Math.random()<.7?pk(MOT):null,e=pk(END);
  [a,b,[e]].forEach(seq=>{if(seq)seq.forEach(n=>mel.push(n))});
  if(Math.random()<.3)mel.unshift([e[0]?3:0,1]);
  const lift=useFlute?5:0;let pos=0;
  if(Math.random()<.5)qing(ctx,dest,t0,fq(M,6),.05);
  mel.forEach(([ix,d],k)=>{const tt=t0+pos*beat,f=fq(M,ix+lift),dur=d*beat;
-  if(useFlute){flute(ctx,dest,tt,f,Math.max(.3,dur-.12),.2);if(d<=1)pluck(ctx,dest,tt,fq(M,ix),.12,rnd(-.3,.3))}
-  else{const sl=d>=2&&Math.random()<.45?rnd(1,2):0;if(d>=2&&Math.random()<.4)pluck(ctx,dest,tt-.1*beat,fq(M,ix+(Math.random()<.5?1:-1)),.16,rnd(-.2,.2));pluck(ctx,dest,tt,fq(M,ix+5),.34,rnd(-.25,.25),sl)}
+  if(useFlute){flute(ctx,dest,tt,f,Math.max(.3,dur-.12),.17)}
+  else{const sl=d>=2&&Math.random()<.45?rnd(1,2):0;if(d>=2&&Math.random()<.4)pluck(ctx,dest,tt-.1*beat,fq(M,ix+(Math.random()<.5?1:-1)),.16,rnd(-.2,.2));pluck(ctx,dest,tt,fq(M,ix+5),.42,rnd(-.25,.25),sl)}
   pos+=d});
  /* 伴奏：每兩拍一組琶音 */
- const total=pos,base=pk([0,0,3]);for(let q=0;q<total;q+=2){const bt=t0+q*beat;[base,base+3,base+5,base+3].forEach((ix,j)=>pluck(ctx,dest,bt+j*beat*.5,fq(M,ix),.2,j%2?.3:-.3))}
+ const total=pos,base=pk([0,0,3]);for(let q=0;q<total;q+=4){const bt=t0+q*beat;[base,base+3,base+5].forEach((ix,j)=>pluck(ctx,dest,bt+j*beat*.9,fq(M,ix),.1,j%2?.3:-.3))}
  /* 句末刮奏 */
  if(Math.random()<.65){const gt=t0+total*beat-beat*.4;const up=Math.random()<.6;for(let i=0;i<8;i++){const ix=up?i:8-i;pluck(ctx,dest,gt+i*.065,fq(M,ix),.16*(1-i*.06),(i/8-.5)*.6)}}
  if(modeName==='yu'||modeName==='di'){if(Math.random()<.5)drum(ctx,dest,t0,.1)}
@@ -6694,7 +6694,7 @@ let gen=0;
 sndLoop=function(){if(!SND.on||!SND.ctx)return;const my=gen;
  try{if(!SND.bus){SND.bus=bus(SND.ctx,SND.mg)}
   const t=SND.ctx.currentTime+.15,dur=phrase(SND.ctx,SND.bus,t,curMode());
-  clearTimeout(SND.tm);SND.tm=setTimeout(()=>{if(my===gen)sndLoop()},(dur+rnd(2.5,5.5))*1000)}catch(e){console.log('r72',e);SND.tm=setTimeout(()=>{if(my===gen)sndLoop()},8000)}};
+  clearTimeout(SND.tm);SND.tm=setTimeout(()=>{if(my===gen)sndLoop()},(dur+rnd(3,7))*1000)}catch(e){console.log('r72',e);SND.tm=setTimeout(()=>{if(my===gen)sndLoop()},8000)}};
 const _tg=sndToggle;sndToggle=function(){gen++;const r=_tg.apply(this,arguments);try{if(SND.on&&SND.mg){SND.mg.gain.value=.85}}catch(e){}return r};
 /* 音效也改用古箏撥弦 */
 const _sfx=sfx;sfx=function(kind){try{if(!SND||!SND.on||!SND.ctx)return;if(!SND.bus)SND.bus=bus(SND.ctx,SND.mg);const M=MODE.gong,ctx=SND.ctx,t=ctx.currentTime+.02,seq={up:[3,4,5,7],baby:[4,6],die:[2,0,-3]}[kind];if(!seq)return _sfx.apply(this,arguments);
