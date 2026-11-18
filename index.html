@@ -4744,6 +4744,35 @@ const _rh=rosterHTML;rosterHTML=function(){let h=_rh.apply(this,arguments);
 const _fa=fApply;fApply=function(){_fa.apply(this,arguments);try{document.querySelectorAll('[data-list=roster]').forEach(box=>{let g=null,vis=0;const flush=()=>{if(g)g.style.display=vis?'':'none'};[...box.children].forEach(c=>{if(c.classList.contains('grp40')){flush();g=c;vis=0}else if(c.style.display!=='none')vis++});flush()})}catch(e){}};
 })();
 
+/* ===== round41：時代背景（每局抽一個）影響國力走向與專屬事件 ===== */
+(function(){
+const gF=x=>{if(S.reg)S.reg.pw+=x;else S.me.favor+=x};
+const fame=x=>{S.me.fame=(S.me.fame||0)+x};
+const ERAS={
+ peace:{n:'盛世承平',d:'四海昇平、府庫充盈。國力穩中有升，宮中安逸，但也人才濟濟，競爭更看門第與才藝。',init:{eco:10,stab:8,pop:6,mil:0},drift:{eco:.06,stab:.04,pop:.04},
+  ev:[()=>({t:'四方使節來朝，宮中大擺筵席，各國貢品堆滿了偏殿。',o:[['獻藝助興，博個好名聲',()=>{if(P(.5+(S.me.at?S.me.at.iq:50)/300)){gF(4);fame(3);return'你的表演贏得滿堂彩，使節也讚不絕口。'}gF(1);return'中規中矩，沒出什麼差錯。'}],['低調赴宴，不搶風頭',()=>{S.me.hp=Math.min(100,S.me.hp+1);S.me.ally+=1;return'你安安穩穩吃完宴席，沒惹任何麻煩。'}],['結交使節夫人，打探外邦風物',()=>{S.me.ally+=3;S.me.scheme+=1;return'你從使節夫人那裡聽到了不少新鮮事。'}]]}),
+  ()=>({t:'連年豐稔，米價大跌，朝廷商議要不要加賞宮人。',o:[['贊成加賞，並帶頭捐出份例（耗銀30）',()=>{if(!pay(30))return'銀兩不足，只能口頭贊成。';S.me.ally+=4;fame(2);return'宮人感念你的體恤，口碑一路傳開。'}],['附和眾議，不出頭',()=>{S.me.ally+=1;return'事情順利通過，你只是附和了幾句。'}],['勸皇上緩一緩，以防日後不豐',()=>{gF(2);S.me.scheme+=2;return'皇上覺得你有遠見。'}]]})]},
+ war:{n:'亂世烽煙',d:'邊患不斷、烽火連年。國力下行、軍力吃緊，宮中人心惶惶，但軍功與母家軍權格外值錢。',init:{eco:-8,stab:-8,pop:-5,mil:8},drift:{eco:-.05,stab:-.05,mil:.03},
+  ev:[()=>({t:'烽火連月，前線急報頻傳，宮中人人自危。',o:[['捐出私房，支援軍餉（耗銀60）',()=>{if(!pay(60))return'銀兩不足，只能獻上幾件首飾。';S.nat.mil+=3;gF(3);fame(2);return'你的義舉傳到皇上耳中，他當眾誇你深明大義。'}],['為前線將士抄經祈福',()=>{fame(2);S.me.ally+=2;return'你連夜抄經，宮人們也跟著一起祈福。'}],['閉門不問，保全自身',()=>{S.me.scheme+=1;return'你沒有多說什麼，日子照常過。'}]]}),
+  ()=>({t:'流民湧入京城，宮外傳來哄搶糧倉的消息。',o:[['出資在城外設粥棚（耗銀40）',()=>{if(!pay(40))return'銀兩不足，只能派人送幾袋米。';S.nat.pop+=3;fame(3);return'百姓稱你為「活菩薩」，聲望大增。'}],['請皇上派兵彈壓',()=>{S.nat.stab+=2;S.nat.pop-=2;gF(1);return'亂局壓下了，但民怨並未消散。'}],['袖手旁觀',()=>{S.nat.stab-=1;return'你什麼也沒做，事態自行發展。'}]]})]},
+ rise:{n:'中興之世',d:'吏治整頓、百廢待興。國力緩步回升，朝局清明，能臣與新政是這個時代的底色。',init:{eco:-2,stab:2,pop:0,mil:0},drift:{eco:.1,stab:.08,pop:.08,mil:.04},
+  ev:[()=>({t:'朝廷大力整頓吏治，宮中也開始清理冗員與虛報的份例。',o:[['配合清查，主動交出帳目',()=>{gF(3);fame(2);return'你坦蕩的做法讓皇上很放心。'}],['替身邊人說情，求從輕發落',()=>{S.me.ally+=3;gF(-1);return'你保住了幾個人，卻略失皇上的信任。'}],['趁機整頓自己宮裡的開支（耗銀0）',()=>{S.me.silver+=30;S.me.scheme+=1;return'你清掉了不少浮帳，反倒省下一筆銀子。'}]]}),
+  ()=>({t:'新法推行見效，國庫漸豐，皇上心情大好，要在宮中設宴慶賀。',o:[['進言「新法有成，宜惠及民間」',()=>{if(P(.55)){gF(4);S.nat.pop+=2;return'皇上採納了你的建議，下旨減免一年賦稅。'}gF(1);return'皇上笑著點點頭，沒有多說。'}],['備一份賀禮（耗銀30）',()=>{if(!pay(30))return'銀兩不足，禮輕了些。';gF(3);return'皇上對你的心意很滿意。'}],['安靜赴宴',()=>{S.me.hp=Math.min(100,S.me.hp+1);return'宴席上你吃得安心。'}]]})]},
+ kin:{n:'外戚專權',d:'外戚坐大、朝堂失衡。高門出身的人佔盡便宜，母家勢力水漲船高，但皇帝猜忌也更重、朝局更不穩。',init:{eco:0,stab:-6,pop:0,mil:0},drift:{stab:-.04},
+  ev:[()=>({t:'朝中外戚勢力坐大，皇上似乎有意制衡，後宮也被捲進這場博弈。',o:[['讓母家低調行事，避其鋒芒',()=>{S.me.fam.forEach(x=>x.pw-=3);gF(3);S.me.ally+=2;return'你的謹慎讓皇上放了心。'}],['借勢而上，替母家多爭一些',()=>{S.me.fam.forEach(x=>x.pw+=5);gF(-3);return'母家風光了一陣，皇上卻對你多了幾分戒心。'}],['兩頭不得罪，靜觀其變',()=>{S.me.scheme+=2;return'你不偏不倚，暫時躲過了風口浪尖。'}]]}),
+  ()=>({t:'某位外戚在朝堂上公然頂撞皇上，後宮議論紛紛。',o:[['勸母家與其劃清界線',()=>{S.me.fam.forEach(x=>x.pw-=2);gF(3);return'你把母家從是非中拉了出來。'}],['暗中派人傳話，示好那位外戚（耗銀30）',()=>{if(!pay(30))return'銀兩不足，話沒傳到。';S.me.ally+=4;S.me.fam.forEach(x=>x.pw+=3);return'那位外戚記下了你的人情。'}],['裝作不知',()=>{return'你沒表態，事情平淡過去。'}]]})]},
+ disaster:{n:'天災頻仍',d:'旱澇蝗疫接連而來，國庫與民生承壓。需要善舉與賑濟，也容易出現趁亂斂財或立功揚名的機會。',init:{eco:-6,stab:-4,pop:-8,mil:0},drift:{pop:-.04,eco:-.03},
+  ev:[()=>({t:'今年天象異常，欽天監連連示警，朝野都在議論是不是上天降罪。',o:[['在宮中設壇祈福（耗銀30）',()=>{if(!pay(30))return'銀兩不足，只能簡單焚香。';S.nat.stab+=2;fame(2);return'祈福之後人心稍安。'}],['勸皇上下罪己詔',()=>{if(P(.4)){gF(4);S.nat.stab+=3;return'皇上聽進去了，下詔後民心穩了不少。'}gF(-3);return'皇上對你的直言有些不悅。'}],['靜觀其變',()=>{return'你什麼也沒做，只覺得心裡不安。'}]]}),
+  ()=>({t:'地方奏報旱情，朝廷要發賑濟，後宮也被要求節儉用度。',o:[['帶頭縮減開支，捐出份例（耗銀30）',()=>{if(!pay(30))return'銀兩不足，只能縮減自己的用度。';S.nat.pop+=3;gF(3);fame(2);return'你的舉動被傳為佳話。'}],['照常用度，不聲張',()=>{return'你日子照舊，沒有引起注意。'}],['趁機低價收購糧食，日後轉賣（耗銀60）',()=>{if(!pay(60))return'銀兩不足，沒能下手。';S.me.silver+=Math.round(60*(1.5+Math.random()));S.me.scand=(S.me.scand||0)+3;return'你賺了一筆，只是難免被人說閒話。'}]]})]}};
+const KEYS=Object.keys(ERAS);
+const _st=start;start=function(){const r=_st.apply(this,arguments);
+ try{if(S&&S.me&&!S.era41){const k=KEYS[Math.floor(Math.random()*KEYS.length)];S.era41=k;const E=ERAS[k];if(S.nat)Object.keys(E.init).forEach(s=>{S.nat[s]=cl((S.nat[s]||50)+E.init[s])});if(typeof msPush==='function')msPush('時代：'+E.n+'——'+E.d)}}catch(e){console.log('r41',e)}return r};
+const _m=mend;mend=function(){const r=_m.apply(this,arguments);
+ try{if(S&&S.era41&&S.me&&!S.over&&S.nat){const E=ERAS[S.era41];Object.keys(E.drift).forEach(s=>{S.nat[s]=cl((S.nat[s]||50)+E.drift[s])});if(S.t>3&&S.t-(S.era41t==null?-99:S.era41t)>=9&&P(.12)){S.era41t=S.t;const e=pk(E.ev)();S.q.push(e);if(!S.ev&&!S.ch&&!S.scn)next();else render()}}}catch(e){console.log('r41b',e)}return r};
+const _g=goalChip;goalChip=function(){let s='';try{if(S&&S.era41&&!S.reg)s=`<div class=cd data-open=1><h3>時代：${ERAS[S.era41].n}</h3><div class=m>${ERAS[S.era41].d}</div></div>`}catch(e){}return _g.apply(this,arguments)+s};
+window.eraName=()=>S&&S.era41?ERAS[S.era41].n:'';
+})();
+
 deco();intro();
 
 
