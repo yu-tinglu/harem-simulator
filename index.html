@@ -5735,6 +5735,34 @@ const _rm=rmend;rmend=function(){const r=_rm.apply(this,arguments);
   S.cb60=S.t+6;infPush(pick.e())}catch(e){console.log('r60',e)}return r};
 })();
 
+/* ===== round61：本月重點卡 ===== */
+(function(){
+function pts(){const m=S.me,o=[];const add=(p,t)=>o.push([p,t]);
+ try{
+ if(m.hp<35)add(9,'健康偏低（'+Math.round(m.hp)+'），再不養生恐生大病，建議做「修身養性」類行動。');
+ if(!S.reg){
+  if(m.favor<30)add(8,'聖寵偏低（'+Math.round(m.favor)+'），容易被冷落，可先做「恩寵聖眷」類行動。');
+  if(m.silver<30)add(7,'銀兩快見底（'+Math.round(m.silver)+'），打點與晉升都會受限。');
+  const ks=m.kids.filter(k=>!k.dead);
+  const a=ks.filter(k=>yr(k)>=4&&yr(k)<18&&!k.pl47);if(a.length)add(6,a[0].n+(a.length>1?'等 '+a.length+' 個孩子':'')+'還沒定培養方式（宗室頁可設定）。');
+  const b=ks.filter(k=>k.sex=='男'&&yr(k)>=16&&!k.pos47);if(b.length)add(5,b[0].n+'已成年，還沒有差事。');
+  const c=ks.filter(k=>k.sex!='男'&&yr(k)>=15&&!k.pp54);if(c.length)add(5,c[0].n+'已及笄，還沒安排公主差事。');
+  const left=36-(S.t-(S.xt58||0));if(S.t>=24&&left<=3&&left>0)add(4,'約 '+left+' 個月後有一屆選秀，皇上可能問你的意見。');
+ }else{
+  const R_=S.reg;if(R_.pw<30)add(9,'你的權柄偏低（'+Math.round(R_.pw)+'），朝政容易被對手把持。');
+  if(R_.rv>65)add(8,'對手勢力偏高（'+Math.round(R_.rv)+'），可考慮「打壓對手」。');
+  const L7=S.led47;if(L7&&typeof led47==='function'&&L7.tr<led47().inc*.4)add(7,'國庫存銀偏低，宜節流或賑濟前先看國情實數。');
+  const e=rx().emp;if(e&&!e.gone&&e.gl<30)add(6,'皇后對你好感很低（'+Math.round(e.gl)+'），婆媳關係緊張。');
+  if(!e||e.gone)add(6,'中宮尚缺皇后，可「籌辦大婚」或在選秀中擇后。');
+  if(yr(R_.k)>=14&&S.t>=(R_.xiu57||0))add(4,'可以主持選秀了（皇帝後宮 '+(rx().cb||[]).length+' 人）。');
+ }
+ }catch(x){console.log('r61p',x)}
+ return o.sort((x,y)=>y[0]-x[0]).slice(0,3).map(x=>x[1])}
+const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
+ try{if(S&&S.me&&!S.over&&TAB==0&&!S.scn){const main=document.querySelector('main');if(main){main.querySelectorAll('.pt61').forEach(e=>e.remove());const l=pts();
+  const d=document.createElement('div');d.className='cd pt61';d.innerHTML='<h3>本月重點</h3>'+(l.length?l.map(t=>`<div class=m>• ${t}</div>`).join(''):'<div class=m>目前一切平穩，可以放心按「無腦玩一個月」。</div>');main.insertBefore(d,main.firstChild)}}}catch(e){console.log('r61',e)}return r};
+})();
+
 deco();intro();
 
 
