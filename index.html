@@ -4549,6 +4549,79 @@ const _n=next;next=function(){const r=_n.apply(this,arguments);
 const _s=window.sug31;if(_s)window.sug31=function(e){const d=(S&&S.diff===undefined)?1:(S&&S.diff);if(d===2)return null;if(d===1&&P(.15))return null;return _s.apply(this,arguments)};
 })();
 
+/* ===== round38：長線劇情——十年宿敵／身世之謎／閨中密友（各4幕，與原主線並行） ===== */
+(function(){
+const NM={foe:'十年宿敵',myst:'身世之謎',friend:'閨中密友'};
+const live=()=>ids().filter(i=>S.npcs[i]&&!S.npcs[i].st);
+function pickNpc(kind){const l=live();if(!l.length)return null;const key=kind==='foe'?(i=>S.npcs[i].host+Math.random()*20):(i=>S.npcs[i].al+Math.random()*20);return l.sort((a,b)=>key(b)-key(a))[0]}
+const A=()=>S.arc37,N=()=>{const a=A();let n=S.npcs[a.ni];if(!n||n.st){const i=pickNpc(a.id==='foe'?'foe':'friend');if(i==null)return null;a.ni=i;n=S.npcs[i]}return n};
+const gF=x=>S.me.favor+=x,scn=x=>{S.me.scand=Math.max(0,(S.me.scand||0)+x)};
+function adv(d,end){const a=A();a.st++;a.nx=S.t+d;if(end||a.st>=4){a.done=1;msPush('長線劇情「'+NM[a.id]+'」落幕')}}
+const ACTS={
+foe:[
+ ()=>{const n=N();if(!n)return null;return{t:`${n.n}近來處處與你作對，宮宴上當眾說了句帶刺的話，眾人都看了過來。`,o:[
+  ['笑著化解，不接她的茬',()=>{A().f.s=0;n.host=cl(n.host-4);gF(1);adv(R(10,16));return'你輕輕一笑帶過，旁人都說你有度量。'}],
+  ['不動聲色，把這筆賬記下',()=>{A().f.s=1;S.me.scheme+=3;adv(R(10,16));return'你面上不顯，心裡已有了計較。'}],
+  ['當場回敬，不落下風（看心機）',()=>{A().f.s=2;if(P(.45+S.me.scheme/300)){gF(3);n.favor=cl(n.favor-3);adv(R(10,16));return'你一句話堵得她無言以對，滿座暗暗稱快。'}gF(-3);n.host=cl(n.host+6);adv(R(10,16));return'你言辭失當，反被她抓住話柄。'}]]}},
+ ()=>{const n=N();if(!n)return null;const s=A().f.s;return s===0?{t:`${n.n}差人送來一盒點心，附言「前日是我失言」。`,o:[
+  ['收下，順勢與她修好',()=>{A().f.s=0;n.al=cl(n.al+10);n.host=cl(n.host-8);adv(R(12,18));return'你們之間的氣氛緩和了不少。'}],
+  ['收下，但提防著她',()=>{S.me.scheme+=2;adv(R(12,18));return'你嘗也沒嘗，轉手賞給了宮人。'}]]}:{t:`${n.n}在皇上面前說了你幾句不是，雖無實據，卻也讓人心裡添堵。`,o:[
+  ['請皇上明察',()=>{if(P(.5+S.me.favor/250)){gF(3);adv(R(12,18));return'皇上沒有信她的話，反而對你多了幾分憐惜。'}gF(-2);adv(R(12,18));return'皇上淡淡地說「後宮瑣事，不必計較」。'}],
+  ['暗中蒐集她的把柄',()=>{S.evid[A().ni]=(S.evid[A().ni]||0)+1;S.me.scheme+=3;adv(R(12,18));return'你開始留意她身邊的一舉一動。'}],
+  ['以德報怨，送上厚禮（耗銀40）',()=>{if(!pay(40))return'銀兩不足，你什麼也送不出。';n.host=cl(n.host-10);adv(R(12,18));return'她收了禮，神色有些複雜。'}]]}},
+ ()=>{const n=N();if(!n)return null;return{t:`${n.n}與你同時被牽扯進一樁宮中小案，雙方各執一詞，皇上要你們當面對質。`,o:[
+  ['據實陳述，不攀咬她',()=>{adv(R(12,20));if(P(.55)){gF(3);S.me.fame=(S.me.fame||0)+2;return'皇上見你言辭坦蕩，對你多了信任。'}gF(-1);return'事情懸而未決，兩人各打五十大板。'}],
+  ['拿出蒐集的證據，反擊',()=>{adv(R(12,20));if((S.evid[A().ni]||0)>=1&&P(.7)){n.favor=cl(n.favor-14);gF(4);return'你的證據讓她無從辯解，聖眷驟減。'}scn(6);gF(-4);return'你拿不出像樣的證據，反被指為誣告。'}],
+  ['請皇后從中調停',()=>{adv(R(12,20));S.me.emp+=4;n.host=cl(n.host-3);return'皇后出面各打圓場，事情算是揭過了。'}]]}},
+ ()=>{const n=N();if(!n)return null;const al=n.al>=55||n.host<25;return al?{t:`多年恩怨下來，${n.n}病中託人請你過去，說有幾句話想當面講。`,o:[
+  ['前去探望，把話說開',()=>{adv(0,1);n.al=cl(n.al+25);n.host=cl(n.host-25);S.me.ally+=8;S.me.fame=(S.me.fame||0)+2;msPush('與'+n.n+'冰釋前嫌');return'她握著你的手，說：「這些年，我也累了。」你們從此成了知己。'}],
+  ['派人送去藥材，自己不去',()=>{adv(0,1);n.host=cl(n.host-10);S.me.ally+=2;return'你的心意她收到了，只是這段關係終究淡淡的。'}]]}:{t:`${n.n}與你鬥了多年，終於在一次小事上栽了跟頭，聖眷一落千丈，宮人都在看你如何處置。`,o:[
+  ['落井下石，徹底斷她後路',()=>{adv(0,1);n.favor=cl(n.favor-20);S.me.scheme+=4;scn(5);msPush('徹底壓倒了'+n.n);return'她從此一蹶不振，只是你在眾人眼裡也多了一層狠辣。'}],
+  ['放她一馬，保留體面',()=>{adv(0,1);n.host=cl(n.host-12);S.me.fame=(S.me.fame||0)+3;S.me.ally+=4;return'你的寬宏讓許多人刮目相看，她也再不敢與你為敵。'}],
+  ['袖手旁觀，任其自生自滅',()=>{adv(0,1);return'你不言不語，這件事就這樣過去了。'}]]}}],
+myst:[
+ ()=>({t:'娘家一位年邁的老僕輾轉遞來口信，說有關於你出身的事，必須當面告訴你。',o:[
+  ['設法安排見面（耗銀30）',()=>{if(!pay(30))return'銀兩不足，沒能安排成。';A().f.m=1;adv(R(10,16));return'你託人把老僕悄悄接進城，約在僻靜處相見。'}],
+  ['派心腹代為詢問',()=>{A().f.m=0;S.me.ally+=1;adv(R(10,16));return'心腹帶回幾句含糊的話，你覺得其中另有隱情。'}],
+  ['不予理會',()=>{A().f.m=-1;adv(R(14,22));return'你把口信擱在一旁，心裡卻怎麼也放不下。'}]]}),
+ ()=>{const m=A().f.m;return m>=0?{t:'老僕道出一樁舊事：你並非家中親生，當年生母另有其人，且與一樁舊案有關。',o:[
+  ['追問細節，查個水落石出（看心機）',()=>{if(P(.5+S.me.scheme/250)){A().f.k=1;S.me.scheme+=4;adv(R(12,18));return'你順著線索摸到了當年的經手人。'}adv(R(12,18));return'線索忽然斷了，像有人在刻意抹去什麼。'}],
+  ['叮囑老僕守口如瓶',()=>{A().f.k=0;S.me.ally+=2;adv(R(12,18));return'你給了老僕一筆銀子，讓他離開京城。'}]]}:{t:'那件事終究還是找上了你：宮外有人拿著一封舊信，說與你的身世有關。',o:[
+  ['花錢買下舊信（耗銀60）',()=>{if(!pay(60)){scn(4);return'銀兩不足，舊信落到了別人手裡。'}A().f.k=1;adv(R(12,18));return'你拿到了舊信，上面的字跡讓你心驚。'}],
+  ['裝作毫不知情',()=>{A().f.k=0;scn(3);adv(R(12,18));return'你面不改色，心裡卻翻江倒海。'}]]}},
+ ()=>({t:'真相逐漸拼湊：你的生母曾是一位獲罪官員的家眷，被人悄悄送出京城，由現在的家人撫養長大。',o:[
+  ['暗中為生母一族平反（耗銀80）',()=>{if(!pay(80))return'銀兩不足，只能把事情暫時壓下。';adv(R(12,20));if(P(.5+S.me.ally/300)){S.me.fame=(S.me.fame||0)+4;S.me.ally+=5;return'舊案悄悄得到了一個說法，你替生母一族出了一口氣。'}scn(8);gF(-4);return'此事驚動了人，有人開始議論你的出身。'}],
+  ['把秘密藏起，作為底牌',()=>{adv(R(12,20));S.me.scheme+=6;return'你把真相鎖進心底，這是只有你知道的牌。'}],
+  ['向養家坦白，求他們庇護',()=>{adv(R(12,20));S.me.fam.forEach(x=>{x.lo=cl((x.lo||50)+6)});return'養家人抱著你哭了一場，往後更加同心。'}]]}),
+ ()=>({t:'你的身世之謎，終於到了不得不做決斷的時候。',o:[
+  ['公開身世，認回生母一族',()=>{adv(0,1);if(P(.5+S.me.favor/250)){S.me.fame=(S.me.fame||0)+6;S.me.ally+=6;S.me.fam.forEach(x=>x.pw+=4);msPush('身世大白於天下');return'你的身世傳開，不少人敬重你的坦蕩，兩家人的勢力都有所增長。'}scn(12);gF(-6);return'風波不小，你在宮中的處境一度尷尬。'}],
+  ['永遠保守這個秘密',()=>{adv(0,1);S.me.scheme+=5;S.me.hp=Math.min(100,S.me.hp+2);return'你決定讓往事隨風，心中反倒輕鬆了許多。'}]]})],
+friend:[
+ ()=>{const n=N();if(!n)return null;return{t:`${n.n}紅著眼眶來找你，說她被人誣陷偷了貴重之物，求你替她說句話。`,o:[
+  ['義無反顧，替她作證',()=>{A().f.p=2;n.al=cl(n.al+15);if(P(.55)){gF(1);adv(R(10,16));return'你的證詞起了作用，她洗清了冤屈。'}gF(-3);scn(3);adv(R(10,16));return'你的話沒能說動人，反被牽連了幾句。'}],
+  ['私下幫她查證，不出面',()=>{A().f.p=1;n.al=cl(n.al+8);S.me.scheme+=2;adv(R(10,16));return'你暗中找到了關鍵的線索，悄悄遞給了她。'}],
+  ['婉拒，說自己不便插手',()=>{A().f.p=0;n.al=cl(n.al-12);adv(R(10,16));return'她默默點頭，轉身走了，背影有些落寞。'}]]}},
+ ()=>{const n=N();if(!n)return null;const p=A().f.p;return p>=1?{t:`${n.n}得了皇上賞識，特意來向你道謝，還帶了一份厚禮。`,o:[
+  ['收下，也替她高興',()=>{n.al=cl(n.al+6);S.me.silver+=40;adv(R(12,18));return'兩人坐在一起說了半日體己話。'}],
+  ['推辭不受，只收一句謝',()=>{n.al=cl(n.al+4);S.me.fame=(S.me.fame||0)+2;adv(R(12,18));return'她感動不已，說這輩子都記著你。'}]]}:{t:`${n.n}最近和你的對頭走得很近，宮人說常看見她們一同說笑。`,o:[
+  ['找她談談，問個明白',()=>{if(P(.5)){n.al=cl(n.al+6);adv(R(12,18));return'她解釋說只是被拉去作陪，你們的隔閡淡了些。'}n.al=cl(n.al-8);adv(R(12,18));return'談得不歡而散，兩人都沒給對方好臉色。'}],
+  ['裝作不知，靜觀其變',()=>{S.me.scheme+=2;adv(R(12,18));return'你不動聲色，把一切看在眼裡。'}]]}},
+ ()=>{const n=N();if(!n)return null;const p=A().f.p;return{t:`一樁大事上，${n.n}掌握了一個對你至關重要的消息。`,o:[
+  ['請她幫你這個忙',()=>{adv(R(12,18));if(p>=1&&P(.8)){S.me.ally+=6;gF(3);return'她毫不猶豫，把消息全數告訴了你。'}if(P(.35)){S.me.ally+=2;return'她猶豫再三，還是透露了一部分。'}n.al=cl(n.al-8);return'她推說不知情，你看得出她在避開你。'}],
+  ['不開口，自己想辦法',()=>{adv(R(12,18));S.me.scheme+=3;return'你沒有麻煩她，卻也沒占到什麼便宜。'}]]}},
+ ()=>{const n=N();if(!n)return null;const p=A().f.p;return p>=1?{t:`多年相伴，${n.n}與你已是宮中難得的知己。她問你：「若有一天我們之中有人要離開，你會怎麼做？」`,o:[
+  ['說「我會一直守著你」',()=>{adv(0,1);n.al=cl(n.al+20);S.me.ally+=8;msPush('與'+n.n+'結為生死之交');return'她眼眶一熱，緊緊握住了你的手。這份情誼成了你在宮中最堅實的依靠。'}],
+  ['笑著說「別說傻話」',()=>{adv(0,1);n.al=cl(n.al+8);S.me.ally+=3;return'她笑了，可你看得出她心裡有些悵然。'}]]}:{t:`${n.n}終於和你說了心裡話：「我曾以為你是我最信任的人，可那件事之後，我才明白宮裡誰都靠不住。」`,o:[
+  ['誠懇道歉，願意補償（耗銀40）',()=>{adv(0,1);if(!pay(40)){return'你拿不出像樣的補償，只能道歉。'}n.al=cl(n.al+12);S.me.ally+=3;return'她沉默許久，輕輕嘆了口氣，算是原諒了你一半。'}],
+  ['默然不語，任她離去',()=>{adv(0,1);n.al=cl(n.al-6);return'你看著她走遠，心裡空落落的。'}]]}}]};
+function start(){const a=['foe','myst','friend'];const done=(S.arcDone37=S.arcDone37||[]);const rest=a.filter(x=>!done.includes(x));if(!rest.length)return;const id=rest[R(0,rest.length-1)];const ni=id==='myst'?null:pickNpc(id==='foe'?'foe':'friend');if(id!=='myst'&&ni==null)return;S.arc37={id,st:0,nx:S.t+R(2,8),f:{},ni:ni}}
+const _m38=mend;mend=function(){const r=_m38.apply(this,arguments);
+ try{if(!S||!S.me||S.over||S.reg||S.t<30)return r;if(!S.arc37){if(!S.arc37w){S.arc37w=S.t+R(0,10)}if(S.t>=S.arc37w)start();return r}
+  const a=S.arc37;if(a.done){if(S.t>=a.nx+10){(S.arcDone37=S.arcDone37||[]).push(a.id);S.arc37=null;S.arc37w=S.t+R(6,14)}return r}
+  if(S.t>=a.nx&&ACTS[a.id][a.st]){const e=ACTS[a.id][a.st]();if(e){S.q.push(e);if(!S.ev&&!S.ch&&!S.scn)next();else render()}else a.nx=S.t+3}}catch(x){console.log('r38',x)}return r};
+const _g38=goalChip;goalChip=function(){let s='';try{const a=S.arc37;if(a&&!S.reg)s=`<div class=cd data-open=1><h3>長線劇情</h3><div class=m>「${NM[a.id]}」${a.done?'・已落幕':`・第${Math.min(a.st+1,4)}幕 / 共4幕`}</div></div>`}catch(e){}return _g38.apply(this,arguments)+s};
+})();
+
 deco();intro();
 
 
