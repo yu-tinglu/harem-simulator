@@ -7059,6 +7059,54 @@ const _u=uiPost;uiPost=function(){const r=_u.apply(this,arguments);try{
 }catch(e){console.log('r77',e)}return r};window.uiPost=uiPost;
 })();
 
+/* ===== round78：每個人固定的「性情」——影響每月互動、也寫進檔案 ===== */
+(function(){
+const X=window.__P68;if(!X||!X.H)return;
+const E=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const TP=[
+ ['剛烈','心直口快、愛憎分明，不高興就寫在臉上。','對她直話直說比拐彎抹角管用；得罪了她，她會當面讓你難堪。'],
+ ['隱忍','凡事藏在心裡，面上總是波瀾不驚。','她不輕易記恨，卻也不輕易交心；真被逼到頭，一次就翻盤。'],
+ ['圓滑','八面玲瓏，誰都不得罪。','朋友多、交情淺；好感不會太高，也不會太低，很難真正拉攏或樹敵。'],
+ ['多疑','凡事多想一層，防人之心很重。','久不往來就會心生疏離，要常常談心；一旦信任了你則相當穩。'],
+ ['重情','一點恩情能記一輩子。','談心、送禮最有效，好感一旦建立就不易動搖；但被辜負會傷得很深。'],
+ ['野心','眼裡有更高的位份。','跟她結盟靠利益而不是交情；位份低時尤其急於往上爬。']];
+const tp=n=>X.H(String(n)+'#t77')%6;
+const nm=n=>n.name||n.n;
+window.__TP77={TP,tp,of:n=>TP[tp(nm(n))]};
+/* ---- 每月影響 ---- */
+function tick(){if(!S||!S.me||S.over||S.reg||S.t<1)return;
+ const live=S.npcs.filter(x=>!x.st);let said=S.cd77&&S.t-S.cd77<2;
+ live.forEach(p=>{const t=tp(nm(p));
+  const tk=p.tk68||0;if(p._tk77===undefined)p._tk77=tk;if(tk!==p._tk77){const d=tk-p._tk77;p._tk77=tk;p._tlk77=S.t;if(t===4)p.al=cl((p.al||0)+2*Math.min(2,d))}
+  if(t===1){if((p.host||0)>20)p.host=cl(p.host-.8);
+   if(!said&&(p.host||0)>=60&&P(.05)){said=true;S.cd77=S.t;S.me.favor=cl(S.me.favor-4);ntfAdd(`${nm(p)}隱忍許久，終於在皇上面前遞了你一狀（聖寵－4）。`,'ti')}}
+  else if(t===2){if((p.al||0)>60)p.al=cl(p.al-.3);else if((p.al||0)<35)p.al=cl(p.al+.3)}
+  else if(t===3){if((p.al||0)>40&&S.t-(p._tlk77||0)>8)p.al=cl(p.al-.4)}
+  else if(t===4){if((p.al||0)>=50)p.al=cl(p.al+.3)}
+  else if(t===5){if((p.rank||0)<5)p.favor=cl(p.favor+.15);
+   if(!said&&(p.rank||0)<6&&P(.03)){said=true;S.cd77=S.t;ntfAdd(`${nm(p)}暗中打聽上位的空缺，似乎另有打算。`,'ti')}}
+  else if(t===0){
+   if(!said&&(p.host||0)>=35&&P(.06)){said=true;S.cd77=S.t;p.favor=cl(p.favor-2);p.host=cl((p.host||0)+3);ntfAdd(`${nm(p)}性子剛烈，在宮中當眾頂撞了人，皇上皺了眉（她聖寵－2）。`,'ti')}
+   else if(!said&&(p.al||0)>=65&&P(.05)){said=true;S.cd77=S.t;p.favor=cl(p.favor-1);S.me.favor=cl(S.me.favor+1);ntfAdd(`${nm(p)}為你仗義執言，皇上聽進了幾分（聖寵＋1）。`,'ti')}}
+ })}
+const _m=mend;mend=function(){const r=_m.apply(this,arguments);try{tick()}catch(e){console.log('r78',e)}return r};window.mend=mend;
+/* ---- 檔案顯示 ---- */
+const css=document.createElement('style');css.textContent='.tp77{margin:8px 0;padding:8px 12px;border-radius:12px;background:rgba(160,120,200,.1);line-height:1.7;font-size:13.5px}.tp77 b{color:#6a4a9a}';document.head.appendChild(css);
+const blk=(name,extra)=>{const t=TP[tp(name)];return`<div class=tp77><b>性情：${t[0]}</b>　${t[1]}<br><span style="opacity:.85">${t[2]}</span>${extra||''}</div>`};
+function injP(){try{const m=document.getElementById('pm68');if(!m||m.querySelector('.tp77'))return;
+ const h=m.querySelector('h3');if(!h)return;const name=(h.textContent||'').trim();
+ const isNpc=S&&S.npcs&&S.npcs.some(x=>nm(x)===name);if(!isNpc)return;
+ const box=m.querySelector('div.m');if(!box)return;box.insertAdjacentHTML('afterend',blk(name))}catch(e){console.log('r78p',e)}}
+new MutationObserver(injP).observe(document.body,{childList:true,subtree:true});
+/* 皇子：以性情調整野心，並寫進檔案 */
+function injK(){try{const md=document.getElementById('kmodal49');if(!md||md.querySelector('.tp77'))return;
+ const nmK=((md.querySelector('h3')||{}).textContent||'').trim();const k=allKids().find(x=>x.n===nmK);if(!k)return;
+ if(!k._tp77){k._tp77=1;const t=tp(k.n);if(t===5)k.am=cl((k.am===undefined?50:k.am)+10);if(t===1)k.am=cl((k.am===undefined?50:k.am)-8)}
+ const ht=[...md.querySelectorAll('h4')].find(x=>/的故事|奪嫡與擁護/.test(x.textContent));
+ const el=md.querySelector('.kx75')||ht;const html=blk(k.n);if(el)el.insertAdjacentHTML('beforebegin',html)}catch(e){console.log('r78k',e)}}
+new MutationObserver(injK).observe(document.body,{childList:true,subtree:true});
+})();
+
 deco();intro();
 
 
