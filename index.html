@@ -5986,6 +5986,180 @@ const _r2=render;render=function(){const r=_r2.apply(this,arguments);
   const m=mm.textContent.match(/^(.+?)所出/);if(!m||npcIdx(m[1])<0)return;d.insertAdjacentHTML('beforeend',`<div class=mg67 style="padding:4px 0"><button class=s onclick="goNpc67('${m[1]}')" style="min-height:0;height:32px;padding:0 14px">查看生母 ${m[1]} 的檔案</button></div>`)})}catch(e){console.log('r67e',e)}return r};
 })();
 
+/* ===== round68：全站人名可點・人物深入檔案・皇帝情緒與背景故事 ===== */
+(function(){
+const pk=a=>a[Math.floor(Math.random()*a.length)];
+const ESC=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const H=s=>{let h=7;for(const c of String(s))h=(h*31+c.charCodeAt(0))>>>0;return h};
+const pickH=(a,h,o)=>a[(h+(o||0)*7919)%a.length];
+const nm0=n=>(n.name||n.n);
+const tmS=t=>`第${Math.floor(t/12)+1}年${t%12+1}月`;
+const kidBy=nm=>{try{return allKids().find(k=>k.n===nm)}catch(e){return null}};
+const cbs=()=>{try{const x=rx();return(x&&x.cb)||[]}catch(e){return[]}};
+const bar=(l,v,c)=>`<div style="display:flex;align-items:center;gap:6px;margin:3px 0"><span style="width:40px;font-size:13px">${l}</span><span style="flex:1;height:7px;border-radius:4px;background:rgba(128,100,80,.2);overflow:hidden"><b style="display:block;height:100%;width:${Math.max(0,Math.min(100,v|0))}%;background:${c||'var(--gd,#d98a2b)'}"></b></span><span style="width:28px;text-align:right;font-size:13px">${v|0}</span></div>`;
+/* ---------- 人名登錄 ---------- */
+function registry(){const m=new Map();if(!S||!S.me)return m;const put=(n,v)=>{n=String(n||'').trim();if(n.length>=2&&!m.has(n))m.set(n,v)};
+ try{allKids().forEach(k=>put(k.n,{t:'kid'}))}catch(e){}
+ S.npcs.forEach((n,i)=>put(nm0(n),{t:'npc',i}));
+ cbs().forEach((c,i)=>put(c.n,{t:'cb',i}));try{const e=rx().emp;if(e)put(e.n,{t:'cbe'})}catch(e){}
+ (S.cr||[]).forEach((f,i)=>put(f.n,{t:'off',i}));
+ try{const e=S.em43;if(e){if(S.reg&&S.reg.k){put(e.giv,{t:'kid',n:S.reg.k.n});put(e.era+'帝',{t:'kid',n:S.reg.k.n})}else{put(e.sur+e.giv,{t:'emp'});put(e.era+'帝',{t:'emp'});put(e.giv,{t:'emp'})}}}catch(e){}
+ if(!S.reg)put('皇上',{t:'emp'});
+ return m}
+let RE=null,REMAP=null;
+function build(){REMAP=registry();const ks=[...REMAP.keys()].sort((a,b)=>b.length-a.length);RE=ks.length?new RegExp(ks.map(k=>k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|'),'g'):null}
+const SKIP='button,a,select,input,textarea,summary,h3,h4,script,style,.pn68,.nm,.pill,.mom67,.fbar,.chips,.kgo49,#bg63,.vsw66';
+function linkify(root){try{if(!S||!S.me||!root)return;build();if(!RE)return;
+ const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>{const p=n.parentElement;if(!p||!n.nodeValue||n.nodeValue.length<2)return NodeFilter.FILTER_REJECT;if(p.closest(SKIP))return NodeFilter.FILTER_REJECT;return NodeFilter.FILTER_ACCEPT}});
+ const list=[];while(w.nextNode())list.push(w.currentNode);
+ list.forEach(n=>{const t=n.nodeValue;RE.lastIndex=0;if(!RE.test(t))return;RE.lastIndex=0;
+  const fr=document.createDocumentFragment();let last=0,m;
+  while((m=RE.exec(t))){if(m.index>last)fr.appendChild(document.createTextNode(t.slice(last,m.index)));const s=document.createElement('span');s.className='pn68';s.dataset.n=m[0];s.textContent=m[0];fr.appendChild(s);last=m.index+m[0].length}
+  if(last<t.length)fr.appendChild(document.createTextNode(t.slice(last)));n.parentNode.replaceChild(fr,n)})}catch(e){console.log('r68l',e)}}
+let raf=0;function sched(){if(raf)return;raf=requestAnimationFrame(()=>{raf=0;linkify(document.body)})}
+new MutationObserver(()=>{if(S&&S.me)sched()}).observe(document.body,{childList:true,subtree:true,characterData:true});
+const _r=render;render=function(){const r=_r.apply(this,arguments);try{linkify(document.querySelector('main'))}catch(e){}return r};
+document.addEventListener('click',e=>{const s=e.target.closest&&e.target.closest('.pn68');if(!s)return;e.preventDefault();e.stopPropagation();open68(s.dataset.n)},true);
+function open68(nm){try{if(!REMAP)build();const v=REMAP.get(nm);if(!v)return;
+ if(v.t==='kid')return kopen49(v.n||nm);
+ if(v.t==='npc')return pOpen(v.i);
+ if(v.t==='off')return oOpen(v.i);
+ if(v.t==='emp')return eOpen();
+ if(v.t==='cb'||v.t==='cbe')return goCb(nm)}catch(e){console.log('r68o',e)}}
+window.open68=open68;
+function goCb(nm){closeM();TAB=1;if(typeof hgView66==='function')hgView66('hg');else render();
+ setTimeout(()=>{const d=[...document.querySelectorAll('main details.hg66')].find(x=>(x.querySelector('.nm')||{}).textContent===nm);if(!d)return;d.open=true;d.scrollIntoView({block:'center'});d.style.outline='2px solid #d98a2b';setTimeout(()=>d.style.outline='',2200)},80)}
+/* ---------- 共用視窗 ---------- */
+function closeM(){const m=document.getElementById('pm68');if(m)m.remove();document.body.style.overflow='';try{kclose49()}catch(e){}}
+window.pm68close=closeM;
+function showM(html){try{kclose49()}catch(e){}
+ let md=document.getElementById('pm68');
+ const cs=getComputedStyle(document.querySelector('.cd')||document.body),bg=cs.backgroundColor.replace(/rgba?\(([^)]*)\)/,(m,x)=>'rgb('+x.split(',').slice(0,3).join(',')+')'),fg=getComputedStyle(document.body).color;
+ const sc=md?md.firstElementChild&&md.firstElementChild.firstElementChild&&md.firstElementChild.firstElementChild.scrollTop:0;
+ if(!md){md=document.createElement('div');md.id='pm68';document.body.appendChild(md)}
+ md.innerHTML=`<div style="position:fixed;inset:0;z-index:72;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center" onclick="if(event.target===this)pm68close()"><div style="width:100%;max-width:560px;max-height:90vh;overflow:auto;background:${bg};color:${fg};border-radius:18px 18px 0 0;padding:14px 16px calc(22px + env(safe-area-inset-bottom,0px))">${html}</div></div>`;
+ document.body.style.overflow='hidden';if(sc)md.firstElementChild.firstElementChild.scrollTop=sc}
+const head=(t,sub)=>`<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h3 style="margin:0;font-size:19px">${ESC(t)}</h3><button class=s onclick="pm68close()" style="min-height:0;height:32px;padding:0 14px">關閉</button></div><div class=m style="margin:8px 0;line-height:1.7">${sub}</div>`;
+const sec=(t,b)=>`<h4 style="margin:14px 0 6px">${t}</h4><div class=m style="line-height:1.75">${b}</div>`;
+const busy=()=>S.ch||S.ev||S.scn||S.over;
+/* ---------- 人生背景（種子化，同一人永遠同一份） ---------- */
+const CHILD=['自幼體弱，常年與湯藥為伴，反而養成了安靜觀察的性子。','幼時家道中落，隨母親寄居外祖家，看盡人情冷暖。','是家中最受寵的幺女，被教得天真爛漫，不識人心險惡。','自小跟著兄長讀書習字，肚裡有不輸男子的學問。','少年喪母，由繼母撫養，學會了凡事先看臉色。','生長在武將之家，騎得馬、挽得弓，性子也直來直往。','在江南水鄉長大，會彈一手好琴，也會繡一手好花。','從小被家族當作「將來入宮的籌碼」精心栽培，每一步都有人安排。'];
+const WHY=['家族需要有人在宮中替他們說話，她沒有選擇。','她自己想來的——聽說宮裡有天下最好的書與樂。','選秀名冊上有她的名字，她連拒絕的念頭都不敢有。','家裡欠了人情，她成了還債的那一個。','曾遠遠見過一次聖駕，從此心裡有了不該有的念想。','為了躲開一門不願意的親事，她寧可進宮。'];
+const WISH=['想有一個自己的孩子，好有個真正屬於自己的依靠。','想讓母家重新抬起頭來。','想要皇上哪怕一次真心的看重，而不只是新鮮。','想坐上那個最高的位置，再沒人能給她臉色。','想平平安安熬到出宮的那一天。','想替一個冤死的人討回公道。','想護住身邊那幾個信得過的人。','想要的不多：一方安靜院子，一年四季的花。'];
+const FEAR=['怕失寵，怕一夕之間所有人都換了臉。','怕有孕時被人暗算。','怕母家出事牽連到自己。','怕老，怕鏡子裡的自己不再被人多看一眼。','怕那個秘密有一天被翻出來。','怕孤單——深夜裡宮牆太高、太靜。'];
+const SECR=['枕下藏著一封從未寄出的舊信，是寫給入宮前的意中人的。','其實讀過不少書，卻一直裝作不識幾個字，免得被人防備。','曾暗中救過一個被冤枉的宮女，至今無人知曉。','與某位宮人情同姐妹，兩人私下互通消息。','身上有一樁舊疾，一直瞞著太醫。','曾在盛怒下做過一件對不起別人的事，夜裡常夢見。','對自己的出身說過謊——她並不是檔案上寫的那樣。','其實根本不在乎恩寵，只是不能讓人看出來。'];
+const LAY=[['入宮之前',CHILD,0],['入宮緣由',WHY,0],['心中所求',WISH,0],['最怕的事',FEAR,0],['不為人知的秘密',SECR,0]];
+function unl(n){const tk=n.tk68||0,al=n.al||0,lo=n.favor!==undefined?0:0;return[true,tk>=1||al>=15,tk>=2||al>=35,tk>=3||al>=55,tk>=4&&al>=35]}
+function bioLay(n,seed,unlk,who){return LAY.map(([t,a],i)=>unlk[i]?`<div style="margin:4px 0"><b>${t}</b>：${ESC(pickH(a,H(seed),i))}</div>`:`<div style="margin:4px 0;opacity:.6"><b>${t}</b>：（還不了解——多與${who}談心、拉近關係才會知道）</div>`).join('')}
+/* ---------- 妃嬪檔案 ---------- */
+const TALK=['你與她閒坐品茶，她起初拘謹，說著說著話漸漸多了。','你親自去看了她，她很意外，悄悄紅了眼眶。','你陪她下了一盤棋，她輸了，卻笑得很開心。','你與她在院中看花，她說起了小時候的事。','你帶了點心去她宮裡，她說很久沒人這樣陪她說話了。'];
+window.pTalk68=function(i){const n=S.npcs[i];if(!n)return;if(busy()){pOpen(i,'請先處理眼前的事件。');return}
+ n.tk68=(n.tk68||0)+1;const b=S.me.favor;n.al=Math.min(100,(n.al||0)+4);if(n.host>0)n.host=Math.max(0,n.host-3);const r=pk(TALK).replace('她',nm0(n)==='你'?'她':'她');
+ try{jot('宮',nm0(n),`談心：${r}`)}catch(e){}try{L(`${nm0(n)}：${r}`)}catch(e){}
+ (n._tl=n._tl||[]).push({t:S.t,x:`你與${nm0(n)}談心，彼此更近了一步。`});if(n._tl.length>12)n._tl.shift();
+ closeM();spend()};
+window.pGo68=function(i){const n=S.npcs[i];if(n)goNpc67(nm0(n))};
+function pOpen(i,msg){const n=S.npcs[i];if(!n)return;const nm=nm0(n),ta=TS[n.g],at=n.at||{},fam=n.fam||[],dead=!!n.st;
+ const mood=n.favor>70?'春風得意':n.favor>45?'安穩度日':n.favor>20?'有些落寞':'備受冷落';
+ const un=unl(n),tk=n.tk68||0,ev=(S.evid&&S.evid[i])||0;
+ let tl=[];(S.ms||[]).forEach(e=>{if(e&&e.x&&e.x.indexOf(nm)>=0)tl.push([e.t,e.x])});(S.chr||[]).forEach(e=>{if(e.w===nm)tl.push([e.t,e.x])});((S.mem||{})[nm]||[]).forEach(e=>tl.push([e.t,e.x]));(n._tl||[]).forEach(e=>tl.push([e.t,e.x]));(n._h||[]).forEach(e=>tl.push([e.t,`${e.v}${e.why?'（'+e.why+'）':''}`]));
+ const seen=new Set();tl=tl.sort((a,b)=>b[0]-a[0]).filter(r=>{const k=r[0]+r[1];if(seen.has(k))return false;seen.add(k);return true}).slice(0,10);
+ const kids=(n.kids||[]);const peers=S.npcs.filter((x,j)=>j!==i&&!x.st&&x.fac===n.fac&&n.fac>=0).sort((a,b)=>b.rank-a.rank).slice(0,3).map(nm0);
+ const foes=S.npcs.filter((x,j)=>j!==i&&!x.st&&x.host>60).slice(0,0);
+ const html=head(nm,`<b>${ESC(n.st||RK[n.rank])}</b>・${nAge(n)}歲・${FAC[n.fac]||'無派系'}${i===S.qi?'・中宮':''}${n.preg?'・有孕':''}<br>天賦：<b>${ta[0]}</b>（${ta[1]}）<br>近況：${mood}`)
+ +(msg?`<div class=m style="color:#c0392b;margin:6px 0"><b>${ESC(msg)}</b></div>`:'')
+ +bar('聖寵',n.favor)+bar('母族',(n.pow===undefined?n.clan:n.pow))+bar('心機',n.sc)+bar('盟友度',n.al||0)+bar('敵意',n.host||0,'#c0392b')
+ +`<div class=m style="margin:8px 0">顏${at.lk|0}・氣質${at.qi|0}・智${at.iq|0}${typeof whT==='function'&&at.wh!==undefined?'・'+whT(at.wh):''}${at.ht?'・'+at.ht+'cm':''}${typeof topSk==='function'&&at.sk?'<br>擅長：'+topSk(at,3):''}${typeof dsPills==='function'&&at.ds?'<br>'+dsPills(at):''}${ev?`<br>你手上有她的罪證 ${ev} 件`:''}</div>`
+ +sec('人生背景（談心越多，了解越深）',bioLay(n,nm+'#n',un,'她')+`<div class=m style="opacity:.7;margin-top:4px">已談心 ${tk} 次</div>`)
+ +sec('家世',fam.length?fam.map(f=>`${ESC(f[0]||f.rel)}：${ESC(f.job)}（勢力${f.pw|0}）`).join('<br>'):'家世不顯。')
+ +sec('子女',kids.length?kids.map(k=>`<span class=pn68 data-n="${ESC(k.n)}">${ESC(k.n)}</span>（${k.sex=='男'?'皇子':'公主'}・${yr(k)}歲）`).join('、'):'膝下尚無子女。')
+ +(peers.length?sec('同派系的人',peers.join('、')):'')
+ +sec('人生軌跡',tl.length?tl.map(r=>`<div>・<span style="opacity:.7">${tmS(r[0])}</span>　${ESC(r[1])}</div>`).join(''):'暫無記載。')
+ +(dead?'':`<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px"><button onclick="pTalk68(${i})" style="text-align:left;min-height:0;padding:8px 10px;height:auto"><div style="font-size:14px">談心拉近</div><small style="opacity:.75">盟友度＋，敵意－，了解更深（耗 1 次行動，剩 ${S.w}）</small></button><button onclick="pGo68(${i})" style="text-align:left;min-height:0;padding:8px 10px;height:auto"><div style="font-size:14px">到後宮名冊操作</div><small style="opacity:.75">賞賜、拉攏、打壓等</small></button></div>`);
+ showM(html)}
+/* ---------- 官員檔案 ---------- */
+const OB=[['寒門出身，一步步靠政績爬上來','世家嫡子，家學淵源','武舉出身，從軍中熬出頭','皇親國戚，沾了血緣的光','科舉榜上有名，少年得志','邊地小吏之子，靠一篇策論被賞識'],['私下極愛收藏古籍字畫','不近女色，唯好養花鳥','酒量極好，酒後話多','每月必去寺中小住','與政敵私交甚篤','對下屬極嚴，對家人極溫柔'],['擔心政敵翻舊帳','擔心告老之後家族失勢','擔心皇上疑心','擔心後繼無人','擔心邊境不穩','擔心自己年輕時的一件舊事被揭出']];
+function oOpen(i){const f=(S.cr||[])[i];if(!f)return;const nm=f.n,h=H(nm),CA=(typeof CARC!=='undefined'&&CARC[f.k])?CARC[f.k]:null;
+ const open=S.me.ally>=45;let hist=(f._h||[]).slice().reverse().slice(0,8);
+ let tl=[];(S.ms||[]).forEach(e=>{if(e&&e.x&&e.x.indexOf(nm)>=0)tl.push([e.t,e.x])});(S.chr||[]).forEach(e=>{if(e.w===nm)tl.push([e.t,e.x])});tl=tl.sort((a,b)=>b[0]-a[0]).slice(0,8);
+ const html=head(`${f.role}・${nm}`,`${FAC[f.fac]||'無派系'}${typeof cgrade==='function'?'・'+cgrade(f):''}${f.gd!==undefined?'・政績'+(f.gd|0):''}`)
+ +sec('出身與為人',`${ESC(pickH(OB[0],h))}。`)
+ +sec('私下的他',open?`${ESC(pickH(OB[1],h,1))}。<br>心事：${ESC(pickH(OB[2],h,2))}。`:'（你在朝中的人脈還不夠深，他不會對你說這些。人脈 45 以上可知。）')
+ +(CA?sec('近期動向',`${CA.k||''}`):'')
+ +sec('歷任官職',hist.length?hist.map(e=>`・${tmS(e.t)}　${ESC(e.v)}${e.why?'（'+ESC(e.why)+'）':''}`).join('<br>'):'目前在任。')
+ +sec('相關記事',tl.length?tl.map(r=>`<div>・<span style="opacity:.7">${tmS(r[0])}</span>　${ESC(r[1])}</div>`).join(''):'暫無記載。');
+ showM(html)}
+/* ---------- 皇帝：背景與情緒 ---------- */
+const GIV=['景','淳','承','瑜','珩','恪','禎','暉','翊','煦'];
+const MOM=['生母出身低微，生下他後便不受待見，在冷宮邊的小院裡鬱鬱而終。','生母是先帝寵極一時的妃子，卻在他七歲那年一夕失寵，抑鬱成疾。','生母難產而亡，他是被乳母和一位老太監帶大的。','生母位分不高，卻是個極有主見的人，從小教他「寧可少說，不可說錯」。','他自幼被抱到嫡母名下撫養，與生母反而生分了。'];
+const BRO=['他有一位才華橫溢的兄長，曾是先帝屬意的人選，後來因一樁疑案被圈禁，至死未再相見。','與一位同母弟弟感情極深，那位弟弟十五歲那年染疾早逝。','與兄弟們從小明爭暗鬥，登基後一位王兄遠赴封地，終身不曾回京。','他排行居中，不顯山不露水，兄長們互相傾軋之際，反倒讓他漁翁得利。'];
+const YTH=['十二歲隨先帝秋獮，從馬上摔下，躺了三個月，從此怕高。','十歲那年親眼見一場宮變後的清洗，多日不敢閉眼。','少年時曾微服隨師傅出宮，在街市上第一次嘗到「自由」的滋味，念了一輩子。','師傅是個倔強的老翰林，常因直諫被先帝責罰，少年的他就在一旁看著。','他少時極愛畫畫，被先帝說「玩物喪志」，一把火燒了他全部的畫。'];
+const THR=['先帝彌留之際，只對他說了一句：「這江山，別學朕。」','登基那夜，他一個人在太和殿坐到天明，不許任何人陪著。','是在一個雷雨夜被匆匆喚醒，披著朝服接下了傳國玉璽。','他是在眾臣的觀望中登基的，那天沒有一個人真心地笑。'];
+const HOB=['書畫','騎射','音律','棋','茶','讀史','花木','金石'];
+const WND={0:'怕辜負先帝，一生如履薄冰，不敢鬆懈。',1:'自小無人管束，用聲色麻痺心裡的空洞。',2:'年少時被至親背叛，從此對誰都留著三分。',3:'兒時見過酷刑，從此心軟，卻也怕自己被人看輕。',4:'出身不算頂尖，總想用功業向所有人證明自己。',5:'每次拿主意都被人否定過，漸漸不信自己的判斷。',6:'被兄長欺凌過，認定只有狠才能活下去。'};
+function eb(){if(!S.em68){const hb=pk(HOB);S.em68={b:{mom:pk(MOM),bro:pk(BRO),yth:pk(YTH),thr:pk(THR),hob:hb,gv:pk(GIV)+'',wnd:WND[S.ep]||WND[0],ft:pk(['舊傷復發的風寒','馬','雷雨夜','兄弟二字','被人當面說「像先帝」'])},lone:35,dbt:(S.ep===2?60:35),tire:30,bond:0,rev:[],cd:S.t};}return S.em68}
+const CH=[ // 章節：需 bond>=g
+ {k:'童年',g:0,t:b=>`${b.mom}`},{k:'少年',g:10,t:b=>`${b.yth}`},{k:'兄弟',g:20,t:b=>`${b.bro}`},
+ {k:'先帝與登基',g:30,t:b=>`${b.thr}`},{k:'心結',g:42,t:b=>`${b.wnd}他不願讓任何人看見的，是這一面。`},
+ {k:'所愛',g:55,t:b=>`他最放鬆的時刻，是獨自一人與「${b.hob}」為伴，那時候他才像個普通的人。`},
+ {k:'最怕',g:68,t:b=>`他最怕的，是${b.ft}。這件事他從未對任何人說過。`},
+ {k:'給你的話',g:80,t:b=>`他說：「這宮裡，朕能說真話的，也許只有你一個。」`}];
+function lw(v,a){return v>=75?a[0]:v>=50?a[1]:v>=25?a[2]:a[3]}
+function heart(){const e=eb(),m=S.mood;const L=[];
+ if(m<25)L.push('心裡像壓著一塊石頭，誰說話都覺得刺耳。');else if(m>=80)L.push('今日心情極好，連批摺子都帶著笑。');
+ if(e.dbt>65)L.push('近日總覺得身邊有人在暗中盤算，看誰都多看兩眼。');if(e.lone>65)L.push('深夜獨坐，聽著更漏，覺得這宮殿大得讓人發慌。');if(e.tire>65)L.push('連日操勞，連提筆的手都有些酸。');
+ if(!L.length)L.push(pk(['今日朝事順遂，他難得多用了半碗飯。','午後在殿中翻了幾頁舊書，神色平靜。','黃昏時站在廊下，看了很久的雲。']));return L[0]}
+window.eHeart68=heart;
+function stage(b){return b>=80?'知心人':b>=55?'推心置腹':b>=30?'能說幾句真話':b>=10?'略有往來':'君臣之別'}
+function eOpen(msg){if(S.reg&&S.reg.k)return kopen49(S.reg.k.n);const e=eb(),b=e.b,em=S.em43||{sur:'',giv:'',era:''};
+ const rv=CH.filter(c=>e.rev.includes(c.k));let tl=[];(S.ms||[]).forEach(x=>{if(x&&x.x&&(x.x.indexOf('皇上')>=0||x.x.indexOf(em.sur+em.giv)>=0))tl.push([x.t,x.x])});tl=tl.sort((a,c)=>c[0]-a[0]).slice(0,8);
+ const html=head(`${em.era||''}帝・${em.sur||''}${em.giv||''}`,`${EPS[S.ep][0]}（${EPS[S.ep][1]}）<br>${S.eage}歲・在位第${Math.floor(S.t/12)+1}年・龍體${S.ehp|0}<br>愛好：${b.hob}　<span style="opacity:.8">${mw()}</span>`)
+ +(msg?`<div class=m style="color:#c0392b;margin:6px 0"><b>${ESC(msg)}</b></div>`:'')
+ +bar('心情',S.mood,'#d98a2b')+bar('疑心',e.dbt,'#8e44ad')+bar('孤寂',e.lone,'#2e86c1')+bar('倦怠',e.tire,'#7f8c8d')
+ +`<div class=m style="margin:8px 0;font-style:italic">「${ESC(heart())}」</div>`
+ +sec('與你的距離',bar('知心度',e.bond,'#c0392b')+`目前：<b>${stage(e.bond)}</b>　已向你說起 ${rv.length}／${CH.length} 段往事`)
+ +sec('公開的簡歷',`${em.era||''}元年登基，如今在位第${Math.floor(S.t/12)+1}年。性情：${EPS[S.ep][0]}。<br><span style="opacity:.7">更深的事——他的出身、少年、心結——要等他願意對你說，並不在任何檔案裡。</span>`)
+ +sec('他向你說起過的往事',rv.length?rv.map(c=>`<div style="margin:5px 0"><b>${c.k}</b>：${ESC(c.t(b))}</div>`).join(''):'他還沒向你敞開過心扉。')
+ +sec('皇上近事',tl.length?tl.map(r=>`<div>・<span style="opacity:.7">${tmS(r[0])}</span>　${ESC(r[1])}</div>`).join(''):'暫無記載。')
+ +`<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px"><button onclick="eTalk68()" style="text-align:left;min-height:0;padding:8px 10px;height:auto"><div style="font-size:14px">陪皇上說說話</div><small style="opacity:.75">知心度＋，孤寂－，或聽他說起往事（耗 1 次行動，剩 ${S.w}）</small></button><button onclick="eGift68()" style="text-align:left;min-height:0;padding:8px 10px;height:auto"><div style="font-size:14px">投其所好（耗銀20）</div><small style="opacity:.75">備一份與「${b.hob}」有關的心意</small></button></div>`;
+ showM(html)}
+window.eOpen68=eOpen;
+function chapterEv(force){const e=eb();if(S.reg||S.over)return null;const c=CH.find(x=>!e.rev.includes(x.k)&&e.bond>=x.g);if(!c)return null;const b=e.b,mw0=mw();
+ const intro=pk([`夜深了，皇上屏退左右，忽然對你說起：「${c.k==='童年'?'朕想起小時候的事':'有些話，朕從沒對人說過'}。」`,`${mw0}的皇上獨自站在窗前，輕聲開了口：「你陪朕說會兒話吧。」`,`燭火下，皇上難得露出疲態，緩緩說：「朕今日，想起了一些舊事。」`]);
+ return{t:`${intro}<br><br>【${c.k}】${c.t(b)}`,o:[['靜靜傾聽，不插一句話',()=>{e.bond=Math.min(100,e.bond+8);e.lone=Math.max(0,e.lone-12);S.me.favor+=3;return'你只是靜靜聽著，皇上說完，沉默了很久，輕輕握了握你的手。（知心度＋8）'}],['溫言寬慰',()=>{e.bond=Math.min(100,e.bond+6);S.mood=Math.min(100,S.mood+6);e.dbt=Math.max(0,e.dbt-6);S.me.favor+=4;return'你柔聲勸慰，皇上的眉頭慢慢舒展開。（知心度＋6、聖寵＋4）'}],['也說說自己的心事',()=>{e.bond=Math.min(100,e.bond+7);S.me.ally+=1;return'你也說起了自己的過往，兩人像尋常夫妻一般絮語到天明。（知心度＋7）'}],['勸他放下，往前看',()=>{if(P(.4+(S.me.scheme||0)/300+(e.bond/250))){e.bond=Math.min(100,e.bond+5);S.mood+=5;return'皇上思索片刻，點了點頭：「你說得是。」（知心度＋5）'}S.mood=Math.max(0,S.mood-8);e.bond=Math.max(0,e.bond-3);return'皇上神色一冷：「你不懂。」說完便不再開口。（心情－8、知心度－3）'}]].map(([l,f])=>[l,()=>{const r=f();e.rev.push(c.k);e.cd=S.t;try{msPush(`皇上向你說起了「${c.k}」的往事。`)}catch(x){}return r}])}}
+const EE={lone:()=>({t:'皇上夜裡忽然駕臨你宮中，說睡不著，想找人說說話。',o:[['備茶陪坐，不多問',()=>{const e=eb();e.lone=Math.max(0,e.lone-18);e.bond=Math.min(100,e.bond+3);S.me.favor+=5;return'皇上坐了小半夜，臨走時神色鬆快了許多。（孤寂－18）'}],['邀皇上對弈一局',()=>{const e=eb();e.lone-=10;if(P(.5)){S.me.favor+=6;return'你與皇上殺得難分難解，皇上大笑：「許久沒這麼痛快了。」'}S.me.favor+=3;return'你輸了一局，皇上笑著說下次讓你三子。'}]]}),
+ dbt:()=>({t:'皇上近日疑心重，忽然問你：「宮裡最近有什麼傳聞？」',o:[['據實以告，不添油醋',()=>{const e=eb();if(P(.6+S.me.favor/400)){e.dbt-=10;S.me.favor+=4;return'皇上點點頭：「你向來老實。」（疑心－10）'}S.me.favor-=3;return'皇上若有所思，沒再說什麼，只是看了你很久。'}],['說「臣妾不敢妄議」',()=>{const e=eb();e.dbt-=3;S.me.favor+=1;return'皇上略一頷首：「也好。」'}]]}),
+ tire:()=>({t:'皇上連日批閱奏摺，眼底發青，在你宮中揉著額角。',o:[['親手替他按揉頭部，備安神湯',()=>{const e=eb();e.tire=Math.max(0,e.tire-18);S.ehp=Math.min(100,S.ehp+3);S.me.favor+=5;return'皇上舒了口氣：「還是你這裡讓人安心。」（倦怠－18）'}],['勸他早些歇息，莫太操勞',()=>{const e=eb();e.tire-=8;S.me.favor+=3;return'皇上嘴上說「朕心裡有數」，卻還是早早歇下了。'}]]}),
+ joy:()=>({t:'皇上今日龍心大悅，賞了你一匣珍玩。',o:[['謝恩，說「皇上高興，臣妾就高興」',()=>{S.me.favor+=3;S.me.silver=(S.me.silver||0)+30;return'皇上笑著擺擺手。（銀兩＋30、聖寵＋3）'}],['請皇上把這份喜氣也分給別的姐妹',()=>{S.me.ally+=2;S.me.favor+=2;return'皇上讚你大度。（人脈＋2）'}]]})};
+window.eTalk68=function(){if(busy()){eOpen('請先處理眼前的事件。');return}const e=eb();const ev=chapterEv(true);closeM();
+ if(ev){S.q.push(ev);spend();return}
+ e.bond=Math.min(100,e.bond+2);e.lone=Math.max(0,e.lone-5);S.me.favor+=1;const r=pk(['你陪皇上喝茶說了半個時辰的閒話，皇上神色舒展了不少。','你替皇上念了一段書，皇上聽著聽著，竟睡著了。','你與皇上聊起宮中的趣事，皇上難得笑出了聲。']);try{L(r)}catch(x){}spend()};
+window.eGift68=function(){if(busy()){eOpen('請先處理眼前的事件。');return}if(!pay(20)){eOpen('銀兩不足。');return}const e=eb();S.mood=Math.min(100,S.mood+5);e.bond=Math.min(100,e.bond+2);S.me.favor+=2;try{L(`你備了一份與「${e.b.hob}」有關的心意，皇上很是受用。`)}catch(x){}closeM();spend()};
+const _m=mend;mend=function(){const r=_m.apply(this,arguments);
+ try{if(!S||!S.me||S.over||S.reg)return r;const e=eb();
+  e.lone=Math.max(0,Math.min(100,e.lone+0.8-(S.me.favor-50)/70+(S.mood<35?1.2:0)-(e.bond>40?.6:0)));
+  e.dbt=Math.max(0,Math.min(100,e.dbt+(S.ep===2?.6:.1)+(S.mood<30?1.2:0)-(e.bond>30?.5:0)-.3));
+  e.tire=Math.max(0,Math.min(100,e.tire+(S.ep===0?1:.5)+((S.ehp<50)?1:0)-.6));
+  if(S.t%9===0)try{msPush(`皇上近況：${heart()}`)}catch(x){}
+  if(S.t<6||S.t-e.cd<7||S.over||S.q.length>2)return r;
+  const fv=S.me.favor;if(fv<28)return r;
+  let ev=null;const pr=fv>=60?.2:fv>=40?.13:.07;
+  if(!P(pr))return r;
+  const c=chapterEv();if(c&&P(.6))ev=c;
+  if(!ev){if(e.lone>65)ev=EE.lone();else if(e.dbt>65)ev=EE.dbt();else if(e.tire>65)ev=EE.tire();else if(S.mood>=80)ev=EE.joy();else if(c)ev=c}
+  if(!ev)return r;e.cd=S.t;S.q.push(ev);if(!S.ev&&!S.ch&&!S.scn)next();else render()}catch(x){console.log('r68m',x)}return r};
+/* ---------- 入口：皇帝傳卡、朝堂卡 ---------- */
+const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
+ try{if(!S||!S.me||S.over)return r;const main=document.querySelector('main');if(!main)return r;
+  if(!S.reg){main.querySelectorAll('.cd').forEach(c=>{const h=c.firstElementChild;if(!h||h.tagName!=='H3'||c.dataset.e68)return;
+   if(/^皇帝傳/.test(h.textContent)){c.dataset.e68=1;const e=eb(),rv=e.rev.length;const mm=c.querySelector('.m');if(mm)mm.innerHTML=`${EPS[S.ep][0]}・${mw()}<br>「${ESC(heart())}」<br>知心度：${stage(e.bond)}（已知 ${rv}／${CH.length} 段往事）`;c.insertAdjacentHTML('beforeend','<div style="padding:4px 0"><button class=s onclick="eOpen68()" style="min-height:0;height:32px;padding:0 14px">查看皇帝檔案</button></div>')}
+   if(h.textContent.indexOf('在位皇帝')===0&&!c.querySelector('.e68b')){c.dataset.e68=1;c.insertAdjacentHTML('beforeend','<div class=e68b style="padding:4px 0"><button class=s onclick="eOpen68()" style="min-height:0;height:32px;padding:0 14px">查看皇帝檔案（情緒・身世）</button></div>')}})}
+ }catch(e){console.log('r68u',e)}return r};
+try{HELP.push(['點人名看檔案','幾乎所有出現人名的地方（事件、紀事、史冊、名冊、孩子與妃嬪檔案）都能點：妃嬪、皇子公主、官員、皇上都有各自的檔案。妃嬪與皇上的背景故事要靠「談心／陪皇上說話」逐層了解，並不是一次全看光。'],['皇上的情緒與往事','皇上除了心情，還有疑心、孤寂、倦怠三種情緒，會隨你的陪伴、他的處境起伏，並觸發不同的事件。知心度越高，他越會向你說起童年、少年、兄弟、先帝與登基、心結等往事，最後甚至對你說真心話。這些往事在每一局都不一樣。'])}catch(e){}
+const st=document.createElement('style');st.textContent='.pn68{cursor:pointer;border-bottom:1px dotted currentColor;text-decoration:none}.pn68:active{opacity:.6}';document.head.appendChild(st);
+window.__P68={pOpen,oOpen,eOpen,linkify,CH};
+})();
+
 deco();intro();
 
 
