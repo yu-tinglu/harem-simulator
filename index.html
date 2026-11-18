@@ -6623,6 +6623,85 @@ add('大婚之議','大婚之議',['empR'],()=>yr(S.reg.k)>=15,[
 try{HELP.push(['個人化故事','每位妃嬪的「心願」與「秘密」不同，故事也不同：想要孩子的人會有求子之路，心繫母家的人會有母家風雲，藏著舊疾的人會有隱疾之事……故事裡會帶入這一局真實存在的其他人。故事走完，會讓你對她的了解更進一步（人生背景自動多揭開幾層）。'])}catch(e){}
 })();
 
+/* ===== round72：古風音樂（古箏＋洞簫＋磬，全程合成、無需外部檔案） ===== */
+(function(){
+if(typeof SND==='undefined')return;
+const rnd=(a,b)=>a+Math.random()*(b-a),ri=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),pk=a=>a[Math.floor(Math.random()*a.length)];
+/* 五聲音階：宮調（明朗）與羽調（幽怨） */
+const MODE={gong:{off:[0,2,4,7,9],root:146.83,bpm:66},yu:{off:[0,3,5,7,10],root:110,bpm:54},xi:{off:[0,2,4,7,9],root:164.81,bpm:84},di:{off:[0,2,5,7,9],root:123.47,bpm:58}};
+const fq=(m,i)=>m.root*Math.pow(2,(m.off[((i%5)+5)%5]+12*Math.floor(i/5))/12);
+/* 旋律動機：[音級, 拍數]，音級 0=主音，5=高八度 */
+const MOT=[
+ [[3,1],[4,1],[5,2],[4,1],[3,1],[2,2],[1,1],[2,1],[3,2]],
+ [[2,2],[3,1],[4,1],[3,2],[1,1],[2,1],[0,3]],
+ [[5,1],[4,1],[3,1],[4,1],[5,2],[7,2],[6,1],[5,1],[4,2]],
+ [[0,1],[1,1],[2,2],[3,2],[2,1],[1,1],[0,2]],
+ [[4,2],[5,1],[4,1],[3,2],[2,1],[3,1],[1,3]],
+ [[3,1],[3,1],[5,2],[4,1],[3,1],[2,1],[1,1],[0,3]],
+ [[6,2],[5,1],[4,1],[5,2],[3,2],[4,1],[3,1],[2,2]],
+ [[1,2],[2,1],[3,1],[5,2],[4,2],[3,1],[2,1],[1,2]]];
+const END=[[0,4],[3,4],[1,4],[2,4]];
+const KS=new WeakMap();
+function pluckBuf(ctx,f){let m=KS.get(ctx);if(!m){m=new Map();KS.set(ctx,m)}const key=Math.round(f*10);if(m.has(key))return m.get(key);
+ const sr=ctx.sampleRate,len=Math.floor(sr*3),N=Math.max(2,Math.round(sr/f)),buf=ctx.createBuffer(1,len,sr),d=buf.getChannelData(0),ring=new Float32Array(N);
+ let pv=0;for(let i=0;i<N;i++){const x=Math.random()*2-1;pv=pv*.55+x*.45;ring[i]=pv}
+ const dec=f>500?.9968:f>250?.9978:.9985;let ix=0,mx=0;
+ for(let n=0;n<len;n++){const a=ring[ix],b=ring[(ix+1)%N],v=(a+b)*.5*dec;ring[ix]=v;d[n]=a;ix=(ix+1)%N;if(Math.abs(a)>mx)mx=Math.abs(a)}
+ const g=.9/(mx||1);for(let n=0;n<len;n++)d[n]*=g;
+ const fade=Math.floor(sr*.3);for(let n=0;n<fade;n++)d[len-1-n]*=n/fade;
+ m.set(key,buf);return buf}
+function pluck(ctx,dest,t,f,v,pan,slide){const s=ctx.createBufferSource();s.buffer=pluckBuf(ctx,f);const g=ctx.createGain();g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0008,t+2.8);
+ if(slide){s.playbackRate.setValueAtTime(Math.pow(2,-slide/12),t);s.playbackRate.exponentialRampToValueAtTime(1,t+.09)}
+ let out=g;if(ctx.createStereoPanner){const p=ctx.createStereoPanner();p.pan.value=pan||0;g.connect(p);out=p}
+ s.connect(g);out.connect(dest);s.start(t);s.stop(t+3)}
+const NB=new WeakMap();function noiseBuf(ctx){let b=NB.get(ctx);if(!b){b=ctx.createBuffer(1,ctx.sampleRate*2,ctx.sampleRate);const d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;NB.set(ctx,b)}return b}
+function flute(ctx,dest,t,f,dur,v){const o=ctx.createOscillator(),o2=ctx.createOscillator(),g=ctx.createGain(),lp=ctx.createBiquadFilter(),lfo=ctx.createOscillator(),lg=ctx.createGain(),g2=ctx.createGain();
+ o.type='sine';o2.type='sine';o.frequency.setValueAtTime(f*.965,t);o.frequency.exponentialRampToValueAtTime(f,t+.12);o2.frequency.value=f*2;g2.gain.value=.1;
+ lfo.frequency.value=5.2;lg.gain.setValueAtTime(0,t);lg.gain.linearRampToValueAtTime(f*.008,t+Math.min(.5,dur*.6));lfo.connect(lg);lg.connect(o.frequency);
+ lp.type='lowpass';lp.frequency.value=2600;
+ g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.14);g.gain.setValueAtTime(v,t+Math.max(.15,dur-.35));g.gain.linearRampToValueAtTime(0,t+dur+.35);
+ o.connect(g);o2.connect(g2);g2.connect(g);g.connect(lp);lp.connect(dest);
+ const nz=ctx.createBufferSource();nz.buffer=noiseBuf(ctx);nz.loop=true;const bp=ctx.createBiquadFilter();bp.type='bandpass';bp.frequency.value=f*2;bp.Q.value=2.5;const ng=ctx.createGain();ng.gain.setValueAtTime(0,t);ng.gain.linearRampToValueAtTime(v*.28,t+.1);ng.gain.linearRampToValueAtTime(0,t+dur+.3);nz.connect(bp);bp.connect(ng);ng.connect(lp);
+ o.start(t);o2.start(t);lfo.start(t);nz.start(t);const e=t+dur+.5;o.stop(e);o2.stop(e);lfo.stop(e);nz.stop(e)}
+function qing(ctx,dest,t,f,v){/* 磬：清脆泛音 */[1,2.76,5.4].forEach((r,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=f*r;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v/(i+1),t+.005);g.gain.exponentialRampToValueAtTime(.0005,t+(3.2-i));o.connect(g);g.connect(dest);o.start(t);o.stop(t+3.3)})}
+function drum(ctx,dest,t,v){const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.setValueAtTime(120,t);o.frequency.exponentialRampToValueAtTime(58,t+.35);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.01);g.gain.exponentialRampToValueAtTime(.001,t+1.1);o.connect(g);g.connect(dest);o.start(t);o.stop(t+1.2)}
+/* 混音匯流排：壓縮器＋合成混響 */
+function bus(ctx,out){const comp=ctx.createDynamicsCompressor();comp.threshold.value=-14;comp.ratio.value=4;comp.connect(out);
+ const dry=ctx.createGain();dry.gain.value=.78;dry.connect(comp);
+ const conv=ctx.createConvolver(),sr=ctx.sampleRate,len=Math.floor(sr*2.6),ib=ctx.createBuffer(2,len,sr);for(let c=0;c<2;c++){const d=ib.getChannelData(c);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.6)}conv.buffer=ib;
+ const wet=ctx.createGain();wet.gain.value=.34;conv.connect(wet);wet.connect(comp);
+ const inp=ctx.createGain();inp.connect(dry);inp.connect(conv);return inp}
+/* 一段樂句：回傳持續秒數 */
+function phrase(ctx,dest,t0,modeName){const M=MODE[modeName]||MODE.gong,beat=60/(M.bpm*rnd(.96,1.04));let t=t0;
+ const useFlute=Math.random()<.6,mel=[];const a=pk(MOT),b=Math.random()<.7?pk(MOT):null,e=pk(END);
+ [a,b,[e]].forEach(seq=>{if(seq)seq.forEach(n=>mel.push(n))});
+ if(Math.random()<.3)mel.unshift([e[0]?3:0,1]);
+ const lift=useFlute?5:0;let pos=0;
+ if(Math.random()<.5)qing(ctx,dest,t0,fq(M,6),.05);
+ mel.forEach(([ix,d],k)=>{const tt=t0+pos*beat,f=fq(M,ix+lift),dur=d*beat;
+  if(useFlute){flute(ctx,dest,tt,f,Math.max(.3,dur-.12),.2);if(d<=1)pluck(ctx,dest,tt,fq(M,ix),.12,rnd(-.3,.3))}
+  else{const sl=d>=2&&Math.random()<.45?rnd(1,2):0;if(d>=2&&Math.random()<.4)pluck(ctx,dest,tt-.1*beat,fq(M,ix+(Math.random()<.5?1:-1)),.16,rnd(-.2,.2));pluck(ctx,dest,tt,fq(M,ix+5),.34,rnd(-.25,.25),sl)}
+  pos+=d});
+ /* 伴奏：每兩拍一組琶音 */
+ const total=pos,base=pk([0,0,3]);for(let q=0;q<total;q+=2){const bt=t0+q*beat;[base,base+3,base+5,base+3].forEach((ix,j)=>pluck(ctx,dest,bt+j*beat*.5,fq(M,ix),.2,j%2?.3:-.3))}
+ /* 句末刮奏 */
+ if(Math.random()<.65){const gt=t0+total*beat-beat*.4;const up=Math.random()<.6;for(let i=0;i<8;i++){const ix=up?i:8-i;pluck(ctx,dest,gt+i*.065,fq(M,ix),.16*(1-i*.06),(i/8-.5)*.6)}}
+ if(modeName==='yu'||modeName==='di'){if(Math.random()<.5)drum(ctx,dest,t0,.1)}
+ return total*beat+(useFlute?.6:1.2)}
+function curMode(){try{if(!S||!S.me)return'gong';if(S.over)return'yu';if(S.reg)return Math.random()<.55?'di':'gong';const m=S.mood;if(m<30||(S.me.hp<35))return'yu';const mo=S.t%12;if(m>=72||mo===0||mo===1)return Math.random()<.6?'xi':'gong';if(m<45)return Math.random()<.5?'di':'gong';return'gong'}catch(e){return'gong'}}
+/* 實際播放 */
+let gen=0;
+sndLoop=function(){if(!SND.on||!SND.ctx)return;const my=gen;
+ try{if(!SND.bus){SND.bus=bus(SND.ctx,SND.mg)}
+  const t=SND.ctx.currentTime+.15,dur=phrase(SND.ctx,SND.bus,t,curMode());
+  clearTimeout(SND.tm);SND.tm=setTimeout(()=>{if(my===gen)sndLoop()},(dur+rnd(2.5,5.5))*1000)}catch(e){console.log('r72',e);SND.tm=setTimeout(()=>{if(my===gen)sndLoop()},8000)}};
+const _tg=sndToggle;sndToggle=function(){gen++;const r=_tg.apply(this,arguments);try{if(SND.on&&SND.mg){SND.mg.gain.value=.85}}catch(e){}return r};
+/* 音效也改用古箏撥弦 */
+const _sfx=sfx;sfx=function(kind){try{if(!SND||!SND.on||!SND.ctx)return;if(!SND.bus)SND.bus=bus(SND.ctx,SND.mg);const M=MODE.gong,ctx=SND.ctx,t=ctx.currentTime+.02,seq={up:[3,4,5,7],baby:[4,6],die:[2,0,-3]}[kind];if(!seq)return _sfx.apply(this,arguments);
+  seq.forEach((ix,i)=>pluck(ctx,SND.bus,t+i*.16,fq(M,ix),kind==='die'?.28:.3,0));if(kind==='up')qing(ctx,SND.bus,t+.5,fq(M,6),.06)}catch(e){return _sfx.apply(this,arguments)}};
+window.__GF={phrase,bus,MODE,fq};
+})();
+
 deco();intro();
 
 
