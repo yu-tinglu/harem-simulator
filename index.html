@@ -6003,7 +6003,7 @@ function registry(){const m=new Map();if(!S||!S.me)return m;const put=(n,v)=>{n=
  S.npcs.forEach((n,i)=>put(nm0(n),{t:'npc',i}));
  cbs().forEach((c,i)=>put(c.n,{t:'cb',i}));try{const e=rx().emp;if(e)put(e.n,{t:'cbe'})}catch(e){}
  (S.cr||[]).forEach((f,i)=>put(f.n,{t:'off',i}));
- try{const e=S.em43;if(e){if(S.reg&&S.reg.k){put(e.giv,{t:'kid',n:S.reg.k.n});put(e.era+'帝',{t:'kid',n:S.reg.k.n})}else{put(e.sur+e.giv,{t:'emp'});put(e.era+'帝',{t:'emp'});put(e.giv,{t:'emp'})}}}catch(e){}
+ try{const e=S.em43;if(e){if(S.reg&&S.reg.k){put(e.giv,{t:'emp'});put(e.era+'帝',{t:'emp'})}else{put(e.sur+e.giv,{t:'emp'});put(e.era+'帝',{t:'emp'});put(e.giv,{t:'emp'})}}}catch(e){}
  if(!S.reg)put('皇上',{t:'emp'});
  return m}
 let RE=null,REMAP=null;
@@ -6111,7 +6111,7 @@ function heart(){const e=eb(),m=S.mood;const L=[];
  if(!L.length)L.push(pk(['今日朝事順遂，他難得多用了半碗飯。','午後在殿中翻了幾頁舊書，神色平靜。','黃昏時站在廊下，看了很久的雲。']));return L[0]}
 window.eHeart68=heart;
 function stage(b){return b>=80?'知心人':b>=55?'推心置腹':b>=30?'能說幾句真話':b>=10?'略有往來':'君臣之別'}
-function eOpen(msg){if(S.reg&&S.reg.k)return kopen49(S.reg.k.n);const e=eb(),b=e.b,em=S.em43||{sur:'',giv:'',era:''};
+function eOpen(msg){if(S.reg&&S.reg.k)return window.eOpenR69?window.eOpenR69(msg):kopen49(S.reg.k.n);const e=eb(),b=e.b,em=S.em43||{sur:'',giv:'',era:''};
  const rv=CH.filter(c=>e.rev.includes(c.k));let tl=[];(S.ms||[]).forEach(x=>{if(x&&x.x&&(x.x.indexOf('皇上')>=0||x.x.indexOf(em.sur+em.giv)>=0))tl.push([x.t,x.x])});tl=tl.sort((a,c)=>c[0]-a[0]).slice(0,8);
  const html=head(`${em.era||''}帝・${em.sur||''}${em.giv||''}`,`${EPS[S.ep][0]}（${EPS[S.ep][1]}）<br>${S.eage}歲・在位第${Math.floor(S.t/12)+1}年・龍體${S.ehp|0}<br>愛好：${b.hob}　<span style="opacity:.8">${mw()}</span>`)
  +(msg?`<div class=m style="color:#c0392b;margin:6px 0"><b>${ESC(msg)}</b></div>`:'')
@@ -6157,7 +6157,82 @@ const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
  }catch(e){console.log('r68u',e)}return r};
 try{HELP.push(['點人名看檔案','幾乎所有出現人名的地方（事件、紀事、史冊、名冊、孩子與妃嬪檔案）都能點：妃嬪、皇子公主、官員、皇上都有各自的檔案。妃嬪與皇上的背景故事要靠「談心／陪皇上說話」逐層了解，並不是一次全看光。'],['皇上的情緒與往事','皇上除了心情，還有疑心、孤寂、倦怠三種情緒，會隨你的陪伴、他的處境起伏，並觸發不同的事件。知心度越高，他越會向你說起童年、少年、兄弟、先帝與登基、心結等往事，最後甚至對你說真心話。這些往事在每一局都不一樣。'])}catch(e){}
 const st=document.createElement('style');st.textContent='.pn68{cursor:pointer;border-bottom:1px dotted currentColor;text-decoration:none}.pn68:active{opacity:.6}';document.head.appendChild(st);
-window.__P68={pOpen,oOpen,eOpen,linkify,CH};
+window.__P68={pOpen,oOpen,eOpen,linkify,CH,bioLay,H,pickH,LAY,showM,closeM,head,sec,bar,busy,ESC,tmS,heart,stage};
+})();
+
+/* ===== round69：太后期皇帝（你的孩子）情緒與背景＋皇帝後宮妃嬪五層背景 ===== */
+(function(){
+const P8=window.__P68;if(!P8)return;
+const {bioLay,pickH,H,showM,closeM,head,sec,bar,busy,ESC,tmS}=P8;
+const pk=a=>a[Math.floor(Math.random()*a.length)];
+const momOf=k=>{for(const x of S.me.kids)if(x===k)return'me';for(let i=0;i<S.npcs.length;i++)if(S.npcs[i].kids.includes(k))return i;return null};
+const cbs=()=>{try{const x=rx();return(x&&x.cb)||[]}catch(e){return[]}};
+/* ---------- 太后期的皇帝 ---------- */
+const FT=['被人當面說「皇上還小」','一個人待在空蕩蕩的大殿','夜裡的雷聲','辜負先帝的期望','被身邊人欺瞞'];
+const HOB=['書畫','騎射','音律','讀史','養鳥','蹴鞠'];
+const AMB=['做個像祖宗那樣開疆拓土的君王','做一個讓百姓過上安穩日子的明君','先把朝堂上那些欺他年輕的人都管住','只想做個不被人擺布的皇帝'];
+const LAST=['先帝彌留時拉著他的手，只說了一句：「聽你母后的話。」','先帝臨終前把他叫到榻前，什麼也沒說，只是看了他很久。','先帝駕崩那夜，他被人從睡夢中喚醒，披著朝服就被帶到了靈前。','先帝在最後的日子裡，反覆叮囑他：「別輕信任何人。」'];
+function K(){return S.reg&&S.reg.k}
+function er(){if(!S.em69||S.em69.kn!==K().n){const k=K(),o=momOf(k),sibs=allKids().filter(x=>x!==k&&!x.dead).sort((a,b)=>a.b-b.b),sn=sibs.map(x=>x.n);
+ const age0=Math.max(0,Math.floor(((S.reg.t0===undefined?S.t:S.reg.t0)-k.b)/12));
+ S.em69={kn:k.n,b:{mom:o==='me'?'你':(on(o)||'生母'),mine:o==='me',last:pk(LAST),age0,sib:sn.slice(0,2),hob:pk(HOB),ft:pk(FT),amb:pk(AMB),rv:(S.cr&&S.cr[0]&&S.cr[0].n)||'首輔'},lone:45,dbt:40,prs:40,bond:Math.max(0,Math.min(40,(k.bond||50)-40)),rev:[],cd:S.t}}
+ return S.em69}
+function chap(){const e=er(),b=e.b,k=K();return[
+ {k:'童年',g:0,t:b.mine?`他想起小時候，你每晚在燈下哄他入睡，那是他一生最安穩的日子。`:`他從小是在${ESC(b.mom)}身邊長大的，說起那段日子，聲音放得很輕。`},
+ {k:'父皇',g:10,t:b.last},
+ {k:'登基那天',g:20,t:`登基那年他才${b.age0}歲，龍袍太大，拖在地上，滿朝文武都跪著，他卻只想躲到你身後。`},
+ {k:'兄弟姊妹',g:30,t:b.sib.length?`他說起${ESC(b.sib.join('、'))}：「他們叫朕『皇上』，可朕想聽他們叫一聲兄長（兄弟姊妹）。」`:'他說，宮裡沒有同齡的兄弟姊妹，連個說話的人都沒有。'},
+ {k:'對首輔',g:42,t:`他壓低聲音問你：「${ESC(b.rv)}……真的可信嗎？朕每次看他，都覺得他眼裡沒有朕。」`},
+ {k:'孤獨',g:55,t:`他說，最難熬的是下了朝以後：${b.hob==='養鳥'?'只有籠中的鳥肯陪他說話':'只有「'+b.hob+'」能讓他暫時忘了自己是皇帝'}。`},
+ {k:'志向',g:68,t:`他認真地說：「朕想${ESC(b.amb)}。」`},
+ {k:'給你的話',g:80,t:`他說：「母后，等朕長大，一定不讓您再這樣辛苦。」`}]}
+const stg=v=>v>=80?'母子同心':v>=55?'無話不談':v>=30?'願意開口':v>=10?'敬而不親':'生分疏遠';
+function heartR(){const e=er();const L=[];if(e.lone>65)L.push('他獨自坐在殿中，望著一排排空椅子出神。');if(e.dbt>65)L.push('他近日看每個大臣的眼神，都多了幾分戒備。');if(e.prs>65)L.push('連日功課與朝會讓他眼下發青，卻仍強撐著不肯叫苦。');if(!L.length)L.push(pk(['他今日讀書很用心，先生誇了他兩句。','午後他在院中追著一隻蝴蝶跑，笑聲傳得很遠。','黃昏時他站在廊下，看了很久的雲。']));return L[0]}
+window.eOpenR69=function(msg){const k=K();if(!k)return;const e=er(),b=e.b,em=S.em43||{era:'',sur:'',giv:k.n};
+ const rv=chap().filter(c=>e.rev.includes(c.k));let tl=[];(S.ms||[]).forEach(x=>{if(x&&x.x&&x.x.indexOf(k.n)>=0)tl.push([x.t,x.x])});tl=tl.sort((a,c)=>c[0]-a[0]).slice(0,8);
+ const KTn=KT[k.t];
+ showM(head(`${em.era}帝・${em.sur||''}${em.giv}`,`${yr(k)}歲・${KTn[0]}（${KTn[1]}）<br>生母：${b.mine?'你':ESC(b.mom)}　愛好：${b.hob}　身邊的人：${ESC(b.rv)}輔政`)
+ +(msg?`<div class=m style="color:#c0392b;margin:6px 0"><b>${ESC(msg)}</b></div>`:'')
+ +bar('才',k.cai)+bar('德',k.de)+bar('孝',k.bond)+bar('勢',k.pow)+(k.ly!==undefined?bar('忠',k.ly):'')
+ +bar('孤寂',e.lone,'#2e86c1')+bar('疑慮',e.dbt,'#8e44ad')+bar('壓力',e.prs,'#7f8c8d')
+ +`<div class=m style="margin:8px 0;font-style:italic">「${ESC(heartR())}」</div>`
+ +sec('母子之間',bar('知心度',e.bond,'#c0392b')+`目前：<b>${stg(e.bond)}</b>　已向你說起 ${rv.length}／8 段心事`)
+ +sec('他向你說起過的心事',rv.length?rv.map(c=>`<div style="margin:5px 0"><b>${c.k}</b>：${c.t}</div>`).join(''):'他還沒向你敞開過心扉。')
+ +sec('近事',tl.length?tl.map(r=>`<div>・<span style="opacity:.7">${tmS(r[0])}</span>　${ESC(r[1])}</div>`).join(''):'暫無記載。')
+ +`<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px"><button onclick="eTalkR69()" style="text-align:left;min-height:0;padding:8px 10px;height:auto"><div style="font-size:14px">陪皇帝說說話</div><small style="opacity:.75">知心度＋，孤寂－，或聽他說起心事（耗 1 次行動，剩 ${S.w}）</small></button><button onclick="pm68close();kopen49('${k.n}')" style="text-align:left;min-height:0;padding:8px 10px;height:auto"><div style="font-size:14px">更多互動</div><small style="opacity:.75">賞賜籠絡、申飭、賜婚等</small></button></div>`)}
+function chapEv(){const e=er(),k=K(),c=chap().find(x=>!e.rev.includes(x.k)&&e.bond>=x.g);if(!c)return null;
+ const mk=(f)=>()=>{const r=f();e.rev.push(c.k);e.cd=S.t;try{msPush(`${k.n}向你說起了「${c.k}」的心事。`)}catch(x){}return r};
+ return{t:`${pk(['夜深了，皇帝遣開宮人，悄悄來到你身邊：「母后，朕有些話想說。」','皇帝批完摺子，沒有回寢宮，而是徑直來了你這裡，坐了許久才開口。','燈下，皇帝低著頭，輕聲說：「母后，朕今日想起了一些事。」'])}<br><br>【${c.k}】${c.t}`,o:[
+  ['靜靜聽他說完，把他摟在懷裡',mk(()=>{e.bond=Math.min(100,e.bond+8);e.lone=Math.max(0,e.lone-12);k.bond=Math.min(100,k.bond+4);return'他靠在你肩上，說著說著睡著了。（知心度＋8、孝＋4）'})],
+  ['以君王之道開導他',mk(()=>{e.bond=Math.min(100,e.bond+5);k.de=Math.min(100,k.de+3);k.ly=Math.min(100,(k.ly===undefined?50:k.ly)+2);return'他認真聽著，記在了心裡。（知心度＋5、德＋3）'})],
+  ['提醒他：此事不可對外人言',mk(()=>{e.bond=Math.min(100,e.bond+4);e.dbt=Math.max(0,e.dbt-6);return'他鄭重點頭：「兒臣明白。」（知心度＋4、疑慮－6）'})],
+  ['說「皇帝長大了，自己拿主意」',mk(()=>{if(P(.5)){e.bond=Math.min(100,e.bond+6);k.pow=Math.min(100,k.pow+2);return'他眼睛一亮，挺直了腰。（知心度＋6）'}e.bond=Math.max(0,e.bond-3);k.bond=Math.max(0,k.bond-2);return'他低下頭：「母后是嫌朕不夠聽話嗎？」（知心度－3）'})]]}}
+const EE={lone:()=>({t:'夜裡，皇帝悄悄來到你宮中，說睡不著，想在你這裡待一會兒。',o:[['留他住下，陪他說話',()=>{const e=er();e.lone=Math.max(0,e.lone-18);e.bond=Math.min(100,e.bond+3);K().bond=Math.min(100,K().bond+3);return'他睡得很安穩。（孤寂－18、孝＋3）'}],['送他回去，叮囑要守規矩',()=>{const e=er();e.lone=Math.min(100,e.lone+4);K().de=Math.min(100,K().de+2);return'他悶悶不樂地走了。（孤寂＋4、德＋2）'}]]}),
+ dbt:()=>({t:`皇帝忽然問你：「母后，${er().b.rv}和朕說話時，總是低著頭，是不是在隱瞞什麼？」`,o:[['如實分析，教他看人',()=>{const e=er();e.dbt=Math.max(0,e.dbt-10);K().de=Math.min(100,K().de+2);return'他若有所思：「朕明白了。」（疑慮－10）'}],['說「皇帝多慮了，首輔是忠臣」',()=>{const e=er();e.dbt=Math.max(0,e.dbt-4);S.reg.pw+=1;return'他半信半疑地點了點頭。（權柄＋1）'}]]}),
+ prs:()=>({t:'皇帝連日功課與朝會，疲態畢露，卻不肯對你說一句累。',o:[['免他一天功課，帶他去御花園走走',()=>{const e=er();e.prs=Math.max(0,e.prs-20);K().bond=Math.min(100,K().bond+3);return'他在園子裡跑了半日，笑得很開心。（壓力－20、孝＋3）'}],['說「這點苦都受不了，如何做皇帝？」',()=>{const e=er();e.prs=Math.min(100,e.prs+6);K().de=Math.min(100,K().de+3);K().bond=Math.max(0,K().bond-3);return'他咬著唇，硬撐了下去。（德＋3、孝－3）'}]]})};
+window.eTalkR69=function(){if(busy()){window.eOpenR69('請先處理眼前的事件。');return}const e=er(),k=K(),ev=chapEv();closeM();
+ if(ev){S.q.push(ev);spend();return}
+ e.bond=Math.min(100,e.bond+2);e.lone=Math.max(0,e.lone-5);k.bond=Math.min(100,k.bond+1);try{L(pk(['你陪皇帝用了晚膳，他把今日學的詩念給你聽。','你問起皇帝的功課，他滔滔不絕說了半個時辰。','你陪皇帝在院中散步，他難得放鬆。']))}catch(x){}spend()};
+const _rm=rmend;rmend=function(){const r=_rm.apply(this,arguments);
+ try{if(!S||!S.reg||!K()||S.over)return r;const e=er();
+  e.lone=Math.max(0,Math.min(100,e.lone+.7-(e.bond>40?.8:0)-(K().bond-50)/90));
+  e.dbt=Math.max(0,Math.min(100,e.dbt+.3+((S.reg.rv||0)>60?.8:0)-(e.bond>30?.5:0)-.3));
+  e.prs=Math.max(0,Math.min(100,e.prs+.7+(yr(K())<14?.4:0)-.7));
+  if(S.t%9===0)try{msPush(`皇帝近況：${heartR()}`)}catch(x){}
+  if(S.t-e.cd<7||S.ev||S.ch||S.scn||S.q.length>1||!P(.16))return r;
+  let ev=null;const c=chapEv();if(c&&P(.6))ev=c;if(!ev){if(e.lone>62)ev=EE.lone();else if(e.dbt>62)ev=EE.dbt();else if(e.prs>62)ev=EE.prs();else ev=c}
+  if(!ev)return r;e.cd=S.t;S.q.push(ev);next()}catch(x){console.log('r69m',x)}return r};
+/* ---------- 皇帝後宮妃嬪：五層背景 ---------- */
+const _cb=window.cbDo66;if(_cb)window.cbDo66=function(i,act){const r=_cb.apply(this,arguments);try{if(act==='talk'){const c=cbs()[i];if(c)c.tk68=(c.tk68||0)+1}}catch(e){}return r};
+function unl(c,isE){const tk=c.tk68||0,ld=isE?(c.gl||0):(c.ld||0);return[true,tk>=1||ld>=50,tk>=2||ld>=60,tk>=3||ld>=70,tk>=4&&ld>=55]}
+const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
+ try{if(!S||!S.reg||S.over)return r;const main=document.querySelector('main');if(!main)return r;main.querySelectorAll('.cd').forEach(c=>{const h=c.firstElementChild;if(h&&h.tagName==='H3'&&h.textContent.indexOf('在位皇帝')===0&&!c.querySelector('.e68b')){c.insertAdjacentHTML('beforeend','<div class=e68b style="padding:4px 0"><button class=s onclick="eOpen68()" style="min-height:0;height:32px;padding:0 14px">查看皇帝檔案（情緒・心事）</button></div>')}});const e0=(rx()||{}).emp,list=cbs();
+  main.querySelectorAll('details.hg66').forEach(d=>{if(d.querySelector('.bio69'))return;const n=(d.querySelector('.nm')||{}).textContent;if(!n)return;
+   const c=list.find(x=>x.n===n),isE=!c&&e0&&e0.n===n,o=c||(isE?e0:null);if(!o)return;
+   const html=`<div class=bio69 style="margin:10px 0 4px"><b>人生背景</b>（召見談心越多，了解越深）<div class=m style="line-height:1.7;margin-top:4px">${bioLay(o,n+'#c',unl(o,isE),'她')}<span style="opacity:.7">已談心 ${o.tk68||0} 次</span></div></div>`;
+   const btn=d.querySelector('button');const host=btn&&btn.parentElement!==d?btn.parentElement:btn;if(host&&host.parentElement===d)d.insertBefore(Object.assign(document.createElement('div'),{innerHTML:html}).firstElementChild,host);else d.insertAdjacentHTML('beforeend',html)})
+ }catch(e){console.log('r69u',e)}return r};
+try{HELP.push(['太后期的皇帝','太后期的皇帝是你的孩子（或你撫養的皇子）。除了數值，他也有孤寂、疑慮、壓力三種情緒，會隨你的陪伴與朝局起伏；知心度越高，越會向你說起童年、父皇、登基那天、兄弟姊妹、對首輔的看法、志向等心事。其中兄弟姊妹、輔政大臣用的是這一局真實存在的人。點皇帝的名字或「在位皇帝」卡可看檔案。'])}catch(e){}
 })();
 
 deco();intro();
