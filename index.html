@@ -5509,7 +5509,7 @@ HELP.push(['皇室族譜與家族餘蔭','宗室頁底部的「皇室族譜」�
 HELP.push(['孩子詳情卡','在宗室頁點任何孩子的卡片，可看他的故事、特質與你能做的事：談心、賞賜、教導、嚴管、謀劃婚事、栽培。太后聽政時則是召見、申飭、賜婚。']);
 }catch(e){console.log('r55h',e)}
 const CATS=[
-['入門與操作',['這是什麼遊戲','第一年照著做','每月 4 次行動','六組行動','數值是什麼','方針與一鍵','輕鬆模式','警示欄','事件頻率','事件冷卻']],
+['入門與操作',['行動的代價','成就與新開局','這是什麼遊戲','第一年照著做','每月 4 次行動','六組行動','數值是什麼','方針與一鍵','輕鬆模式','警示欄','事件頻率','事件冷卻']],
 ['後宮、位份與宮鬥',['位份與編制','官女子','盟友度','敵意、罪證','皇后與中宮','管教皇后','暗算皇后','結拜與宿敵','關係圖','記憶、派系','因果與人生','選秀']],
 ['皇帝、朝堂與主線',['皇帝詳情','皇帝疑心','前朝、母家','私兵與疑心','主線劇情','終局大計']],
 ['子嗣、宗室與傳承',['子嗣與奪嫡','九龍奪嫡','子女婚配','姻親勢力','皇子字輩','孩子資質','皇子差事','出身與差事','公主差事','孩子詳情卡','皇室族譜']],
@@ -5556,7 +5556,7 @@ const ACH=[
  ['a8','長壽福氣','撐過 30 年',()=>S.t>=360]];
 const got=()=>{try{return JSON.parse(g('hg56ach')||'{}')}catch(e){return{}}};
 function chk(){try{if(!S||!S.me||S.over)return;const G=got();let ch=0;ACH.forEach(([id,n,d,f])=>{if(G[id])return;let ok=false;try{ok=!!f()}catch(e){}if(ok){G[id]=1;ch=1;toast('🏅 成就解鎖：<b>'+n+'</b>（'+d+'）')}});if(ch)s('hg56ach',JSON.stringify(G))}catch(e){console.log('r56a',e)}}
-function achHtml(){const G=got();return`<div class="ach56">${ACH.map(([id,n,d])=>`<span class="${G[id]?'':'no'}" title="${d}">${G[id]?'🏅':'🔒'} ${n}</span>`).join('')}<div class=m style="margin-top:4px">已解鎖 ${ACH.filter(a=>G[a[0]]).length}／${ACH.length}（跨局累計，存在這個瀏覽器）</div></div>`}
+function achHtml(){const G=got();return`<div class="ach56">${ACH.map(([id,n,d])=>`<span class="${G[id]?'':'no'}" title="${d}">${G[id]?'🏅':'🔒'} ${n}</span>`).join('')}<div class=m style="margin-top:4px">已解鎖 ${ACH.filter(a=>G[a[0]]).length}／${ACH.length}（跨局累計，存在這個瀏覽器）</div>${window.unlTxt64?`<div class=m style="margin-top:4px">${window.unlTxt64()}</div>`:''}</div>`}
 const _m=mend;mend=function(){const r=_m.apply(this,arguments);
  try{if(S&&S.me&&!S.over){const ks=S.me.kids.filter(k=>!k.dead);
   if(ks.some(k=>yr(k)>=4))tip('kid4');else if(S.t>=24&&0);
@@ -5822,6 +5822,41 @@ function sync(){try{const inGame=!!(S&&S.me);document.documentElement.classList.
 const _r=render;render=function(){const r=_r.apply(this,arguments);sync();return r};
 const _i=intro;intro=function(){const r=_i.apply(this,arguments);sync();return r};
 sync();
+})();
+
+/* ===== round64：行動代價（資源互相排擠）、成就解鎖新開局身分 ===== */
+(function(){
+const g=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
+const toast=t=>{try{let e=document.getElementById('tt56');if(e)e.remove();e=document.createElement('div');e.id='tt56';e.innerHTML=t+'<button onclick="this.parentNode.remove()">×</button>';document.body.appendChild(e);setTimeout(()=>{try{e.remove()}catch(x){}},9000)}catch(x){}};
+// ---- 1. 行動代價 ----
+const cl2=v=>Math.max(0,Math.min(100,v));
+const _A=A;A=function(i){let w0=null,cat=null;try{if(S&&S.me&&!S.reg&&!S.over&&!S.ch&&!S.scn&&!S.ev){w0=S.w;const c=ACTCAT.find(c=>c[1].includes(i));cat=c&&c[0]}}catch(e){}
+ const r=_A.apply(this,arguments);
+ try{if(cat&&S&&S.me&&!S.over&&S.w<w0){const m=S.me;
+  if(cat==='恩寵聖眷'){m.hp=cl2(m.hp-.7);if(m.favor>75)m.ally=cl2(m.ally-.5)}
+  else if(cat==='人脈勢力'){if(m.favor>40)m.favor=cl2(m.favor-.5)}
+  else if(cat==='宮鬥暗招'){m.hp=cl2(m.hp-.5);m.ally=cl2(m.ally-.4)}
+  else if(cat==='修身養性'){if(m.favor>40)m.favor=cl2(m.favor-.5)}
+  else if(cat==='宮中遊歷'){m.silver=Math.max(0,m.silver-3)}
+  else if(cat==='子嗣'){m.silver=Math.max(0,m.silver-2)}}}catch(e){console.log('r64a',e)}
+ return r};
+try{HELP.push(['行動的代價','每個行動除了本身的效果，也有隱性的代價：恩寵聖眷類耗心神（健康略降，聖寵很高時招人嫉妒）；人脈勢力與修身養性類讓你少在御前露面（聖寵略降）；宮鬥暗招令人提防（人脈略降）；宮中遊歷與子嗣類要打賞花錢。所以什麼都做滿並不划算，要依局勢取捨。'])}catch(e){}
+// 高處不勝寒：聖寵、人脈衝到頂端時加強衰減
+const _mm=mend;mend=function(){const r=_mm.apply(this,arguments);try{if(S&&S.me&&!S.over&&!S.reg){const m=S.me;if(m.favor>90)m.favor=cl2(m.favor-2);if(m.ally>92)m.ally=m.ally-1.2;if(m.ally>100)m.ally=100}}catch(e){console.log('r64m',e)}return r};
+// ---- 2. 成就解鎖新開局身分 ----
+const UN=[
+ ['宗室遠親','你是宗室旁支的女兒，與皇家沾親帶故，入宮便有幾分體面，但也被人看得更緊。起始位份：常在',{s:40,a:10,sc:2,r:1,f:4,e:8},[['祖父','輔國公',40,70,80],['族兄','宗室侍衛',20,60,80]],3,1,'a2','親王之母',()=>({t:'入宮不久，幾位宗室福晉特意來向你問好，言語間試探你的來歷。',o:[['謙遜以對，不攀親戚',()=>{S.me.ally+=3;return'你的低調讓人高看一眼。（人脈＋3）'}],['藉宗室身分結交福晉們',()=>{S.me.ally+=5;S.me.favor-=1;return'你很快有了一圈往來。（人脈＋5、聖寵－1）'}],['稱病，不見外客',()=>{S.me.hp=Math.min(100,S.me.hp+2);return'你躲了個清靜。'}]]})],
+ ['商賈巨富之女','父親是江南鹽商，富可敵國，卻被士大夫看不起。你帶著豐厚的嫁妝入宮，但出身最受輕視。起始位份：答應',{s:200,a:2,sc:3,r:0,f:2,e:-4},[['父親','鹽商',45,60,90],['舅舅','絲綢商',30,55,85]],3,-1,'a4','家財萬貫',()=>({t:'你入宮時帶的箱籠沉甸甸的，內務府的管事太監眼睛都亮了。',o:[['大方打賞，結個善緣（耗銀60）',()=>{if(!pay(60))return'銀兩不足，只能小賞。';S.me.ally+=6;return'宮裡上下都說你出手闊綽。（人脈＋6）'}],['藏起大半，只拿出一點',()=>{S.me.silver+=10;return'你留了後手。（銀兩＋10）'}],['託人送一份重禮給皇后',()=>{if(!pay(80))return'銀兩不足，只能備份薄禮。';S.me.emp+=8;return'皇后對你客氣了許多。（皇后好感＋8）'}]]})],
+ ['江南才女','自幼名動江南，詩詞書畫俱佳，被地方官薦入宮中。才情出眾，但心思單純。起始位份：答應',{s:20,a:4,sc:2,r:0,f:6,e:2},[['父親','江南教諭',10,70,90]],3,-1,'a1','子孫滿堂',()=>({t:'入宮後第一次被召，皇上隨口出了一句上聯，要你當場對下聯。',o:[['從容應對，下聯工整',()=>{if(P(.65)){S.me.favor+=8;return'皇上讚賞，你一時名動後宮。（聖寵＋8）'}S.me.favor-=2;return'你一時緊張，對得平平。（聖寵－2）'}],['故意對得平庸，藏拙',()=>{S.me.scheme+=2;return'你避開了鋒芒。（心機＋2）'}],['反出一個上聯請皇上對',()=>{if(P(.4)){S.me.favor+=10;return'皇上大笑，覺得你有趣。（聖寵＋10）'}S.me.favor-=3;return'皇上愣了一下，神色微沉。（聖寵－3）'}]]})]];
+const OPEN={};UN.forEach(u=>{OPEN[u[0]]=u[8]});
+const got=()=>{try{return JSON.parse(g('hg56ach')||'{}')}catch(e){return{}}};
+function sync(){try{const G=got();UN.forEach(u=>{if(G[u[6]]&&!GS.some(x=>x[0]===u[0])){GS.push(u.slice(0,6));const seen=g('hg64u_'+u[0]);if(!seen){try{localStorage.setItem('hg64u_'+u[0],'1')}catch(e){}if(S&&S.me)toast('🔓 解鎖新開局身分：<b>'+u[0]+'</b>（下一局可選）')}}})}catch(e){console.log('r64s',e)}}
+window.unlTxt64=function(){const G=got();return UN.map(u=>`${G[u[6]]?'🔓':'🔒'} ${u[0]}（需成就「${u[7]}」）`).join('　')};
+const _r=render;render=function(){const r=_r.apply(this,arguments);sync();return r};
+const _s=start;start=function(){const r=_s.apply(this,arguments);
+ try{const o=S&&S.me&&OPEN[GS[G][0]];if(o&&!S.op64){S.op64=1;S.q=S.q||[];S.q.push(o());if(!S.ev&&!S.ch&&!S.scn)next();else render()}}catch(e){console.log('r64o',e)}return r};
+sync();
+try{HELP.push(['成就與新開局身分','累積成就能解鎖新的開局身分：「親王之母」解鎖宗室遠親、「家財萬貫」解鎖商賈巨富之女、「子孫滿堂」解鎖江南才女。解鎖後在新遊戲的選擇出身畫面就會出現。成就跨局累計，存在這個瀏覽器。'])}catch(e){}
 })();
 
 deco();intro();
