@@ -5613,12 +5613,20 @@ const CX=['主持選秀','依祖制三年一選：大選、小選或停選；擇
  {l:'暫不辦理',f(){L('選秀之事暫且擱下。')}}]);return 1}];
 RACT.push(CX);try{RAC_ORDER[1][1].push('主持選秀')}catch(e){}
 // ---- 皇帝後宮名冊（太后期，太妃頁） ----
+const RKL=['答應','常在','貴人','嬪','貴嬪','妃'],CAPL=[6,6,6,4,3,2];
+const rkIdx=c=>Math.max(0,RKL.indexOf(c.rk||(c.fv>=70?'嬪':c.fv>=55?'貴人':'常在')));
+const rkCnt=i=>cbs().filter(c=>rkIdx(c)===i).length;
+window.cbDo58=function(i,act){try{const c=cbs()[i],e=rx().emp;if(!c||S.t<(c.cd58||0))return;c.cd58=S.t+3;
+ if(act==='up'){const r=rkIdx(c);if(r>=RKL.length-1||rkCnt(r+1)>=CAPL[r+1]){L(`${RKL[Math.min(r+1,5)]}名額已滿或已到頂，無法再晉封。`);render();return}if(!pay(20)){L('銀兩不足。');render();return}c.rk=RKL[r+1];c.ld=cl(c.ld+8);if(e&&!e.gone)e.gl=cl(e.gl-2);L(`你下旨晉封${c.n}為${c.rk}，她感念你的恩典。（忠誠＋8、皇后好感－2）`)}
+ else{c.fv=cl(c.fv-8);c.ld=cl(c.ld+4);if(e&&!e.gone)e.gl=cl(e.gl+2);L(`你召${c.n}訓誡一番，她收斂了許多。（帝寵－8、忠誠＋4、皇后好感＋2）`)}render()}catch(x){console.log('r59c',x)}};
+// 每年自動晉封
+const _rm=rmend;rmend=function(){const r=_rm.apply(this,arguments);try{if(S&&S.reg&&S.t%12===3){cbs().forEach(c=>{const k=rkIdx(c);if((c.kids>0||c.fv>70)&&k<4&&rkCnt(k+1)<CAPL[k+1]&&P(.5)){c.rk=RKL[k+1];try{msPush(`皇帝晉封${c.n}為${c.rk}`)}catch(e){}}})}}catch(e){console.log('r59y',e)}return r};
 const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
  try{if(S&&S.reg&&!S.over&&TAB==1){const main=document.querySelector('main');if(main&&!main.querySelector('.hg57')){const x=rx(),e=x.emp,cb=x.cb||[],ix=RACT.findIndex(a=>a[0]==='主持選秀');
   const R_=S.reg,left=Math.max(0,(R_.xiu57||0)-S.t);
   const rkOf=c=>c.rk||(c.fv>=70?'嬪':c.fv>=55?'貴人':'常在');
   const d=document.createElement('div');d.className='cd hg57';
-  d.innerHTML=`<h3>皇帝的後宮</h3><div class=m>${e&&!e.gone?`<b>皇后　${e.n}</b>（${e.ty}）・對你好感${e.gl|0}・家勢${e.pw|0}・帝寵${e.fv|0}`:'中宮尚缺皇后（可「籌辦大婚」或在選秀中擇后）'}</div>${cb.map(c=>`<div class=m>${rkOf(c)}　${c.n}（${c.ty}）・帝寵${c.fv|0}・忠於你${c.ld|0}・子嗣${c.kids}</div>`).join('')||'<div class=m>其餘妃嬪：尚無。</div>'}<div class=m style="margin-top:6px">${left?`下一屆選秀：還有 ${left} 個月`:'可以主持選秀了'}</div><p><button onclick="A(${ix})">主持選秀</button></p>`;
+  d.innerHTML=`<h3>皇帝的後宮</h3><div class=m>${e&&!e.gone?`<b>皇后　${e.n}</b>（${e.ty}）・對你好感${e.gl|0}・家勢${e.pw|0}・帝寵${e.fv|0}`:'中宮尚缺皇后（可「籌辦大婚」或在選秀中擇后）'}</div>${cb.map((c,ci)=>`<div class=m>${rkOf(c)}　${c.n}（${c.ty}）・帝寵${c.fv|0}・忠於你${c.ld|0}・子嗣${c.kids}${S.t<(c.cd58||0)?'':` <button class=s onclick="cbDo58(${ci},'up')">晉封</button> <button class=s onclick="cbDo58(${ci},'warn')">申飭</button>`}</div>`).join('')||'<div class=m>其餘妃嬪：尚無。</div>'}<div class=m style="margin-top:6px">${left?`下一屆選秀：還有 ${left} 個月`:'可以主持選秀了'}</div><p><button onclick="A(${ix})">主持選秀</button></p>`;
   main.insertBefore(d,main.firstChild)}}}catch(e){console.log('r57u',e)}return r};
 try{HELP.push(['選秀（妃子期與太后期）','清制三年一選，秀女經殿選「留牌子」或「撂牌子」。妃子期：位份夠或夠受寵時，皇上會問你的意見，你可舉薦母族之女、為皇子福晉或公主額駙留心、勸從簡或不表態。太后期：朝堂頁／行動「皇室」類有「主持選秀」，可辦大選、小選或停選，先擇后再留妃嬪；太妃頁頂端有「皇帝的後宮」名冊。外戚、滿蒙聯姻、寒門才女各有取捨。'])}catch(e){}
 })();
@@ -5659,6 +5667,21 @@ const _m=mend;mend=function(){const r=_m.apply(this,arguments);
    S.q.push({t:`三年一度的選秀將開，皇上把名單遞給你：「${names}……你有什麼看法？」`,o})}
   if(!S.ev&&!S.ch&&!S.scn)next();else render()}catch(e){console.log('r58',e)}return r};
 try{HELP.push(['選秀產生的新妃嬪','妃子期每三年一屆選秀（入宮那一屆算第一屆）。新留牌子的妃嬪會真的進入「後宮」名冊，有自己的出身、位份與家族。你被問意見時可舉薦母族之女、替寒門才女美言、暗中阻攔門第最高的人，或勸皇上從簡；新人會分走聖寵，被你舉薦的人較親近你。後宮人數已滿時不再辦選秀。'])}catch(e){}
+})();
+
+/* ===== round59：名冊顯示新人出身、入宮選秀策略 ===== */
+(function(){
+const _ROW=ROW;ROW=function(n,i){let r=_ROW.apply(this,arguments);try{if(n&&n.tag58)r=r.replace(/(<span class=nm>[^<]*<\/span>)/,'$1<span class=pill>'+n.tag58+'</span>')}catch(e){}return r};
+const _xb=xiuBegin;xiuBegin=function(){const r=_xb.apply(this,arguments);
+ try{if(!S||!S.xiu||!S.scn||S.xiu.p58)return r;S.xiu.p58=1;const orig=S.scn,m=S.me,X=S.xiu;
+  const go=msg=>{if(msg)try{L(msg)}catch(e){}S.scn=orig;render()};
+  S.scn={h:`<p><b>入選之前</b></p><p>秀女入京到殿選之間，還有幾天空檔。同屆秀女 ${X.N} 人，誰都想留牌子。你打算怎麼準備？</p>`,o:[
+   {l:'重金打點內務府與教習嬤嬤（耗銀40，皇上印象＋6）',f(){if(!pay(40)){go('銀兩不足，只能作罷。');return}X.e+=6;go('銀子遞出去，教習嬤嬤在殿選前替你說了好話。')}},
+   {l:'暗中絆倒一位勁敵（約六成成功；失敗皇后印象－5）',f(){if(P(.6)){X.e+=4;go('勁敵在殿選前「失儀」，你少了一個對手。（皇上印象＋4）')}else{X.q-=5;go('手腳被人察覺，傳到了皇后耳裡。（皇后印象－5）')}}},
+   {l:'結交同屆秀女，互通消息（入宮後她們較親近你）',f(){X.bond58=1;go('你與幾位同屆秀女處得不錯，約好日後互相照應。')}},
+   {l:'專心準備殿選（才藝與應答小幅加分）',f(){X.q+=2;X.d+=2;go('你把這幾天都花在練習儀態與應答上。')}}]};render()}catch(e){console.log('r59x',e)}return r};
+const _xr=xiuRes;xiuRes=function(){const n0=S.npcs.length;const r=_xr.apply(this,arguments);
+ try{const X=S.xiu;S.npcs.slice(n0).forEach(n=>{n.tag58='同屆秀女';if(X&&X.bond58)n.al=Math.max(n.al||0,40)})}catch(e){console.log('r59r',e)}return r};
 })();
 
 deco();intro();
