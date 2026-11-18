@@ -7237,6 +7237,35 @@ const sel=e.querySelectorAll('select');sel.forEach(s=>{const o=s.getAttribute('o
 e.addEventListener('click',ev=>{if(ev.target.closest('button')&&!ev.target.closest('.x82')){setTimeout(()=>{const z=document.getElementById('adv82');if(z)z.remove()},30)}});sel.forEach(s=>{if(/apx/.test(s.getAttribute('onchange')||''))s.addEventListener('change',()=>setTimeout(()=>{const z=document.getElementById('adv82');if(z)z.remove()},200))});document.body.appendChild(e)}catch(x){console.log('r82adv',x)}};try{const _ar=autoRun;autoRun=function(){const z=document.getElementById('adv82');if(z)z.remove();return _ar.apply(this,arguments)}}catch(e){}
 const _v82=uiPost;uiPost=function(){const r=_v82.apply(this,arguments);try{const old=document.getElementById('adv82');if(old&&(!S||!S.me||S.over))old.remove();const row=document.querySelector('.ac31 .pol75');if(row&&!row.querySelector('.adv82')){const b=document.createElement('button');b.className='adv82';b.textContent='進階';b.onclick=adv82;row.appendChild(b)}
 const m=document.querySelector('main'),ab=m&&m.querySelector(':scope>.autobar');if(ab){const resume=[...ab.querySelectorAll('button')].some(x=>/繼續/.test(x.textContent)&&x.offsetParent!==null);ab.style.display='none';const ib=document.querySelector('.ac31 .adv82');if(ib)ib.textContent=resume?'進階・可繼續':'進階'}}catch(e){console.log('r82v',e)}return r}}catch(e){console.log('r82',e)}
+/* 進階面板重做：分段、說明、明細預設收起 */
+try{const st=document.createElement('style');st.textContent=`
+#adv82{padding:14px 14px 16px!important}
+#adv82 .h82{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#adv82 .h82 b{font-size:15px}
+#adv82 .x82{float:none!important;min-height:32px;min-width:32px;border-radius:50%;background:rgba(190,120,100,.14)!important}
+#adv82 .t82{font-size:12px;color:#8a6a60;margin:2px 0 10px}
+#adv82 .s82{border-top:1px solid rgba(190,120,100,.25);padding-top:10px;margin-top:10px}
+#adv82 .s82>b{display:block;font-size:13.5px;margin-bottom:2px}
+#adv82 .s82 .d82{font-size:12px;color:#8a6a60;margin-bottom:6px}
+#adv82 .s82 select{width:100%}
+#adv82 .rw82{display:flex;gap:8px;align-items:center}#adv82 .rw82 select{flex:1;min-width:0}
+#adv82 .go82{display:block;width:100%;min-height:40px;margin-top:6px;border-radius:99px;border:0;background:linear-gradient(135deg,#f0808f,#d24b60);color:#fff;font-size:13.5px}
+#adv82 .rs82{background:#843f37}
+#adv82 details summary{cursor:pointer;font-size:13.5px;font-weight:700}
+`;document.head.appendChild(st);
+window.adv82=function(){try{let e=document.getElementById('adv82');if(e){e.remove();return}const ab=document.querySelector('main .autobar'),am=ab&&ab.querySelector('details.am');if(!am)return;
+const sels=am.querySelectorAll('select'),sx=sels[0],sg=sels[1];const gb=[...am.querySelectorAll('button')].find(x=>/達成/.test(x.textContent));const rb=[...ab.querySelectorAll('button')].find(x=>/繼續/.test(x.textContent));const alg=am.querySelector('.alg');
+e=document.createElement('div');e.id='adv82';
+const mk=(h,d)=>{const s=document.createElement('div');s.className='s82';s.innerHTML='<b>'+h+'</b><div class=d82>'+d+'</div>';return s};
+e.innerHTML='<div class=h82><b>自動過月設定</b><button class=x82>✕</button></div><div class=t82>平常直接按下方「自動過一個月」就好，這裡是選填的細部設定。</div>';
+if(rb){const s=mk('上次中斷了','自動過月被大事打斷時，可以從這裡接著跑。');const b=rb.cloneNode(true);b.className='go82 rs82';b.removeAttribute('style');s.appendChild(b);e.appendChild(s)}
+if(sx){const s=mk('遇到事件時','小事讓遊戲替你選；選「每件都讓我決定」就會每件停下來問你。');const c=sx.cloneNode(true);c.value=S.apx||sx.value;c.setAttribute('onchange',sx.getAttribute('onchange'));s.appendChild(c);e.appendChild(s)}
+if(sg){const s=mk('一路自動做到某個目標','先選目標，再按「開始」，達成或遇到大事就會停下。');const c=sg.cloneNode(true);c.value=S.agoal||sg.value;c.setAttribute('onchange',sg.getAttribute('onchange'));s.appendChild(c);if(gb){const b=gb.cloneNode(true);b.className='go82';b.removeAttribute('style');b.textContent='開始自動達成這個目標';s.appendChild(b)}e.appendChild(s)}
+if(alg){const s=document.createElement('div');s.className='s82';const d=document.createElement('details');d.innerHTML='<summary>上次自動過月明細</summary>';[...alg.children].forEach(x=>{if(x.tagName!=='B')d.appendChild(x.cloneNode(true))});s.appendChild(d);e.appendChild(s)}
+e.addEventListener('click',ev=>{const b=ev.target.closest('button');if(b)setTimeout(()=>{const z=document.getElementById('adv82');if(z)z.remove()},30)});
+e.querySelectorAll('select').forEach(s=>{const o=s.getAttribute('onchange')||'';if(/apx/.test(o)){s.addEventListener('change',()=>setTimeout(()=>{const z=document.getElementById('adv82');if(z)z.remove()},200))}else if(/agoal/.test(o)){s.addEventListener('change',()=>setTimeout(()=>{const z=document.getElementById('adv82');if(z){z.remove();adv82()}},150))}});
+document.body.appendChild(e)}catch(x){console.log('r82adv',x)}}
+}catch(e){console.log('r82',e)}
 
 deco();intro();
 
