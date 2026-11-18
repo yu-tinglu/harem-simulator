@@ -4496,6 +4496,39 @@ Object.keys(V).forEach(k=>{const orig=FE[k];FE[k]=function(){try{S.fv35=S.fv35||
 const _m35=mend;mend=function(){const r=_m35.apply(this,arguments);try{if(S&&S.me&&!S.over&&S.reg&&S.t>0){const mo=S.t%12;if(REGF[mo]){S.q.push(REGF[mo]());if(!S.ev&&!S.ch&&!S.scn)next();else render()}}}catch(e){console.log('r35b',e)}return r};
 })();
 
+/* ===== round36：選擇的後果——伏筆與回響（後宮與臨朝通用） ===== */
+(function(){
+const RULES=[
+ ['rev',/動手腳|暗中|下毒|陷害|暗算|嫁禍|栽贓|離間|收買|羅織|佯裝中毒|將計就計/,.55,[5,12]],
+ ['rep',/賞賜|周濟|資助|援手|相助|庇護|探望|施恩|出面維護|求情|說情|分給|接濟/,.5,[6,14]],
+ ['cov',/燒毀|銷毀|封口|隱瞞|裝作不知|壓下|掩蓋|息事寧人|不予理會|閉口/,.4,[6,14]],
+ ['hon',/坦白|請罪|如實|據實|自陳|主動說明/,.5,[4,9]]];
+const clean=l=>String(l||'').replace(/　★建議.*$/,'').replace(/（[^）]*）/g,'').replace(/[「」]/g,'').slice(0,18);
+const gF=(x)=>{if(S.reg)S.reg.pw+=x;else S.me.favor+=x};
+const scn=(x)=>{S.me.scand=Math.max(0,(S.me.scand||0)+x)};
+const who=()=>S.reg?'朝臣':'皇上';
+const CH={
+rev:lab=>({t:`【前事回響】你當初選了「${lab}」，如今當事人終於找上門來，眼神不善。`,o:[
+ ['先發制人，堵住她的嘴（看心機）',()=>{if(P(.45+S.me.scheme/300)){gF(2);S.me.scheme+=2;return'你搶在對方開口前佈好了局，對方反倒不敢再提。'}scn(8);gF(-5);return'你的反擊被識破，風波鬧得更大了。'}],
+ ['低頭認下，送上厚禮（耗銀40）',()=>{if(!pay(40)){scn(4);return'銀兩不足，對方冷笑著走了。'}S.me.ally+=2;return'對方收下禮物，這件事算是了結了。'}],
+ ['裝糊塗，看她能拿出什麼證據',()=>{if(P(.5)){return'對方拿不出實據，悻悻而去。'}scn(6);gF(-3);return'對方拿出了蛛絲馬跡，你一時語塞。'}]]}),
+rep:lab=>({t:`【前事回響】你當初選了「${lab}」，有人一直記著這份情，今日特意來謝你。`,o:[
+ ['坦然受她一禮',()=>{S.me.ally+=4;S.me.silver+=30;return'對方留下一份心意，你的人緣更好了。'}],
+ ['請她幫你辦一件小事',()=>{if(P(.65)){S.me.ally+=6;gF(2);return'她辦得妥妥貼貼，往後更是死心塌地。'}S.me.ally+=2;return'她盡了力，只是事情沒辦成。'}],
+ ['婉拒，說舉手之勞',()=>{S.me.fame=(S.me.fame||0)+2;S.me.ally+=2;return'你的謙遜傳了出去，眾人更覺得你仁厚。'}]]}),
+cov:lab=>({t:`【前事回響】你當初選了「${lab}」，那件事不知被誰翻了出來，竊竊私語四起。`,o:[
+ ['主動向'+who()+'說明來龍去脈',()=>{gF(-2);S.me.ally+=2;scn(-4);return'你把話說開了，雖有些難堪，風波卻漸漸平息。'}],
+ ['花錢堵住知情人的嘴（耗銀50）',()=>{if(!pay(50)){scn(5);return'銀兩不足，消息還是傳開了。'}return'知情人收了銀子，不再開口。'}],
+ ['一口咬定是誣陷',()=>{if(P(.5+S.me.scheme/300)){return'你言辭鑿鑿，流言不攻自破。'}scn(10);gF(-6);return'你的說法漏洞百出，反而坐實了猜測。'}]]}),
+hon:lab=>({t:`【前事回響】你當初選了「${lab}」，這份坦率被${who()}記在心裡。`,o:[
+ ['趁機進言，說出心裡話',()=>{if(P(.6)){gF(4);return'對方聽進去了，對你多了幾分信任。'}gF(1);return'對方沒有表態，卻也沒有不悅。'}],
+ ['依舊謙遜，不居功',()=>{S.me.fame=(S.me.fame||0)+2;gF(2);return'你不爭不搶，對方更覺得你可靠。'}],
+ ['順勢請對方照拂身邊人',()=>{S.me.ally+=3;S.me.fam&&S.me.fam.forEach(x=>x.pw+=2);return'你替身邊人討了個人情。'}]]})};
+const _V=V;V=function(i){let e=null,lab='';try{e=S.ev;lab=e&&e.o&&e.o[i]?String(e.o[i][0]):''}catch(x){}const r=_V.apply(this,arguments);
+ try{if(lab&&S&&S.me&&!S.over&&S.t>=3){S.cn35=S.cn35||[];const last=S.c35t==null?-99:S.c35t;if(S.cn35.length<3&&S.t-last>=4){const ru=RULES.find(x=>x[1].test(lab));if(ru&&P(ru[2])){const d=R(ru[3][0],ru[3][1]);S.cn35.push({at:S.t+d,k:ru[0],lab:clean(lab)});S.c35t=S.t;msPush('埋下伏筆：「'+clean(lab)+'」，日後恐有回響')}}}}catch(x){console.log('r36',x)}return r};
+const _m36=mend;mend=function(){const r=_m36.apply(this,arguments);try{if(S&&S.me&&!S.over&&S.cn35&&S.cn35.length){const due=S.cn35.filter(c=>c.at<=S.t);if(due.length){S.cn35=S.cn35.filter(c=>c.at>S.t);due.slice(0,1).forEach(c=>{if(CH[c.k])S.q.push(CH[c.k](c.lab))});if(!S.ev&&!S.ch&&!S.scn)next();else render()}}}catch(x){console.log('r36b',x)}return r};
+})();
+
 deco();intro();
 
 
