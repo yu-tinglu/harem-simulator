@@ -6931,6 +6931,57 @@ try{const _u=uiPost;uiPost=function(){const r=_u.apply(this,arguments);try{
 (function(){try{const _u=uiPost;uiPost=function(){const r=_u.apply(this,arguments);try{
  const main=document.querySelector('main');if(main){const ss=main.querySelector(':scope>.stat-strip'),pt=main.querySelector(':scope>.pt61');
   if(ss&&pt&&(pt.compareDocumentPosition(ss)&Node.DOCUMENT_POSITION_FOLLOWING))main.insertBefore(ss,pt)}}catch(e){console.log('r75s',e)}return r};window.uiPost=uiPost}catch(e){console.log('r75',e)}})();
+/* ===== V170：奪嫡合併成一張表；派系與擁護者寫進皇子檔案 ===== */
+(function(){
+const E=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const alive=k=>!k.dead&&!k.died&&k.alive!==false;
+const sons=()=>{try{return allKids().filter(k=>k.sex=='男'&&alive(k)).sort((a,b)=>sc(b)-sc(a))}catch(e){return[]}};
+const momIdx=k=>{try{if(S.me.kids.includes(k))return'me';return S.npcs.findIndex(n=>n.kids.includes(k))}catch(e){return -1}};
+const momNm=o=>{try{return o==='me'?S.me.n+'（你）':on(o)}catch(e){return'—'}};
+const stat=k=>{try{if(S.heir===k)return'儲君';if(k.jin)return'圈禁';if(yr(k)<14)return'未成年';return typeof ambTx==='function'?ambTx(k):'成年'}catch(e){return'—'}};
+const css=document.createElement('style');css.textContent='.dj75 table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:6px}.dj75 th{text-align:left;font-weight:700;font-size:12px;opacity:.7;padding:4px 4px;border-bottom:1px solid rgba(160,120,100,.3)}.dj75 td{padding:7px 4px;border-bottom:1px dashed rgba(160,120,100,.25);vertical-align:middle}.dj75 tr.r75{cursor:pointer}.dj75 tr.r75:active{background:rgba(214,70,90,.08)}.dj75 td.nm b{font-size:14px}.dj75 td.nm small{display:block;opacity:.7;font-size:11.5px}.dj75 .tag75{display:inline-block;padding:1px 7px;border-radius:999px;font-size:11.5px;background:rgba(214,70,90,.13);color:#a33}.dj75 .gy75{opacity:.55}.dj75 .ft75{font-size:12px;opacity:.7;margin-top:6px;line-height:1.6}.kx75{margin:10px 0;padding:10px 12px;border-radius:12px;background:rgba(214,70,90,.07);line-height:1.75;font-size:13.5px}.kx75 h4{margin:0 0 4px}';document.head.appendChild(css);
+try{const _u=uiPost;uiPost=function(){const r=_u.apply(this,arguments);try{
+ if(typeof TAB==='undefined'||TAB!==2||!S||!S.me||S.over||S.reg)return r;
+ const main=document.querySelector('main');if(!main||main.querySelector('.dj75'))return r;
+ const cds=[...main.querySelectorAll('.cd')];
+ const c1=cds.find(e=>/^奪嫡局勢/.test((e.innerText||'').trim())),c2=cds.find(e=>/^奪嫡聲勢/.test((e.innerText||'').trim()));
+ if(!c1&&!c2)return r;
+ const ss=sons();if(!ss.length)return r;
+ let head='';
+ if(c1&&S.dj){try{head+=`<div class=m>皇子成年後會結黨、構陷；皇帝若久不傳位，儲君可能逼宮。</div>`+abar('爭儲熱度',S.dj.heat|0);
+   if(S.heir&&!S.heir.jin)head+=`<div class=m>儲君：${E(S.heir.n)}（${E(momNm(momIdx(S.heir)))}之子）　${E(ambTx(S.heir))}</div>`+abar('皇上對儲君的猜忌',(S.heir.sus||0)|0);
+   else head+='<div class=m>儲位虛懸，各方人馬都在觀望。</div>'}catch(e){}}
+ else head='<div class=m>皇子的排名與處境。</div>';
+ const rows=ss.slice(0,10).map((k,i)=>{const st=stat(k),gy=(k.jin||yr(k)<14)?' gy75':'';const o=momIdx(k);
+  return`<tr class="r75${gy}" onclick="kopen49('${E(k.n)}')"><td>${i+1}</td><td class=nm><b>${E(k.n)}</b><small>${E(momNm(o))}之子</small></td><td>${yr(k)}</td><td><b>${sc(k)|0}</b></td><td>${st==='儲君'?'<span class=tag75>儲君</span>':E(st)}</td></tr>`}).join('');
+ const card=document.createElement('div');card.className='cd dj75';card.setAttribute('data-open','1');
+ card.innerHTML=`<h3>奪嫡</h3>${head}<div style="overflow-x:auto"><table><tr><th>名次</th><th>皇子</th><th>歲</th><th>聲勢</th><th>狀態</th></tr>${rows}</table></div><div class=ft75>點任一位皇子，可看他的才德寵勢、派系與擁護者。<br>聲勢＝才25%＋德20%＋寵30%＋勢力35%，年紀太小會扣分；未滿14歲、被圈禁者不參與奪嫡。公主不參與奪嫡。${ss.length>10?'<br>（僅列前10位）':''}</div>`;
+ (c1||c2).replaceWith(card);if(c1&&c2)c2.remove();
+}catch(e){console.log('r75d2',e)}return r};window.uiPost=uiPost}catch(e){console.log('r75',e)}
+/* 皇子檔案：加「奪嫡與擁護」區塊 */
+function block(k){try{
+ if(k.sex!='男')return'';
+ const o=momIdx(k),mom=o==='me'?S.me:S.npcs[o];if(!mom)return'';
+ const ss=sons(),rk=ss.indexOf(k)+1,sd=sc(k)|0;
+ const fi=mom.fac,fn=(fi>=0&&typeof FAC!=='undefined'&&FAC[fi])?FAC[fi]:null;
+ const fam=(mom.fam||[]).slice().sort((a,b)=>(b.pw||0)-(a.pw||0)).slice(0,3).map(x=>`${E(x.rel||'')}${E(x.job||'')}（權${x.pw|0}）`);
+ const mates=fn?S.npcs.filter(n=>n!==mom&&n.fac===fi&&!n.st).slice(0,4).map(n=>E(n.name||n.n)):[];
+ const rv=ss.filter(x=>x!==k&&!x.jin&&yr(x)>=14)[0];
+ const lines=[];
+ lines.push(`<b>奪嫡排名</b>：第${rk}／${ss.length}・聲勢${sd}・${E(stat(k))}`);
+ lines.push(`<b>所屬派系</b>：${fn?E(fn)+(S.fp&&S.fp[fi]!=null?`（朝中勢力${S.fp[fi]|0}）`:''):'無明確派系'}`);
+ lines.push(`<b>擁護者</b>：<br>・生母 ${E(momNm(o))}${o==='me'?'':(S.npcs[o].st||RK[S.npcs[o].rank]?'（'+E(S.npcs[o].st||RK[S.npcs[o].rank])+'）':'')}`);
+ if(fam.length)lines.push(`・母家：${fam.join('、')}`);
+ if(mates.length)lines.push(`・同派系妃嬪：${mates.join('、')}`);
+ if(fn)lines.push(`・朝中「${E(fn)}」一系的官員`);
+ if(rv)lines.push(`<b>最大對手</b>：${E(rv.n)}（${E(momNm(momIdx(rv)))}之子・聲勢${sc(rv)|0}）`);
+ return`<div class=kx75><h4>奪嫡與擁護</h4>${lines.join('<br>')}</div>`}catch(e){console.log('r75k',e);return''}}
+function inject(){try{const md=document.getElementById('kmodal49');if(!md||md.querySelector('.kx75'))return;
+ const h=[...md.querySelectorAll('h4')].find(x=>/的故事/.test(x.textContent));if(!h)return;
+ const nm=(md.querySelector('h3')||{}).textContent;const k=allKids().find(x=>x.n===nm);if(!k)return;
+ const b=block(k);if(b)h.insertAdjacentHTML('beforebegin',b)}catch(e){console.log('r75i',e)}}
+['kopen49','kdo49','kdraw'].forEach(fn=>{try{const f=window[fn];if(typeof f!=='function')return;window[fn]=function(){const r=f.apply(this,arguments);inject();return r}}catch(e){}});
+})();
 
 deco();intro();
 
