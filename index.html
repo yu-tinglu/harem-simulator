@@ -5859,6 +5859,48 @@ sync();
 try{HELP.push(['成就與新開局身分','累積成就能解鎖新的開局身分：「親王之母」解鎖宗室遠親、「家財萬貫」解鎖商賈巨富之女、「子孫滿堂」解鎖江南才女。解鎖後在新遊戲的選擇出身畫面就會出現。成就跨局累計，存在這個瀏覽器。'])}catch(e){}
 })();
 
+/* ===== round65：介面整理（同類卡片合併成可摺疊群組、去除重複的一鍵按鈕） ===== */
+(function(){
+const st=document.createElement('style');st.textContent=`details.grp65{margin:10px 0}details.grp65>summary{cursor:pointer;list-style:none;padding:12px 14px;font-weight:700;font-size:16px;display:flex;align-items:center;gap:8px}details.grp65>summary::-webkit-details-marker{display:none}details.grp65>summary::before{content:"▸";font-size:13px;opacity:.7}details.grp65[open]>summary::before{content:"▾"}details.grp65>summary small{font-weight:400;opacity:.7}details.grp65>.gin65{padding:0 8px 8px}details.grp65>.gin65>.cd,details.grp65>.gin65>details{margin:6px 0}html.in63:not(.dk18) #app .cd,html.in63:not(.dk18) #app .stat-strip>*{background:rgba(255,250,245,.90)!important}.tool65{display:flex;flex-direction:column;gap:6px}.pt61 .tip{margin:8px 0 0!important;font-size:12.5px}`;document.head.appendChild(st);
+const T=e=>(((e.querySelector&&e.querySelector('h3,summary'))||{}).textContent||'').replace(/[▾▸]/g,'').trim();
+function grp(main,title,keys,open){if(main.querySelector('.grp65[data-t="'+title+'"]'))return;
+ const nodes=[...main.children].filter(e=>!e.classList.contains('grp65')&&keys.some(k=>T(e).startsWith(k)));
+ if(nodes.length<2)return;
+ const d=document.createElement('details');d.className='cd grp65';d.dataset.t=title;if(open)d.open=true;
+ d.innerHTML=`<summary>${title}<small>${nodes.length} 項</small></summary><div class=gin65></div>`;
+ nodes[0].insertAdjacentElement('beforebegin',d);const box=d.querySelector('.gin65');nodes.forEach(n=>box.appendChild(n))}
+function tab0(main){
+ // 1. 去除重複的一鍵按鈕（保留底部浮動列）
+ main.querySelectorAll('.autobar button').forEach(b=>{const t=(b.textContent||'').trim();if(/^一鍵(本月|一年)$/.test(t))b.style.display='none'});
+ // 2. 小提示併入本月重點
+ const pt=main.querySelector('.pt61');if(pt){main.querySelectorAll(':scope>.tip').forEach(t=>pt.appendChild(t))}
+ // 3. 局勢總覽：概況＋主線劇情＋時代＋這一局 vs 上一局
+ if(!main.querySelector('.sit65')){const keys=['概況','主線劇情','時代','這一局'];
+  const nodes=[...main.children].filter(e=>keys.some(k=>T(e).startsWith(k))||(e.classList.contains('ov49')));
+  if(nodes.length>=2){const d=document.createElement('details');d.className='cd grp65 sit65';d.dataset.t='局勢總覽';
+   const ov=nodes.find(n=>T(n).startsWith('概況'));
+   d.innerHTML=`<summary>局勢總覽<small>${ov?T(ov).replace(/^概況\s*/,'').slice(0,22):''}</small></summary><div class=gin65></div>`;
+   nodes[0].insertAdjacentElement('beforebegin',d);const box=d.querySelector('.gin65');nodes.forEach(n=>{box.appendChild(n);if(n.tagName==='DETAILS'&&n.classList.contains('ov49'))n.open=true})}}}
+function tab1(main){
+ // 工具列：簡版/詳細版與篩選放同一區
+ const a=main.querySelector(':scope>.cmp49bar'),b=main.querySelector(':scope>.fbar');
+ if(a&&b&&!main.querySelector('.tool65')){const w=document.createElement('div');w.className='tool65';a.insertAdjacentElement('beforebegin',w);w.appendChild(a);w.appendChild(b)}
+ grp(main,'我的人與關係',['我的下人','身邊人物','恩怨簿','關係圖']);}
+function tab3(main){
+ grp(main,'前朝官員',['前朝官階','官職編制','前朝官員履歷']);
+ grp(main,'家族與派系',['母家族人','後宮派系']);
+ grp(main,'朝堂動態',['皇室帝后','朝堂紀事'])}
+function tab4(main){grp(main,'人物傳記與大事記',['皇帝傳','太后傳','前朝人物','大事記'])}
+function tab5(main){
+ grp(main,'紀錄與成就',['通知記錄','宮中紀事','本屆選秀結果','母家','成就　','歷屆選秀']);
+ grp(main,'設定與存檔',['輕鬆模式','後台與年報','事件頻率','我的畫像','存檔','完整備份','隱私與通知','意見回饋','主畫面']);
+ // 深淺色卡片（無標題）併入設定
+ const g=main.querySelector('.grp65[data-t="設定與存檔"]'),dk=main.querySelector(':scope>.cd.dk18');if(g&&dk)g.querySelector('.gin65').insertAdjacentElement('afterbegin',dk)}
+const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
+ try{if(!S||!S.me||S.over||S.scn)return r;const main=document.querySelector('#app main');if(!main||main.classList.contains('mmenu'))return r;
+  if(TAB==0)tab0(main);else if(TAB==1)tab1(main);else if(TAB==3)tab3(main);else if(TAB==4)tab4(main);else if(TAB==5)tab5(main)}catch(e){console.log('r65',e)}return r};
+})();
+
 deco();intro();
 
 
