@@ -5861,7 +5861,7 @@ try{HELP.push(['成就與新開局身分','累積成就能解鎖新的開局身�
 
 /* ===== round65：介面整理（同類卡片合併成可摺疊群組、去除重複的一鍵按鈕） ===== */
 (function(){
-const st=document.createElement('style');st.textContent=`details.grp65{margin:10px 0}details.grp65>summary{cursor:pointer;list-style:none;padding:12px 14px;font-weight:700;font-size:16px;display:flex;align-items:center;gap:8px}details.grp65>summary::-webkit-details-marker{display:none}details.grp65>summary::before{content:"▸";font-size:13px;opacity:.7}details.grp65[open]>summary::before{content:"▾"}details.grp65>summary small{font-weight:400;opacity:.7}details.grp65>.gin65{padding:0 8px 8px}details.grp65>.gin65>.cd,details.grp65>.gin65>details{margin:6px 0}html.in63:not(.dk18) #app .cd,html.in63:not(.dk18) #app .stat-strip>*{background:rgba(255,250,245,.90)!important}.tool65{display:flex;flex-direction:column;gap:6px}.pt61 .tip{margin:8px 0 0!important;font-size:12.5px}`;document.head.appendChild(st);
+const st=document.createElement('style');st.textContent=`details.grp65{margin:10px 0}details.grp65>summary{cursor:pointer;list-style:none;padding:12px 14px;font-weight:700;font-size:16px;display:flex;align-items:center;gap:8px}details.grp65>summary::-webkit-details-marker{display:none}details.grp65>summary::before{content:"▸";font-size:13px;opacity:.7}details.grp65[open]>summary::before{content:"▾"}details.grp65>summary small{font-weight:400;opacity:.7}details.grp65>.gin65{padding:0 8px 8px}details.grp65>.gin65>.cd,details.grp65>.gin65>details{margin:6px 0}html.in63:not(.dk18) #app .cd,html.in63:not(.dk18) #app .stat-strip>*{background:rgba(255,250,245,.90)!important}details.sub65{margin:6px 0;border-top:1px solid rgba(180,90,90,.18)}details.sub65>summary{cursor:pointer;list-style:none;padding:10px 2px;font-weight:700;letter-spacing:.2em;display:flex;align-items:center;gap:8px}details.sub65>summary::-webkit-details-marker{display:none}details.sub65>summary::before{content:"▸";font-size:12px;opacity:.7}details.sub65[open]>summary::before{content:"▾"}details.sub65>summary small{font-weight:400;letter-spacing:0;opacity:.65}.tool65{display:flex;flex-direction:column;gap:6px}.pt61 .tip{margin:8px 0 0!important;font-size:12.5px}`;document.head.appendChild(st);
 const T=e=>(((e.querySelector&&e.querySelector('h3,summary'))||{}).textContent||'').replace(/[▾▸]/g,'').trim();
 function grp(main,title,keys,open){if(main.querySelector('.grp65[data-t="'+title+'"]'))return;
  const nodes=[...main.children].filter(e=>!e.classList.contains('grp65')&&keys.some(k=>T(e).startsWith(k)));
@@ -5869,7 +5869,15 @@ function grp(main,title,keys,open){if(main.querySelector('.grp65[data-t="'+title
  const d=document.createElement('details');d.className='cd grp65';d.dataset.t=title;if(open)d.open=true;
  d.innerHTML=`<summary>${title}<small>${nodes.length} 項</small></summary><div class=gin65></div>`;
  nodes[0].insertAdjacentElement('beforebegin',d);const box=d.querySelector('.gin65');nodes.forEach(n=>box.appendChild(n))}
+
+// ---- 太后期行動分類可收合 ----
+let OPEN65={};try{OPEN65=JSON.parse(localStorage.getItem('hg65sub')||'{}')}catch(e){}
+function subs(main){main.querySelectorAll('.cd.actcat').forEach(c=>{if(c.dataset.s65)return;const labs=[...c.children].filter(e=>e.tagName==='DIV'&&e.classList.contains('m')&&e.nextElementSibling&&e.nextElementSibling.classList.contains('g'));if(labs.length<2)return;c.dataset.s65=1;
+ labs.forEach(l=>{const g=l.nextElementSibling,nm=l.textContent.trim(),n=g.querySelectorAll('button').length;const d=document.createElement('details');d.className='sub65';d.dataset.n=nm;if(OPEN65[nm])d.open=true;
+  d.innerHTML=`<summary>${nm}<small>${n} 項</small></summary>`;l.insertAdjacentElement('beforebegin',d);d.appendChild(g);l.remove();
+  d.addEventListener('toggle',()=>{OPEN65[nm]=d.open?1:0;try{localStorage.setItem('hg65sub',JSON.stringify(OPEN65))}catch(e){}})})})}
 function tab0(main){
+ subs(main);
  // 1. 去除重複的一鍵按鈕（保留底部浮動列）
  main.querySelectorAll('.autobar button').forEach(b=>{const t=(b.textContent||'').trim();if(/^一鍵(本月|一年)$/.test(t))b.style.display='none'});
  // 2. 小提示併入本月重點
