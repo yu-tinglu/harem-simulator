@@ -4773,6 +4773,48 @@ const _g=goalChip;goalChip=function(){let s='';try{if(S&&S.era41&&!S.reg)s=`<div
 window.eraName=()=>S&&S.era41?ERAS[S.era41].n:'';
 })();
 
+/* ===== round42：天災大事件＋選秀新人背景 ===== */
+(function(){
+const gF=x=>{if(S.reg)S.reg.pw+=x;else S.me.favor+=x};
+const fame=x=>{S.me.fame=(S.me.fame||0)+x};
+const nt=(k,x)=>{if(S.nat)S.nat[k]=cl((S.nat[k]||50)+x)};
+const DIS=[
+ ()=>({t:'連月無雨，赤地千里，數省接連上報旱情，流民開始北上。',o:[
+  ['設壇祈雨，並捐資賑濟（耗銀50）',()=>{if(!pay(50))return'銀兩不足，只能設壇祈雨。';nt('pop',3);nt('stab',2);fame(2);gF(2);return'祈雨未必靈驗，但你的賑濟讓不少人撐過了荒年。'}],
+  ['勸皇上開倉放糧，減免賦稅',()=>{if(P(.5)){nt('pop',5);nt('eco',-3);gF(3);return'朝廷開倉放糧，民心大定，只是國庫吃緊。'}gF(-1);nt('pop',1);return'此議被戶部以「庫銀不足」擋了回去。'}],
+  ['宮中節省用度，靜觀其變',()=>{nt('pop',-2);S.me.silver+=20;return'宮裡省下了一點開銷，災情卻在擴大。'}]]}),
+ ()=>({t:'黃河決堤，沿岸數州一夜成澤國，災民數十萬。',o:[
+  ['出資修堤並安置災民（耗銀80）',()=>{if(!pay(80))return'銀兩不足，只能出一點綿薄之力。';nt('pop',4);nt('stab',3);fame(3);gF(3);return'堤壩合龍那天，百姓在岸邊為你燒香。'}],
+  ['建議派得力大臣督辦賑災',()=>{if(P(.55)){nt('stab',3);nt('pop',3);gF(3);return'欽差得力，災情很快穩住。'}nt('stab',-2);gF(-1);return'欽差中飽私囊，災情反而惡化。'}],
+  ['置身事外',()=>{nt('pop',-3);nt('stab',-2);return'你什麼也沒做，災民的消息一件件傳進宮裡。'}]]}),
+ ()=>({t:'蝗群蔽日，數十縣禾稼盡毀，糧價暴漲。',o:[
+  ['出資收購糧食平價放賑（耗銀60）',()=>{if(!pay(60))return'銀兩不足，只能勉強收一些。';nt('pop',4);nt('eco',-1);fame(3);return'糧價慢慢降了下來，你的名聲也傳開了。'}],
+  ['奏請禁止囤積居奇',()=>{if(P(.5)){nt('eco',2);nt('pop',2);gF(3);return'禁令一下，奸商收斂，糧價趨穩。'}gF(-1);return'禁令沒人理會。'}],
+  ['趁機低價購糧，日後轉賣（耗銀80）',()=>{if(!pay(80))return'銀兩不足，沒能下手。';S.me.silver+=Math.round(80*(1.4+Math.random()));S.me.scand=(S.me.scand||0)+4;nt('pop',-2);return'你賺了一筆，只是有人在背後議論你發國難財。'}]]}),
+ ()=>({t:'京畿地動，宮牆裂開了幾道縫，宮人驚惶，連夜露宿庭中。',o:[
+  ['安撫宮人，開私庫賞下（耗銀30）',()=>{if(!pay(30))return'銀兩不足，只能出言安撫。';S.me.ally+=5;fame(2);return'宮人們感念你在慌亂中仍能鎮定。'}],
+  ['陪伴皇上，勸他保重龍體',()=>{gF(4);return'皇上在驚魂未定時，格外依賴你的陪伴。'}],
+  ['帶著身邊人避往空曠處',()=>{S.me.hp=Math.min(100,S.me.hp+1);return'你帶著身邊人平安度過了餘震。'}]]}),
+ ()=>({t:'大疫橫行，京城封了三道城門，宮中人心惶惶。',o:[
+  ['備足藥材，按方防疫（耗銀50）',()=>{if(!pay(50))return'銀兩不足，只能自己小心。';S.epi={m:4,p:1};nt('pop',2);fame(2);return'你備好了藥材，宮裡也跟著防疫，沒有人倒下。'}],
+  ['閉門謝客，杜絕往來',()=>{S.epi={m:4,p:1};gF(-1);return'你閉門不出，平安度過了這一波。'}],
+  ['照常走動',()=>{S.epi={m:4,p:0};S.me.hp=Math.max(3,S.me.hp-5);nt('pop',-2);return'你沒當回事，疫情在宮中悄悄蔓延，你也染了風寒。'}]]})];
+const BG={
+ talent:{n:'才女',d:'才名遠播，詩書琴畫樣樣拿得出手。',f:a=>{a.iq=Math.min(100,a.iq+12);a.qi=Math.min(100,a.qi+8);a.sk[13]=Math.min(100,(a.sk[13]||0)+25);a.sk[1]=Math.min(100,(a.sk[1]||0)+15)},line:'據說她詩才出眾，連太傅都曾稱讚。',o:['請教詩詞，結個才女之交','暗中觀察，不急著表態','故意考她一考，試試深淺']},
+ martial:{n:'將門之女',d:'出身武將世家，騎射出眾，性情爽利。',f:a=>{a.sk[6]=Math.min(100,(a.sk[6]||0)+30);a.sk[7]=Math.min(100,(a.sk[7]||0)+20)},line:'她步伐生風，舉手投足都帶著將門的颯爽。',o:['邀她同去校場，結交武將世家','不卑不亢，以禮相待','暗暗提防，擔心她的母族勢大']},
+ merchant:{n:'商賈之女',d:'家資豪富，出手闊綽，精於算計。',f:a=>{a.sk[8]=Math.min(100,(a.sk[8]||0)+30)},line:'她入宮時帶來了整整十二箱嫁妝，引得宮人側目。',o:['笑臉相迎，交個財神朋友','按規矩相待，不多走動','暗暗輕視她的出身']},
+ healer:{n:'醫家之女',d:'出身杏林世家，通曉醫理，心思細膩。',f:a=>{a.sk[12]=Math.min(100,(a.sk[12]||0)+35)},line:'她隨身帶著一個小藥匣，開口閉口都是藥性。',o:['請她替自己把把脈，交個懂醫的朋友','客氣相待，保持距離','暗中提防她手裡的藥']},
+ foreign:{n:'外邦貢女',d:'遠道而來，容貌殊異，語言與風俗皆有隔閡。',f:a=>{a.lk=Math.min(100,a.lk+10);a.qi=Math.min(100,a.qi+5)},line:'她的口音帶著異域腔調，宮人們都忍不住多看她幾眼。',o:['耐心教她宮中規矩，交個朋友','按規矩相待','冷眼旁觀，暗暗防備']}};
+const _nb=newbie;newbie=function(){const n=_nb.apply(this,arguments);
+ try{if(n&&!n.bg35&&S&&S.t>0){const ks=Object.keys(BG);if(P(.45)){const k=ks[Math.floor(Math.random()*ks.length)];n.bg35=k;if(n.at&&n.at.sk)BG[k].f(n.at);if(!S.reg&&S.me&&!S.over&&S.q){const b=BG[k];S.q.push({t:`新人${n.n}入宮，是一位${b.n}。${b.line}`,o:[
+ [b.o[0]+'（耗銀15）',()=>{if(!pay(15))return'銀兩不足，只送了一句問候。';n.al=cl(n.al+9);S.me.ally+=1;return`${n.n}對你的善意記在心裡。`}],
+ [b.o[1],()=>{n.al=cl(n.al+2);return'你與她只是點頭之交。'}],
+ [b.o[2],()=>{n.host=cl(n.host+8);S.me.scheme+=1;return`${n.n}似乎察覺到了你的態度，神情淡了下來。`}]]})}}}}catch(e){console.log('r42',e)}return n};
+const _r=ROW;ROW=function(n,i){let h=_r.apply(this,arguments);try{if(n&&n.bg35&&BG[n.bg35]&&!h.includes('data-bg35'))h=h.replace('<span class="pc-chip gold">',`<span class="pc-chip gold" data-bg35 title="${BG[n.bg35].d}">${BG[n.bg35].n}</span><span class="pc-chip gold">`)}catch(e){}return h};
+const _m=mend;mend=function(){const r=_m.apply(this,arguments);
+ try{if(S&&S.me&&!S.over&&S.t>12&&S.t-(S.dis42t==null?-99:S.dis42t)>=10&&P(.02*(S.era41==='disaster'?3:1))){S.dis42t=S.t;S.q.push(pk(DIS)());if(!S.ev&&!S.ch&&!S.scn)next();else render()}}catch(e){console.log('r42b',e)}return r};
+})();
+
 deco();intro();
 
 
