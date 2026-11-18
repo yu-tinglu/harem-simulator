@@ -5620,19 +5620,45 @@ const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
   const d=document.createElement('div');d.className='cd hg57';
   d.innerHTML=`<h3>皇帝的後宮</h3><div class=m>${e&&!e.gone?`<b>皇后　${e.n}</b>（${e.ty}）・對你好感${e.gl|0}・家勢${e.pw|0}・帝寵${e.fv|0}`:'中宮尚缺皇后（可「籌辦大婚」或在選秀中擇后）'}</div>${cb.map(c=>`<div class=m>${rkOf(c)}　${c.n}（${c.ty}）・帝寵${c.fv|0}・忠於你${c.ld|0}・子嗣${c.kids}</div>`).join('')||'<div class=m>其餘妃嬪：尚無。</div>'}<div class=m style="margin-top:6px">${left?`下一屆選秀：還有 ${left} 個月`:'可以主持選秀了'}</div><p><button onclick="A(${ix})">主持選秀</button></p>`;
   main.insertBefore(d,main.firstChild)}}}catch(e){console.log('r57u',e)}return r};
-// ---- 妃子期：選秀問意見 ----
-const _m=mend;mend=function(){const r=_m.apply(this,arguments);
- try{if(!S||!S.me||S.over||S.reg||S.t<30||S.t%36!==30||S.xt57===S.t)return r;S.xt57=S.t;const m=S.me,askd=m.rank>=3||m.favor>=55;
-  const sons=m.kids.filter(k=>!k.dead&&!k.sp&&yr(k)>=14&&k.sex=='男'),dau=m.kids.filter(k=>!k.dead&&!k.sp&&yr(k)>=14&&k.sex!='男');
-  if(!askd){const n=R(8,16);S.q.push({t:`三年一度的選秀開始了，這一屆有 ${n} 位新人入宮。`,o:[['新人分走了不少恩寵，你只好更用心當差',()=>{m.favor=cl(m.favor-2);m.scheme=Math.min(100,(m.scheme||0)+1);return'新人入宮，你的處境緊了些。（聖寵－2）'}],['暗中結交幾位新人',()=>{m.ally+=2;return'你與幾位新人處得不錯。（人脈＋2）'}]]});}
-  else{const o=[['舉薦母族之女入宮（耗銀30）',()=>{if(!pay(30))return'銀兩不足，沒能打點。';m.ally+=4;m.favor=cl(m.favor-2);try{jot('宮',m.n,'你向皇上舉薦母族之女入選。')}catch(e){}return'皇上准了，母族女子入宮，與你互為奧援，只是分去了些恩寵。（人脈＋4、聖寵－2）'}],
-   ['勸皇上體恤民力，這屆從簡',()=>{if(P(.55)){m.favor=cl(m.favor+3);S.nat.pop=cl(S.nat.pop+1);return'皇上覺得有理，這屆從簡辦理。（聖寵＋3、民心＋1）'}m.favor=cl(m.favor-2);return'皇上說祖制不可廢，不悅地擺了擺手。（聖寵－2）'}],
-   ['說「全憑皇上聖裁」',()=>{m.favor=cl(m.favor+1);return'皇上滿意你識大體。（聖寵＋1）'}]];
-   if(sons.length)o.unshift([`請皇上趁此替${sons[0].n}留意福晉人選`,()=>{S.q.push(mxProp(sons[0],'me'));return'皇上說，那就在秀女中替皇子挑一挑。'}]);
-   if(dau.length)o.unshift([`請皇上替${dau[0].n}留心額駙人選`,()=>{S.q.push(mxProp(dau[0],'me'));return'皇上說，宗室與勛貴子弟，這回可以一併相看。'}]);
-   S.q.push({t:`三年一度的選秀將開，皇上笑著問你：「你有什麼想法？」`,o})}
-  if(!S.ev&&!S.ch&&!S.scn)next();else render()}catch(e){console.log('r57m',e)}return r};
 try{HELP.push(['選秀（妃子期與太后期）','清制三年一選，秀女經殿選「留牌子」或「撂牌子」。妃子期：位份夠或夠受寵時，皇上會問你的意見，你可舉薦母族之女、為皇子福晉或公主額駙留心、勸從簡或不表態。太后期：朝堂頁／行動「皇室」類有「主持選秀」，可辦大選、小選或停選，先擇后再留妃嬪；太妃頁頂端有「皇帝的後宮」名冊。外戚、滿蒙聯姻、寒門才女各有取捨。'])}catch(e){}
+})();
+
+/* ===== round58：妃子期選秀產生真實新妃嬪，可指名舉薦／阻攔 ===== */
+(function(){
+const NEWS=[['滿洲大族',3],['漢軍旗',2],['江南士族',2],['寒門才女',2],['勛貴之女',2]];
+const pick=()=>{let r=Math.random()*NEWS.reduce((a,x)=>a+x[1],0);for(const x of NEWS){r-=x[1];if(r<=0)return x[0]}return NEWS[0][0]};
+function cand(kind){const ty=kind||pick();const fr=ty==='寒門才女'?3:ty==='勛貴之女'?R(0,1):ty==='滿洲大族'?R(0,2):R(1,3);
+ return{n:nm2(),ty,fam:famFor(fr),cai:R(35,90),mei:R(35,92),fr}}
+const sc=c=>(3-c.fr)*9+c.cai*.25+c.mei*.35+R(-8,8);
+const lbl=c=>`${c.n}（${c.ty}・才${c.cai}・貌${c.mei}）`;
+function finalize(pool,forced,K,blocked,tag){const m=S.me;const left=pool.filter(c=>!blocked.includes(c));
+ const sorted=left.slice().sort((a,b)=>(forced.includes(b)?99:sc(b))-(forced.includes(a)?99:sc(a)));
+ const kept=sorted.slice(0,Math.max(K,forced.length)),out=[];
+ kept.forEach((c,i)=>{if(S.npcs.length>=HMAX-1)return;let r=i===0?2:i<=2?1:0;if(forced.includes(c)&&r<1)r=1;while(r>0&&!rkRoom(r))r--;
+  const n=mkN(c.n,r,R(38,58)+Math.round((c.mei-60)/4),c.fam);n.tag58=c.ty;if(forced.includes(c)&&c.mine){n.al=62;n.host=R(5,20)}else if(forced.includes(c)){n.al=52}S.npcs.push(n);out.push(`${RK[r]}${c.n}`)});
+ m.favor=cl(m.favor-Math.min(4,out.length));S.xt58=S.t;
+ const txt=`本屆選秀，皇上留了 ${out.length} 人的牌子：${out.join('、')||'無'}。其餘秀女撂牌子遣回。${tag||''}（新人分寵，聖寵－${Math.min(4,out.length)}）`;
+ try{msPush(txt);jot('宮',m.n,txt)}catch(e){}return txt}
+const _m=mend;mend=function(){const r=_m.apply(this,arguments);
+ try{if(!S||!S.me||S.over||S.reg)return r;if(S.xt58==null)S.xt58=0;
+  if(S.t<30||S.t-S.xt58<36||S.xt58b===S.t||S.npcs.length>=HMAX-3)return r;S.xt58b=S.t;
+  const m=S.me,askd=m.rank>=3||m.favor>=55,pool=[];for(let i=0;i<6;i++)pool.push(cand());
+  const mine=cand('母族之女');mine.mine=1;mine.fam=famFor(Math.max(0,Math.min(3,3-Math.floor(m.rank/3))));pool.push(mine);
+  const top=pool.filter(c=>!c.mine).sort((a,b)=>a.fr-b.fr)[0],poor=pool.find(c=>c.ty==='寒門才女'&&!c.mine);
+  const names=pool.map(c=>c.n).join('、');
+  if(!askd){S.q.push({t:`三年一度的選秀開始了，這一屆有 ${pool.length+8} 位秀女入圍殿選。`,o:[['靜觀其變，更用心當差',()=>finalize(pool,[],R(2,3),[],'')],['暗中結交幾位新人',()=>{m.ally+=2;return finalize(pool,[],R(2,3),[],'（你暗中結交了新人，人脈＋2）')}]]})}
+  else{const o=[];
+   o.push([`舉薦母族之女「${mine.n}」入宮（耗銀30）`,()=>{if(!pay(30))return finalize(pool,[],3,[],'你想舉薦母族之女，卻湊不出打點的銀子。');m.ally+=3;return finalize(pool,[mine],3,[],`你舉薦的母族之女${mine.n}入選，與你互為奧援。（人脈＋3）`)}]);
+   if(poor)o.push([`替才貌出眾的寒門女「${poor.n}」美言`,()=>{m.favor=cl(m.favor+1);return finalize(pool,[poor],3,[],`寒門女${poor.n}得你美言入選，對你頗為感激。`)}]);
+   if(top&&top.fr<=1)o.push([`暗中阻攔門第最高的「${top.n}」入選（耗銀20，有風險）`,()=>{if(!pay(20))return finalize(pool,[],3,[],'銀兩不足，阻攔之事不了了之。');if(P(.6)){m.ally-=1;return finalize(pool,[],3,[top],`${top.n}因「儀態欠佳」被撂了牌子，沒人知道是你動的手。（人脈－1）`)}m.favor=cl(m.favor-3);return finalize(pool,[],3,[],`阻攔之事被察覺，皇上對你起了疑心。（聖寵－3）`)}]);
+   o.push(['勸皇上體恤民力，這屆從簡',()=>{if(P(.55)){m.favor=cl(m.favor+3);S.nat.pop=cl(S.nat.pop+1);return finalize(pool,[],2,[],'皇上准了從簡。（聖寵＋3、民心＋1）')}m.favor=cl(m.favor-2);return finalize(pool,[],3,[],'皇上說祖制不可廢。（聖寵－2）')}]);
+   const sons=m.kids.filter(k=>!k.dead&&!k.sp&&yr(k)>=14&&k.sex=='男'),dau=m.kids.filter(k=>!k.dead&&!k.sp&&yr(k)>=14&&k.sex!='男');
+   if(sons.length)o.push([`請皇上趁此替${sons[0].n}留意福晉人選`,()=>{S.q.push(mxProp(sons[0],'me'));return finalize(pool,[],3,[],'皇上說可在秀女中替皇子相看。')}]);
+   if(dau.length)o.push([`請皇上替${dau[0].n}留心額駙人選`,()=>{S.q.push(mxProp(dau[0],'me'));return finalize(pool,[],3,[],'皇上說宗室勛貴子弟，可一併相看。')}]);
+   o.push(['說「全憑皇上聖裁」',()=>{m.favor=cl(m.favor+1);return finalize(pool,[],R(2,4),[],'皇上滿意你識大體。（聖寵＋1）')}]);
+   S.q.push({t:`三年一度的選秀將開，皇上把名單遞給你：「${names}……你有什麼看法？」`,o})}
+  if(!S.ev&&!S.ch&&!S.scn)next();else render()}catch(e){console.log('r58',e)}return r};
+try{HELP.push(['選秀產生的新妃嬪','妃子期每三年一屆選秀（入宮那一屆算第一屆）。新留牌子的妃嬪會真的進入「後宮」名冊，有自己的出身、位份與家族。你被問意見時可舉薦母族之女、替寒門才女美言、暗中阻攔門第最高的人，或勸皇上從簡；新人會分走聖寵，被你舉薦的人較親近你。後宮人數已滿時不再辦選秀。'])}catch(e){}
 })();
 
 deco();intro();
