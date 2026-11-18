@@ -7215,6 +7215,10 @@ body:has(#rt77) #ntf{display:none!important}
 `;document.head.appendChild(st)}catch(e){}
 /* 說明視窗內放字體大小 */
 try{const _h82=helpOpen;helpOpen=function(){const r=_h82.apply(this,arguments);try{const hb=document.querySelector('#help .hb');if(hb&&!hb.querySelector('.fz82')){const cur=(()=>{try{return localStorage.getItem('hg81fz')||'m'}catch(e){return 'm'}})();const L={s:'小',m:'中',l:'大',x:'特大'};const d=document.createElement('div');d.className='fz82';d.innerHTML='<span>字體大小</span>'+Object.keys(L).map(k=>`<button class="${k===cur?'on':''}" data-k="${k}">${L[k]}</button>`).join('');d.onclick=e=>{const b=e.target.closest('button');if(!b)return;fz81(b.dataset.k);d.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b))};const first=hb.querySelector('h2,h3,.hx75')?hb.querySelector('h2,h3'):null;if(first)first.insertAdjacentElement('afterend',d);else hb.insertBefore(d,hb.children[1]||null)}}catch(e){console.log('r82h',e)}return r}}catch(e){console.log('r82',e)}
+/* 進階自動設定：收起並移到底部，避免與「自動過」按鈕重複 */
+try{const _a82=uiPost;uiPost=function(){const r=_a82.apply(this,arguments);try{if(typeof TAB!=='undefined'&&TAB==0&&S&&S.me&&!S.over){const m=document.querySelector('main'),ab=m&&m.querySelector(':scope>.autobar');if(ab){const am=ab.querySelector('details.am');if(am&&!am._w82){am._w82=1;am.addEventListener('toggle',()=>{S._am82=am.open?1:0})}if(am)am.open=!!S._am82;
+const resume=[...ab.querySelectorAll('button')].some(b=>/繼續/.test(b.textContent)&&b.offsetParent!==null);
+if(!resume){const anchor=[...m.children].reverse().find(e=>e.classList&&e.classList.contains('sec13')&&/個人/.test(e.textContent));if(anchor&&anchor.previousElementSibling!==ab){anchor.insertAdjacentElement('beforebegin',ab)}}}}}catch(e){console.log('r82a',e)}return r}}catch(e){console.log('r82',e)}
 
 deco();intro();
 
