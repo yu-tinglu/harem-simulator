@@ -4670,6 +4670,80 @@ const _m39=mend;mend=function(){const r=_m39.apply(this,arguments);
  try{if(!S||!S.me||S.over||S.reg||S.t<8)return r;if(S.t-(S.pe35t==null?-99:S.pe35t)<3||!P(.4))return r;const i=pickNpc();if(i==null)return r;const n=S.npcs[i],tr=trait(n);let e;if(tr.length&&P(.6))e=T[tr[R(0,tr.length-1)]](n);else e=(n.host>=55?REL.foe:n.al>=55?REL.friend:REL.plain)(n);n.pe35=S.t;S.pe35t=S.t;S.q.push(e);if(!S.ev&&!S.ch&&!S.scn)next();else render()}catch(x){console.log('r39',x)}return r};
 })();
 
+/* ===== round40：人物卡重新設計＋名冊依位份分組 ===== */
+(function(){
+const st=document.createElement('style');st.id='pc40s';st.textContent=`
+details.con.pc40{border-left:4px solid var(--pcc,#c9a98a);padding:0;overflow:hidden}
+details.con.pc40>summary{display:flex;flex-wrap:nowrap;gap:10px;align-items:center;padding:10px 12px}
+details.con.pc40 .pc-av{flex:0 0 auto;display:flex;align-items:center}
+details.con.pc40 .pc-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+details.con.pc40 .pc-top{display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center}
+details.con.pc40 .pc-sub{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;font-size:12px;color:#7a5a50}
+details.con.pc40 .pc-fv{display:inline-flex;align-items:center;gap:5px}
+details.con.pc40 .pc-fv i{display:inline-block;width:54px;height:6px;border-radius:99px;background:rgba(160,120,100,.22);overflow:hidden}
+details.con.pc40 .pc-fv i b{display:block;height:100%;background:linear-gradient(90deg,#e8a04c,#c8323c)}
+details.con.pc40 .pc-chip{display:inline-block;font-size:11px;line-height:18px;padding:0 7px;border-radius:99px;background:rgba(190,140,110,.16);color:#7a4a38;white-space:nowrap}
+details.con.pc40 .pc-chip.rel{font-weight:700}
+details.con.pc40 .pc-chip.ally{background:rgba(70,150,100,.18);color:#2f7a52}
+details.con.pc40 .pc-chip.foe{background:rgba(200,50,60,.16);color:#a3242e}
+details.con.pc40 .pc-chip.gold{background:rgba(227,180,90,.25);color:#8a5a12}
+details.con.pc40 .pc-body{padding:2px 14px 12px;display:flex;flex-direction:column;gap:10px}
+details.con.pc40 .pc-sec{border-top:1px dashed rgba(170,120,90,.3);padding-top:8px}
+details.con.pc40 .pc-sec>h4{margin:0 0 4px;font-size:12px;letter-spacing:.2em;color:#a8531c;font-weight:700}
+details.con.pc40 .pc-sec .pc-l{font-size:13px;line-height:1.65;color:#5a3a32}
+details.con.pc40 .pc-bars{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;margin-bottom:4px}
+details.con.pc40 .pc-bar{display:flex;align-items:center;gap:6px;font-size:12px;color:#7a5a50}
+details.con.pc40 .pc-bar span{flex:0 0 3.2em}
+details.con.pc40 .pc-bar i{flex:1;height:6px;border-radius:99px;background:rgba(160,120,100,.2);overflow:hidden}
+details.con.pc40 .pc-bar i b{display:block;height:100%;background:#c9a24a}
+details.con.pc40 .pc-bar.g i b{background:#4aa070}
+details.con.pc40 .pc-bar.r i b{background:#c8323c}
+details.con.pc40 .pc-bar em{font-style:normal;flex:0 0 2em;text-align:right}
+.grp40{display:flex;align-items:center;gap:8px;margin:16px 2px 4px;font-size:12.5px;letter-spacing:.25em;color:#a8531c;font-weight:700}
+.grp40::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(168,83,28,.4),transparent)}
+.grp40 i{font-style:normal;letter-spacing:0;font-weight:400;color:#8a6a60;font-size:12px}
+details.con[data-t*="皇子"]:not(.pc40){border-left:4px solid #3d7bb5}details.con[data-t*="公主"]:not(.pc40){border-left:4px solid #d46a8a}details.con[data-t*="儲君"]:not(.pc40){border-left-color:#c9a24a;border-left-width:6px}
+`;document.head.appendChild(st);
+const FC=['#c8323c','#d98a2b','#4aa070','#3d7bb5','#8a5fb0','#b5654a','#5f8a8a','#a68a3a'];
+const rel=(n,i)=>{if(n===S.me)return{t:'你',c:'gold'};if(n.st)return{t:n.st,c:''};if(n.bd==='sworn')return{t:'結拜姐妹',c:'ally'};if(n.bd==='rival')return{t:'宿敵',c:'foe'};if(n.host>=55)return{t:'嫌隙',c:'foe'};if(n.al>=60)return{t:'肝膽相照',c:'ally'};if(n.al>=45)return{t:'盟友',c:'ally'};if(n.al>=25)return{t:'友善',c:''};return{t:'點頭之交',c:''}};
+const bar=(l,v,k)=>`<div class="pc-bar ${k||''}"><span>${l}</span><i><b style="width:${Math.max(0,Math.min(100,v))}%"></b></i><em>${v|0}</em></div>`;
+const _r40=ROW;ROW=function(n,i){let h=_r40.apply(this,arguments);
+ try{const tpl=document.createElement('template');tpl.innerHTML=h.trim();const d=tpl.content.firstElementChild;if(!d||d.tagName!=='DETAILS'||d.classList.contains('pc40'))return h;
+  const sum=d.querySelector('summary'),body=d.querySelector('summary+div.m')||d.querySelector(':scope>div');if(!sum||!body)return h;
+  const me=n===S.me,av=sum.querySelector('.av18'),nm=sum.querySelector('.nm'),pills=[...sum.querySelectorAll('.pill')].map(e=>e.outerHTML).join(''),mm=(sum.querySelector('.mm')||{textContent:''}).textContent;
+  const r=rel(n,i);const fv=Math.max(0,Math.min(100,n.favor|0));
+  const clan=(n.pow===undefined?n.clan:n.pow)|0,kids=n.kids?n.kids.length:0,tal=((TS[n.g]||[])[0])||'';
+  const facI=Math.max(0,(n.fac|0)),col=n.st?'#b0a39a':(r.c==='foe'?'#c8323c':r.c==='ally'?'#4aa070':FC[facI%FC.length]);d.style.setProperty('--pcc',col);
+  const sub=`<span class=pc-fv>寵<i><b style="width:${fv}%"></b></i>${fv}</span><span class="pc-chip rel ${r.c}">${r.t}</span>${tal?`<span class="pc-chip gold">${tal}</span>`:''}<span class=pc-chip>母族${clan}</span>${kids?`<span class=pc-chip>子女${kids}</span>`:''}`;
+  sum.innerHTML=`<span class=pc-av>${av?av.innerHTML?av.outerHTML:'':''}</span><div class=pc-main><div class=pc-top>${nm?nm.outerHTML:''}${pills}</div><div class=pc-sub>${sub}</div></div>`;
+  /* 內文依行分類 */
+  const lines=body.innerHTML.split(/<br\s*\/?>/i).map(x=>x.trim()).filter(Boolean);
+  const sec={story:[],look:[],rel:[],fam:[],other:[]};
+  lines.forEach(x=>{const t=x.replace(/<[^>]*>/g,'');
+   if(/^(小傳|她對你說過|往事|故事線|・第|<b>往事)/.test(t)||/^<b>(小傳|往事)/.test(x)||/往事[：:]|^・/.test(t))sec.story.push(x);
+   else if(/^顏\d|^口頭禪|^擅長|身無疾患|氣喘|心悸|宮冷|遺傳/.test(t)||/class="pill/.test(x))sec.look.push(x);
+   else if(/^(父族|派系|與你|你的|.*盟友度|人脈)/.test(t)||/盟友度|敵意/.test(t))sec.rel.push(x);
+   else if(/權\d+/.test(t)&&/[父母兄弟姐叔祖舅姨堂表侄]/.test(t))sec.fam.push(x);
+   else sec.other.push(x)});
+  sec.rel=sec.rel.map(x=>x.replace(/\s*與你：[^<]*$/,'').replace(/　?與你：盟友度[^<]*/,'')).filter(x=>x.replace(/<[^>]*>/g,'').trim());
+  const S2=(h4,arr,pre)=>arr.length||pre?`<div class=pc-sec><h4>${h4}</h4>${pre||''}<div class=pc-l>${arr.join('<br>')}</div></div>`:'';
+  const a=n.at||{};
+  const bars=!me&&!n.st?`<div class=pc-bars>${bar('盟友度',n.al|0,'g')}${bar('敵意',n.host|0,'r')}${bar('體力',n.hp|0)}${bar('罪證',Math.min(100,(S.evid&&S.evid[i]||0)*25))}</div>`:me?`<div class=pc-bars>${bar('聖寵',n.favor|0)}${bar('體力',n.hp|0,'g')}${bar('人脈',n.ally|0,'g')}${bar('心機',n.scheme|0)}</div>`:'';
+  const lookBars=a.lk!==undefined?`<div class=pc-bars>${bar('顏值',a.lk)}${bar('氣質',a.qi)}${bar('智商',a.iq)}${a.sp!==undefined?bar('精神',a.sp):''}</div>`:'';
+  const lookLines=sec.look.filter(x=>!/^顏\d/.test(x.replace(/<[^>]*>/g,'')));
+  body.className='pc-body';body.innerHTML=S2('關係',sec.rel,bars)+S2('才貌',lookLines,lookBars)+S2('近況與往事',sec.story)+S2('家人',sec.fam)+(sec.other.length?S2('近況記錄',sec.other):'');
+  d.classList.add('pc40');return d.outerHTML}catch(e){console.log('pc40',e)}return h};
+/* 名冊分組標題 */
+const TIER=(row)=>/class="[^"]*\bdead\b/.test(row)?'已故・離宮':/高位/.test((row.match(/data-t="([^"]*)"/)||[])[1]||'')?'高位':/中位/.test((row.match(/data-t="([^"]*)"/)||[])[1]||'')?'中位':'低位';
+const TN={'高位':'高位・妃以上','中位':'中位・嬪與貴人','低位':'低位・常在與答應','已故・離宮':'已故・離宮'};
+const _rh=rosterHTML;rosterHTML=function(){let h=_rh.apply(this,arguments);
+ try{const mk='<div data-list=roster>';const i=h.indexOf(mk);if(i<0)return h;const head=h.slice(0,i+mk.length),rest=h.slice(i+mk.length).replace(/<\/div>$/,'');
+  const rows=rest.split(/(?=<details class="cd con)/).filter(x=>x.trim());const cnt={};rows.forEach(r=>{const t=TIER(r);cnt[t]=(cnt[t]||0)+1});let last='',out='';
+  rows.forEach(r=>{const t=TIER(r);if(t!==last){last=t;out+=`<div class=grp40 data-g="${t}">${TN[t]}<i>${cnt[t]} 人</i></div>`}out+=r});
+  return head+out+'</div>'}catch(e){console.log('rh40',e)}return h};
+const _fa=fApply;fApply=function(){_fa.apply(this,arguments);try{document.querySelectorAll('[data-list=roster]').forEach(box=>{let g=null,vis=0;const flush=()=>{if(g)g.style.display=vis?'':'none'};[...box.children].forEach(c=>{if(c.classList.contains('grp40')){flush();g=c;vis=0}else if(c.style.display!=='none')vis++});flush()})}catch(e){}};
+})();
+
 deco();intro();
 
 
