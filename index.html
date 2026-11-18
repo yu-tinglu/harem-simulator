@@ -7185,7 +7185,7 @@ try{const st=document.createElement('style');st.textContent=`
 .r span{flex:0 0 auto!important;min-width:5.4em;white-space:nowrap}
 body.hid82 .ac31{transform:translateY(170%);transition:transform .22s ease}
 .ac31{transition:transform .22s ease}
-.goal82{margin:-4px 0 10px;padding:7px 12px;border-radius:10px;background:rgba(255,255,255,.55);border:1px dashed rgba(190,120,100,.45);font-size:13.5px;color:#6b3b32!important;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.goal82{flex-wrap:nowrap!important;margin:-4px 0 10px;padding:7px 12px;border-radius:10px;background:rgba(255,255,255,.55);border:1px dashed rgba(190,120,100,.45);font-size:13.5px;color:#6b3b32!important;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .goal82 b{color:#c24558}
 .goal82 small{font-size:12px;color:#8a6a60!important}
 `;document.head.appendChild(st);
@@ -7194,7 +7194,7 @@ const _g82=uiPost;uiPost=function(){const r=_g82.apply(this,arguments);try{docum
 if(typeof TAB!=='undefined'&&TAB==0&&S&&S.me&&!S.over&&S.npcs){const m=S.me;if(!S.g82)S.g82={r:m.rank};const kids=(m.kids||[]).length;
 const G=[['聖寵升到 60',m.favor>=60,'目前 '+(m.favor|0),'恩寵聖眷'],['晉升一級（現為「'+RK[S.g82.r]+'」）',m.rank>S.g82.r,'','恩寵聖眷'],['生下第一個孩子',kids>0,'','子嗣'],['晉升到「嬪」以上',m.rank>=3,'目前「'+RK[m.rank]+'」','恩寵聖眷'],['聖寵升到 85',m.favor>=85,'目前 '+(m.favor|0),'恩寵聖眷']];
 const g=G.find(x=>!x[1]);const mn=document.querySelector('main');const ss=mn&&mn.querySelector('.stat-strip');
-window.__G82K=g?g[3]:'';window.__G82=g?'🎯 下一個目標：<b>'+g[0]+'</b>'+(g[2]?'　<small>'+g[2]+'</small>':''):'';const put=()=>{try{document.querySelectorAll('.goal82').forEach(e=>e.remove());const s2=document.querySelector('main>.stat-strip')||document.querySelector('.stat-strip');if(window.__G82&&s2&&TAB==0){const d=document.createElement('div');d.className='goal82';d.innerHTML=window.__G82+'<small style="margin-left:auto">點我前往 ›</small>';d.setAttribute('data-k',window.__G82K||'');d.onclick=()=>go82(d.getAttribute('data-k'));s2.insertAdjacentElement('afterend',d)}}catch(e){}};put();setTimeout(put,120);setTimeout(put,600)}}catch(e){console.log('r82g',e)}return r}
+window.__G82K=g?g[3]:'';window.__G82=g?'🎯 下一個目標：<b>'+g[0]+'</b>'+(g[2]?'　<small>'+g[2]+'</small>':''):'';const put=()=>{try{document.querySelectorAll('.goal82').forEach(e=>e.remove());const s2=document.querySelector('main>.stat-strip')||document.querySelector('.stat-strip');if(window.__G82&&s2&&TAB==0){const d=document.createElement('div');d.className='goal82';d.innerHTML=window.__G82+'<small style="margin-left:auto">前往 ›</small>';d.setAttribute('data-k',window.__G82K||'');d.onclick=()=>go82(d.getAttribute('data-k'));s2.insertAdjacentElement('afterend',d)}}catch(e){}};put();setTimeout(put,120);setTimeout(put,600)}}catch(e){console.log('r82g',e)}return r}
 }catch(e){console.log('r82',e)}
 
 window.go82=function(key){try{const main=document.querySelector('main');if(!main)return;const T=e=>(e.querySelector(':scope>h3,:scope>summary,:scope>.h')||e).textContent.trim();
@@ -7219,6 +7219,10 @@ try{const _h82=helpOpen;helpOpen=function(){const r=_h82.apply(this,arguments);t
 try{const _a82=uiPost;uiPost=function(){const r=_a82.apply(this,arguments);try{if(typeof TAB!=='undefined'&&TAB==0&&S&&S.me&&!S.over){const m=document.querySelector('main'),ab=m&&m.querySelector(':scope>.autobar');if(ab){const am=ab.querySelector('details.am');if(am&&!am._w82){am._w82=1;am.addEventListener('toggle',()=>{S._am82=am.open?1:0})}if(am)am.open=!!S._am82;
 const resume=[...ab.querySelectorAll('button')].some(b=>/繼續/.test(b.textContent)&&b.offsetParent!==null);
 if(!resume){const anchor=[...m.children].reverse().find(e=>e.classList&&e.classList.contains('sec13')&&/個人/.test(e.textContent));if(anchor&&anchor.previousElementSibling!==ab){anchor.insertAdjacentElement('beforebegin',ab)}}}}}catch(e){console.log('r82a',e)}return r}}catch(e){console.log('r82',e)}
+
+/* 沒有內容的區塊標題（宮中情勢、行動）不顯示 */
+try{const fix=()=>{try{const m=document.querySelector('main');if(!m)return;const L=[...m.children].filter(e=>e.classList&&e.classList.contains('sec13'));L.forEach(e=>{if(e.classList.contains('sub'))return;let n=e.nextElementSibling;while(n&&n.classList.contains('sec13')&&n.style.display==='none')n=n.nextElementSibling;const empty=!n||n.classList.contains('sec13');if(empty)e.style.setProperty('display','none','important');else e.style.removeProperty('display')})}catch(e){console.log('r82s',e)}};
+const _s82=uiPost;uiPost=function(){const r=_s82.apply(this,arguments);fix();setTimeout(fix,150);setTimeout(fix,700);return r}}catch(e){console.log('r82',e)}
 
 deco();intro();
 
