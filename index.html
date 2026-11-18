@@ -5231,6 +5231,27 @@ const _r=render;render=function(){const r=_r.apply(this,arguments);
  try{if(S&&S.me&&!S.over&&S.reg&&S.reg.k&&typeof empName==='function'){const e=empName(),nm=S.reg.k.n,root=document.querySelector('main')||document.body;
   const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null);let n;while((n=w.nextNode())){const v=n.nodeValue;if(v.indexOf('皇帝')>=0&&v.indexOf(nm)>=0&&v.indexOf(e)<0){const nv=v.replace('皇帝 '+nm,e).replace('當今皇帝　'+nm,'當今皇帝　'+e);if(nv!==v)n.nodeValue=nv}}}}catch(e){console.log('r49',e)}return r};
 })();
+/* ---- round49b：行動頁概況卡合併、大數字簡寫 ---- */
+(function(){
+let OPEN=false;try{OPEN=localStorage.getItem('hg49ov')==='1'}catch(e){}
+window.ov49=function(el){OPEN=el.open;try{localStorage.setItem('hg49ov',OPEN?'1':'0')}catch(e){}};
+const _r=render;render=function(){const r=_r.apply(this,arguments);
+ try{if(!S||!S.me||S.over||typeof TAB==='undefined'||TAB!==0)return r;const m=document.querySelector('main');if(!m)return r;
+  const strip=m.querySelector(':scope>.stat-strip');
+  if(strip){const c=[...strip.children].find(x=>/銀兩/.test(x.textContent));if(c){const b=c.querySelector('b,strong,.v,div,span')||c;const walker=document.createTreeWalker(c,NodeFilter.SHOW_TEXT,null);let n;while((n=walker.nextNode())){const t=n.nodeValue.trim();if(/^\d{5,}$/.test(t)){c.title='銀兩 '+t;n.nodeValue=(+t/10000).toFixed(1)+'萬'}}}}
+  if(m.querySelector(':scope>.ov49'))return r;
+  const kids=[...m.children];let si=strip?kids.indexOf(strip)+1:0;
+  const isHdr=e=>e.classList.contains('sec13')&&!e.classList.contains('sub');
+  let ei=kids.findIndex((e,i)=>i>=si&&(/選擇行動/.test(e.textContent.slice(0,12))||(isHdr(e)&&e.textContent.trim()==='行動')||e.classList.contains('autobar')));
+  if(ei<0)return r;
+  const take=kids.slice(si,ei).filter(e=>!e.classList.contains('alertbar')&&!e.classList.contains('tip')&&!(isHdr(e)&&/宮中情勢/.test(e.textContent)));
+  if(take.length<2)return r;
+  const era=S.era41&&typeof ERAS!=='undefined'&&ERAS[S.era41]?ERAS[S.era41].n:'';
+  const em=typeof empName==='function'?empName():'';
+  const d=document.createElement('details');d.className='cd ov49';if(OPEN)d.open=true;d.setAttribute('ontoggle','ov49(this)');
+  d.innerHTML=`<summary style="cursor:pointer"><b>概況</b>　<span class=m>${em}｜${era?era+'｜':''}國力${natv()|0}${S.reg?'｜權柄'+(S.reg.pw|0):''}</span></summary>`;
+  m.insertBefore(d,take[0]);take.forEach(e=>d.appendChild(e))}catch(e){console.log('r49b',e)}return r};
+})();
 
 deco();intro();
 
