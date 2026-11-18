@@ -650,7 +650,7 @@ const COURT=[()=>courtEv('邊關告急，朝議是否出兵北伐。',cO('主戰
 ()=>courtEv('是否開放海禁、通商番邦？',cO('開海通商',3,1,()=>{addN([7,0,1,-2]);return'海貿大興，國庫豐盈。'}),cO('閉關鎖國',1,3,()=>{addN([-2,0,0,2]);return'朝局安穩，商路蕭條。'})),
 ()=>courtEv('一樁貪腐大案牽連數位高官。',cO('嚴懲不貸',1,0,()=>{addN([3,0,3,5]);return'吏治一新，朝臣人人自危。'}),cO('輕判了事',0,1,()=>{addN([0,0,-3,-5]);return'事情淡化，貪風卻更盛。'})),
 ()=>stEv()];
-const dn=()=>{if(!S.dow)return'太后';const p=S.dow.pet;return p==='me'?'你':S.npcs[p].st?'某位已故妃嬪':S.npcs[p].n};
+const dn=()=>{if(!S.dow)return'太后';const p=S.dow.pet;return p==='me'?'你':!S.npcs[p]?'某位妃嬪':S.npcs[p].st?'某位已故妃嬪':S.npcs[p].n};
 const DOW=[()=>({t:'太后召你到慈寧宮問話，語氣不辨喜怒。',o:[['恭順侍奉，有問必答',()=>{S.me.dw+=8;return'太后微微頷首。'}],['展現才學，吟詩作對',()=>{if(P(.5+tf('perf')/2)){S.me.dw+=12;S.me.favor+=2;return'太后誇你才思敏捷。'}S.me.dw-=4;return'太后嫌你賣弄。'}],['試探太后的心意',()=>{if(tf('insight')||P(.4)){S.me.scheme+=2;S.me.dw+=3;return`你看出太后偏愛${dn()}。`}S.me.dw-=3;return'太后一眼看穿了你的心思。'}]]}),
 ()=>({t:'太后禮佛，要人替她抄經祈福。',o:[['親手抄經三日',()=>{S.me.hp-=4;S.me.dw+=10;return'太后深受感動。'}],['捐一筆香油錢（耗銀20）',()=>{if(!pay(20))return'銀兩不足。';S.me.dw+=8;return'太后覺得你有心。'}],['推說身子不適',()=>{S.me.dw-=8;return'太后面露不悅。'}]]}),
 ()=>({t:'太后有意為皇上添些新人，問你有何意見。',o:[['推薦自己家族的女子',()=>{const n=kinIn('族人');if(!n)return'名額已滿，作罷。';S.me.fam.forEach(x=>x.pw+=4);S.me.dw-=2;return`${n.kin}${n.n}入宮，封為${RK[n.rank]}，成了你的助力。可在「後宮」名冊中找到她。`}],['贊同太后的人選',()=>{S.me.dw+=5;return'太后滿意地點頭。'}],['婉言反對',()=>{S.me.dw-=8;return'太后不悅你多嘴。'}]]}),
@@ -7138,6 +7138,32 @@ const _u=uiPost;uiPost=function(){const r=_u.apply(this,arguments);try{
   card.querySelectorAll('button').forEach(b=>{const t=(b.innerText||b.textContent||'').trim();if(NAMES.some(x=>t.startsWith(x))){b.remove();n++}});
   if(n){const left=card.querySelectorAll('button').length;const hs=[...card.querySelectorAll('*')].find(e=>!e.children.length&&/^\d+項$/.test((e.textContent||'').trim()));if(hs&&left>0)hs.textContent=left+'項'}})
 }catch(e){console.log('r80',e)}return r};window.uiPost=uiPost;
+})();
+
+/* ===== round81：字體大小與比例——整體放大一點、最小字級拉高、按鈕加大，可在紀事調整 ===== */
+(function(){
+const KEY='hg81fz',g=()=>{try{return localStorage.getItem(KEY)}catch(e){return null}},st=v=>{try{localStorage.setItem(KEY,v)}catch(e){}};
+const LV={s:['小',1],m:['中',1.1],l:['大',1.2],x:['特大',1.3]};
+const cur=()=>{const k=g();return LV[k]?k:'m'};
+const apply=()=>{document.documentElement.style.setProperty('--fz81',LV[cur()][1])};apply();
+const css=document.createElement('style');css.textContent=`
+main,#pm68>div>div>div,#kmodal49>div>div,#help .hb{zoom:var(--fz81,1.1)}
+#pm68>div>div,#kmodal49>div>div{zoom:var(--fz81,1.1)}
+#pm68>div>div>div{zoom:1}
+main small,#pm68 small,#kmodal49 small{font-size:12px}
+main .pill,#pm68 .pill,#kmodal49 .pill{font-size:11.5px}
+main .pc-chip,main .pn68{font-size:11.5px}
+main button,#pm68 button,#kmodal49 button{min-height:36px}
+.cmp49bar button{min-height:34px!important;height:34px!important}
+.more77>summary{min-height:44px;display:flex;align-items:center}
+.fz81 .fzb{display:flex;gap:8px;flex-wrap:wrap}.fz81 .fzb button{flex:1;min-width:64px}
+`;document.head.appendChild(css);
+window.fz81=function(k){st(k);apply();try{render()}catch(e){}};
+const _u=uiPost;uiPost=function(){const r=_u.apply(this,arguments);try{
+ if(typeof TAB==='undefined'||TAB!==5||!S||!S.me||S.over)return r;const main=document.querySelector('main');if(!main||main.querySelector('.fz81'))return r;
+ const c=cur(),d=document.createElement('div');d.className='cd fz81';
+ d.innerHTML=`<h3>字體大小</h3><div class=m style="margin:4px 0 8px">調整整個遊戲畫面的字體大小。目前：${LV[c][0]}。</div><div class=fzb>${Object.keys(LV).map(k=>`<button class="${k===c?'':'s'}" onclick="fz81('${k}')">${LV[k][0]}</button>`).join('')}</div>`;
+ const gp=main.querySelector('.grp65[data-t="設定與存檔"] .gin65');if(gp)gp.insertAdjacentElement('afterbegin',d);else main.appendChild(d)}catch(e){console.log('r81',e)}return r};window.uiPost=uiPost;
 })();
 
 deco();intro();
