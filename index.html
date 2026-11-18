@@ -3244,14 +3244,14 @@ const _up3=uiPost;uiPost=function(){const r=_up3.apply(this,arguments);try{if(TA
 HELP.push(['私兵與疑心','殺手樓訓練死士、牧場養馬，都會成為真實私兵；戰力＝死士×2＋戰馬，會加成宮變、逼宮、內應與奪嫡。私兵要付月錢，過大會令皇帝疑心上升，疑心高時會召你問話，甚至剷除你。疑心也看聖寵、皇帝年紀與儲位；到40會先有風聲預警，被降位兩次後仍不收斂才可能被剷除。可用「示忠表心」或禮佛慢慢降疑心，聖寵高時皇上可能賜你合法護衛。產業卡會列出疑心來源。']);
 
 /* ===== 第三輪：降母國猜忌、派系成員展開 ===== */
-const CLR=['澄清母國往來','降低皇上對你與母國的猜忌',()=>{const m=S.me,f=S.fr;if(!m.fo||!f||f.dead||f.ann){L('你沒有需要澄清的母國往來。');return}infInit();choose(`母國往來疑心 ${f.sus|0}／100（計入總疑心），如何化解？`,[
+const CLR=['化解母國猜忌','降低皇上對你與母國的猜忌',()=>{const m=S.me,f=S.fr;if(!m.fo||!f||f.dead||f.ann){L('你沒有需要化解的母國猜忌。');return}infInit();choose(`母國往來疑心 ${f.sus|0}／100（計入總疑心），如何化解？`,[
 {l:'上書表忠，宣示不忘皇恩（耗銀40，疑心－10）',f(){if(!pay(40))return L('銀兩不足。');const a=f.sus|0;f.sus=cl((f.sus||0)-10);f.rel=cl(f.rel-2);m.favor+=2;L(`你上書表明心跡，皇上讀後沉默良久。猜忌 ${a}→${f.sus|0}。`)}},
 {l:'疏遠母國使者（滲透－8、邦誼－5、疑心－14）',f(){const a=f.sus|0;f.inf=cl(f.inf-8);f.rel=cl(f.rel-5);f.sus=cl((f.sus||0)-14);L(`你婉拒了母國使者的來訪，與母國的往來冷了下來。猜忌 ${a}→${f.sus|0}，滲透 ${f.inf|0}。`)}},
 {l:'將母國貢品獻給皇上（耗銀60，疑心－8、聖寵＋4）',f(){if(!pay(60))return L('銀兩不足。');const a=f.sus|0;f.sus=cl((f.sus||0)-8);m.favor+=4;L(`你把母國送來的珍品悉數獻給皇上，皇上龍心大悅。猜忌 ${a}→${f.sus|0}。`)}},
 {l:'靜待風頭（疑心每月自然緩降）',f(){L('你決定暫時按兵不動，等風聲過去。')}}]);return 1}];
 const clrIdx=ACT.length;ACT.push(CLR);(function(){const c=ACTCAT.find(x=>/人脈/.test(x[0]));if(c)c[1].push(clrIdx)})();
-const _frR3=frCard;frCard=function(){let h=_frR3.apply(this,arguments);try{const f=S.fr;if(h&&f&&!f.dead&&!f.ann&&S.me.fo&&(f.sus||0)>=20){h=h.replace(/<\/div>$/,`<div class=m style="margin-top:6px"><button onclick="A(${clrIdx})" style="padding:6px 12px;border-radius:8px;border:1px solid currentColor;background:transparent;color:inherit;font-size:13px">降低猜忌：澄清母國往來</button></div></div>`)}}catch(e){console.log('frR3',e)}return h};
-HELP.push(['降低母國猜忌','主畫面「母國」卡的「皇上猜忌」是你與母國往來太密的後果。猜忌到60聖寵會受損，到80會被徹查。可按母國卡上的「降低猜忌：澄清母國往來」，或到行動→人脈勢力→「澄清母國往來」：表忠、疏遠使者或獻貢品。']);
+const _frR3=frCard;frCard=function(){let h=_frR3.apply(this,arguments);try{const f=S.fr;if(h&&f&&!f.dead&&!f.ann&&S.me.fo&&(f.sus||0)>=20){h=h.replace(/<\/div>$/,`<div class=m style="margin-top:6px"><button onclick="A(${clrIdx})" style="padding:6px 12px;border-radius:8px;border:1px solid currentColor;background:transparent;color:inherit;font-size:13px">降低猜忌：化解母國猜忌</button></div></div>`)}}catch(e){console.log('frR3',e)}return h};
+HELP.push(['降低母國猜忌','主畫面「母國」卡的「皇上猜忌」是你與母國往來太密的後果。猜忌到60聖寵會受損，到80會被徹查。可按母國卡上的「降低猜忌：化解母國猜忌」，或到行動→人脈勢力→「化解母國猜忌」：表忠、疏遠使者或獻貢品。']);
 /* 派系：點開看成員 */
 fxCard=function(){fxInit();const rows=[0,1,2,3,4].map(f=>{const l=facLead(f),ms=facMem(f),me=S.me.fac===f,al=S.fx.ally.filter(p=>p[0]===f||p[1]===f).map(p=>facName(p[0]===f?p[1]:p[0]));
 const list=[...(me?[`<b>你</b>（${RK[S.me.rank]||''}）${l===S.me?'　★領袖':''}`]:[]),...ms.map(n=>`${n.n}${(()=>{try{return'（'+RKN(n)+'）'}catch(e){return''}})()}${l===n?'　★領袖':''}`)];
@@ -3269,7 +3269,7 @@ const actIx=n=>ACT.findIndex(a=>a[0]==n);
 const BTNS='padding:5px 10px;border-radius:8px;border:1px solid currentColor;background:transparent;color:inherit;font-size:13px;margin:4px 6px 0 0';
 /* 警示欄 */
 function alertItems(){const m=S.me,o=[];
-if(m.fo&&S.fr&&!S.fr.dead&&!S.fr.ann&&(S.fr.sus||0)>=60)o.push([`母國往來引起的疑心 ${S.fr.sus|0}，皇上已起疑`,'澄清往來',actIx('澄清母國往來')]);
+if(m.fo&&S.fr&&!S.fr.dead&&!S.fr.ann&&(S.fr.sus||0)>=60)o.push([`母國往來引起的疑心 ${S.fr.sus|0}，皇上已起疑`,'澄清往來',actIx('化解母國猜忌')]);
 if((m.dsus||0)>=55)o.push([`皇帝疑心 ${m.dsus|0}，恐被召見問罪`,'示忠降疑心',actIx('示忠表心')]);
 if((m.scand||0)>=40)o.push([`醜聞值 ${m.scand|0}，隨時可能被揭發`,'打點賄賂',actIx('打點賄賂')]);
 if(m.hp<35)o.push([`健康只剩 ${m.hp|0}`,'調養身子',actIx('調養身子')]);
@@ -3492,12 +3492,12 @@ html body .kid,html body .k{font-size:13.5px}
 HELP.push(['姻親勢力','子女的配偶家世會影響你：武將姻親加成宮變、逼宮、奪嫡；文官姻親有各自好處（御史壓醜聞、鹽商增進項、翰林增賢名、巡撫穩朝局），但勢力過強也會招來皇帝疑心。']);
 
 /* ===== 第十輪：方針與自動過月、主畫面再精簡 ===== */
-const POLS={'固寵':['獻藝邀寵','梳妝保養','寬慰聖心','結交宮人','研習技藝'],'養生':['調養身子','延醫問藥','梳妝保養','讀書習藝'],'斂財':['置產投資','獻藝邀寵','賞賜宮人','傳書母家'],'人脈':['結交宮人','結盟拉攏','賞賜宮人','串門走動'],'育子':['教養子女','為子籌謀','過問婚事','求子調理'],'守成':['示忠表心','澄清母國往來','調養身子','結交宮人'],'謀位':['奪嫡謀劃','為子籌謀','結盟拉攏','獻藝邀寵']};
+const POLS={'固寵':['獻藝邀寵','梳妝保養','寬慰聖心','結交宮人','研習技藝'],'養生':['調養身子','延醫問藥','梳妝保養','讀書習藝'],'斂財':['置產投資','獻藝邀寵','賞賜宮人','傳書母家'],'人脈':['結交宮人','結盟拉攏','賞賜宮人','串門走動'],'育子':['教養子女','為子籌謀','過問婚事','求子調理'],'守成':['示忠表心','化解母國猜忌','調養身子','結交宮人'],'謀位':['奪嫡謀劃','為子籌謀','結盟拉攏','獻藝邀寵']};
 const POLD={'固寵':'聖寵為先，多邀寵梳妝','養生':'以健康為主，少折騰','斂財':'置產投資、廣結財源','人脈':'結交妃嬪、廣布人脈','育子':'專心教養子女、安排婚事','守成':'降疑心降猜忌，低調穩住','謀位':'為兒子謀劃奪嫡'};
 function polAct(){const m=S.me,pol=POLS[S.pol]||POLS['固寵'];const ok=n=>{const i=ACT.findIndex(a=>a[0]==n);if(i<0)return-1;
 if(n=='置產投資'&&(m.silver<250||(m.prop&&m.prop.farm>=5)))return-1;if(n=='賞賜宮人'&&m.silver<120)return-1;
 if(n=='求子調理'&&m.kids.length>=3)return-1;if((n=='教養子女'||n=='為子籌謀'||n=='奪嫡謀劃')&&!m.kids.length)return-1;
-if(n=='過問婚事'&&!m.kids.some(k=>yr(k)>=15&&!k.sp))return-1;if(n=='澄清母國往來'&&(!m.fo||!S.fr||S.fr.dead||S.fr.ann||(S.fr.sus||0)<20))return-1;
+if(n=='過問婚事'&&!m.kids.some(k=>yr(k)>=15&&!k.sp))return-1;if(n=='化解母國猜忌'&&(!m.fo||!S.fr||S.fr.dead||S.fr.ann||(S.fr.sus||0)<20))return-1;
 if(n=='示忠表心'&&(m.dsus||0)<8)return-1;return i};
 const v=pol.map(ok).filter(i=>i>=0);if(m.hp<45){const h=ACT.findIndex(a=>a[0]=='調養身子');if(h>=0)return h}return v.length?pk(v):ACT.findIndex(a=>a[0]=='獻藝邀寵')}
 function evCritical(e){return /逼宮|駕崩|禪位|宮變|賜死|廢|立儲|儲君|謀逆|徹查|召你問話|降了|病危|求婚|婚事|選妃|冊封|和親|繼位|攝政|母國.*(政變|併吞)/.test(e.t||'')}
