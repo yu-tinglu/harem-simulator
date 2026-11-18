@@ -5591,10 +5591,13 @@ const TYX=[
  {ty:'寒門才女',w:1.5,d:'家世單薄卻才貌出眾，皇帝多半喜歡',fm:72,ld:35,pw:20,gl:50,rk:'答應',ef:()=>{S.reg.k.bond=cl(S.reg.k.bond+3)}}];
 const pickTy=()=>{let r=Math.random()*TYX.reduce((a,x)=>a+x.w,0);for(const x of TYX){r-=x.w;if(r<=0)return x}return TYX[0]};
 let cur57=null;
+const TR58=['溫婉','強勢','心機深','單純'];
+const mkFam58=ty=>{const t=ty.includes('滿洲')?R(0,1):ty.includes('蒙古')?1:ty.includes('寒門')?3:2,f=famFor([8,6,4,1][t])[0];return{job:f[1],pw:f[2]}};
+window.mkFam58=mkFam58;window.TR58=TR58;
 function mkPool(n){const p=[];for(let i=0;i<n;i++){const t=pickTy();p.push({n:pnm('女'),t,cai:R(35,90),mei:R(35,92)})}if(cur57===null||1)cur57={t:S.t,who:'太后',pool:p,kept:[]};return p}
 const desc=c=>`${c.n}（${c.t.ty}・才${c.cai}・貌${c.mei}）`;
 function addEmpress(c){const x=rx(),R_=S.reg;R_.wed=1;x.emp={n:c.n,ty:c.t.ty,pw:c.t.pw+R(-5,8),gl:c.t.gl,fv:c.t.fm+Math.round((c.mei-60)/4),gs:0};c.t.ef();if(cur57)cur57.kept.push(c);try{jot('帝','新帝'+R_.k.n,`你主持選秀，為皇帝選定${c.t.ty}${c.n}為皇后。`)}catch(e){}return`你在選秀中為皇帝選定${c.t.ty}${c.n}為皇后。${c.t.d}。`}
-function addConsort(c,e){const x=rx();x.cb=x.cb||[];x.cb.push({n:c.n,ty:c.t.ty,t:S.t,kids:0,fv:cl(c.t.fm+Math.round((c.mei-60)/3)),ld:c.t.ld,rk:c.t.rk,cai:c.cai});c.t.ef();if(cur57)cur57.kept.push(c);if(e&&!e.gone)e.fv=cl(e.fv-3);return`留了${c.t.ty}${c.n}的牌子，封為${c.t.rk}。${c.t.d}。`}
+function addConsort(c,e){const x=rx();x.cb=x.cb||[];x.cb.push({n:c.n,ty:c.t.ty,t:S.t,kids:0,fv:cl(c.t.fm+Math.round((c.mei-60)/3)),ld:c.t.ld,rk:c.t.rk,cai:c.cai,fam:mkFam58(c.t.ty),tr:pk(TR58)});c.t.ef();if(cur57)cur57.kept.push(c);if(e&&!e.gone)e.fv=cl(e.fv-3);return`留了${c.t.ty}${c.n}的牌子，封為${c.t.rk}。${c.t.d}。`}
 function round(pool,left,after){const x=rx(),e=x.emp,needE=!e||e.gone;
  if(!pool.length||left<=0||(!needE&&cbs().length>=10)){L(after||'選秀完畢。');if(after!==null)finish();return}
  choose(needE?`先為皇帝擇后。以下是入選殿選的秀女：`:`再為皇帝留牌子（還能留${left}位；後宮現有${cbs().length}人）：`,
@@ -5627,7 +5630,7 @@ const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
   const R_=S.reg,left=Math.max(0,(R_.xiu57||0)-S.t);
   const rkOf=c=>c.rk||(c.fv>=70?'嬪':c.fv>=55?'貴人':'常在');
   const d=document.createElement('div');d.className='cd hg57';
-  d.innerHTML=`<h3>皇帝的後宮</h3><div class=m>${e&&!e.gone?`<b>皇后　${e.n}</b>（${e.ty}）・對你好感${e.gl|0}・家勢${e.pw|0}・帝寵${e.fv|0}`:'中宮尚缺皇后（可「籌辦大婚」或在選秀中擇后）'}</div>${cb.map((c,ci)=>`<div class=m>${rkOf(c)}　${c.n}（${c.ty}）・帝寵${c.fv|0}・忠於你${c.ld|0}・子嗣${c.kids}${S.t<(c.cd58||0)?'':` <button class=s onclick="cbDo58(${ci},'up')">晉封</button> <button class=s onclick="cbDo58(${ci},'warn')">申飭</button>`}</div>`).join('')||'<div class=m>其餘妃嬪：尚無。</div>'}<div class=m style="margin-top:6px">${left?`下一屆選秀：還有 ${left} 個月`:'可以主持選秀了'}</div><p><button onclick="A(${ix})">主持選秀</button></p>`;
+  d.innerHTML=`<h3>皇帝的後宮</h3><div class=m>${e&&!e.gone?`<b>皇后　${e.n}</b>（${e.ty}）・對你好感${e.gl|0}・家勢${e.pw|0}・帝寵${e.fv|0}`:'中宮尚缺皇后（可「籌辦大婚」或在選秀中擇后）'}</div>${cb.map((c,ci)=>`<div class=m>${rkOf(c)}　${c.n}（${c.ty}）・帝寵${c.fv|0}・忠於你${c.ld|0}・子嗣${c.kids}${c.fam?'・'+c.fam.job+'之女・'+(c.tr||''):''}${S.t<(c.cd58||0)?'':` <button class=s onclick="cbDo58(${ci},'up')">晉封</button> <button class=s onclick="cbDo58(${ci},'warn')">申飭</button>`}</div>`).join('')||'<div class=m>其餘妃嬪：尚無。</div>'}<div class=m style="margin-top:6px">${left?`下一屆選秀：還有 ${left} 個月`:'可以主持選秀了'}</div><p><button onclick="A(${ix})">主持選秀</button></p>`;
   main.insertBefore(d,main.firstChild)}}}catch(e){console.log('r57u',e)}return r};
 try{HELP.push(['選秀（妃子期與太后期）','清制三年一選，秀女經殿選「留牌子」或「撂牌子」。妃子期：位份夠或夠受寵時，皇上會問你的意見，你可舉薦母族之女、為皇子福晉或公主額駙留心、勸從簡或不表態。太后期：朝堂頁／行動「皇室」類有「主持選秀」，可辦大選、小選或停選，先擇后再留妃嬪；太妃頁頂端有「皇帝的後宮」名冊。外戚、滿蒙聯姻、寒門才女各有取捨。'])}catch(e){}
 })();
@@ -5637,7 +5640,7 @@ try{HELP.push(['選秀（妃子期與太后期）','清制三年一選，秀女�
 const NEWS=[['滿洲大族',3],['漢軍旗',2],['江南士族',2],['寒門才女',2],['勛貴之女',2]];
 const pick=()=>{let r=Math.random()*NEWS.reduce((a,x)=>a+x[1],0);for(const x of NEWS){r-=x[1];if(r<=0)return x[0]}return NEWS[0][0]};
 function cand(kind){const ty=kind||pick();const fr=ty==='寒門才女'?3:ty==='勛貴之女'?R(0,1):ty==='滿洲大族'?R(0,2):R(1,3);
- return{n:nm2(),ty,fam:famFor(fr),cai:R(35,90),mei:R(35,92),fr}}
+ return{n:nm2(),ty,fam:famFor([8,6,4,1][fr]),cai:R(35,90),mei:R(35,92),fr}}
 const sc=c=>(3-c.fr)*9+c.cai*.25+c.mei*.35+R(-8,8);
 const lbl=c=>`${c.n}（${c.ty}・才${c.cai}・貌${c.mei}）`;
 function finalize(pool,forced,K,blocked,tag){const m=S.me;const left=pool.filter(c=>!blocked.includes(c));
@@ -5652,7 +5655,7 @@ const _m=mend;mend=function(){const r=_m.apply(this,arguments);
  try{if(!S||!S.me||S.over||S.reg)return r;if(S.xt58==null)S.xt58=0;
   if(S.t<30||S.t-S.xt58<36||S.xt58b===S.t||S.npcs.length>=HMAX-3)return r;S.xt58b=S.t;
   const m=S.me,askd=m.rank>=3||m.favor>=55,pool=[];for(let i=0;i<6;i++)pool.push(cand());
-  const mine=cand('母族之女');mine.mine=1;mine.fam=famFor(Math.max(0,Math.min(3,3-Math.floor(m.rank/3))));pool.push(mine);
+  const mine=cand('母族之女');mine.mine=1;mine.fam=famFor([8,6,4,1][Math.max(0,Math.min(3,3-Math.floor(m.rank/3)))]);pool.push(mine);
   const top=pool.filter(c=>!c.mine).sort((a,b)=>a.fr-b.fr)[0],poor=pool.find(c=>c.ty==='寒門才女'&&!c.mine);
   const names=pool.map(c=>c.n).join('、');
   if(!askd){S.q.push({t:`三年一度的選秀開始了，這一屆有 ${pool.length+8} 位秀女入圍殿選。`,o:[['靜觀其變，更用心當差',()=>finalize(pool,[],R(2,3),[],'')],['暗中結交幾位新人',()=>{m.ally+=2;return finalize(pool,[],R(2,3),[],'（你暗中結交了新人，人脈＋2）')}]]})}
@@ -5687,6 +5690,49 @@ const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
  try{if(S&&S.me&&!S.over&&TAB==5&&S.xh58&&S.xh58.length){const main=document.querySelector('main');if(main&&!main.querySelector('.xh58')){const d=document.createElement('div');d.className='cd xh58';
   d.innerHTML='<h3>歷屆選秀</h3>'+S.xh58.slice(-4).reverse().map(h=>`<div class=m><b>第${Math.floor(h.t/12)+1}年・${h.who}主持</b><br>留牌子：${h.kept.join('、')||'無'}<br>撂牌子：${h.out.join('、')||'無'}</div>`).join('');
   main.insertBefore(d,main.firstChild)}}}catch(e){console.log('r59h',e)}return r};
+})();
+
+/* ===== round60：太后期新妃嬪的家族與故事線 ===== */
+(function(){
+const cbs=()=>{const x=rx();if(!x.cb)x.cb=[];return x.cb};
+const ensure=()=>cbs().forEach(c=>{if(!c.fam)c.fam=window.mkFam58(c.ty||'');if(!c.tr)c.tr=window.TR58[R(0,3)]});
+const RKL=['答應','常在','貴人','嬪','貴嬪','妃'];
+const rkOf=c=>c.rk||(c.fv>=70?'嬪':c.fv>=55?'貴人':'常在');
+function demote(c){const i=RKL.indexOf(rkOf(c));c.rk=RKL[Math.max(0,i-1)]}
+const EV=[
+ // 母家請託
+ c=>c.fam.pw>=20&&P(.9)?{w:3,e:()=>infEv(`${c.n}的父親${c.fam.job}托人遞話，希望太后替他在朝中謀一個更好的位子。`,[
+  ['准其升遷，賣個人情（忠誠＋10、朝局－0.5）',()=>{c.ld=cl(c.ld+10);c.fam.pw=cl(c.fam.pw+8);S.nat.stab=cl(S.nat.stab-.5);if(S.fp)S.fp[0]=cl(S.fp[0]+2);return`${c.fam.job}得了新差事，${c.n}對你感恩戴德。（忠誠＋10、朝局－0.5）`}],
+  ['改給個閒職安撫（忠誠＋3）',()=>{c.ld=cl(c.ld+3);return`${c.n}的父親雖有些失望，仍謝了恩。（忠誠＋3）`}],
+  ['婉言回絕，說朝廷自有規矩（忠誠－6、權柄＋1）',()=>{c.ld=cl(c.ld-6);S.reg.pw+=1;return`${c.n}面上恭順，心裡記了一筆。（忠誠－6、權柄＋1）`}]])}:null,
+ // 有孕
+ c=>c.kids<3&&c.fv>=50?{w:3,e:()=>infEv(`${c.n}診出了喜脈，皇帝很是高興。`,[
+  ['厚賞並派得力嬤嬤照料（耗銀30、忠誠＋8）',()=>{if(!pay(30))return'銀兩不足，只能口頭囑咐。';c.ld=cl(c.ld+8);if(P(.9)){c.kids++;S.reg.k.bond=cl(S.reg.k.bond+2);return`${c.n}平安誕下皇嗣，你又添了皇孫。（忠誠＋8、皇帝孝心＋2）`}return`${c.n}終究沒保住胎兒，你的賞賜與照料她記在心裡。（忠誠＋8）`}],
+  ['一切照例，不特別過問',()=>{if(P(.75)){c.kids++;return`${c.n}誕下皇嗣。`}return`${c.n}不幸小產，宮中暗自議論。`}],
+  ['暗中放任皇后與其周旋（皇后好感－，風險大）',()=>{const e=rx().emp;if(P(.4)){S.reg.k.bond=cl(S.reg.k.bond-6);c.ld=cl(c.ld-15);return`${c.n}的胎兒沒保住，皇帝追查，矛頭隱隱指向慈寧宮。（皇帝孝心－6、忠誠－15）`}c.kids=c.kids;return`${c.n}的胎像不穩，終究平安無事，你什麼都沒說。`}]])}:null,
+ // 外戚坐大
+ c=>c.fam.pw>=55&&c.fv>=60?{w:4,e:()=>infEv(`${c.n}得寵，其父${c.fam.job}在朝中漸成氣候，御史私下議論外戚專權。`,[
+  ['敲打其父，令其收斂（忠誠－8、朝局＋0.5）',()=>{c.ld=cl(c.ld-8);c.fam.pw=cl(c.fam.pw-10);S.nat.stab=cl(S.nat.stab+.5);return`${c.fam.job}被申飭後安分了許多。（忠誠－8、朝局＋0.5）`}],
+  ['厚賞籠絡，化為己用（耗銀30、忠誠＋10）',()=>{if(!pay(30))return'銀兩不足，籠絡不成。';c.ld=cl(c.ld+10);return`${c.fam.job}感激你的賞賜，願為你所用。（忠誠＋10）`}],
+  ['置之不理（對手勢力＋2、朝局－1）',()=>{S.reg.rv=cl(S.reg.rv+2);S.nat.stab=cl(S.nat.stab-1);return`外戚日益坐大，朝中有人開始投靠。（對手勢力＋2、朝局－1）`}]])}:null,
+ // 兩妃相爭
+ c=>{const o=cbs().filter(z=>z!==c);if(!o.length)return null;const d=o[R(0,o.length-1)];return{w:3,e:()=>infEv(`${c.n}與${d.n}為了爭寵鬧到你面前，各說各的理。`,[
+  [`偏袒${c.n}（${c.n}忠誠＋8、${d.n}帝寵－6）`,()=>{c.ld=cl(c.ld+8);d.fv=cl(d.fv-6);d.ld=cl(d.ld-4);return`${d.n}受了委屈，卻不敢作聲。`}],
+  [`偏袒${d.n}（${d.n}忠誠＋8、${c.n}帝寵－6）`,()=>{d.ld=cl(d.ld+8);c.fv=cl(c.fv-6);c.ld=cl(c.ld-4);return`${c.n}受了委屈，卻不敢作聲。`}],
+  ['各打五十大板，令兩人禁足半月',()=>{c.fv=cl(c.fv-3);d.fv=cl(d.fv-3);S.reg.pw+=1;return`兩人都收斂了。（權柄＋1）`}]])}},
+ // 巫蠱流言
+ c=>c.ld<65?{w:2,e:()=>infEv(`宮中傳出流言，說${c.n}私設神位、行厭勝之術，已有人告到太后面前。`,[
+  ['徹查到底（真相未必有利）',()=>{if(c.ld<50&&P(.65)){demote(c);c.fv=cl(c.fv-20);S.reg.k.bond=cl(S.reg.k.bond-1);return`查實${c.n}確有不軌，被降為${rkOf(c)}，帝寵大減。`}c.ld=cl(c.ld+10);S.reg.k.bond=cl(S.reg.k.bond-2);return`查下來是有人誣陷，${c.n}洗清冤屈，卻驚動了皇帝。（忠誠＋10、皇帝孝心－2）`}],
+  ['壓下此事，私下告誡（忠誠＋5）',()=>{c.ld=cl(c.ld+5);return`你把風聲壓了下去，${c.n}知道欠了你一個人情。（忠誠＋5）`}],
+  ['交皇后處置（皇后好感＋4、帝寵－8）',()=>{const e=rx().emp;if(e&&!e.gone)e.gl=cl(e.gl+4);c.fv=cl(c.fv-8);return`皇后從嚴處置，${c.n}失了顏面。`}]])}:null,
+ // 獻忠
+ c=>c.ld>=62&&rx().emp&&!rx().emp.gone?{w:2,e:()=>{const e=rx().emp;return infEv(`${c.n}悄悄來見太后，說皇后近日行事有幾處不妥，願意作證。`,[
+  ['收下消息，留作日後之用（皇后罪證＋1）',()=>{e.flt=(e.flt||0)+1;c.ld=cl(c.ld+4);return`你記下了皇后的把柄。（皇后罪證＋1、忠誠＋4）`}],
+  ['訓斥她不該挑撥（忠誠－4、皇后好感＋3）',()=>{c.ld=cl(c.ld-4);e.gl=cl(e.gl+3);return`${c.n}碰了一鼻子灰，悻悻告退。`}]])}}:null];
+const _rm=rmend;rmend=function(){const r=_rm.apply(this,arguments);
+ try{if(!S||!S.reg||S.over)return r;ensure();const cb=cbs();if(!cb.length||S.gcd>0||S.t<(S.cb60||0)||!P(.07)||(S.ev||S.ch||S.scn))return r;
+  const c=cb[R(0,cb.length-1)],pool=EV.map(f=>f(c)).filter(Boolean);if(!pool.length)return r;let t=pool.reduce((a,x)=>a+x.w,0),k=Math.random()*t,pick=pool[0];for(const x of pool){k-=x.w;if(k<=0){pick=x;break}}
+  S.cb60=S.t+6;infPush(pick.e())}catch(e){console.log('r60',e)}return r};
 })();
 
 deco();intro();
