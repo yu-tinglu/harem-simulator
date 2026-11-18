@@ -6927,6 +6927,10 @@ try{const _u=uiPost;uiPost=function(){const r=_u.apply(this,arguments);try{
   d.querySelector('select').onchange=function(){S.pol=this.value;d.querySelector('span').textContent=(typeof POLD!=='undefined'&&POLD[S.pol])||'';const sel=document.querySelector('.autobar>select');if(sel)sel.value=S.pol};
   bar.appendChild(d);document.body.style.setProperty('--acb','92px')}}catch(e){console.log('r75p',e)}return r};window.uiPost=uiPost}catch(e){console.log('r75',e)}
 })();
+/* ===== V169：數值列放到「本月重點」之上 ===== */
+(function(){try{const _u=uiPost;uiPost=function(){const r=_u.apply(this,arguments);try{
+ const main=document.querySelector('main');if(main){const ss=main.querySelector(':scope>.stat-strip'),pt=main.querySelector(':scope>.pt61');
+  if(ss&&pt&&(pt.compareDocumentPosition(ss)&Node.DOCUMENT_POSITION_FOLLOWING))main.insertBefore(ss,pt)}}catch(e){console.log('r75s',e)}return r};window.uiPost=uiPost}catch(e){console.log('r75',e)}})();
 
 deco();intro();
 
