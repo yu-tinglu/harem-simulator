@@ -7120,6 +7120,14 @@ const _u=uiPost;uiPost=function(){const r=_u.apply(this,arguments);try{
  if(cur&&cur!==S._rs79){if(!S.ev&&!S.ch&&!S.scn){S._rs79=cur;show(cur)}}
  else if(!cur)S._rs79=''}catch(e){console.log('r79u',e)}return r};window.uiPost=uiPost;
 })();
+/* ===== V175：後宮／子嗣頁的「展開／收合」連同外層摺疊卡片一起處理 ===== */
+(function(){try{const f=window.cmpAll49;if(typeof f!=='function')return;
+window.cmpAll49=function(o){const r=f.apply(this,arguments);try{
+ const main=document.querySelector('main');if(!main)return r;
+ if(o){main.querySelectorAll('details.con').forEach(d=>{let p=d.parentElement;while(p&&p!==main){if(p.classList&&p.classList.contains('fold')&&p.classList.contains('closed'))p.classList.remove('closed');p=p.parentElement}});
+}
+ const first=main.querySelector('details.con');if(first&&first.scrollIntoView)setTimeout(()=>first.scrollIntoView({block:o?'start':'center',behavior:'smooth'}),80)
+ }catch(e){console.log('r79c',e)}return r}}catch(e){}})();
 
 deco();intro();
 
