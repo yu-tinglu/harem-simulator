@@ -7410,7 +7410,7 @@ function ev83(){try{if(!S||!S.ev)return;const sc=document.querySelector('.scrim 
 function rt83(){try{document.querySelectorAll('.rt83').forEach(e=>e.remove());if(!S||!S.me||S.over||S.ev||S.scn||typeof TAB==='undefined'||TAB!=0)return;
  const ss=document.querySelector('main>.stat-strip')||document.querySelector('.stat-strip');if(!ss)return;
  const it=[['emp',S.reg?'新帝':'皇上']];if(S.dow&&!S.reg)it.push(['dow','太后']);it.push(['me',S.reg?'太后':'你']);
- const d=document.createElement('div');d.className='rt83';d.innerHTML=it.map(x=>`<button onclick="setTab(3)" aria-label="${x[1]}">${face83(x[0],30)}<span>${x[1]}</span></button>`).join('');
+ const d=document.createElement('div');d.className='rt83';d.innerHTML=it.map(x=>`<button onclick="setTab(3)" aria-label="${x[1]}">${face83(x[0],30)}<span>${x[1]}</span></button>`).join('')+(S.me.preg>0&&!S.reg?`<button onclick="setTab(2)" aria-label="孕期"><span style="padding-left:6px">🤰 孕 ${10-S.me.preg}／10 月</span></button>`:'');
  const g=document.querySelector('.goal82');(g||ss).insertAdjacentElement('afterend',d)}catch(e){console.log('r83top',e)}}
 function rost83(){try{if(typeof TAB==='undefined'||TAB!=1||!S)return;document.querySelectorAll('[data-list=roster]>details[data-i]').forEach(d=>{if(d.querySelector('.up83')||d.classList.contains('meRow'))return;
  const nm=(d.dataset.t||'').split(' ')[0];const n=(S.npcs||[]).find(x=>x.n===nm||x.name===nm);if(!n)return;
@@ -7421,12 +7421,15 @@ function ph83up(inp){try{const nm=decodeURIComponent(inp.dataset.nm),f=inp.files
  const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{try{const sz=240,c=document.createElement('canvas');c.width=c.height=sz;const x=c.getContext('2d');const s=Math.min(im.width,im.height),sx=(im.width-s)/2,sy=Math.max(0,(im.height-s)*.2);x.fillStyle='#fff';x.fillRect(0,0,sz,sz);x.drawImage(im,sx,sy,s,s,0,0,sz,sz);PH83[nm]=c.toDataURL('image/jpeg',.82);const ks=Object.keys(PH83);while(ks.length>40)delete PH83[ks.shift()];phSave83();ph83re(nm)}catch(e){}};im.src=fr.result};fr.readAsDataURL(f)}catch(e){}}
 function ph83rm(e){const nm=decodeURIComponent(e);delete PH83[nm];phSave83();ph83re(nm)}
 function mo83(w,title,sub){try{const o=document.getElementById('mo83');if(o)o.remove();const d=document.createElement('div');d.id='mo83';d.innerHTML=`<div class=c>${face83(w,128)}<h4>${title}</h4><p>${sub||''}</p></div>`;const cl=()=>{d.classList.add('out');setTimeout(()=>d.remove(),420)};d.onclick=cl;document.body.appendChild(d);setTimeout(cl,3600)}catch(e){}}
-function chk83(){try{if(!S||!S.me||S.over)return;const m=S.me,k=(m.kids||[]).length;if(!S._b83){S._b83={r:m.rank,k,g:!!S.reg};return}const b=S._b83;if(S.ev||S.ch||S.scn||document.querySelector('.scrim')||document.getElementById('mo83'))return;
+function chk83(){try{if(!S||!S.me||S.over)return;const m=S.me,k=(m.kids||[]).length;if(!S._b83){S._b83={r:m.rank,k,g:!!S.reg,p:m.preg>0};return}const b=S._b83;if(S.ev||S.ch||S.scn||document.querySelector('.scrim')||document.getElementById('mo83'))return;
  if(!!S.reg!==b.g){S._b83={r:m.rank,k,g:!!S.reg};return}
- if(m.rank>b.r){S._b83={r:m.rank,k,g:!!S.reg};mo83('me','晉封「'+RK[m.rank]+'」','你在後宮又向上走了一步')}
- else if(k>b.k){const kd=m.kids[k-1];S._b83={r:m.rank,k,g:!!S.reg};mo83('me','喜添子嗣',(kd&&kd.n?kd.n+'　':'')+'平安降生')}
- else{b.r=m.rank;b.k=k}}catch(e){}}
+ if(m.rank>b.r){S._b83={r:m.rank,k,g:!!S.reg,p:m.preg>0};mo83('me','晉封「'+RK[m.rank]+'」','你在後宮又向上走了一步')}
+ else if(m.preg>0&&!b.p&&!S.reg){S._b83={r:m.rank,k,g:!!S.reg,p:true};mo83('me','診出喜脈','孕期共 10 個月，預計'+MON[(S.t+m.preg)%12]+'月臨盆')}
+ else if(k>b.k){const kd=m.kids[k-1];S._b83={r:m.rank,k,g:!!S.reg,p:m.preg>0};mo83('me','喜添子嗣',(kd&&kd.n?kd.n+'　':'')+'平安降生')}
+ else{b.r=m.rank;b.k=k;b.p=m.preg>0}}catch(e){}}
 const _r83=render;render=function(){const r=_r83.apply(this,arguments);try{ev83();rt83();rost83();setTimeout(()=>{try{rt83()}catch(e){}},700);setTimeout(chk83,300)}catch(e){console.log('r83',e)}return r};
+
+const _ar83=autoRun;autoRun=function(){const r=_ar83.apply(this,arguments);try{if(S&&S.me&&!S.over&&!S.reg&&S.me.preg>0){ntfAdd('你已懷孕（孕 '+(10-S.me.preg)+'／10 月），預計'+MON[(S.t+S.me.preg)%12]+'月臨盆。','me');if(!S.ev&&!S.scn&&!S.ch)render()}}catch(e){console.log('r83ar',e)}return r};
 
 deco();intro();
 
