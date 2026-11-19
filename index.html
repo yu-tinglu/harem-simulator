@@ -7372,6 +7372,62 @@ who.insertAdjacentElement('afterend',c)}catch(e){console.log('r82i',e)}return r}
 const _pr=ptRefresh;ptRefresh=function(){const r=_pr.apply(this,arguments);try{if(!S)intro()}catch(e){}return r};
 }catch(e){console.log('r82',e)}
 
+/* ===== V196: 人物畫像 — 事件彈窗頭像／行動頁頭像列／名冊可上傳／關鍵時刻放大 ===== */
+(function(){const st=document.createElement('style');st.id='st83';st.textContent=`
+.f83{display:inline-flex;flex:none;border-radius:50%;overflow:hidden;box-shadow:0 0 0 2px #d9b45a,0 0 0 3.5px rgba(217,180,90,.28);background:#f3e6d4;vertical-align:middle}
+.f83 svg{width:100%;height:100%;display:block}
+.ev83{display:flex;align-items:center;gap:10px;margin:8px 0 6px}
+.ev83 b{font-size:15px;color:#7a2a35;display:block}
+.ev83 small{display:block;font-size:12px;color:#8a6a60}
+.rt83{display:flex;justify-content:center;gap:10px;margin:-2px 0 10px;flex-wrap:nowrap}
+.rt83 button{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:6px;font-size:12px;color:#6b3b32;cursor:pointer;padding:3px 9px 3px 4px;border-radius:20px;background:rgba(255,255,255,.55);border:1px solid rgba(190,120,100,.3)}
+.up83{margin-top:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;color:#8a6a60}
+.up83 button{font-size:12px}
+#mo83{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;background:rgba(30,6,12,.55);animation:mo83i .35s ease}
+#mo83 .c{width:min(300px,80vw);padding:22px 18px 20px;border-radius:18px;text-align:center;background:linear-gradient(160deg,#6e1424,#3a0912);border:2px solid #d9b45a;box-shadow:0 0 0 5px rgba(217,180,90,.2),0 14px 40px rgba(0,0,0,.45);animation:mo83c .5s cubic-bezier(.2,1.3,.4,1)}
+#mo83 .f83{box-shadow:0 0 0 3px #e6c675,0 0 0 8px rgba(230,198,117,.25),0 0 24px rgba(230,198,117,.45)}
+#mo83 h4{margin:16px 0 4px;font-size:17px;color:#f0cd78;letter-spacing:.12em;font-weight:700}
+#mo83 p{margin:0;font-size:13.5px;color:#f3dfc4}
+#mo83.out{opacity:0;transition:opacity .4s}
+@keyframes mo83i{from{opacity:0}to{opacity:1}}@keyframes mo83c{from{transform:scale(.7)}to{transform:scale(1)}}
+`;document.head.appendChild(st)})();
+const PH83=(()=>{try{return JSON.parse(localStorage.getItem('hg83_ph')||'{}')}catch(e){return{}}})();
+function phSave83(){try{localStorage.setItem('hg83_ph',JSON.stringify(PH83))}catch(e){}}
+function face83(w,sz){let src='',pos='50% 25%',svg='';
+ try{if(w==='me'){src=AVS[0]||'';pos='var(--avpos,50% 25%)';if(!src)svg=avSvg(S.me,sz)}
+ else if(w==='emp'||w==='dow'){src=PT[w].src;pos='var(--pos-'+w+')'}
+ else if(w&&w.n){src=PH83[w.n]||'';if(!src)svg=avSvg(w,sz)}}catch(e){}
+ const inner=src?`<img src="${src}" alt="" style="width:100%;height:100%;object-fit:cover;object-position:${pos};display:block">`:svg;
+ return`<span class=f83 style="width:${sz}px;height:${sz}px">${inner}</span>`}
+function subj83(t){try{const s=String(t||'').replace(/<[^>]+>/g,'');const ix=ks=>{let b=1e9;ks.forEach(k=>{const i=s.indexOf(k);if(i>=0&&i<b)b=i});return b};
+ const c=[];const e=ix(['皇上','皇帝','陛下','天子']);if(e<1e9)c.push([e,'emp','皇上']);
+ if(S.dow&&!S.reg){const d=ix(['太后']);if(d<1e9)c.push([d,'dow','太后'])}
+ const mi=ix([S.me.n]);if(mi<1e9)c.push([mi,'me',S.me.n+'（你）']);
+ (S.npcs||[]).forEach(n=>{const i=ix([n.n]);if(i<1e9)c.push([i,n,n.n,(typeof RKN==='function'&&!n.st)?RKN(n):(n.st||'')])});
+ c.sort((a,b)=>a[0]-b[0]);return c[0]||null}catch(e){return null}}
+function ev83(){try{if(!S||!S.ev)return;const sc=document.querySelector('.scrim .scroll');if(!sc||sc.querySelector('.ev83'))return;const s=subj83(S.ev.t);if(!s)return;
+ const tag=sc.querySelector('.tag');const h=`<div class=ev83>${face83(s[1],52)}<div><b>${s[2]}</b>${s[3]?`<small>${s[3]}</small>`:''}</div></div>`;if(tag)tag.insertAdjacentHTML('afterend',h);else sc.insertAdjacentHTML('afterbegin',h)}catch(e){console.log('r83ev',e)}}
+function rt83(){try{document.querySelectorAll('.rt83').forEach(e=>e.remove());if(!S||!S.me||S.over||S.ev||S.scn||typeof TAB==='undefined'||TAB!=0)return;
+ const ss=document.querySelector('main>.stat-strip')||document.querySelector('.stat-strip');if(!ss)return;
+ const it=[['emp',S.reg?'新帝':'皇上']];if(S.dow&&!S.reg)it.push(['dow','太后']);it.push(['me',S.reg?'太后':'你']);
+ const d=document.createElement('div');d.className='rt83';d.innerHTML=it.map(x=>`<button onclick="setTab(3)" aria-label="${x[1]}">${face83(x[0],30)}<span>${x[1]}</span></button>`).join('');
+ const g=document.querySelector('.goal82');(g||ss).insertAdjacentElement('afterend',d)}catch(e){console.log('r83top',e)}}
+function rost83(){try{if(typeof TAB==='undefined'||TAB!=1||!S)return;document.querySelectorAll('[data-list=roster]>details[data-i]').forEach(d=>{if(d.querySelector('.up83')||d.classList.contains('meRow'))return;
+ const nm=(d.dataset.t||'').split(' ')[0];const n=(S.npcs||[]).find(x=>x.n===nm||x.name===nm);if(!n)return;
+ const av=d.querySelector('summary .av18');if(av&&PH83[n.n])av.innerHTML=face83(n,22);
+ const nmE=encodeURIComponent(n.n);d.insertAdjacentHTML('beforeend',`<div class=up83>${face83(n,56)}<button class=s onclick="this.nextElementSibling.click()">${PH83[n.n]?'更換照片':'上傳照片'}</button><input type=file accept="image/*" hidden data-nm="${nmE}" onchange="ph83up(this)">${PH83[n.n]?`<button class=s onclick="ph83rm('${nmE}')">移除</button>`:''}<span>只存在這台裝置</span></div>`)}) }catch(e){console.log('r83ro',e)}}
+function ph83re(nm){try{render();setTimeout(()=>{const d=Array.from(document.querySelectorAll('[data-list=roster]>details[data-i]')).find(e=>(e.dataset.t||'').split(' ')[0]===nm);if(d){d.open=true;d.scrollIntoView({block:'center'})}},60)}catch(e){}}
+function ph83up(inp){try{const nm=decodeURIComponent(inp.dataset.nm),f=inp.files&&inp.files[0];if(!f||!/^image\//.test(f.type))return;
+ const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{try{const sz=240,c=document.createElement('canvas');c.width=c.height=sz;const x=c.getContext('2d');const s=Math.min(im.width,im.height),sx=(im.width-s)/2,sy=Math.max(0,(im.height-s)*.2);x.fillStyle='#fff';x.fillRect(0,0,sz,sz);x.drawImage(im,sx,sy,s,s,0,0,sz,sz);PH83[nm]=c.toDataURL('image/jpeg',.82);const ks=Object.keys(PH83);while(ks.length>40)delete PH83[ks.shift()];phSave83();ph83re(nm)}catch(e){}};im.src=fr.result};fr.readAsDataURL(f)}catch(e){}}
+function ph83rm(e){const nm=decodeURIComponent(e);delete PH83[nm];phSave83();ph83re(nm)}
+function mo83(w,title,sub){try{const o=document.getElementById('mo83');if(o)o.remove();const d=document.createElement('div');d.id='mo83';d.innerHTML=`<div class=c>${face83(w,128)}<h4>${title}</h4><p>${sub||''}</p></div>`;const cl=()=>{d.classList.add('out');setTimeout(()=>d.remove(),420)};d.onclick=cl;document.body.appendChild(d);setTimeout(cl,3600)}catch(e){}}
+function chk83(){try{if(!S||!S.me||S.over)return;const m=S.me,k=(m.kids||[]).length;if(!S._b83){S._b83={r:m.rank,k,g:!!S.reg};return}const b=S._b83;if(S.ev||S.ch||S.scn||document.querySelector('.scrim')||document.getElementById('mo83'))return;
+ if(!!S.reg!==b.g){S._b83={r:m.rank,k,g:!!S.reg};return}
+ if(m.rank>b.r){S._b83={r:m.rank,k,g:!!S.reg};mo83('me','晉封「'+RK[m.rank]+'」','你在後宮又向上走了一步')}
+ else if(k>b.k){const kd=m.kids[k-1];S._b83={r:m.rank,k,g:!!S.reg};mo83('me','喜添子嗣',(kd&&kd.n?kd.n+'　':'')+'平安降生')}
+ else{b.r=m.rank;b.k=k}}catch(e){}}
+const _r83=render;render=function(){const r=_r83.apply(this,arguments);try{ev83();rt83();rost83();setTimeout(()=>{try{rt83()}catch(e){}},700);setTimeout(chk83,300)}catch(e){console.log('r83',e)}return r};
+
 deco();intro();
 
 
