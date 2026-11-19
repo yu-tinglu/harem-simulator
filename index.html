@@ -7379,8 +7379,8 @@ const _pr=ptRefresh;ptRefresh=function(){const r=_pr.apply(this,arguments);try{i
 .ev83{display:flex;align-items:center;gap:10px;margin:8px 0 6px}
 .ev83 b{font-size:15px;color:#7a2a35;display:block}
 .ev83 small{display:block;font-size:12px;color:#8a6a60}
-.rt83{display:flex;justify-content:center;gap:10px;margin:-2px 0 10px;flex-wrap:nowrap}
-.rt83 button{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:6px;font-size:12px;color:#6b3b32;cursor:pointer;padding:3px 9px 3px 4px;border-radius:20px;background:rgba(255,255,255,.55);border:1px solid rgba(190,120,100,.3)}
+.rt83{display:flex;justify-content:flex-start;gap:8px;margin:-2px 0 10px;flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px}.rt83 button{flex:none;white-space:nowrap}
+.rt83 button{all:unset;flex:none;white-space:nowrap;box-sizing:border-box;display:flex;align-items:center;gap:6px;font-size:12px;color:#6b3b32;cursor:pointer;padding:3px 9px 3px 4px;border-radius:20px;background:rgba(255,255,255,.55);border:1px solid rgba(190,120,100,.3)}
 .up83{margin-top:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;color:#8a6a60}
 .up83 button{font-size:12px}
 #mo83{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;background:rgba(30,6,12,.55);animation:mo83i .35s ease}
@@ -7403,6 +7403,7 @@ function subj83(t){try{const s=String(t||'').replace(/<[^>]+>/g,'');const ix=ks=
  const c=[];const e=ix(['皇上','皇帝','陛下','天子']);if(e<1e9)c.push([e,'emp','皇上']);
  if(S.dow&&!S.reg){const d=ix(['太后']);if(d<1e9)c.push([d,'dow','太后'])}
  const mi=ix([S.me.n]);if(mi<1e9)c.push([mi,'me',S.me.n+'（你）']);
+ (S.me.kids||[]).forEach(k=>{const i=ix([k.n]);if(i<1e9)c.push([i,k,k.n,'你的孩子'])});
  (S.npcs||[]).forEach(n=>{const i=ix([n.n]);if(i<1e9)c.push([i,n,n.n,(typeof RKN==='function'&&!n.st)?RKN(n):(n.st||'')])});
  c.sort((a,b)=>a[0]-b[0]);return c[0]||null}catch(e){return null}}
 function ev83(){try{if(!S||!S.ev)return;const sc=document.querySelector('.scrim .scroll');if(!sc||sc.querySelector('.ev83'))return;const s=subj83(S.ev.t);if(!s)return;
@@ -7410,7 +7411,8 @@ function ev83(){try{if(!S||!S.ev)return;const sc=document.querySelector('.scrim 
 function rt83(){try{document.querySelectorAll('.rt83').forEach(e=>e.remove());if(!S||!S.me||S.over||S.ev||S.scn||typeof TAB==='undefined'||TAB!=0)return;
  const ss=document.querySelector('main>.stat-strip')||document.querySelector('.stat-strip');if(!ss)return;
  const it=[['emp',S.reg?'新帝':'皇上']];if(S.dow&&!S.reg)it.push(['dow','太后']);it.push(['me',S.reg?'太后':'你']);
- const d=document.createElement('div');d.className='rt83';d.innerHTML=it.map(x=>`<button onclick="setTab(3)" aria-label="${x[1]}">${face83(x[0],30)}<span>${x[1]}</span></button>`).join('')+(S.me.preg>0&&!S.reg?`<button onclick="setTab(2)" aria-label="孕期"><span style="padding-left:6px">🤰 孕 ${10-S.me.preg}／10 月</span></button>`:'');
+ const qn=typeof S.qi==='number'?S.npcs[S.qi]:null;if(qn&&!qn.st)it.push([qn,'皇后']);const rv=(S.npcs||[]).filter(x=>!x.st&&x!==qn).sort((a,b)=>(b.host||0)-(a.host||0))[0];if(rv&&(rv.host||0)>=45)it.push([rv,'宿敵']);
+ const d=document.createElement('div');d.className='rt83';d.innerHTML=it.map(x=>`<button onclick="setTab(${typeof x[0]==='object'?1:3})" aria-label="${x[1]}">${face83(x[0],30)}<span>${x[1]}</span></button>`).join('')+(S.me.preg>0&&!S.reg?`<button onclick="setTab(2)" aria-label="孕期"><span style="padding-left:6px">🤰 孕 ${10-S.me.preg}／10 月</span></button>`:'');
  const g=document.querySelector('.goal82');(g||ss).insertAdjacentElement('afterend',d)}catch(e){console.log('r83top',e)}}
 function rost83(){try{if(typeof TAB==='undefined'||TAB!=1||!S)return;document.querySelectorAll('[data-list=roster]>details[data-i]').forEach(d=>{if(d.querySelector('.up83')||d.classList.contains('meRow'))return;
  const nm=(d.dataset.t||'').split(' ')[0];const n=(S.npcs||[]).find(x=>x.n===nm||x.name===nm);if(!n)return;
@@ -7421,7 +7423,9 @@ function ph83up(inp){try{const nm=decodeURIComponent(inp.dataset.nm),f=inp.files
  const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{try{const sz=240,c=document.createElement('canvas');c.width=c.height=sz;const x=c.getContext('2d');const s=Math.min(im.width,im.height),sx=(im.width-s)/2,sy=Math.max(0,(im.height-s)*.2);x.fillStyle='#fff';x.fillRect(0,0,sz,sz);x.drawImage(im,sx,sy,s,s,0,0,sz,sz);PH83[nm]=c.toDataURL('image/jpeg',.82);const ks=Object.keys(PH83);while(ks.length>40)delete PH83[ks.shift()];phSave83();ph83re(nm)}catch(e){}};im.src=fr.result};fr.readAsDataURL(f)}catch(e){}}
 function ph83rm(e){const nm=decodeURIComponent(e);delete PH83[nm];phSave83();ph83re(nm)}
 function mo83(w,title,sub){try{const o=document.getElementById('mo83');if(o)o.remove();const d=document.createElement('div');d.id='mo83';d.innerHTML=`<div class=c>${face83(w,128)}<h4>${title}</h4><p>${sub||''}</p></div>`;const cl=()=>{d.classList.add('out');setTimeout(()=>d.remove(),420)};d.onclick=cl;document.body.appendChild(d);setTimeout(cl,3600)}catch(e){}}
-function chk83(){try{if(!S||!S.me||S.over)return;const m=S.me,k=(m.kids||[]).length;if(!S._b83){S._b83={r:m.rank,k,g:!!S.reg,p:m.preg>0};return}const b=S._b83;if(S.ev||S.ch||S.scn||document.querySelector('.scrim')||document.getElementById('mo83'))return;
+function chk83(){try{
+ if(S&&S.me&&!S.over&&!S.reg){const q=S.qi;if(S._q83===undefined)S._q83=q;else if(q!==S._q83&&!S.ev&&!document.querySelector('.scrim')&&!document.getElementById('mo83')&&!document.getElementById('rc86')){const old=S._q83;S._q83=q;if(q==='me')mo83('me','你登上後位','六宮之主，自此是你');else if(typeof q==='number'&&S.npcs[q]&&!S.npcs[q].st&&old!==undefined)mo83(S.npcs[q],'新后冊立',S.npcs[q].n+'入主中宮')}}
+if(!S||!S.me||S.over)return;const m=S.me,k=(m.kids||[]).length;if(!S._b83){S._b83={r:m.rank,k,g:!!S.reg,p:m.preg>0};return}const b=S._b83;if(S.ev||S.ch||S.scn||document.querySelector('.scrim')||document.getElementById('mo83'))return;
  if(!!S.reg!==b.g){S._b83={r:m.rank,k,g:!!S.reg};return}
  if(m.rank>b.r){S._b83={r:m.rank,k,g:!!S.reg,p:m.preg>0};mo83('me','晉封「'+RK[m.rank]+'」','你在後宮又向上走了一步')}
  else if(m.preg>0&&!b.p&&!S.reg){S._b83={r:m.rank,k,g:!!S.reg,p:true};mo83('me','診出喜脈','孕期共 10 個月，預計'+MON[(S.t+m.preg)%12]+'月臨盆')}
@@ -7476,8 +7480,8 @@ const _mc84=miscarry;miscarry=function(n){const r=_mc84.apply(this,arguments);tr
 ACT.push(['安胎調養','請太醫與護衛看護，三個月內孕期受襲的風險大減（耗銀40）',()=>{const m=S.me,g=pg84();if(!(m.preg>0)||S.reg)return L('你目前並未有孕。');if(g.guard>0)return L('安胎的人手仍在，不必重複安排。');if(!pay(40))return L('銀兩不足。');g.guard=3;m.hp=Math.min(100,m.hp+4);L('你請太醫日日請脈，又調了信得過的護衛守在宮門外。三個月內，旁人難以下手。')}]);const IA84=ACT.length-1;
 ACT.push(['追查孕事','查出是誰在孕期暗算你，再決定如何處置',()=>{const m=S.me,g=pg84();if(g.cul==null||g.done||S.t>g.exp)return L('眼下沒有需要追查的孕期之事。');
  if(g.known==null)return choose('追查孕期遇襲之事',[{l:'秘密查探（耗銀30）',f(){if(!pay(30))return L('銀兩不足。');const n=S.npcs[g.cul];
-  if(P(cl(.3+m.scheme/200+m.ally/300+(g.hint||0)*.15+tf('insight')*.15,.15,.9))){g.known=g.cul;g.sure=1;S.evid[g.cul]=(S.evid[g.cul]||0)+2;L(`你的眼線查實了：暗中動手的正是${n.n}，證據確鑿。`);return}
-  const pool=S.npcs.map((x,i)=>i).filter(i=>!S.npcs[i].st&&i!==g.cul),w=pool.length&&P(.5)?pk(pool):g.cul;g.known=w;g.sure=0;L(`線索似乎指向${S.npcs[w].n}，但證據還不夠扎實。`)}},{l:'先不追究',f(){L('你把此事壓在心底，暫且按下。')}}]);
+  if(P(cl(.3+m.scheme/200+m.ally/300+(g.hint||0)*.15+tf('insight')*.15,.15,.9))){g.known=g.cul;g.sure=1;S.evid[g.cul]=(S.evid[g.cul]||0)+2;L(`你的眼線查實了：暗中動手的正是${n.n}，證據確鑿。`);S.q.unshift(conf86(g.cul,true));return}
+  const pool=S.npcs.map((x,i)=>i).filter(i=>!S.npcs[i].st&&i!==g.cul),w=pool.length&&P(.5)?pk(pool):g.cul;g.known=w;g.sure=0;L(`線索似乎指向${S.npcs[w].n}，但證據還不夠扎實。`);S.q.unshift(conf86(w,false))}},{l:'先不追究',f(){L('你把此事壓在心底，暫且按下。')}}]);
  const i=g.known,n=S.npcs[i],tr=i===g.cul;
  choose(`處置${n.n}（${g.sure?'證據確鑿':'證據不足，不能確定'}）`,[
   {l:'上報皇上',f(){g.done=1;if(g.sure){S.evid[i]=Math.max(S.evid[i]||0,3);report(n,i)}else{if(tr&&P(.4)){S.evid[i]=Math.max(S.evid[i]||0,2);report(n,i)}else{m.favor-=8;n.host=cl(n.host+15);L('皇上聽了你的指控，覺得證據不足，反疑你借孕邀寵、構陷他人。')}}}},
@@ -7600,6 +7604,54 @@ function rc86Show(b,why){try{if(!S||!S.me||S.over||S.reg)return;const m=S.me,mo=
  const el=document.createElement('div');el.id='rc86';el.innerHTML=`<div class=c><h4>這 ${mo} 個月的回顧</h4><div class=sub>第 ${Math.floor(b.t/12)+1} 年 ${b.t%12+1} 月 → 第 ${Math.floor(S.t/12)+1} 年 ${S.t%12+1} 月</div><div class=chips>${ch.join('')}</div>${tl?`<h5>發生了什麼</h5><ul style="margin:0;padding:0">${tl}</ul>`:''}${dl?`<h5>替你做的決定${dec.length>5?`（另有 ${dec.length-5} 件）`:''}</h5><ul style="margin:0;padding:0">${dl}</ul><div class=sub style="margin-top:4px">想親自決定每件事，到「進階」把遇到事件時改成「每件都讓我決定」。</div>`:''}${why?`<div class=why>已停下：${why}</div>`:''}<button onclick="document.getElementById('rc86').remove()">知道了</button></div>`;
  el.addEventListener('click',e=>{if(e.target===el)el.remove()});document.body.appendChild(el)}catch(e){console.log('r86',e)}}
 let _RC86=0;const _ar86=autoRun;autoRun=function(n){if(_RC86||!S||!S.me||S.over||S.reg||S.scn||S.ev||S.ch)return _ar86.apply(this,arguments);_RC86=1;let b;try{b=rc86Snap()}catch(e){}try{const r=_ar86.apply(this,arguments);try{if(b&&S&&S.me&&!S.over&&!S.reg){const w=S.ev?'有事件等你決定':S.scn?'有重要的事要你決定':'';setTimeout(()=>rc86Show(b,w),350)}}catch(e){}return r}finally{_RC86=0}};
+
+/* ===== V202: 人情簿（恩怨長線）／孩子的記憶／孕期追查對質／失子之後 ===== */
+function led86(){return S.led86=S.led86||[]}
+const snapN86=()=>{const o={};(S.npcs||[]).forEach(n=>{if(n&&n.n)o[n.n]=[n.al||0,n.host||0]});return o};
+const _V86=V;V=function(i){let a=null;try{if(S&&S.me&&S.ev&&S.ev.o&&S.ev.o[i])a=snapN86()}catch(e){}
+ const r=_V86.apply(this,arguments);
+ try{if(a&&S&&S.npcs){const L=led86();S.npcs.forEach(n=>{const p=a[n.n];if(!p||n.st)return;const dA=(n.al||0)-p[0],dH=(n.host||0)-p[1];
+  if(dA>=12&&!L.some(x=>x.n===n.n&&x.k==='恩'&&S.t-x.t<12))L.push({n:n.n,t:S.t,k:'恩'});
+  else if((dH>=10||dA<=-10)&&!L.some(x=>x.n===n.n&&x.k==='怨'&&S.t-x.t<12))L.push({n:n.n,t:S.t,k:'怨'})});if(L.length>12)L.splice(0,L.length-12)}}catch(e){console.log('r87v',e)}
+ return r};
+function payback86(){try{if(!S||!S.me||S.over||S.reg||S.ev||S.ch||S.scn||(S.q||[]).length)return;if(S.t-(S.lp86===undefined?-9:S.lp86)<4)return;const L=led86();
+ const el=L.filter(x=>S.t-x.t>=5&&S.t-x.t<=40);if(!el.length||!P(.12))return;const x=pk(el),n=S.npcs.find(y=>y.n===x.n);L.splice(L.indexOf(x),1);if(!n||n.st)return;S.lp86=S.t;const m=S.me,i=S.npcs.indexOf(n);let e;
+ if(x.k==='恩'){const k=R(0,2);
+  if(k===0&&m.preg>0&&!S.reg)e={keep:1,t:`${n.n}悄悄遣人來傳話：「娘娘有孕在身，我替您留意了小廚房和宮門口，有任何風吹草動，我一定先告訴您。」`,o:[['心領了，請她多費心',()=>{const g=pg84();g.guard=Math.max(g.guard||0,3);n.al+=6;return`${n.n}說到做到，接下來三個月，你的飲食起居多了一雙看不見的眼睛。`}],['謝過，但不敢連累她',()=>{n.al+=10;return`${n.n}說：「當年娘娘也沒想過連累我。」`}]]};
+  else if(k===1)e={keep:1,t:`${n.n}匆匆來見你，低聲說：「當初娘娘幫過我，我一直記著。如今聽見一件事，覺得該讓您知道。」`,o:[['請她說下去',()=>{const c=S.npcs.map((y,j)=>[y,j]).filter(z=>!z[0].st&&z[0]!==n&&(z[0].host||0)>=40);if(c.length){const[y,j]=pk(c);S.evid[j]=(S.evid[j]||0)+2;m.scheme+=3;return`她說出了${y.n}近來在背後的動作。你有了一條實實在在的證據。`}m.scheme+=2;return'她說的是一些宮裡的風向，雖不致命，卻讓你心裡有了底。'}],['不必了，只當沒來過',()=>{n.al+=4;return'你不想捲進是非，她也不勉強，臨走時深深看了你一眼。'}]]};
+  else e={keep:1,t:`${n.n}來求見，說自己遇上難處，想起你曾經幫過她，思來想去只有你能開口。`,o:[['聽她說完，盡力相助（耗銀30）',()=>{if(!pay(30))return'銀兩不足，只能安慰她幾句。';n.al+=22;m.ally+=5;return`你替她解了圍。${n.n}紅著眼眶說：「這輩子，我都不會忘。」`}],['委婉推辭',()=>{n.al-=8;return'她點點頭，笑得有些勉強。'}]]}}
+ else{const k=R(0,1);
+  if(k===0)e={keep:1,t:`宮裡漸漸傳出一些對你不利的話，話裡話外，你聽出是${n.n}早年結下的怨氣在作祟。`,o:[['求見皇上，把話說開',()=>{if(P(cl(m.favor/130+.2,.2,.8))){m.favor+=2;return`皇上聽完一笑置之。${n.n}沒討到好，反倒顯得失了分寸。`}m.favor-=6;return'皇上聽進了幾分，你這幾日少了不少笑臉。'}],['找人壓下流言',()=>{if(!pay(25)){m.favor-=3;return'銀兩不足，流言又傳開了幾日。'}return'你花了些銀子，流言才漸漸平息。'}],['登門見她，一次說清',()=>{if(P(.5)){n.host=cl(n.host-12);n.al+=8;return`${n.n}沒料到你親自上門，沉默許久，終究鬆了口。`}n.host=cl(n.host+8);return`${n.n}冷笑著送客，你知道這梁子又結深了。`}]]};
+  else e={keep:1,t:`你發現自己的份例時不時被人剋扣，查下去，發現是${n.n}在背後使絆子。`,o:[['忍下這口氣，暗中留證據',()=>{S.evid[i]=(S.evid[i]||0)+1;m.silver-=Math.min(m.silver,12);return`你默不作聲，卻把每一筆都記在了冊子上。`}],['找內務府總管理論（耗銀15）',()=>{if(!pay(15))return'銀兩不足，只能乾著急。';if(P(.6)){m.ally+=3;return'總管賠著笑臉改了賬，你的份例補了回來。'}return'總管推說是例行調整，你討不到說法。'}]]}}
+ if(e){S.q.push(e);next()}}catch(e){console.log('r87pay',e)}}
+/* 孩子的記憶 */
+function kidMem86(){try{if(!S||!S.me||S.over||S.reg||S.ev||S.ch||S.scn||(S.q||[]).length||S.t%12!==5)return;const m=S.me;
+ const c=(m.kids||[]).filter(k=>yr(k)>=8&&yr(k)<=22&&!k.m86&&(k.bond>=72||k.bond<=25));if(!c.length)return;const k=pk(c);k.m86=1;
+ if(k.bond>=72)S.q.push({keep:1,t:`${k.n}${yr(k)}歲了，今日特意來你宮裡，捧著一個小小的錦盒：「兒臣記得小時候，母親總是陪在身邊。這是兒臣親手做的。」`,o:[['打開看看，笑著收下',()=>{m.hp=Math.min(100,m.hp+4);k.bond=cl(k.bond+4);S.mood=cl(S.mood+1);return`盒子裡是一枚拙樸的平安結。你把它掛在了床頭。`}],['拉著他說一下午的話',()=>{k.bond=cl(k.bond+6);k.de=cl(k.de+2);return`${k.n}說了很多學堂裡的事，臨走時回頭朝你揮了揮手。`}]]});
+ else S.q.push({keep:1,t:`${k.n}已經${yr(k)}歲，近來請安總是匆匆一句就走，連眼睛都不太看你。身邊的嬤嬤說，孩子似乎對你有些心結。`,o:[['親自去問他心裡怎麼想',()=>{if(P(.6)){k.bond=cl(k.bond+14);return`${k.n}沉默了很久，才說出自己這些年的委屈。你們談到天黑，這個結總算鬆開了一點。`}k.bond=cl(k.bond+3);return`${k.n}只說「沒什麼」，但你看得出他在猶豫。`}],['嚴厲訓斥一頓',()=>{k.bond=cl(k.bond-8);k.pow=cl(k.pow+1);return`${k.n}低頭聽完，行禮告退，再沒說一個字。`}],['放任他，等他自己想通',()=>{k.bond=cl(k.bond-3);return'你告訴自己孩子大了總有自己的心思，只是心裡不免有些空落落的。'}]]});
+ next()}catch(e){console.log('r87kid',e)}}
+const _md87=mend;mend=function(){const r=_md87.apply(this,arguments);try{payback86();kidMem86()}catch(e){}return r};
+/* 孕期追查：對質場景 */
+function conf86(i,sure){const m=S.me,g=pg84(),n=S.npcs[i],tr=i===g.cul;
+ return{p84:1,t:sure?`證據確鑿——暗中對你動手的，正是${n.n}。她此刻被帶到了你的面前，臉上一點血色也沒有。`:`你請${n.n}來問話。她坐在你面前，手指不安地絞著帕子，眼神四處閃躲，看不出是心虛還是害怕。`,o:[
+ ['當面對質',()=>{const r=Math.random();if(sure||tr){if(r<.45){n.al+=20;n.host=cl(n.host-15);g.done=1;return`${n.n}撲通一聲跪下，哭著說是被人逼迫，求你饒她一命。你知道，從今往後她欠你一條命。`}if(r<.8){m.favor-=4;n.host=cl(n.host+10);return`${n.n}咬死不認，反說你因失子之痛遷怒於人。你一時拿不出更多證據，不歡而散。`}const q=S.qi!=='me'&&typeof S.qi==='number'?S.npcs[S.qi]:null;if(q&&q!==n){q.al+=4;S.evid[i]=(S.evid[i]||0)+1;return`皇后恰好趕到，聽完事情經過，沉下臉來：「宮裡容不得這種事。」她命人把${n.n}看管起來，證據也已經交到了你手上。`}S.evid[i]=(S.evid[i]||0)+1;return`${n.n}一時失言，露了破綻。你得到了一條關鍵的證據。`}
+  if(r<.5){n.host=cl(n.host+20);n.al-=12;m.favor-=2;return`${n.n}一臉受辱：「娘娘若當真疑心我，不如直接去回皇上！」她拂袖而去，從此視你為仇。這一回，你多半是冤枉了人。`}n.al+=4;g.hint=(g.hint||0)+1;return`${n.n}紅著眼眶辯白，你看得出她不似作偽。你收了口，線索卻因此又被拉開了。`}],
+ ['私下談條件',()=>{if(sure||tr){if(P(.7)){const g2=R(40,90);m.silver+=g2;n.host=cl(n.host-20);g.done=1;return`${n.n}答應賠你${g2}兩銀子，並發誓此後安分守己。你把這件事壓了下來。`}m.favor-=5;return'談判被人撞破，外面都在傳你拿孕事做文章。'}n.al-=6;return`${n.n}一頭霧水：「娘娘說的什麼條件？」你意識到自己問錯了人。`}],
+ ['直接上報皇上',()=>{g.done=1;if(sure){S.evid[i]=Math.max(S.evid[i]||0,3);report(n,i);return`你把證據呈給皇上。`}if(tr&&P(.4)){S.evid[i]=Math.max(S.evid[i]||0,2);report(n,i);return'你把疑點呈給皇上，皇上命人徹底查問。'}m.favor-=8;n.host=cl(n.host+15);return'皇上看完，覺得疑點太多、證據太少，反而叮囑你要養好身子，不要胡思亂想。'}],
+ ['先按下，不打草驚蛇',()=>{if(!sure&&!g.hint)g.hint=1;return'你把這張牌捏在手裡，暫時沒有動。'}]]}}
+/* 失子之後 */
+const _mc87=miscarry;miscarry=function(n){const r=_mc87.apply(this,arguments);try{if(n===S.me&&!S.reg){const m=S.me;S.q.push({p84:1,t:'你躺在榻上，窗外的天色一點點暗下去。太醫垂手站在一旁，不敢多說。皇上差人送來了補品，卻沒有親自來。',o:[['哀慟靜養，什麼都不想管',()=>{m.hp=Math.min(100,m.hp+10);S.mood=cl(S.mood+1);return'你閉門三日，誰也不見。身子慢慢好了一些，心裡的空洞卻沒有填上。'}],['強撐起身，吩咐徹查此事',()=>{m.hp-=4;const g=pg84();g.hint=(g.hint||0)+2;return'你把貼身的人一個個叫來問話，雖然疲累，卻理出了幾條可疑的線索。'}],['請皇上過來一趟',()=>{if(P(cl(m.favor/110,.15,.85))){m.favor+=6;S.mood=cl(S.mood-1);return'皇上來了，在榻邊坐了很久，只說了一句：「是朕沒有護好你。」'}m.favor-=2;return'皇上說政務纏身，只吩咐太醫好生照料。你望著空蕩蕩的門口，沒有再說話。'}]]})}}catch(e){console.log('r87mc',e)}return r};
+
+/* ===== V203: 節令事件 ===== */
+const FEST88=[
+[0,'春節',()=>({keep:1,t:'除夕守歲，宮中張燈結綵。皇上賜宴，嬪妃按位份入座，你正琢磨著該給誰送一份年禮。',o:[['給皇上準備一份親手做的新年禮',()=>{if(P(cl(.5+perfB(S.me)/2,.2,.85))){S.me.favor+=9;return'皇上拆開禮物，眼底有了笑意：「這個年，過得比往年暖。」'}S.me.favor+=3;return'禮物樸素，皇上卻說心意難得。'}],['給太后和皇后各送一份厚禮（耗銀40）',()=>{if(!pay(40))return'銀兩不足，只能備了簡單的茶點。';if(S.dow)S.me.dw+=8;S.me.ally+=5;return'太后與皇后都記下了這份體面。'}],['給宮裡位份低的姐妹們送些壓歲錢（耗銀25）',()=>{if(!pay(25))return'銀兩不足。';const[a]=lowN85();a.al+=14;S.me.ally+=6;return'新年那天，好些人悄悄來謝你。'}]]})],
+[0,'元宵',()=>{const[a,i]=rnn();return{keep:1,t:`元宵夜，宮中掛滿花燈。${a.n}提著一盞兔子燈來找你：「姐姐，一起去猜燈謎吧。」`,o:[['欣然同去',()=>{a.al+=10;if(P(.5)){S.me.favor+=3;return'你們連猜中了幾道謎，恰好被皇上看見，他笑著賞了你們一人一盞宮燈。'}return'你們逛了一整夜，笑聲沒斷。'}],['借猜謎暗中打探她',()=>{S.me.scheme+=2;a.al+=3;return`她說起了家裡的一些事，你把這些記在了心裡。`}],['推說不適，獨自賞燈',()=>{S.me.hp+=2;return'你一個人站在燈下，看了很久。'}]]}}],
+[4,'端午',()=>({keep:1,t:'端午節到了，內務府送來艾草、雄黃酒和一批五色絲線。宮裡的嬪妃們都忙著做香囊。',o:[['做一枚香囊獻給皇上',()=>{if(P(cl(.45+S.me.at.sk[5]/150,.2,.85))){S.me.favor+=8;return'皇上將香囊佩在腰間，一整天都沒有解下。'}S.me.favor+=2;return'針腳稍顯稚拙，皇上卻也笑著收下。'}],['親手為孩子做香囊驅邪',()=>{const k=S.me.kids.filter(x=>yr(x)<14);if(!k.length){S.me.hp+=2;return'你沒有孩子可做，便給自己縫了一枚，掛在床頭。'}k.forEach(x=>x.bond=cl(x.bond+5));return'孩子們戴著香囊跑來跑去，笑聲傳得很遠。'}],['一口氣做一批送給各宮（耗銀20）',()=>{if(!pay(20))return'銀兩不足。';S.npcs.filter(x=>!x.st).slice(0,6).forEach(x=>x.al+=3);S.me.ally+=5;return'你送出去的香囊，換回了不少笑臉。'}]]})],
+[6,'七夕',()=>({keep:1,t:'七夕夜，宮裡的女子們聚在庭中乞巧，比誰穿針穿得快。皇上也被請來作了評判。',o:[['也上去比一比',()=>{if(P(cl(.4+S.me.at.sk[5]/130,.15,.85))){S.me.favor+=9;S.me.ally+=2;return'你一氣呵成，滿座喝彩，皇上賞了你一支金簪。'}S.me.favor+=1;return'你穿得慢了半拍，惹得大家一陣笑。'}],['在一旁幫人理線助興',()=>{S.me.ally+=4;return'你的熱心讓不少人對你有了好感。'}],['悄悄望著皇上的方向',()=>{S.me.favor+=2;return'你的目光與他短暫相遇，又都若無其事地移開。'}]]})],
+[7,'中秋',()=>({keep:1,t:'中秋夜，御花園擺開賞月宴。月光灑在池面上，皇上舉杯，眾人都靜了下來。',o:[['敬皇上一杯，說幾句貼心話',()=>{if(P(.65)){S.me.favor+=8;S.mood=cl(S.mood+2);return'你說的話不多，卻句句落在他心坎上，皇上多飲了兩杯。'}S.me.favor+=2;return'皇上點點頭，目光卻落在別處。'}],['帶著孩子們賞月，講嫦娥的故事',()=>{const k=S.me.kids.filter(x=>yr(x)<14);if(!k.length){S.me.hp+=3;return'你望著月亮出神，想起了老家的團圓。'}k.forEach(x=>{x.bond=cl(x.bond+6);x.de=cl(x.de+1)});S.me.favor+=2;return'孩子們圍著你問個不停，皇上遠遠看了一眼，沒有出聲，嘴角卻彎了一彎。'}],['悄悄觀察各人的神色',()=>{S.me.scheme+=3;const[a,i]=rnn();if(P(.4))S.evid[i]=(S.evid[i]||0)+1;return'月光下，每個人的笑容都有些不同，你一一看在眼裡。'}]]})],
+[8,'重陽',()=>({keep:1,t:'重陽節，宮中登高賞菊。太后年事已高，由人攙扶著慢慢走，你有機會陪在她身邊。',o:[['攙著太后，慢慢陪她走',()=>{if(S.dow){S.me.dw+=10;return'太后拍著你的手：「還是你有心。」'}S.me.hp+=2;return'你陪著宮裡的老嬤嬤慢慢走了一程。'}],['獻上一盆名貴的菊花',()=>{if(!pay(20))return'銀兩不足。';if(S.dow)S.me.dw+=5;S.me.favor+=3;return'這盆菊花被擺在了最顯眼的位置。'}],['獨自登高，遠眺宮牆',()=>{S.me.hp+=3;S.mood=cl(S.mood+0);return'風很大，你站在高處，覺得自己很小，又很清醒。'}]]})],
+[10,'冬至',()=>({keep:1,t:'冬至到了，宮裡照例要吃餃子。皇上差人問各宮想吃什麼餡。',o:[['親手包幾個，送去皇上那裡',()=>{if(P(.7)){S.me.favor+=7;return'皇上嘗了一口，說：「像小時候吃過的味道。」'}S.me.favor+=2;return'餃子煮破了皮，皇上卻說味道不差。'}],['給宮裡的下人都分一碗',()=>{S.me.ally+=6;return'冬天裡，這碗熱餃子讓許多人都記住了你。'}],['給孩子們留一桌',()=>{const k=S.me.kids;k.forEach(x=>x.bond=cl(x.bond+4));return'孩子們圍坐成一圈，這是這個冬天最暖的一刻。'}]]})]];
+const _md88=mend;mend=function(){const r=_md88.apply(this,arguments);try{if(S&&S.me&&!S.over&&!S.reg&&S.t>0&&!S.ev&&!S.ch&&!S.scn){const mo=S.t%12,y=Math.floor(S.t/12);S.fest88=S.fest88||{};FEST88.forEach(f=>{if(f[0]===mo&&S.fest88[f[1]]!==y&&!S.ev){S.fest88[f[1]]=y;const e=f[2]();e.t='〔'+f[1]+'〕'+e.t;S.q.push(e);next()}})}}catch(e){console.log('r88',e)}return r};
 
 deco();intro();
 
