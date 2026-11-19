@@ -7443,7 +7443,7 @@ function pg84(){return S.pg84=S.pg84||{act:0,dmg:0,pre:0,n:0,cul:null,hint:0,don
 function rst84(g){g.act=0;g.dmg=0;g.pre=0;g.n=0;g.guard=0}
 const labPend84=()=>[S.ev].concat(S.q||[]).some(e=>e&&/臨盆在即/.test(e.t||''));
 function hurt84(sev,why){const m=S.me,g=pg84(),mo=10-m.preg;if(sev<=0)return why+'，幸而無大礙。';
- if(sev>=2){if(mo<6&&P(.55)){miscarry(m,why+'，胎兒沒能保住');return why+'。太醫搖了搖頭——孩子沒能保住。'}
+ if(sev>=2){if(m.hp<30&&P(.25)){fatal90('poison');return why+'。毒發得太快，太醫已經來不及了。'}if(mo<6&&P(.55)){miscarry(m,why+'，胎兒沒能保住');return why+'。太醫搖了搖頭——孩子沒能保住。'}
   if(m.preg>=2){m.preg=R(1,2);g.pre=1;g.dmg++;m.hp-=8;return why+'，你動了胎氣，腹痛如絞，孩子怕是要提早來了。'}}
  g.dmg+=sev>=2?2:1;m.hp-=sev>=2?8:4;return why+'，胎象不穩，太醫囑咐務必靜養。'}
 const gb84=()=>{const g=pg84();return(g.gw?.2:0)+tf('guard')*.05+tf('pois')*.12+Math.min(2,S.me.med||0)*.05};
@@ -7474,7 +7474,7 @@ function tick84(){try{if(!S||!S.me||S.over||S.reg)return;const m=S.me,g=pg84();
  }catch(e){console.log('r84tick',e)}}
 const _md84=mend;mend=function(){const r=_md84.apply(this,arguments);tick84();return r};
 const _ec84=evCritical;evCritical=function(e){return _ec84.apply(this,arguments)||!!(e&&e.p84)};
-const _dl84=deliver;deliver=function(risk,hl){const g=pg84(),m=S.me,n0=m.kids.length;let r=_dl84.call(this,risk+(g.dmg||0)*.04+(g.pre?.06:0),hl);try{if(m.kids.length>n0){const k=m.kids[m.kids.length-1];if(g.pre||g.dmg>=2){setWeak84(k);r+='　只是孩子'+(g.pre?'早產，':'在腹中受了損傷，')+'身子十分孱弱，往後要悉心調養。'}}}catch(e){}rst84(g);return r};
+const _dl84=deliver;deliver=function(risk,hl){const g=pg84(),m=S.me,n0=m.kids.length;let r=_dl84.call(this,risk+(g.dmg||0)*.04+(g.pre?.06:0),hl);try{if(m.kids.length>n0){const k=m.kids[m.kids.length-1];if(g.pre||g.dmg>=2){setWeak84(k);r+='　只是孩子'+(g.pre?'早產，':'在腹中受了損傷，')+'身子十分孱弱，往後要悉心調養。'}}}catch(e){}try{fatal90('labour',g)}catch(e){}rst84(g);return r};
 const _mc84=miscarry;miscarry=function(n){const r=_mc84.apply(this,arguments);try{if(n===S.me)rst84(pg84())}catch(e){}return r};
 /* 行動：安胎調養、追查孕事 */
 ACT.push(['安胎調養','請太醫與護衛看護，三個月內孕期受襲的風險大減（耗銀40）',()=>{const m=S.me,g=pg84();if(!(m.preg>0)||S.reg)return L('你目前並未有孕。');if(g.guard>0)return L('安胎的人手仍在，不必重複安排。');if(!pay(40))return L('銀兩不足。');g.guard=3;m.hp=Math.min(100,m.hp+4);L('你請太醫日日請脈，又調了信得過的護衛守在宮門外。三個月內，旁人難以下手。')}]);const IA84=ACT.length-1;
@@ -7678,6 +7678,32 @@ function storm89(){try{if(!S||!S.me||S.over||S.reg||S.ev||S.ch||S.scn||(S.q||[])
  else e={p84:1,t:`你的貼身宮女被人收買，悄悄把你的行蹤告訴了${n.n}，這幾日接連有人「恰好」撞見你私下的小動作。`,o:[['抓出內鬼，嚴加處置',()=>{if(P(cl(.45+m.scheme/250,.2,.8))){m.ally+=3;n.host=cl(n.host+6);return'你揪出了內鬼，也讓對方知道你不好惹。'}m.ally-=3;return'你疑錯了人，宮裡人心浮動。'}],['將計就計，放假消息',()=>{if(P(cl(.35+m.scheme/200,.15,.8))){n.favor=cl(n.favor-10);return`${n.n}按你放的假消息出手，反倒落了把柄。`}m.favor-=6;m.scand=(m.scand||0)+8;return'對方識破了你的計謀，你反倒更被動。'+sev()}],['全部換掉身邊的人（耗銀40）',()=>{if(!pay(40)){return'銀兩不足，只換了幾個人。'}m.ally-=2;return'你換了一批新人，雖然花了力氣，卻總算安穩了。'}]]};
  S.q.push(e);next()}catch(e){console.log('r89storm',e)}}
 const _md90=mend;mend=function(){const r=_md90.apply(this,arguments);try{storm89()}catch(e){}return r};
+
+/* ===== V206: 更多元的結局 ===== */
+function fatal90(k,g){try{const m=S.me;if(!m||S.over||S.reg)return;
+ if(k==='poison'){over('毒發身亡','你本就體弱，那碗藥裡的東西讓你連夜高燒不退。太醫跪了一地，最後只留下一句「恕臣無能」。宮裡很快有了新的話題，沒有人再提起你。');return}
+ if(k==='labour'&&m.hp<35&&P(.1+((g&&g.dmg)||0)*.06+((g&&g.pre)?.08:0))){over('產子殞命','產房裡的血腥氣散不去。你聽見孩子的哭聲，微微笑了一下，然後便再也沒有睜開眼。皇上在殿外站了一夜，卻終究沒能見你最後一面。')}}catch(e){console.log('r90f',e)}}
+const age90=()=>{try{return typeof yr0==='function'?yr0():30}catch(e){return 30}};
+function end90(){try{if(!S||!S.me||S.over||S.reg||S.ev||S.ch||S.scn)return;const m=S.me,a=age90();
+ /* 醜聞警告與廢位 */
+ if((m.scand||0)>=45&&!S.sw90){S.sw90=1;ntfAdd('警示：你的醜聞已經累積到危險的程度，再出事就可能被廢位。','ti')}
+ if((m.scand||0)<30)S.sw90=0;
+ if((m.scand||0)>=60&&m.rank>=2&&S.t-(S.wv90===undefined?-99:S.wv90)>=18){S.wv90=S.t;S.q.push({p84:1,t:'皇上忽然召你問話，案上攤著幾份密報，每一份都與你有關。他沒有發怒，只是淡淡地問：「你有什麼要說的嗎？」',o:[['跪下請罪，據實以告',()=>{m.scand=Math.max(0,(m.scand||0)-18);m.favor-=4;return'皇上沉默片刻：「知錯能改，朕不追究。」你知道這是一次機會。'}],['逐條辯解',()=>{if(P(cl(.35+m.scheme/220,.2,.75))){m.scand=Math.max(0,(m.scand||0)-10);return'你言辭鑿鑿，皇上聽完，神色鬆動了幾分。'}m.scand=(m.scand||0)+6;m.favor-=6;return'皇上看著你，目光漸冷：「是嗎。」'}],['保持沉默',()=>{m.scand=(m.scand||0)+4;return'皇上等了很久，你一句話也沒說。他站起來走了。'}]]});next();return}
+ if(m.rank>=2&&(m.scand||0)>=75&&P(.07)){over('廢位幽禁',`一樁樁舊事被翻了出來，樁樁件件都對不上你當初的辯白。皇上沉默了很久，終於下旨：廢你為庶人，幽居冷宮。你被帶走的那天，窗外正下著雨。`);return}
+ if(S.t%12!==3&&S.t%12!==6&&S.t%12!==9)return;if((S.q||[]).length)return;
+ const mo=S.t%12;
+ /* 為子赴死 */
+ if(mo===6){const ks=(m.kids||[]).filter(k=>k.sex==='男'&&yr(k)>=16&&k.pow>=55&&!k.m90);if(ks.length&&S.t>=96&&P(.1)){const k=pk(ks);k.m90=1;S.q.push({p84:1,t:`${k.n}被人以「結黨謀逆」之名彈劾，證據一件件擺到了皇上案前，其中有幾件確實與他有牽連，卻絕非他本意。皇上盛怒，已有人傳話：這一回，沒人保得住他。`,o:[['願以己身擔下所有罪名',()=>{over('為子赴死',`你在殿上跪了很久，把所有的罪名一一擔下。皇上看著你，良久才說：「你這是何必。」${k.n}在殿外聽見了，一路跪行進來，卻再沒能碰到你的衣角。許多年以後，他在登基大典上，第一道旨意便是為你追封。`);return'你以身相替。'}],['上書皇上，陳情求寬',()=>{if(P(cl(m.favor/130+.15,.15,.7))){m.favor-=6;k.pow=cl(k.pow-12);return`皇上看完你的奏疏，沉默許久，終究只是削了${k.n}的差事，沒有再追究。`}m.favor-=14;k.pow=cl(k.pow-25);k.bond=cl(k.bond-8);return`皇上沒有理會，${k.n}被貶去了遠地，臨走時甚至沒有見你一面。`}],['連夜疏通朝臣（耗銀100）',()=>{if(!pay(100)){return'銀兩不足，沒人肯冒這個險。'}if(P(cl(.3+m.ally/200,.2,.75))){m.ally-=4;k.pow=cl(k.pow-8);return`你耗盡人脈，替${k.n}把這件事壓成了「失察」，他保住了性命和爵位。`}m.favor-=10;k.pow=cl(k.pow-22);return'疏通的消息走漏，反倒坐實了「結黨」的說法。'}],['與他劃清界線，保全自己',()=>{k.bond=cl(k.bond-40);k.pow=cl(k.pow-35);m.favor+=3;return`你當著眾人的面說「此子與我無關」。${k.n}望著你，眼中的光一點點暗了下去。`}]]});next()}}
+ /* 青燈古佛 */
+ if(mo===9&&a>=30&&(m.hp<50||S.lost90)&&P(.16)){S.q.push({p84:1,t:'你已經很久沒有真正笑過了。這天夜裡，你獨自坐在窗前，忽然想起了入宮之前的日子，想起了故鄉的炊煙和母親的叮囑。你問自己：還要這樣走多久？',o:[['請旨出宮，到家廟修行',()=>{over('青燈古佛',`皇上准了你的請求，沒有多說什麼，只命人備了一頂小轎。你離宮那天，沒有回頭。往後的日子，檀香、經卷、木魚聲，把一切喧囂都擋在了牆外。`);return'你遞上了出宮的奏請。'}],['再撐一撐，換個活法',()=>{m.hp=Math.min(100,m.hp+5);m.scheme=Math.max(0,m.scheme-3);S.lost90=0;return'你決定先不離開。你開始學著為自己活一點點。'}]]});next()}
+ /* 知己終老 */
+ if(mo===3&&a>=50&&S.t-(S.zj90===undefined?-99:S.zj90)>=60){const f=(S.npcs||[]).filter(n=>!n.st&&(n.al||0)>=92&&nAge90(n)>=45);if(f.length&&P(.15)){S.zj90=S.t;const n=pk(f);S.q.push({p84:1,t:`${n.n}與你並肩走過了漫長的歲月。這天黃昏，她坐在你身邊，輕聲說：「姐姐，等我們老了，不如就找一處清靜的院子，一起住著，再沒有人能來算計我們。」`,o:[['答應她，與她結伴度過餘生',()=>{over('知己終老',`你與${n.n}搬進了後宮最偏僻的一處小院。院子裡種了兩棵梅花，一株紅，一株白。後來有人說，宮裡再沒有比她們更安靜的兩個人，也再沒有比她們更讓人羨慕的兩個人。`);return'你答應了她。'}],['謝過她，但還想再走一程',()=>{n.al=cl(n.al+3);return`${n.n}笑了笑：「那我就陪你。」`}]]});next()}}
+ /* 幕後執棋人 */
+ if(mo===6&&a>=45&&m.ally>=75&&m.scheme>=75&&m.rank<=6&&P(.2)){S.q.push({p84:1,t:'你在宮裡織下的網，已經大得連你自己都有些吃驚：誰受寵、誰失勢、哪一件事該由誰去辦，往往只需要你的一句話。有人悄悄說：「您何必再爭那個名分，這後宮，其實早就是您的了。」',o:[['就這樣吧，退居幕後，做真正的執棋人',()=>{over('幕後執棋人',`你不再爭任何名位，卻在每一次晉封、每一次風波裡都留下了影子。很多年以後，宮裡的人還在說，那位從不顯山露水的娘娘，才是這座宮城真正的主人。`);return'你選擇了幕後。'}],['不，我還要那個名分',()=>{m.favor=Math.min(100,m.favor+2);return'你收回了心思，繼續向上走。'}]]});next()}
+}catch(e){console.log('r90e',e)}}
+const nAge90=n=>{try{return typeof nAge==='function'?nAge(n):40}catch(e){return 40}};
+const _mc90=miscarry;miscarry=function(n){const r=_mc90.apply(this,arguments);try{if(n===S.me)S.lost90=1}catch(e){}return r};
+const _md91=mend;mend=function(){const r=_md91.apply(this,arguments);try{end90()}catch(e){}return r};
 
 deco();intro();
 
