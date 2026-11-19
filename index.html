@@ -7713,8 +7713,8 @@ const _md91=mend;mend=function(){const r=_md91.apply(this,arguments);try{end90()
 .scrim .scroll button .t91.co{background:#fff3d2;color:#8a6a14}
 .scrim .scroll .n91{margin-top:8px;font-size:12px;color:#8a6a60;line-height:1.5;text-align:center}
 `;document.head.appendChild(st)})();
-const RK91=/澄清|求見|面聖|攤牌|翻臉|不留情|險|極|暗中|栽贓|陷害|下毒|暗算|報復|反咬|將計就計|先發制人|強行|孤注|逼問|揭發|對質|鬧到|以牙還牙|煽風|冷嘲|偷聽|跟上去|查探|大膽|放假消息|當場|厲聲/;
-const SF91=/閉門|等風頭|靜觀|忍一|忍下|觀望|低調|不追究|算了|退避|靜靜|婉拒|婉言|婉轉|謙|隱忍|按兵|不當一回事|不理|裝作|低頭|請罪|安撫|化解|息事|知道了|作罷|離開|放回|謝過|不打擾|不敢|退開|再撐|先不|不必/;
+const RK91=/嚴厲|據理力爭|寸步不讓|派人搜|反告|暗示|藉機|託皇上|求娘家|舉薦|加封母家|安插親信|不假辭色|險|極|暗中|栽贓|陷害|下毒|暗算|報復|反咬|將計就計|先發制人|強行|孤注|逼問|揭發|對質|鬧到|以牙還牙|煽風|冷嘲|偷聽|跟上去|查探|大膽|放假消息|當場|厲聲|澄清|求見|面聖|攤牌|翻臉|不留情|（看[^）]{1,4}）|落井下石|反擊|打壓|硬撐|壯膽|嚴查|徹查|敲打|殺雞儆猴|杖責|暗助|阻撓|招安|直言進諫|割捨|推給旁人|底牌|挑撥|偏袒|申斥|躲進暗處|動用人脈|頂替|逼|威脅|賭|搏|謀|策反|聯合|結盟|收買|拉攏|揭穿|告發|檢舉|抄家|廢|處死|嚴懲|重罰|冒|擅自|私自|瞞著|隱瞞|撒謊|謊稱|矇混|硬闖|強闖|拚|殺/;
+const SF91=/冷眼旁觀|視而不見|淡然|平靜|任其|從簡|恭順|欣然|假裝沒|折衷|相信|保留|壓下|安慰|召見|接回|留京|親手|親自教導|閉門|等風頭|靜觀|忍一|忍下|觀望|低調|不追究|算了|退避|靜靜|婉拒|婉言|婉轉|謙|隱忍|按兵|不當一回事|不理|裝作|低頭|請罪|安撫|化解|息事|知道了|作罷|離開|放回|謝過|不打擾|不敢|退開|再撐|先不|不必|一笑置之|不予理會|不准|不插手|不聲不響|乖乖|安靜|以靜制動|先按下|備一份|勸|叮囑|婉謝|推辭|照常|稱病|如實|據實|坦然|大方|寬恕|訓誡|既往不咎|聽她說完|聽他說完|節省|減免|與民休息|恭敬|恭謹|順從|依例|照例|按例|按規矩|守禮|守規矩|行禮|謝恩|賠罪|賠不是|道歉|認錯|讓步|讓出|退讓|忍讓|陪伴|陪她|陪他|親自照料|悉心|細心|關切|探望|慰問|送去|贈|賞銀|同行|結伴|婉轉|好言|溫言|不多問|不聲張|私下|悄悄|默默|留意|記在心裡|再議|擱置|等待時機|靜候|暫且|順其自然|隨緣|交給皇上|上報|稟報|如實稟|呈報|請示|請教|請太醫|請安|安分/;
 const CO91=/耗銀\s*\d|銀\s*\d+\s*兩|重金|花銀/;
 function tag91(l){const t=[];const s=String(l||'');if(CO91.test(s))t.push(['co','耗銀']);if(RK91.test(s))t.push(['rk','冒險']);else if(SF91.test(s))t.push(['sf','穩妥']);return t}
 function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||sc.querySelector('.t91'))return;let n=0;sc.querySelectorAll('button').forEach(b=>{if(b.querySelector('.t91'))return;const oc=b.getAttribute('onclick')||'';if(!/^(V|C)\(/.test(oc))return;const t=tag91(b.textContent);if(!t.length)return;n++;b.insertAdjacentHTML('beforeend',t.map(x=>`<em class="t91 ${x[0]}">${x[1]}</em>`).join(''))});
@@ -7725,7 +7725,7 @@ const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91
 const VER92='V209';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
-#fb92{position:fixed;inset:0;z-index:95;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
+#fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
 #fb92 .bx{background:#fff8ef;border:1px solid #e3b45a;border-radius:16px;max-width:460px;width:100%;max-height:88vh;overflow:auto;padding:16px;color:#5a2b22;box-shadow:0 10px 30px rgba(0,0,0,.35)}
 #fb92 h3{margin:0 0 6px;font-size:17px}#fb92 p{margin:6px 0;font-size:13.5px;line-height:1.6;color:#7a5a50}
 #fb92 textarea{width:100%;box-sizing:border-box;border:1px solid #e3c6a0;border-radius:10px;padding:8px;font:inherit;font-size:13.5px;background:#fff;color:#4a2a22}
@@ -7761,7 +7761,7 @@ function lin93Apply(){try{if(DLY||!S||!S.me||S.lin93done||S.dly)return;const a=l
  if(p.ally&&p.ally!==S.me.n){const n=pick(2);if(n){used[n.n]=1;n.n=p.ally;n.al=Math.max(n.al||0,55);n.host=0;n.lin93='ally';msg.push('舊識「'+p.ally+'」也在宮中，對你格外親近')}}
  if(p.foe&&p.foe!==S.me.n&&p.foe!==p.ally){const n=pick(5);if(n){used[n.n]=1;n.n=p.foe;n.host=Math.max(n.host||0,45);n.al=Math.min(n.al||0,20);n.lin93='foe';msg.push('「'+p.foe+'」眼神裡帶著說不出的敵意')}}
  if(p.kid){S.me.ally+=3;msg.push('夢裡總聽見一個叫「'+p.kid+'」的孩子喊娘')}
- S.lin93msg=msg;S.lin93p=p;
+ S.lin93msg=msg;S.lin93p=p;if(msg.length)try{unlock('a70')}catch(e){}
  const f=()=>{try{if(!msg.length)return;S.q.unshift({t:'前世的影子',o:[['記在心裡',()=>{S.me.scheme+=2;return '你說不清這種熟悉感從哪裡來，只是多留了個心眼。'+msg.join('；')+'。'}]]})}catch(e){}};f()}catch(e){console.log('r93b',e)}}
 const _la93=lgApply;lgApply=function(){const r=_la93.apply(this,arguments);try{lin93Apply()}catch(e){}return r};
 const _lc93=lgCard;lgCard=function(){let h=_lc93.apply(this,arguments);try{const a=linGet();if(a.length){const p=a[a.length-1];h=h.replace(/<\/div><div class=g>/,'</div><div class=m style="margin:6px 0">前世羈絆：上一世你是「'+ESC(p.me)+'」，最終'+ESC(p.end||'—')+(p.ally?'；生前摯友「'+ESC(p.ally)+'」':'')+(p.foe?'；宿敵「'+ESC(p.foe)+'」':'')+(p.kid?'；牽掛的孩子「'+ESC(p.kid)+'」':'')+'。這些人會在下一世再度出現。</div><div class=g>')}}catch(e){}return h};
@@ -7797,13 +7797,13 @@ function arc95(n){S.arc95=S.arc95||{};return S.arc95[n.n]=S.arc95[n.n]||{a:0,f:0
 function ev95(t,o){return{t,o,keep:1,p84:1}}
 function betray95(n){const m=S.me,A=arc95(n);A.b=1;
  return ev95('盟友的裂痕：'+n.n,[
- ['當面質問她，問個明白',()=>{n.al=Math.min(n.al,25);n.host=(n.host||0)+25;m.scand=(m.scand||0)+3;return '你把話攤開來問。'+n.n+'臉色一白，沉默良久，只說了句「身在宮中，誰沒有難處」。多年情分，自此薄了。'}],
- ['假作不知，暗中提防',()=>{n.al=Math.max(0,n.al-15);n.host=(n.host||0)+10;m.scheme+=3;A.watch=1;return '你什麼也沒說，只是從此留了心眼，言談處處多一分遮掩。'+n.n+'似乎察覺到你的疏遠，卻也沒再靠近。'}],
+ ['當面質問她，問個明白',()=>{try{unlock('a72')}catch(e){}n.al=Math.min(n.al,25);n.host=(n.host||0)+25;m.scand=(m.scand||0)+3;return '你把話攤開來問。'+n.n+'臉色一白，沉默良久，只說了句「身在宮中，誰沒有難處」。多年情分，自此薄了。'}],
+ ['假作不知，暗中提防',()=>{try{unlock('a72')}catch(e){}n.al=Math.max(0,n.al-15);n.host=(n.host||0)+10;m.scheme+=3;A.watch=1;return '你什麼也沒說，只是從此留了心眼，言談處處多一分遮掩。'+n.n+'似乎察覺到你的疏遠，卻也沒再靠近。'}],
  ['先下手為強，揭發她的把柄（冒險）',()=>{const p=Math.max(.2,Math.min(.8,.35+(m.scheme-40)/150));if(Math.random()<p){n.favor=Math.max(0,(n.favor||0)-15);n.host=(n.host||0)+30;n.al=Math.min(n.al,10);m.favor+=3;return '你搶在她前面把她的錯處遞了出去，'+n.n+'失了聖心，恨你入骨，但你保住了自己。'}m.favor-=6;m.scand=(m.scand||0)+8;n.host=(n.host||0)+35;n.al=Math.min(n.al,5);return '證據不夠硬，反被'+n.n+'倒打一耙，皇上對你多了幾分疑心。'}]
  ])}
 function plead95(n){const m=S.me,A=arc95(n);A.p=1;
  return ev95('宿敵的求饒：'+n.n,[
- ['出手相助（耗銀40）',()=>{m.silver=Math.max(0,m.silver-40);n.host=Math.max(0,(n.host||0)-40);n.al=(n.al||0)+30;m.ally+=4;try{led86().push({n:n.n,t:S.t,k:'恩'})}catch(e){}return n.n+'跪在你面前，泣不成聲：「從前是我糊塗。」你讓人送去藥材銀兩。宮裡人看在眼裡，都說你有容人之量。'}],
+ ['出手相助（耗銀40）',()=>{try{unlock('a71')}catch(e){}m.silver=Math.max(0,m.silver-40);n.host=Math.max(0,(n.host||0)-40);n.al=(n.al||0)+30;m.ally+=4;try{led86().push({n:n.n,t:S.t,k:'恩'})}catch(e){}return n.n+'跪在你面前，泣不成聲：「從前是我糊塗。」你讓人送去藥材銀兩。宮裡人看在眼裡，都說你有容人之量。'}],
  ['冷眼旁觀，不聞不問',()=>{n.host=(n.host||0)+5;m.scheme+=1;return '你只淡淡說了句「各人自有造化」，便讓人送客。'+n.n+'走時背影單薄，眼裡的恨意卻沒有散去。'}],
  ['落井下石，徹底斷了她的路',()=>{n.favor=Math.max(0,(n.favor||0)-15);n.host=100;n.al=0;m.scand=(m.scand||0)+6;m.favor+=2;return '你讓人把她的處境傳了出去，她再難翻身。只是宮裡有人暗暗說你心狠，連'+n.n+'也發了狠話：此生必不饒你。'}]
  ])}
@@ -7811,9 +7811,9 @@ const _md95=mend;mend=function(){const r=_md95.apply(this,arguments);try{
  if(!S||!S.me||S.over||S.dly)return r;const m=S.me;if(S.ev||S.ch||S.scn)return r;
  let fired=0;(S.npcs||[]).forEach(n=>{if(fired||!n||n.st||!n.n)return;const A=arc95(n);
   if((n.al||0)>=60&&(n.host||0)<30)A.a++;else A.a=0;
-  if((n.host||0)>=35)A.f++;else A.f=0;
+  if((n.host||0)>=30)A.f++;else A.f=0;
   if(!A.b&&A.a>=18&&Math.floor(S.t/12)>=3&&(S.arc95n||0)<2&&S.t-(S.arc95t||-99)>=36){const envy=(n.rank||0)>=(m.rank||0)-1||m.favor>(n.favor||0)+20||(m.scand||0)>=40;if(envy&&Math.random()<.025){S.arc95n=(S.arc95n||0)+1;S.arc95t=S.t;S.q.unshift(betray95(n));fired=1;return}}
-  if(!A.p&&A.f>=6&&(S.arc95p||0)<3&&((m.rank||0)-(n.rank||0)>=2||(n.favor||0)<=15)&&Math.random()<.16){S.arc95p=(S.arc95p||0)+1;S.q.unshift(plead95(n));fired=1}});
+  if(!A.p&&A.f>=4&&(S.arc95p||0)<3&&((m.rank||0)-(n.rank||0)>=2||(n.favor||0)<=15)&&Math.random()<.25){S.arc95p=(S.arc95p||0)+1;S.q.unshift(plead95(n));fired=1}});
  if(fired&&!S.ev&&!S.ch)try{next()}catch(e){}
  }catch(e){console.log('r95',e)}return r};
 
@@ -7845,9 +7845,9 @@ function clan96(){const f=fa96();if(!f.length)return;const c=Math.round(Math.max
 function fm96(){const f=fa96();return f.length?f.slice().sort((a,b)=>b.pw-a.pw)[0]:null}
 function rise96(){const m=S.me,x=fm96();if(!x)return null;const nm=x.nm||x.rel;S.cl96t=S.t;return{t:`皇上念你侍奉有功，有意擢升你的${x.rel}${x.nm?'「'+x.nm+'」':''}（${x.job||'家人'}）。`,keep:1,p84:1,o:[
  ['謙辭再三，不敢受此恩典',()=>{m.favor+=3;x.pw=Math.min(100,x.pw+2);clan96();return'你上表辭謝，言辭懇切。皇上讚你知進退，反而多賞了些東西。母家名聲更穩。'}],
- ['欣然受封，母家借勢而起',()=>{fa96().forEach(y=>y.pw=Math.min(100,y.pw+6));x.pw=Math.min(100,x.pw+4);m.dsus=(m.dsus||0)+6;m.ally+=4;clan96();return'母家一時風光無兩，門庭若市。只是樹大招風，朝中已有人暗暗留意。'}],
- ['趁勢替族中子弟謀幾個差事（耗銀50）',()=>{m.silver=Math.max(0,m.silver-50);fa96().forEach(y=>y.pw=Math.min(100,y.pw+4));m.ally+=3;clan96();return'你打點之下，族中幾個後生有了正經差事，往後有人撐起門面。'}]]}}
-function fall96(){const m=S.me,x=fm96();if(!x)return null;S.cl96t=S.t;return{t:`母家傳來急信：你的${x.rel}${x.nm?'「'+x.nm+'」':''}（${x.job||'家人'}）捲入官場風波，族中人心惶惶，來求你拿主意。`,keep:1,p84:1,o:[
+ ['欣然受封，母家借勢而起',()=>{try{unlock('a74')}catch(e){}fa96().forEach(y=>y.pw=Math.min(100,y.pw+6));x.pw=Math.min(100,x.pw+4);m.dsus=(m.dsus||0)+6;m.ally+=4;clan96();return'母家一時風光無兩，門庭若市。只是樹大招風，朝中已有人暗暗留意。'}],
+ ['趁勢替族中子弟謀幾個差事（耗銀50）',()=>{try{unlock('a74')}catch(e){}m.silver=Math.max(0,m.silver-50);fa96().forEach(y=>y.pw=Math.min(100,y.pw+4));m.ally+=3;clan96();return'你打點之下，族中幾個後生有了正經差事，往後有人撐起門面。'}]]}}
+function fall96(){const m=S.me,x=fm96();if(!x)return null;S.cl96fall=(S.cl96fall||0)+1;S.cl96t=S.t;return{t:`母家傳來急信：你的${x.rel}${x.nm?'「'+x.nm+'」':''}（${x.job||'家人'}）捲入官場風波，族中人心惶惶，來求你拿主意。`,keep:1,p84:1,o:[
  ['傾力打點，保住母家（耗銀80）',()=>{if(m.silver<80){fa96().forEach(y=>y.pw=Math.max(0,y.pw-8));clan96();return'銀兩不夠，打點不周，母家還是受了重創，族人怨你無力。'}m.silver-=80;if(Math.random()<.65){fa96().forEach(y=>y.pw=Math.max(0,y.pw-2));clan96();return'你散盡心力，總算把事情壓了下去。母家元氣小傷，卻保住了根基。'}fa96().forEach(y=>y.pw=Math.max(0,y.pw-10));clan96();return'銀子花了，風波卻沒平，母家仍被削去了不少權勢。'}],
  ['割捨一人，保全大局',()=>{x.pw=Math.max(0,x.pw-25);fa96().forEach(y=>{if(y!==x)y.pw=Math.max(0,y.pw-2)});m.ally-=2;m.scheme+=2;clan96();return'你狠下心舍了他，母家總算保住了大半。你知道這個決定會被人記很久。'}],
  ['按兵不動，免得牽連自身',()=>{fa96().forEach(y=>y.pw=Math.max(0,y.pw-9));m.ally-=3;clan96();return'你什麼也沒做。母家一落千丈，族人背地裡說，你只顧自己。'}]]}}
@@ -7911,6 +7911,48 @@ const _r97=render;render=function(){const r=_r97.apply(this,arguments);try{
   const t=S.ev&&S.ev.t||'';if(t&&t!==st97.e){st97.e=t;sfx97('ev')}if(!t)st97.e='';
   if(TAB===1&&!S.over){const mn=document.querySelector('#app main');if(mn&&!mn.querySelector('.pg97b'))mn.insertAdjacentHTML('afterbegin','<div class="cd pg97b" style="padding:8px 12px"><button class=s style="width:100%" onclick="pg97open()">人物誌・人物關係與畫像設定</button></div>')}
   wc97()}else{st97.r=null;st97.k=null}}catch(e){console.log('r97',e)}return r};
+
+/* ===== V215：遊戲中回報入口 ===== */
+const _ho98=helpOpen;helpOpen=function(){const r=_ho98.apply(this,arguments);try{const e=document.getElementById('help');if(e&&!e.querySelector('.fb98')){const box=e.firstElementChild||e;box.insertAdjacentHTML('beforeend','<div class=fb98 style="margin:10px 0"><button class=s style="width:100%" onclick="fb92()">回報問題／提出建議（附上目前存檔）</button></div>')}}catch(x){console.log('r98h',x)}return r};
+const _r98=render;render=function(){const r=_r98.apply(this,arguments);try{if(S&&S.me&&!S.over&&TAB===4){const mn=document.querySelector('#app main');if(mn&&!mn.querySelector('.fb98t'))mn.insertAdjacentHTML('afterbegin','<div class="cd fb98t" style="padding:8px 12px"><button class=s style="width:100%" onclick="fb92()">回報問題／提出建議</button></div>')}}catch(e){}return r};
+
+/* ===== V215：新結局（兒孫繞膝／骨肉離心／母家傾覆）、朝堂派系長線、新成就 ===== */
+[['a70','故人重逢','開局遇見前世的摯友或宿敵'],['a71','化敵為友','在宿敵落難時出手相助'],['a72','洞察人心','察覺盟友的背叛並做出應對'],['a73','十載抉擇','累積十個以上影響重大的選擇'],['a74','母家興盛','讓母家在你得寵時更上一層'],['a75','慈母','三個以上的孩子都與你十分親近'],['a76','兒孫繞膝','結局：晚年兒孫滿堂、承歡膝下'],['a77','骨肉離心','結局：晚年與子女疏離'],['a78','母家傾覆','結局：母家敗落，你孤立無援'],['a79','朝堂縱橫','與朝中三派勢力都保持良好關係']].forEach(x=>{if(!AL.some(a=>a[0]===x[0]))AL.push([x[0],x[1],x[2],()=>false])});
+/* 結局 */
+function end99(){try{if(!S||!S.me||S.over||S.reg||S.ev||S.ch||S.scn||(S.q||[]).length)return;const m=S.me,ks=(m.kids||[]).filter(k=>!k.dead&&!k.sp);const ad=ks.filter(k=>yr(k)>=18);
+ if(S.t>=12*35&&ad.length>=3&&ad.every(k=>(k.bond||50)>=68)&&m.hp<=70&&Math.random()<.08){try{unlock('a76')}catch(e){}over('兒孫繞膝','你的鬢髮早已花白。院子裡孩子們的笑聲、媳婦們端來的熱湯、孫輩纏著你講的舊事，把這座深宮的寒意一點點焐熱。臨終那夜，滿屋子的人都守在床前，你忽然覺得，這一輩子，值了。');return}
+ if(S.t>=12*25&&ad.length>=2&&ad.every(k=>(k.bond||50)<=28)&&Math.random()<.1){try{unlock('a77')}catch(e){}over('骨肉離心','日子一年年過去，你的宮門越來越冷清。孩子們各有各的前程，來請安的時候，話越來越少，禮數越來越足。最後一個冬天，你抱著暖爐坐在窗邊，才忽然想起，已經很久沒有聽見誰喊過一聲「娘」。');return}
+ const f=(m.fam||[]).filter(x=>typeof x.pw==='number');if(f.length&&(S.cl96fall||0)>=2&&f.reduce((a,x)=>a+x.pw,0)/f.length<=14&&m.favor<=25&&Math.random()<.12){try{unlock('a78')}catch(e){}over('母家傾覆','母家接連獲罪，抄的抄、貶的貶，曾經門庭若市的府邸，如今連看門的人都散盡了。你在宮裡再也沒有依靠，所有人都知道，你已是無根之萍。不過數月，一道旨意，把你送去了最偏僻的院子。');return}
+ if(ad.length>=3&&ad.every(k=>(k.bond||50)>=70))try{unlock('a75')}catch(e){}
+ if(S.fc99&&S.fc99.q>=15&&S.fc99.w>=15&&S.fc99.m>=15)try{unlock('a79')}catch(e){}
+ if((S.dec94||[]).length>=10)try{unlock('a73')}catch(e){}}catch(e){console.log('r99e',e)}}
+/* 朝堂派系 */
+const FC99=[['q','清流','朝中的清流言官'],['w','外戚','外戚勢力'],['m','武將','邊關與京城的武將']];
+function fc99(){S.fc99=S.fc99||{q:0,w:0,m:0};return S.fc99}
+function fmov99(a,b,c){const f=fc99();f.q=Math.max(-50,Math.min(50,f.q+a));f.w=Math.max(-50,Math.min(50,f.w+b));f.m=Math.max(-50,Math.min(50,f.m+c))}
+function fev99(){const m=S.me,k=Math.floor(Math.random()*3);
+ if(k===0)return{t:'朝中清流上疏，彈劾外戚專權，字字句句卻隱隱指向你的母家。',keep:1,p84:1,o:[
+  ['暗中表態支持清流（冒險）',()=>{fmov99(12,-12,0);m.dsus=(m.dsus||0)+3;(m.fam||[]).forEach(x=>{if(typeof x.pw==='number')x.pw=Math.max(0,x.pw-4)});return'清流言官記下了你的態度，母家卻因此受了些波及。'}],
+  ['替外戚說話，維護母家',()=>{fmov99(-12,12,0);m.ally+=2;return'你託人遞話為外戚辯白。清流對你多了幾分微詞，外戚卻記下了這份情。'}],
+  ['兩不相幫，閉門自守',()=>{m.scheme+=1;return'你一句話也沒說。朝堂上的風，吹不到你宮裡來，卻也沒有人再把你當成自己人。'}]]};
+ if(k===1)return{t:'邊關將領回京述職，託人遞話，想與你宮裡「走動走動」。',keep:1,p84:1,o:[
+  ['收下禮單，應允代為美言（耗銀30）',()=>{m.silver=Math.max(0,m.silver-30);fmov99(0,0,14);m.ally+=3;m.dsus=(m.dsus||0)+4;return'武將們欠下你一份人情，往後或有用處，只是皇上最忌後宮與武將往來。'}],
+  ['婉拒，不與武將結交',()=>{fmov99(0,0,-8);return'你把禮單原封退回，言辭客氣。武將們悻悻而去，倒也挑不出你的錯。'}],
+  ['藉機打聽邊關軍情（冒險）',()=>{if(Math.random()<.55){m.scheme+=3;fmov99(0,0,5);return'你從只言片語裡拼湊出邊關的虛實，這份消息，日後說不定能換來一條命。'}m.scand=(m.scand||0)+6;fmov99(0,0,-6);return'有人看見你與將領私下交談，閒話很快傳開了。'}]]};
+ return{t:'外戚遞來帖子，希望你在皇上面前為他們謀一個差事。',keep:1,p84:1,o:[
+  ['答應幫忙，尋機向皇上進言（冒險）',()=>{if(Math.random()<.5){fmov99(-4,14,0);m.ally+=3;return'皇上準了。外戚得了差事，對你感激不盡。'}m.favor-=5;fmov99(-6,6,0);return'皇上冷冷地說：「後宮不得干政。」你碰了一鼻子灰。'}],
+  ['推說自己位卑言輕',()=>{fmov99(0,-6,0);return'外戚面露不悅，卻也不好說什麼。'}],
+  ['出銀錢相助，不涉朝政（耗銀40）',()=>{m.silver=Math.max(0,m.silver-40);fmov99(0,8,0);m.ally+=2;return'你只出錢不出面，外戚領了情，朝堂上的人也挑不出毛病。'}]]}}
+function fres99(){const f=fc99(),m=S.me;
+ if(f.q>=38&&!S.fcq99){S.fcq99=1;return{t:'清流言官聯名上疏，為你的賢德請功。',keep:1,o:[['謙辭，不敢居功',()=>{m.scand=Math.max(0,(m.scand||0)-15);m.favor+=3;return'皇上讀了奏疏，對你的印象好了不少。'}]]}}
+ if(f.w>=38&&!S.fcw99){S.fcw99=1;return{t:'外戚為報你的恩情，替母家在朝中說了不少話。',keep:1,o:[['收下好意',()=>{(m.fam||[]).forEach(x=>{if(typeof x.pw==='number')x.pw=Math.min(100,x.pw+8)});try{clan96()}catch(e){}return'母家的處境好了許多。'}]]}}
+ if(f.m>=38&&!S.fcm99){S.fcm99=1;return{t:'有將領在酒後說起你的好處，這話傳進了皇子耳朵。',keep:1,o:[['裝作不知',()=>{(m.kids||[]).forEach(k=>{if(!k.dead)k.pow=Math.min(100,(k.pow||50)+4)});return'你的孩子在武將間多了些聲望。'}]]}}
+ if(f.q<=-38&&!S.fcq99h){S.fcq99h=1;return{t:'清流言官連上三道奏疏，句句指你品行不端。',keep:1,p84:1,o:[['上表自辯',()=>{m.scand=(m.scand||0)+8;m.favor-=4;return'奏疏雖被壓下，皇上心裡終究是存了疑。'}],['閉門思過',()=>{m.scand=(m.scand||0)+3;m.favor-=1;return'你避而不見，風頭漸漸過去，名聲卻已受損。'}]]}}
+ return null}
+const _md99=mend;mend=function(){const r=_md99.apply(this,arguments);try{end99();
+ if(S&&S.me&&!S.over&&!S.reg&&S.t>=12*10&&S.t-(S.fcT99===undefined?-99:S.fcT99)>=48&&Math.random()<.25){S.fcT99=S.t;const e=fres99()||(Math.random()<.7?fev99():null);if(e)S.q.push(e)}}catch(x){console.log('r99m',x)}return r};
+/* 數值保險：好感／敵意維持在 0–100，且不出現 NaN */
+const _md99b=mend;mend=function(){const r=_md99b.apply(this,arguments);try{if(S&&S.npcs)S.npcs.forEach(n=>{if(!n)return;['al','host'].forEach(k=>{if(typeof n[k]==='number'){if(!isFinite(n[k]))n[k]=0;if(n[k]>100)n[k]=100;if(n[k]<0)n[k]=0}})})}catch(e){}return r};
 
 deco();intro();
 

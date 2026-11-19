@@ -3,7 +3,7 @@ const {chromium}=require('playwright');
 await p.goto(''+(process.env.HG_URL||('file://'+require('path').resolve(__dirname,'../index.html')))+'');await p.waitForSelector('text=開始新遊戲');await p.tap('text=開始新遊戲');await p.waitForTimeout(400);await p.tap('text=隨機入宮');await p.waitForTimeout(1500);
 await p.evaluate(()=>{S.ch=null;S.ev=null;S.scn=null;S.q=[];TAB=0;S.t=30;render();document.querySelectorAll('.ob31').forEach(e=>e.remove())});await p.waitForTimeout(600);
 // ledger via V
-console.log('ledger',await p.evaluate(()=>{S.ev=null;S.q=[];const n=S.npcs[2];S.ev={t:'測試',o:[['x',()=>{n.al+=15;S.npcs[3].host+=12;return'ok'}]]};V(0);return JSON.stringify(led86())}));
+console.log('ledger',await p.evaluate(()=>{S.ev=null;S.q=[];const L=S.npcs,n=L[Math.min(2,L.length-1)],n2=L[L.length-1];S.ev={t:'測試',o:[['x',()=>{n.al+=15;n2.host+=12;return'ok'}]]};V(0);return JSON.stringify(led86())}));
 // payback each variant
 const pb=await p.evaluate(()=>{const outs=[];for(let rep=0;rep<40;rep++){S.ev=null;S.q=[];S.ch=null;S.scn=null;S.lp86=-99;S.me.preg=rep%3==0?5:0;S.me.silver=200;const L=led86();L.length=0;L.push({n:S.npcs[2].n,t:S.t-10,k:rep%2?'恩':'怨'});const oR=Math.random;Math.random=()=>0.01;try{payback86()}finally{Math.random=oR}
  const e=S.ev||S.q[0];if(e){e.o.forEach(o=>{try{const r=o[1]();if(typeof r!=='string'||/undefined|NaN/.test(r))outs.push('bad:'+e.t.slice(0,10))}catch(x){outs.push('ERR '+x.message)}})}else outs.push('none'+rep)}return [...new Set(outs)]});console.log('payback',pb);
