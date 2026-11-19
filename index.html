@@ -7309,7 +7309,7 @@ d.innerHTML=`<div class=fr><img alt="" src="${AVS[0]}" style="object-position:${
 recapList=function(){const out=[],m=S.me;try{
 if(S.g82&&typeof S.g82.r==='number'&&S.g82.r!==m.rank&&!S.reg)out.push('位份：由「'+RK[S.g82.r]+'」晉至「'+RK[m.rank]+'」');else out.push('最終位份：'+(S.reg?S.reg.title:RK[m.rank]));
 const ks=m.kids||[];if(ks.length){let best=ks[0];try{best=ks.slice().sort((p,q)=>sc(q)-sc(p))[0]}catch(e){}out.push('育有 '+ks.length+' 位子女，最出色的是'+best.n)}else out.push('一生未育子女');
-const ag=S.ag||[];if(ag.length)out.push('成就 '+ag.length+' 項：'+ag.slice(0,4).join('、')+(ag.length>4?'⋯':''));
+const ag=S.ag||[];if(ag.length)out.push('累積成就 '+ag.length+' 項，最終達成「'+ag[ag.length-1]+'」');
 if(S.pk82)out.push('聖寵最高 '+(S.pk82.f|0)+'・銀兩最多 '+(S.pk82.s|0));
 if(S.goal)out.push('人生目標「'+GOALS[S.goal][0]+'」'+(S.gdone?'已達成':'未達成'));
 const good=(S.ms||[]).filter(x=>/誕下|你的族人|人生抉擇|降位|打入冷宮|登基|主線「/.test(x.x)&&!/年報|歲計|近況|領袖|後果|伏筆|故事/.test(x.x));
