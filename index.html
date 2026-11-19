@@ -7652,6 +7652,9 @@ const FEST88=[
 [8,'重陽',()=>({keep:1,t:'重陽節，宮中登高賞菊。太后年事已高，由人攙扶著慢慢走，你有機會陪在她身邊。',o:[['攙著太后，慢慢陪她走',()=>{if(S.dow){S.me.dw+=10;return'太后拍著你的手：「還是你有心。」'}S.me.hp+=2;return'你陪著宮裡的老嬤嬤慢慢走了一程。'}],['獻上一盆名貴的菊花',()=>{if(!pay(20))return'銀兩不足。';if(S.dow)S.me.dw+=5;S.me.favor+=3;return'這盆菊花被擺在了最顯眼的位置。'}],['獨自登高，遠眺宮牆',()=>{S.me.hp+=3;S.mood=cl(S.mood+0);return'風很大，你站在高處，覺得自己很小，又很清醒。'}]]})],
 [10,'冬至',()=>({keep:1,t:'冬至到了，宮裡照例要吃餃子。皇上差人問各宮想吃什麼餡。',o:[['親手包幾個，送去皇上那裡',()=>{if(P(.7)){S.me.favor+=7;return'皇上嘗了一口，說：「像小時候吃過的味道。」'}S.me.favor+=2;return'餃子煮破了皮，皇上卻說味道不差。'}],['給宮裡的下人都分一碗',()=>{S.me.ally+=6;return'冬天裡，這碗熱餃子讓許多人都記住了你。'}],['給孩子們留一桌',()=>{const k=S.me.kids;k.forEach(x=>x.bond=cl(x.bond+4));return'孩子們圍坐成一圈，這是這個冬天最暖的一刻。'}]]})]];
 const _md88=mend;mend=function(){const r=_md88.apply(this,arguments);try{if(S&&S.me&&!S.over&&!S.reg&&S.t>0&&!S.ev&&!S.ch&&!S.scn){const mo=S.t%12,y=Math.floor(S.t/12);S.fest88=S.fest88||{};FEST88.forEach(f=>{if(f[0]===mo&&S.fest88[f[1]]!==y&&!S.ev){S.fest88[f[1]]=y;const e=f[2]();e.t='〔'+f[1]+'〕'+e.t;S.q.push(e);next()}})}}catch(e){console.log('r88',e)}return r};
+/* ===== 存檔備份提醒 ===== */
+const _ex89=expSave;expSave=function(){const r=_ex89.apply(this,arguments);try{localStorage.setItem('hg89_bk',String(Date.now()))}catch(e){}return r};
+const _md89=mend;mend=function(){const r=_md89.apply(this,arguments);try{if(S&&S.me&&!S.over&&S.t>0&&S.t%24===12){let last=0;try{last=+localStorage.getItem('hg89_bk')||0}catch(e){}if(Date.now()-last>14*864e5)ntfAdd('提醒：換瀏覽器或清除網站資料，存檔就會消失。到「紀事」分頁匯出一份備份，隨時能還原。','ti')}}catch(e){console.log('r89',e)}return r};
 
 deco();intro();
 
