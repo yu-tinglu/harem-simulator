@@ -7817,6 +7817,47 @@ const _md95=mend;mend=function(){const r=_md95.apply(this,arguments);try{
  if(fired&&!S.ev&&!S.ch)try{next()}catch(e){}
  }catch(e){console.log('r95',e)}return r};
 
+/* ===== V213: 子嗣成長線（啟蒙／志向／初露鋒芒）與母家興衰 ===== */
+const GS96=[[6,'啟蒙'],[11,'志向'],[16,'鋒芒']];
+function log96(k,age,tx){k.g96=k.g96||[];k.g96.push({a:age,x:tx})}
+function top96(k){const a=[['cai','才學'],['de','品性'],['pow','武略']].sort((x,y)=>(k[y[0]]||0)-(k[x[0]]||0));return a[0]}
+function kEv96(k,st){const n=k.n,m=S.me,age=GS96[st][0],cl9=v=>Math.max(0,Math.min(100,v));k.g96done=k.g96done||{};k.g96done[st]=1;const bd=(d)=>{k.bond=cl9((k.bond||50)+d)};
+ if(st===0)return{t:`${n}已滿${age}歲，到了啟蒙讀書的年紀。`,keep:1,p84:1,o:[
+  ['請名師嚴加教導（耗銀30）',()=>{m.silver=Math.max(0,m.silver-30);k.cai=cl9((k.cai||50)+8);bd(-3);log96(k,age,'延請名師啟蒙，學業起步扎實');return`${n}跟著老先生從早讀到晚，進步很快，只是見你的時候少了些笑臉。`}],
+  ['親自陪讀，教他認字',()=>{k.cai=cl9((k.cai||50)+3);bd(8);m.hp=Math.max(0,m.hp-1);log96(k,age,'由母親親自陪讀啟蒙');return`你每晚抽空陪他讀書，${n}最愛纏著你講故事。這份親近，比什麼都實在。`}],
+  ['順其自然，由嬤嬤照看',()=>{k.cai=cl9((k.cai||50)+1);log96(k,age,'由嬤嬤照看，順其自然長大');return`${n}按宮裡的慣例啟了蒙，不好不壞。`}]]};
+ if(st===1){const t=top96(k);return{t:`${n}${age}歲了，漸漸顯出自己的脾性，似乎格外偏愛${t[1]}一路。`,keep:1,p84:1,o:[
+  [`順著他的志向栽培`,()=>{k[t[0]]=cl9((k[t[0]]||50)+6);bd(4);log96(k,age,'志在'+t[1]+'，母親全力支持');return`你替他尋了合適的師傅，${n}眼睛亮亮的，說長大要讓你以他為榮。`}],
+  ['勸他學更穩妥的學問，莫太出頭',()=>{k.de=cl9((k.de||50)+6);bd(-3);log96(k,age,'被勸學穩妥之道，略有不甘');return`${n}低頭應了，卻明顯不太樂意。你知道，宮裡的孩子，鋒芒太露未必是福。`}],
+  ['帶他到皇上面前露個臉（冒險）',()=>{if(Math.random()<.65){k.chong=cl9((k.chong||50)+6);log96(k,age,'在父皇面前得了誇獎');return`皇上考了他幾句，${n}答得有板有眼，龍心大悅，賞了他一方硯台。`}k.chong=cl9((k.chong||50)-4);log96(k,age,'在父皇面前失了儀態');return`${n}緊張得答非所問，皇上皺了皺眉。回宮的路上，孩子一句話也沒說。`}]]}}
+ const avg=((k.cai||50)+(k.de||50)+(k.pow||50))/3;
+ if(avg>=58)return{t:`${n}${age}歲，在宮裡的比試中嶄露頭角，連皇上都問起了他。`,keep:1,p84:1,o:[
+  ['叮囑他謙虛低調，莫要驕矜',()=>{k.de=cl9((k.de||50)+5);bd(3);log96(k,age,'初露鋒芒，母親叮囑謙虛');return`你把他叫到跟前，只說了一句「樹大招風」。${n}鄭重點頭，這份懂事讓你欣慰。`}],
+  ['趁勢向皇上討個賞賜',()=>{if(Math.random()<.6){k.chong=cl9((k.chong||50)+8);m.favor+=2;log96(k,age,'初露鋒芒，得皇上賞賜');return`皇上順口賞了${n}一匹御馬，宮裡人看你們母子的眼神都不同了。`}m.scand=(m.scand||0)+4;k.chong=cl9((k.chong||50)-3);log96(k,age,'初露鋒芒，卻被說成母子爭功');return`有人說你們母子急著邀功，話傳進了皇上耳朵。`}]]};
+ return{t:`${n}${age}歲，最近闖了個不小的禍，惹得師傅動了氣。`,keep:1,p84:1,o:[
+  ['替他向師傅賠罪，私下嚴加管教',()=>{bd(2);k.de=cl9((k.de||50)+5);log96(k,age,'闖禍後被母親嚴加管教');return`你備了禮向師傅賠不是，回頭把${n}關在屋裡抄了十遍書。孩子知道錯了。`}],
+  ['讓他自己去認錯、自己承擔',()=>{if(Math.random()<.55){k.de=cl9((k.de||50)+8);bd(1);log96(k,age,'闖禍後自己認錯承擔');return`${n}紅著臉去給師傅磕了頭。師傅嘆口氣，倒對他多了幾分看重。`}bd(-6);log96(k,age,'闖禍後無人撐腰，心有怨氣');return`${n}被罰得很重，回來後看你的眼神帶著怨氣。`}],
+  ['送去宮外舅家歷練一年（耗銀20）',()=>{m.silver=Math.max(0,m.silver-20);k.pow=cl9((k.pow||50)+5);k.cai=cl9((k.cai||50)+3);bd(-4);log96(k,age,'被送去舅家歷練');return`${n}在外頭吃了些苦頭，回來後穩重了不少，只是和你生分了一點。`}]]}}
+function kidTick96(){try{const m=S.me;if(!m||S.over||S.ev||S.ch||S.scn||(S.q||[]).length||S.reg)return;const c=[];(m.kids||[]).forEach(k=>{if(k.dead||k.sp)return;const a=yr(k);k.g96done=k.g96done||{};GS96.forEach((g,i)=>{if(a>=g[0]&&a<g[0]+3&&!k.g96done[i])c.push([k,i])})});if(!c.length||Math.random()>.35)return;const x=c[Math.floor(Math.random()*c.length)];S.q.push(kEv96(x[0],x[1]))}catch(e){console.log('r96k',e)}}
+/* 母家興衰 */
+function fa96(){const f=(S.me.fam||[]).filter(x=>x&&typeof x.pw==='number');return f}
+function clan96(){const f=fa96();if(!f.length)return;const c=Math.round(Math.max.apply(null,f.map(x=>x.pw))*.6+f.reduce((a,x)=>a+x.pw,0)/f.length*.4);S.me.clan=c}
+function fm96(){const f=fa96();return f.length?f.slice().sort((a,b)=>b.pw-a.pw)[0]:null}
+function rise96(){const m=S.me,x=fm96();if(!x)return null;const nm=x.nm||x.rel;S.cl96t=S.t;return{t:`皇上念你侍奉有功，有意擢升你的${x.rel}${x.nm?'「'+x.nm+'」':''}（${x.job||'家人'}）。`,keep:1,p84:1,o:[
+ ['謙辭再三，不敢受此恩典',()=>{m.favor+=3;x.pw=Math.min(100,x.pw+2);clan96();return'你上表辭謝，言辭懇切。皇上讚你知進退，反而多賞了些東西。母家名聲更穩。'}],
+ ['欣然受封，母家借勢而起',()=>{fa96().forEach(y=>y.pw=Math.min(100,y.pw+6));x.pw=Math.min(100,x.pw+4);m.dsus=(m.dsus||0)+6;m.ally+=4;clan96();return'母家一時風光無兩，門庭若市。只是樹大招風，朝中已有人暗暗留意。'}],
+ ['趁勢替族中子弟謀幾個差事（耗銀50）',()=>{m.silver=Math.max(0,m.silver-50);fa96().forEach(y=>y.pw=Math.min(100,y.pw+4));m.ally+=3;clan96();return'你打點之下，族中幾個後生有了正經差事，往後有人撐起門面。'}]]}}
+function fall96(){const m=S.me,x=fm96();if(!x)return null;S.cl96t=S.t;return{t:`母家傳來急信：你的${x.rel}${x.nm?'「'+x.nm+'」':''}（${x.job||'家人'}）捲入官場風波，族中人心惶惶，來求你拿主意。`,keep:1,p84:1,o:[
+ ['傾力打點，保住母家（耗銀80）',()=>{if(m.silver<80){fa96().forEach(y=>y.pw=Math.max(0,y.pw-8));clan96();return'銀兩不夠，打點不周，母家還是受了重創，族人怨你無力。'}m.silver-=80;if(Math.random()<.65){fa96().forEach(y=>y.pw=Math.max(0,y.pw-2));clan96();return'你散盡心力，總算把事情壓了下去。母家元氣小傷，卻保住了根基。'}fa96().forEach(y=>y.pw=Math.max(0,y.pw-10));clan96();return'銀子花了，風波卻沒平，母家仍被削去了不少權勢。'}],
+ ['割捨一人，保全大局',()=>{x.pw=Math.max(0,x.pw-25);fa96().forEach(y=>{if(y!==x)y.pw=Math.max(0,y.pw-2)});m.ally-=2;m.scheme+=2;clan96();return'你狠下心舍了他，母家總算保住了大半。你知道這個決定會被人記很久。'}],
+ ['按兵不動，免得牽連自身',()=>{fa96().forEach(y=>y.pw=Math.max(0,y.pw-9));m.ally-=3;clan96();return'你什麼也沒做。母家一落千丈，族人背地裡說，你只顧自己。'}]]}}
+function clanTick96(){try{const m=S.me;if(!m||S.over||S.ev||S.ch||S.scn||(S.q||[]).length||S.reg||S.t%12!==8)return;if(S.t-(S.cl96t||-99)<36)return;const f=fa96();if(!f.length)return;const avg=f.reduce((a,x)=>a+x.pw,0)/f.length;
+ const up=avg>=55&&m.favor>=55&&(m.rank||0)>=3&&Math.random()<.35,dn=(avg<=35||(m.favor<=20&&(m.rank||0)<=3)||(m.scand||0)>=55)&&Math.random()<.4;
+ const e=up?rise96():dn?fall96():null;if(e)S.q.push(e)}catch(e){console.log('r96c',e)}}
+const _md96=mend;mend=function(){const r=_md96.apply(this,arguments);try{kidTick96();clanTick96()}catch(e){}return r};
+/* 結局卡：子女成長記 */
+const _u96=uiPost;uiPost=function(){const r=_u96.apply(this,arguments);try{const sc=document.querySelector('.scrim .scroll');if(sc&&S&&S.over&&S.me&&!sc.querySelector('.kg96')){const ks=(S.me.kids||[]).filter(k=>k.g96&&k.g96.length);if(ks.length){const d=document.createElement('details');d.className='dec94 kg96';d.innerHTML='<summary>子女成長記</summary>'+ks.slice(0,6).map(k=>`<div class=it><b>${ESC(k.n)}</b>${k.g96.map(g=>`<small>${g.a}歲・${ESC(g.x)}</small>`).join('')}</div>`).join('');const a=sc.querySelector('.dec94:not(.kg96)')||sc.querySelector('.end82');if(a)a.insertAdjacentElement('afterend',d)}}}catch(e){console.log('r96u',e)}return r};
+
 deco();intro();
 
 
