@@ -7283,6 +7283,63 @@ window.cel82=function(t,sub){try{let e=document.getElementById('cel82');if(e)e.r
 try{const _ec=endCard;endCard=function(){let r=_ec.apply(this,arguments);try{const t=S.over&&S.over.t||'';let set=[];try{set=JSON.parse(localStorage.getItem('hg82_end')||'[]')}catch(e){}const fresh=t&&!set.includes(t);if(fresh){set.push(t);try{localStorage.setItem('hg82_end',JSON.stringify(set))}catch(e){}}
 const m=S.me;const yrs=Math.floor(S.t/12)+1;const kids=(m.kids||[]).length;
 r+=`<div class=m style="margin:8px 0;padding:8px 10px;border-radius:10px;background:rgba(227,180,90,.18)"><b>這輩子的重點</b><br>入宮 ${yrs} 年・最終「${S.reg?S.reg.title:RK[m.rank]}」・子女 ${kids} 人・銀兩 ${Math.round(m.silver)}<br>結局收集：你已看過 <b>${set.length}</b> 種結局${fresh?'（<b>這是新結局！</b>）':'（這個之前看過了，換個選擇也許能看到新的）'}</div>`}catch(e){console.log('r82e',e)}return r}}catch(e){console.log('r82',e)}
+/* ===== V191：結局卡重做（畫面＋分享圖）、版權字不再重疊、開局畫像設定 ===== */
+try{
+const st=document.createElement('style');st.textContent=`
+body:has(.scrim) footer.copyright{visibility:hidden}
+.scrim .scroll.end82c{background:linear-gradient(180deg,#fff8ea,#fbe6cc);border:1px solid #e3b45a;box-shadow:0 0 0 4px rgba(255,248,234,.6),0 14px 40px rgba(60,10,16,.5)}
+.end82{display:flex;flex-direction:column;align-items:center;gap:6px;margin:2px 0 10px;text-align:center}
+.end82 .fr{width:132px;height:168px;border-radius:66px 66px 12px 12px;padding:4px;background:linear-gradient(135deg,#f3d58a,#b8862b);box-shadow:0 6px 16px rgba(80,30,20,.35)}
+.end82 .fr img{width:100%;height:100%;object-fit:cover;border-radius:62px 62px 8px 8px;display:block;background:#fff}
+.end82 .nm{font-size:17px;font-weight:700;color:#6b1d27;letter-spacing:.2em}
+.end82 .sc{font-size:13.5px;color:#8a5a2a}
+.end82 .gr{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%;margin-top:4px}
+.end82 .gr div{background:rgba(255,255,255,.65);border:1px solid rgba(227,180,90,.7);border-radius:10px;padding:6px 2px}
+.end82 .gr b{display:block;font-size:15px;color:#6b1d27}.end82 .gr small{font-size:12px;color:#8a6a60}
+.pf82 .pg82{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.pf82 .pi82{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.pf82 .pi82 .im{width:84px;height:104px;border-radius:42px 42px 8px 8px;padding:3px;background:linear-gradient(135deg,#f3d58a,#b8862b)}
+.pf82 .pi82 img{width:100%;height:100%;object-fit:cover;border-radius:40px 40px 6px 6px;display:block;background:#fff}
+.pf82 .pi82 b{font-size:13.5px}.pf82 .pi82 button{min-height:32px;font-size:12px;padding:0 10px}
+`;document.head.appendChild(st);
+/* 結局畫面：頂部加畫像與數據 */
+const _u82=uiPost;uiPost=function(){const r=_u82.apply(this,arguments);try{const sc=document.querySelector('.scrim .scroll');if(sc&&S&&S.over&&!sc.querySelector('.end82')){sc.classList.add('end82c');const m=S.me,s=scoreOf();const d=document.createElement('div');d.className='end82';
+d.innerHTML=`<div class=fr><img alt="" src="${AVS[0]}" style="object-position:${AVPOS[0]}% ${AVPOS[1]}%"></div><div class=nm>${m.n}</div><div class=sc>評分 <b>${s}</b>・${SCT(s)}</div><div class=gr><div><b>${Math.floor(S.t/12)+1} 年</b><small>入宮</small></div><div><b>${S.reg?S.reg.title:RK[m.rank]}</b><small>最終位份</small></div><div><b>${m.kids.length} 人</b><small>子女</small></div></div>`;const tag=sc.querySelector('.tag');if(tag)tag.insertAdjacentElement('beforebegin',d);else sc.prepend(d)}}catch(e){console.log('r82end',e)}return r};
+/* 分享圖重做 */
+recapImg=function(){try{const m=S.me,W=720,H=1180,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');const SER='"Noto Serif TC","PingFang TC","Microsoft JhengHei",serif',SAN='"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif';
+const gr=x.createLinearGradient(0,0,0,H);gr.addColorStop(0,'#5e0f18');gr.addColorStop(.6,'#3a0a10');gr.addColorStop(1,'#1a0508');x.fillStyle=gr;x.fillRect(0,0,W,H);
+x.strokeStyle='rgba(227,180,90,.07)';x.lineWidth=1;for(let i=0;i<W;i+=36){x.beginPath();x.moveTo(i,0);x.lineTo(i,H);x.stroke()}for(let j=0;j<H;j+=36){x.beginPath();x.moveTo(0,j);x.lineTo(W,j);x.stroke()}
+x.strokeStyle='#e3b45a';x.lineWidth=4;x.strokeRect(24,24,W-48,H-48);x.lineWidth=1;x.strokeRect(38,38,W-76,H-76);x.fillStyle='#e3b45a';[[24,24],[W-24,24],[24,H-24],[W-24,H-24]].forEach(([a,b])=>{x.save();x.translate(a,b);x.rotate(Math.PI/4);x.fillRect(-9,-9,18,18);x.restore()});
+x.textAlign='center';x.fillStyle='#e3b45a';x.font='bold 42px '+SER;x.fillText('後 宮 模 擬 器',W/2,104);x.font='22px '+SER;x.fillStyle='#c9a05a';x.fillText('一入宮門深似海',W/2,142);
+const sc=scoreOf(),rank=S.reg?S.reg.title:RK[m.rank];
+const arch=(cx,top,w,h,pad)=>{const r=w/2+pad,L=cx-r,R=cx+r,B=top+h+pad;x.beginPath();x.moveTo(L,B);x.lineTo(L,top-pad+r);x.arc(cx,top-pad+r,r,Math.PI,0);x.lineTo(R,B);x.closePath()};
+const rest=()=>{x.textAlign='center';x.fillStyle='#fff';x.font='bold 48px '+SER;x.fillText(m.n,W/2,670);
+x.fillStyle='#8f1d2c';const rw=360,rx=W/2-rw/2;x.beginPath();x.rect(rx,696,rw,52);x.fill();x.strokeStyle='#e3b45a';x.lineWidth=2;x.strokeRect(rx+4,700,rw-8,44);x.fillStyle='#ffe9b8';x.font='bold 32px '+SER;x.fillText(S.over?S.over.t:'',W/2,732);
+const cols=[[Math.floor(S.t/12)+1+' 年','入宮'],[rank,'最終位份'],[m.kids.length+' 人','子女']];cols.forEach((cl,i)=>{const bx=70+i*(W-140)/3,bw=(W-140)/3-12;x.fillStyle='rgba(255,233,184,.08)';x.fillRect(bx,780,bw,86);x.strokeStyle='rgba(227,180,90,.55)';x.lineWidth=1;x.strokeRect(bx,780,bw,86);x.fillStyle='#ffe9b8';x.font='bold 30px '+SER;x.fillText(cl[0],bx+bw/2,822);x.fillStyle='#c9a05a';x.font='20px '+SAN;x.fillText(cl[1],bx+bw/2,852)});
+x.fillStyle='#e3b45a';x.font='bold 36px '+SER;x.fillText('評分 '+sc+'・'+SCT(sc),W/2,926);
+x.strokeStyle='rgba(227,180,90,.5)';x.beginPath();x.moveTo(110,950);x.lineTo(W-110,950);x.stroke();
+x.textAlign='left';x.fillStyle='#f3e3c3';x.font='bold 24px '+SER;x.fillText('一生重點',70,990);x.font='22px '+SAN;x.fillStyle='#e8d6b0';
+const L=recapList();const pick=L.length>4?L.slice(0,1).concat(L.slice(-3)):L;pick.forEach((t,i)=>{let s=t;while(x.measureText(s).width>W-150&&s.length>6)s=s.slice(0,-1);if(s!==t)s+='…';x.fillText(s,70,1030+i*36)});
+x.save();x.translate(W-112,520);x.rotate(-.18);x.fillStyle='#b3202f';x.beginPath();x.arc(0,0,44,0,Math.PI*2);x.fill();x.strokeStyle='#ffe9b8';x.lineWidth=2;x.beginPath();x.arc(0,0,38,0,Math.PI*2);x.stroke();x.fillStyle='#ffe9b8';x.textAlign='center';x.font='bold 46px '+SER;x.fillText('終',0,16);x.restore();
+x.textAlign='center';x.fillStyle='#9a7b4a';x.font='20px '+SAN;x.fillText('後宮模擬器',W/2,H-62);
+let o=document.getElementById('rimg');if(o)o.remove();o=document.createElement('div');o.id='rimg';o.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px;overflow:auto';o.innerHTML=`<img src="${c.toDataURL('image/png')}" style="max-width:100%;max-height:78vh;border-radius:4px"><div style="color:#f3e3c3;font-size:13.5px">長按（或右鍵）圖片即可儲存</div><button onclick="this.parentNode.remove()">關閉</button>`;document.body.appendChild(o)};
+const cx=W/2,top=176,pw=300,ph=400,pad=10;
+const draw=img=>{x.save();arch(cx,top,pw,ph,0);x.clip();x.fillStyle='#2a0a10';x.fillRect(cx-pw/2,top,pw,ph);if(img){const ar=img.width/img.height;let dw=pw,dh=pw/ar;if(dh<ph){dh=ph;dw=ph*ar}const ox=cx-pw/2-(dw-pw)*(AVPOS[0]/100),oy=top-(dh-ph)*(AVPOS[1]/100);x.drawImage(img,ox,oy,dw,dh)}x.restore();
+x.strokeStyle='#e3b45a';x.lineWidth=5;arch(cx,top,pw,ph,0);x.stroke();x.lineWidth=1.5;arch(cx,top,pw,ph,pad);x.stroke();rest()};
+const im=new Image();im.onload=()=>draw(im);im.onerror=()=>draw(null);im.src=AVS[0]}catch(e){console.log('r82img',e)}};
+}catch(e){console.log('r82',e)}
+/* 開局畫像設定（我／皇帝／太后） */
+try{
+const _i82=intro;intro=function(){const r=_i82.apply(this,arguments);try{const app=document.getElementById('app');if(!app||S||app.querySelector('main.mmenu')||typeof IST==='undefined')return r;
+[...app.children].forEach(el=>{if(el.classList&&el.classList.contains('cd')&&el.querySelector(':scope>h3')&&/^我的畫像/.test(el.querySelector(':scope>h3').textContent.trim()))el.remove()});
+app.querySelectorAll('.pf82').forEach(e=>e.remove());if(IST>0)return r;
+const who=[...app.children].find(e=>e.classList&&e.classList.contains('cd')&&e.querySelector('.who'));if(!who)return r;
+const c=document.createElement('div');c.className='cd pf82';
+const it=(lab,src,pos,id,up,rs)=>`<div class=pi82><div class=im><img alt="${lab}" src="${src}" style="object-position:${pos[0]}% ${pos[1]}%"></div><b>${lab}</b><button onclick="document.getElementById('${id}').click()">更換照片</button><button class=s onclick="${rs}">預設</button><input id=${id} type=file accept="image/*" hidden onchange="${up}"></div>`;
+c.innerHTML='<h3>畫像（可自訂）</h3><div class=m>可以換成自己或喜歡的照片，會出現在遊戲裡和結局卡上。照片只存在你自己的瀏覽器，不會傳給任何人；請使用你有權使用的圖片。</div><div class=pg82>'+it('我',AVS[0],AVPOS,'pf82_me','avUpload(this)','avReset()')+it('皇帝',PT.emp.src,PT.emp.pos,'pf82_emp',"ptUpload('emp',this)","ptReset('emp')")+it('太后',PT.dow.src,PT.dow.pos,'pf82_dow',"ptUpload('dow',this)","ptReset('dow')")+'</div>';
+who.insertAdjacentElement('afterend',c)}catch(e){console.log('r82i',e)}return r};
+const _pr=ptRefresh;ptRefresh=function(){const r=_pr.apply(this,arguments);try{if(!S)intro()}catch(e){}return r};
+}catch(e){console.log('r82',e)}
 
 deco();intro();
 
