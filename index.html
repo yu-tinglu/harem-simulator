@@ -7306,26 +7306,39 @@ body:has(.scrim) footer.copyright{visibility:hidden}
 const _u82=uiPost;uiPost=function(){const r=_u82.apply(this,arguments);try{const sc=document.querySelector('.scrim .scroll');if(sc&&S&&S.over&&!sc.querySelector('.end82')){sc.classList.add('end82c');const m=S.me,s=scoreOf();const d=document.createElement('div');d.className='end82';
 d.innerHTML=`<div class=fr><img alt="" src="${AVS[0]}" style="object-position:${AVPOS[0]}% ${AVPOS[1]}%"></div><div class=nm>${m.n}</div><div class=sc>評分 <b>${s}</b>・${SCT(s)}</div><div class=gr><div><b>${Math.floor(S.t/12)+1} 年</b><small>入宮</small></div><div><b>${S.reg?S.reg.title:RK[m.rank]}</b><small>最終位份</small></div><div><b>${m.kids.length} 人</b><small>子女</small></div></div>`;const tag=sc.querySelector('.tag');if(tag)tag.insertAdjacentElement('beforebegin',d);else sc.prepend(d)}}catch(e){console.log('r82end',e)}return r};
 /* 分享圖重做 */
-recapImg=function(){try{const m=S.me,W=720,H=1180,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');const SER='"Noto Serif TC","PingFang TC","Microsoft JhengHei",serif',SAN='"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif';
-const gr=x.createLinearGradient(0,0,0,H);gr.addColorStop(0,'#5e0f18');gr.addColorStop(.6,'#3a0a10');gr.addColorStop(1,'#1a0508');x.fillStyle=gr;x.fillRect(0,0,W,H);
-x.strokeStyle='rgba(227,180,90,.07)';x.lineWidth=1;for(let i=0;i<W;i+=36){x.beginPath();x.moveTo(i,0);x.lineTo(i,H);x.stroke()}for(let j=0;j<H;j+=36){x.beginPath();x.moveTo(0,j);x.lineTo(W,j);x.stroke()}
-x.strokeStyle='#e3b45a';x.lineWidth=4;x.strokeRect(24,24,W-48,H-48);x.lineWidth=1;x.strokeRect(38,38,W-76,H-76);x.fillStyle='#e3b45a';[[24,24],[W-24,24],[24,H-24],[W-24,H-24]].forEach(([a,b])=>{x.save();x.translate(a,b);x.rotate(Math.PI/4);x.fillRect(-9,-9,18,18);x.restore()});
-x.textAlign='center';x.fillStyle='#e3b45a';x.font='bold 42px '+SER;x.fillText('後 宮 模 擬 器',W/2,104);x.font='22px '+SER;x.fillStyle='#c9a05a';x.fillText('一入宮門深似海',W/2,142);
-const sc=scoreOf(),rank=S.reg?S.reg.title:RK[m.rank];
+recapList=function(){const out=[],m=S.me;try{
+if(S.g82&&typeof S.g82.r==='number'&&S.g82.r!==m.rank&&!S.reg)out.push('位份：由「'+RK[S.g82.r]+'」晉至「'+RK[m.rank]+'」');else out.push('最終位份：'+(S.reg?S.reg.title:RK[m.rank]));
+const ks=m.kids||[];if(ks.length){let best=ks[0];try{best=ks.slice().sort((p,q)=>sc(q)-sc(p))[0]}catch(e){}out.push('育有 '+ks.length+' 位子女，最出色的是'+best.n)}else out.push('一生未育子女');
+const ag=S.ag||[];if(ag.length)out.push('成就 '+ag.length+' 項：'+ag.slice(0,4).join('、')+(ag.length>4?'⋯':''));
+if(S.pk82)out.push('聖寵最高 '+(S.pk82.f|0)+'・銀兩最多 '+(S.pk82.s|0));
+if(S.goal)out.push('人生目標「'+GOALS[S.goal][0]+'」'+(S.gdone?'已達成':'未達成'));
+const good=(S.ms||[]).filter(x=>/誕下|你的族人|人生抉擇|降位|打入冷宮|登基|主線「/.test(x.x)&&!/年報|歲計|近況|領袖|後果|伏筆|故事/.test(x.x));
+good.slice(-2).forEach(x=>out.push('第'+(Math.floor(x.t/12)+1)+'年　'+String(x.x).replace(/<[^>]*>/g,'').slice(0,24)))}catch(e){console.log('r82rl',e)}return out};
+const _pk=uiPost;uiPost=function(){const r=_pk.apply(this,arguments);try{if(S&&S.me&&!S.over){const p=S.pk82=S.pk82||{f:0,s:0};p.f=Math.max(p.f,S.me.favor);p.s=Math.max(p.s,S.me.silver)}}catch(e){}return r};
+recapImg=function(){try{const m=S.me,W=720,H=1380,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');const SER='"Noto Serif TC","PingFang TC","Microsoft JhengHei",serif',SAN='"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif';
+const gr=x.createLinearGradient(0,0,0,H);gr.addColorStop(0,'#601019');gr.addColorStop(.55,'#3b0b11');gr.addColorStop(1,'#16040a');x.fillStyle=gr;x.fillRect(0,0,W,H);
+x.strokeStyle='rgba(227,180,90,.06)';x.lineWidth=1;for(let i=0;i<W;i+=36){x.beginPath();x.moveTo(i,0);x.lineTo(i,H);x.stroke()}for(let j=0;j<H;j+=36){x.beginPath();x.moveTo(0,j);x.lineTo(W,j);x.stroke()}
+const gl=x.createRadialGradient(W/2,380,40,W/2,380,380);gl.addColorStop(0,'rgba(255,200,120,.28)');gl.addColorStop(1,'rgba(255,200,120,0)');x.fillStyle=gl;x.fillRect(0,0,W,760);
+const vg=x.createRadialGradient(W/2,H/2,H*.35,W/2,H/2,H*.8);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.45)');x.fillStyle=vg;x.fillRect(0,0,W,H);
+x.strokeStyle='#e3b45a';x.lineWidth=5;x.strokeRect(24,24,W-48,H-48);x.lineWidth=1.5;x.strokeRect(40,40,W-80,H-80);x.lineWidth=1;x.strokeStyle='rgba(227,180,90,.45)';x.strokeRect(50,50,W-100,H-100);
+x.fillStyle='#e3b45a';[[24,24],[W-24,24],[24,H-24],[W-24,H-24]].forEach(([a,b])=>{x.save();x.translate(a,b);x.rotate(Math.PI/4);x.fillRect(-10,-10,20,20);x.fillStyle='#601019';x.fillRect(-4,-4,8,8);x.fillStyle='#e3b45a';x.restore()});
+const orn=(y,w)=>{x.strokeStyle='rgba(227,180,90,.7)';x.lineWidth=1.5;x.beginPath();x.moveTo(W/2-w,y);x.lineTo(W/2-14,y);x.moveTo(W/2+14,y);x.lineTo(W/2+w,y);x.stroke();x.fillStyle='#e3b45a';x.save();x.translate(W/2,y);x.rotate(Math.PI/4);x.fillRect(-5,-5,10,10);x.restore()};
+x.textAlign='center';x.fillStyle='#f0c868';x.font='bold 44px '+SER;x.fillText('後 宮 模 擬 器',W/2,112);x.font='22px '+SER;x.fillStyle='#c9a05a';x.fillText('一入宮門深似海',W/2,150);orn(172,150);
+const sc0=scoreOf(),rank=S.reg?S.reg.title:RK[m.rank];
 const arch=(cx,top,w,h,pad)=>{const r=w/2+pad,L=cx-r,R=cx+r,B=top+h+pad;x.beginPath();x.moveTo(L,B);x.lineTo(L,top-pad+r);x.arc(cx,top-pad+r,r,Math.PI,0);x.lineTo(R,B);x.closePath()};
-const rest=()=>{x.textAlign='center';x.fillStyle='#fff';x.font='bold 48px '+SER;x.fillText(m.n,W/2,670);
-x.fillStyle='#8f1d2c';const rw=360,rx=W/2-rw/2;x.beginPath();x.rect(rx,696,rw,52);x.fill();x.strokeStyle='#e3b45a';x.lineWidth=2;x.strokeRect(rx+4,700,rw-8,44);x.fillStyle='#ffe9b8';x.font='bold 32px '+SER;x.fillText(S.over?S.over.t:'',W/2,732);
-const cols=[[Math.floor(S.t/12)+1+' 年','入宮'],[rank,'最終位份'],[m.kids.length+' 人','子女']];cols.forEach((cl,i)=>{const bx=70+i*(W-140)/3,bw=(W-140)/3-12;x.fillStyle='rgba(255,233,184,.08)';x.fillRect(bx,780,bw,86);x.strokeStyle='rgba(227,180,90,.55)';x.lineWidth=1;x.strokeRect(bx,780,bw,86);x.fillStyle='#ffe9b8';x.font='bold 30px '+SER;x.fillText(cl[0],bx+bw/2,822);x.fillStyle='#c9a05a';x.font='20px '+SAN;x.fillText(cl[1],bx+bw/2,852)});
-x.fillStyle='#e3b45a';x.font='bold 36px '+SER;x.fillText('評分 '+sc+'・'+SCT(sc),W/2,926);
-x.strokeStyle='rgba(227,180,90,.5)';x.beginPath();x.moveTo(110,950);x.lineTo(W-110,950);x.stroke();
-x.textAlign='left';x.fillStyle='#f3e3c3';x.font='bold 24px '+SER;x.fillText('一生重點',70,990);x.font='22px '+SAN;x.fillStyle='#e8d6b0';
-const L=recapList();const pick=L.length>4?L.slice(0,1).concat(L.slice(-3)):L;pick.forEach((t,i)=>{let s=t;while(x.measureText(s).width>W-150&&s.length>6)s=s.slice(0,-1);if(s!==t)s+='…';x.fillText(s,70,1030+i*36)});
-x.save();x.translate(W-112,520);x.rotate(-.18);x.fillStyle='#b3202f';x.beginPath();x.arc(0,0,44,0,Math.PI*2);x.fill();x.strokeStyle='#ffe9b8';x.lineWidth=2;x.beginPath();x.arc(0,0,38,0,Math.PI*2);x.stroke();x.fillStyle='#ffe9b8';x.textAlign='center';x.font='bold 46px '+SER;x.fillText('終',0,16);x.restore();
-x.textAlign='center';x.fillStyle='#9a7b4a';x.font='20px '+SAN;x.fillText('後宮模擬器',W/2,H-62);
+const rest=()=>{x.textAlign='center';x.fillStyle='#fff';x.shadowColor='rgba(0,0,0,.5)';x.shadowBlur=8;x.font='bold 50px '+SER;x.fillText(m.n,W/2,660);x.shadowBlur=0;
+const rw=380,rx=W/2-rw/2;x.fillStyle='#8f1d2c';x.beginPath();x.moveTo(rx-22,682);x.lineTo(rx,682);x.lineTo(rx,734);x.lineTo(rx-22,734);x.lineTo(rx-8,708);x.closePath();x.fill();x.beginPath();x.moveTo(rx+rw+22,682);x.lineTo(rx+rw,682);x.lineTo(rx+rw,734);x.lineTo(rx+rw+22,734);x.lineTo(rx+rw+8,708);x.closePath();x.fill();
+x.fillStyle='#a8233a';x.fillRect(rx,678,rw,60);x.strokeStyle='#e3b45a';x.lineWidth=2;x.strokeRect(rx+5,683,rw-10,50);x.fillStyle='#ffe9b8';x.font='bold 32px '+SER;x.fillText(S.over?S.over.t:'',W/2,718);
+const cols=[[Math.floor(S.t/12)+1+' 年','入宮'],[rank,'最終位份'],[m.kids.length+' 人','子女']];const bw=(W-170)/3-10;cols.forEach((cl,i)=>{const bx=85+i*(bw+15);x.fillStyle='rgba(255,233,184,.08)';x.fillRect(bx,768,bw,92);x.strokeStyle='rgba(227,180,90,.6)';x.lineWidth=1;x.strokeRect(bx,768,bw,92);x.strokeStyle='rgba(227,180,90,.25)';x.strokeRect(bx+4,772,bw-8,84);x.fillStyle='#ffe9b8';x.font='bold 30px '+SER;x.fillText(cl[0],bx+bw/2,810);x.fillStyle='#c9a05a';x.font='20px '+SAN;x.fillText(cl[1],bx+bw/2,842)});
+x.fillStyle='#f0c868';x.font='bold 40px '+SER;x.fillText('評分 '+sc0,W/2,928);x.fillStyle='#ffe9b8';x.font='24px '+SER;x.fillText('「'+SCT(sc0)+'」',W/2,964);orn(992,200);
+x.textAlign='center';x.fillStyle='#f3e3c3';x.font='bold 26px '+SER;x.fillText('一 生 重 點',W/2,1036);x.textAlign='left';x.font='22px '+SAN;
+const L=recapList().slice(0,5);L.forEach((t,i)=>{let s=t;const lim=W-190;while(x.measureText(s).width>lim&&s.length>6)s=s.slice(0,-1);if(s!==t)s+='…';x.fillStyle='#e3b45a';x.fillText('◆',80,1084+i*40);x.fillStyle='#ecdcb8';x.fillText(s,112,1084+i*40)});
+x.save();x.translate(W-112,500);x.rotate(-.18);x.fillStyle='#b3202f';x.beginPath();x.arc(0,0,46,0,Math.PI*2);x.fill();x.strokeStyle='#ffe9b8';x.lineWidth=2;x.beginPath();x.arc(0,0,40,0,Math.PI*2);x.stroke();x.fillStyle='#ffe9b8';x.textAlign='center';x.font='bold 48px '+SER;x.fillText('終',0,17);x.restore();
+x.textAlign='center';x.fillStyle='#9a7b4a';x.font='20px '+SAN;x.fillText('後宮模擬器',W/2,H-70);
 let o=document.getElementById('rimg');if(o)o.remove();o=document.createElement('div');o.id='rimg';o.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px;overflow:auto';o.innerHTML=`<img src="${c.toDataURL('image/png')}" style="max-width:100%;max-height:78vh;border-radius:4px"><div style="color:#f3e3c3;font-size:13.5px">長按（或右鍵）圖片即可儲存</div><button onclick="this.parentNode.remove()">關閉</button>`;document.body.appendChild(o)};
-const cx=W/2,top=176,pw=300,ph=400,pad=10;
-const draw=img=>{x.save();arch(cx,top,pw,ph,0);x.clip();x.fillStyle='#2a0a10';x.fillRect(cx-pw/2,top,pw,ph);if(img){const ar=img.width/img.height;let dw=pw,dh=pw/ar;if(dh<ph){dh=ph;dw=ph*ar}const ox=cx-pw/2-(dw-pw)*(AVPOS[0]/100),oy=top-(dh-ph)*(AVPOS[1]/100);x.drawImage(img,ox,oy,dw,dh)}x.restore();
-x.strokeStyle='#e3b45a';x.lineWidth=5;arch(cx,top,pw,ph,0);x.stroke();x.lineWidth=1.5;arch(cx,top,pw,ph,pad);x.stroke();rest()};
+const cx=W/2,top=196,pw=300,ph=360,pad=10;
+const draw=img=>{x.save();x.shadowColor='rgba(0,0,0,.55)';x.shadowBlur=24;x.fillStyle='#2a0a10';arch(cx,top,pw,ph,0);x.fill();x.restore();x.save();arch(cx,top,pw,ph,0);x.clip();x.fillStyle='#2a0a10';x.fillRect(cx-pw/2,top,pw,ph);if(img){const ar=img.width/img.height;let dw=pw,dh=pw/ar;if(dh<ph){dh=ph;dw=ph*ar}const ox=cx-pw/2-(dw-pw)*(AVPOS[0]/100),oy=top-(dh-ph)*(AVPOS[1]/100);x.drawImage(img,ox,oy,dw,dh)}x.restore();
+x.strokeStyle='#f0c868';x.lineWidth=6;arch(cx,top,pw,ph,0);x.stroke();x.lineWidth=1.5;x.strokeStyle='#e3b45a';arch(cx,top,pw,ph,pad);x.stroke();x.lineWidth=1;x.strokeStyle='rgba(227,180,90,.4)';arch(cx,top,pw,ph,pad+8);x.stroke();rest()};
 const im=new Image();im.onload=()=>draw(im);im.onerror=()=>draw(null);im.src=AVS[0]}catch(e){console.log('r82img',e)}};
 }catch(e){console.log('r82',e)}
 /* 開局畫像設定（我／皇帝／太后） */
