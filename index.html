@@ -471,7 +471,7 @@ choose(`對${n.n}用什麼手段？`,o)}
 function vacancy(why){if(S.reg){S.qi=null;L(why+'。');return}S.qi=null;L(`${why}，中宮虛懸，六宮蠢蠢欲動。`);if(S.me.rank>=6)S.q.unshift(crownEv());else L(crown(0))}
 function crownEv(){const m=S.me;return{t:`中宮空懸，皇上有意在六宮中擇賢立后。你位居${RK[m.rank]}，足以一爭。`,o:[['廣結人脈、重金疏通（耗銀60）',()=>crown(pay(60)?14:3)],['聯合嬪妃共同舉薦自己',()=>crown(m.ally/6)],['按兵不動，靜觀其變',()=>crown(0)]]}}
 function crown(b){const m=S.me,c=ids().filter(i=>S.npcs[i].rank>=6).map(i=>{const n=S.npcs[i];return{i,s:n.rank*6+n.favor*.35+n.pow*.3+(n.kids.some(k=>k.sex=='男')?8:0)+R(0,18)}});
-if(m.rank>=6)c.push({i:'me',s:m.rank*6+m.favor*.35+m.clan*.3+m.ally*.15+(m.kids.some(k=>k.sex=='男')?8:0)+(b||0)+R(0,18)});
+if(m.rank>=6)c.push({i:'me',s:m.rank*6+m.favor*.35+m.clan*.3+m.ally*.15+(m.kids.some(k=>k.sex=='男')?8:0)+(b||0)-crownPen86(m)+R(0,18)});
 if(!c.length){const a=ids().sort((x,y)=>S.npcs[y].rank-S.npcs[x].rank);c.push({i:a[0],s:0})}
 c.sort((x,y)=>y.s-x.s);const w=c[0].i;S.qi=w;
 if(w==='me'){m.rank=8;L('皇上下旨冊封你為皇后！');return'冊封大典上，你身著鳳冠霞帔，母儀天下！'}
@@ -679,7 +679,7 @@ shopTick();m.favor-=1;m.silver+=Math.max(0,3+m.rank*2+(tf('rich')?5:0)+Math.roun
 if(S.t%12==0){[m].concat(S.npcs).forEach(o=>o.fam.forEach(x=>{x.pw+=R(-3,4);x.ab+=R(0,2)}));
 S.npcs.forEach(n=>n.kids.forEach(k=>{k.cai+=R(0,3);k.de+=R(0,2);k.pow+=R(0,2)+Math.round((n.pow-45)/30);k.chong+=R(-3,3)}));m.kids.forEach(k=>k.chong+=R(-2,2));
 ids().forEach(i=>{const n=S.npcs[i];if(i!==S.qi&&n.rank<7&&n.favor>=55&&P(.4)&&rkRoom(n.rank+1,n)){n.rank++;L(`${n.n}晉封為${RKN(n)}。`)}})}
-if(S.t%6==0&&m.rank<TOP&&m.favor>=34+m.rank*8-(m.clan/10|0)-(S.dow&&m.dw>=60?4:0)){if(rkRoom(m.rank+1,m)){m.rank++;L(`恭喜！你晉封為${RK[m.rank]}。`)}else L(`你的聖寵與資歷已夠晉封${RK[m.rank+1]}，但${rkFull(m.rank+1)}`)}
+if(S.t%6==0&&m.rank<TOP&&m.favor>=34+m.rank*8-(m.clan/10|0)-(S.dow&&m.dw>=60?4:0)&&promoOK86(m)){if(rkRoom(m.rank+1,m)){m.rank++;L(`恭喜！你晉封為${RK[m.rank]}。`)}else L(`你的聖寵與資歷已夠晉封${RK[m.rank+1]}，但${rkFull(m.rank+1)}`)}
 fix();if(S.over)return;
 if(m.favor<=0&&S.t>24)return over('打入冷宮','聖寵盡失，你被貶入冷宮，在寂寥歲月中度過餘生。');
 if(P(edeath()))return succ();
@@ -4502,7 +4502,7 @@ const RULES=[
  ['rev',/動手腳|暗中|下毒|陷害|暗算|嫁禍|栽贓|離間|收買|羅織|佯裝中毒|將計就計/,.55,[5,12]],
  ['rep',/賞賜|周濟|資助|援手|相助|庇護|探望|施恩|出面維護|求情|說情|分給|接濟/,.5,[6,14]],
  ['cov',/燒毀|銷毀|封口|隱瞞|裝作不知|壓下|掩蓋|息事寧人|不予理會|閉口/,.4,[6,14]],
- ['hon',/坦白|請罪|如實|據實|自陳|主動說明/,.5,[4,9]]];
+ ['hon',/坦白|請罪|如實|據實|自陳|主動說明/,.5,[4,9]],['rev',/揭發|告發|上報|呵斥|訓斥|冷嘲|煽風點火|拒收|拒絕|趕走|當面對質|報復/,.4,[5,12]],['rep',/送|贈|幫|護|救|勸|陪|安撫|教她|替她|出主意|打賞/,.35,[6,14]]];
 const clean=l=>String(l||'').replace(/　★建議.*$/,'').replace(/（[^）]*）/g,'').replace(/[「」]/g,'').slice(0,18);
 const gF=(x)=>{if(S.reg)S.reg.pw+=x;else S.me.favor+=x};
 const scn=(x)=>{S.me.scand=Math.max(0,(S.me.scand||0)+x)};
@@ -4525,7 +4525,7 @@ hon:lab=>({t:`【前事回響】你當初選了「${lab}」，這份坦率被${w
  ['依舊謙遜，不居功',()=>{S.me.fame=(S.me.fame||0)+2;gF(2);return'你不爭不搶，對方更覺得你可靠。'}],
  ['順勢請對方照拂身邊人',()=>{S.me.ally+=3;S.me.fam&&S.me.fam.forEach(x=>x.pw+=2);return'你替身邊人討了個人情。'}]]})};
 const _V=V;V=function(i){let e=null,lab='';try{e=S.ev;lab=e&&e.o&&e.o[i]?String(e.o[i][0]):''}catch(x){}const r=_V.apply(this,arguments);
- try{if(lab&&S&&S.me&&!S.over&&S.t>=3){S.cn35=S.cn35||[];const last=S.c35t==null?-99:S.c35t;if(S.cn35.length<3&&S.t-last>=4){const ru=RULES.find(x=>x[1].test(lab));if(ru&&P(ru[2])){const d=R(ru[3][0],ru[3][1]);S.cn35.push({at:S.t+d,k:ru[0],lab:clean(lab)});S.c35t=S.t;msPush('埋下伏筆：「'+clean(lab)+'」，日後恐有回響')}}}}catch(x){console.log('r36',x)}return r};
+ try{if(lab&&S&&S.me&&!S.over&&S.t>=3){S.cn35=S.cn35||[];const last=S.c35t==null?-99:S.c35t;if(S.cn35.length<5&&S.t-last>=2){const ru=RULES.find(x=>x[1].test(lab));if(ru&&P(ru[2])){const d=R(ru[3][0],ru[3][1]);S.cn35.push({at:S.t+d,k:ru[0],lab:clean(lab)});S.c35t=S.t;msPush('埋下伏筆：「'+clean(lab)+'」，日後恐有回響')}}}}catch(x){console.log('r36',x)}return r};
 const _m36=mend;mend=function(){const r=_m36.apply(this,arguments);try{if(S&&S.me&&!S.over&&S.cn35&&S.cn35.length){const due=S.cn35.filter(c=>c.at<=S.t);if(due.length){S.cn35=S.cn35.filter(c=>c.at>S.t);due.slice(0,1).forEach(c=>{if(CH[c.k])S.q.push(CH[c.k](c.lab))});if(!S.ev&&!S.ch&&!S.scn)next();else render()}}}catch(x){console.log('r36b',x)}return r};
 })();
 
@@ -7611,11 +7611,11 @@ const snapN86=()=>{const o={};(S.npcs||[]).forEach(n=>{if(n&&n.n)o[n.n]=[n.al||0
 const _V86=V;V=function(i){let a=null;try{if(S&&S.me&&S.ev&&S.ev.o&&S.ev.o[i])a=snapN86()}catch(e){}
  const r=_V86.apply(this,arguments);
  try{if(a&&S&&S.npcs){const L=led86();S.npcs.forEach(n=>{const p=a[n.n];if(!p||n.st)return;const dA=(n.al||0)-p[0],dH=(n.host||0)-p[1];
-  if(dA>=12&&!L.some(x=>x.n===n.n&&x.k==='恩'&&S.t-x.t<12))L.push({n:n.n,t:S.t,k:'恩'});
-  else if((dH>=10||dA<=-10)&&!L.some(x=>x.n===n.n&&x.k==='怨'&&S.t-x.t<12))L.push({n:n.n,t:S.t,k:'怨'})});if(L.length>12)L.splice(0,L.length-12)}}catch(e){console.log('r87v',e)}
+  if(dA>=8&&!L.some(x=>x.n===n.n&&x.k==='恩'&&S.t-x.t<12))L.push({n:n.n,t:S.t,k:'恩'});
+  else if((dH>=7||dA<=-7)&&!L.some(x=>x.n===n.n&&x.k==='怨'&&S.t-x.t<12))L.push({n:n.n,t:S.t,k:'怨'})});if(L.length>12)L.splice(0,L.length-12)}}catch(e){console.log('r87v',e)}
  return r};
-function payback86(){try{if(!S||!S.me||S.over||S.reg||S.ev||S.ch||S.scn||(S.q||[]).length)return;if(S.t-(S.lp86===undefined?-9:S.lp86)<4)return;const L=led86();
- const el=L.filter(x=>S.t-x.t>=5&&S.t-x.t<=40);if(!el.length||!P(.12))return;const x=pk(el),n=S.npcs.find(y=>y.n===x.n);L.splice(L.indexOf(x),1);if(!n||n.st)return;S.lp86=S.t;const m=S.me,i=S.npcs.indexOf(n);let e;
+function payback86(){try{if(!S||!S.me||S.over||S.reg||S.ev||S.ch||S.scn||(S.q||[]).length)return;if(S.t-(S.lp86===undefined?-9:S.lp86)<3)return;const L=led86();
+ const el=L.filter(x=>S.t-x.t>=5&&S.t-x.t<=40);if(!el.length||!P(.2))return;const x=pk(el),n=S.npcs.find(y=>y.n===x.n);L.splice(L.indexOf(x),1);if(!n||n.st)return;S.lp86=S.t;const m=S.me,i=S.npcs.indexOf(n);let e;
  if(x.k==='恩'){const k=R(0,2);
   if(k===0&&m.preg>0&&!S.reg)e={keep:1,t:`${n.n}悄悄遣人來傳話：「娘娘有孕在身，我替您留意了小廚房和宮門口，有任何風吹草動，我一定先告訴您。」`,o:[['心領了，請她多費心',()=>{const g=pg84();g.guard=Math.max(g.guard||0,3);n.al+=6;return`${n.n}說到做到，接下來三個月，你的飲食起居多了一雙看不見的眼睛。`}],['謝過，但不敢連累她',()=>{n.al+=10;return`${n.n}說：「當年娘娘也沒想過連累我。」`}]]};
   else if(k===1)e={keep:1,t:`${n.n}匆匆來見你，低聲說：「當初娘娘幫過我，我一直記著。如今聽見一件事，覺得該讓您知道。」`,o:[['請她說下去',()=>{const c=S.npcs.map((y,j)=>[y,j]).filter(z=>!z[0].st&&z[0]!==n&&(z[0].host||0)>=40);if(c.length){const[y,j]=pk(c);S.evid[j]=(S.evid[j]||0)+2;m.scheme+=3;return`她說出了${y.n}近來在背後的動作。你有了一條實實在在的證據。`}m.scheme+=2;return'她說的是一些宮裡的風向，雖不致命，卻讓你心裡有了底。'}],['不必了，只當沒來過',()=>{n.al+=4;return'你不想捲進是非，她也不勉強，臨走時深深看了你一眼。'}]]};
@@ -7655,6 +7655,29 @@ const _md88=mend;mend=function(){const r=_md88.apply(this,arguments);try{if(S&&S
 /* ===== 存檔備份提醒 ===== */
 const _ex89=expSave;expSave=function(){const r=_ex89.apply(this,arguments);try{localStorage.setItem('hg89_bk',String(Date.now()))}catch(e){}return r};
 const _md89=mend;mend=function(){const r=_md89.apply(this,arguments);try{if(S&&S.me&&!S.over&&S.t>0&&S.t%24===12){let last=0;try{last=+localStorage.getItem('hg89_bk')||0}catch(e){}if(Date.now()-last>14*864e5)ntfAdd('提醒：換瀏覽器或清除網站資料，存檔就會消失。到「紀事」分頁匯出一份備份，隨時能還原。','ti')}}catch(e){console.log('r89',e)}return r};
+
+/* ===== V205: 難度與因果 ===== */
+function promoOK86(m){try{const d=typeof S.diff==='number'?S.diff:1,k=m.rk86;if(!k||k.r!==m.rank){m.rk86={r:m.rank,t:S.t};return false}
+ const wait=Math.round((6+m.rank*3)*(d==0?.7:d==2?1.25:1));if(S.t-k.t<wait){m.nh86=m.nh86||{};if(!m.nh86[m.rank]){m.nh86[m.rank]=1;try{ntfAdd('你的聖寵已足夠晉位，但資歷還淺，需要再等些時日。','ti')}catch(e){}}return false}
+ return P(d==0?.8:d==2?.5:.62)}catch(e){return true}}
+/* 人情簿：門檻放寬、頻率提高；偵查別人也會被發現 */
+{const _V=V;V=function(i){let ev0=null,a=null;try{if(S&&S.me&&S.ev&&S.ev.o&&S.ev.o[i]){a=JSON.stringify(S.evid||{})}}catch(e){}
+ const r=_V.apply(this,arguments);try{if(a&&S&&S.npcs){const b=S.evid||{},o=JSON.parse(a);Object.keys(b).forEach(k=>{if((b[k]||0)>(o[k]||0)){const n=S.npcs[+k];if(n&&!n.st){const L=led86();if(!L.some(x=>x.n===n.n&&x.k==='察'&&S.t-x.t<12)&&P(.45))L.push({n:n.n,t:S.t,k:'察'})}}})}}catch(e){console.log('r89v',e)}return r}}
+const _pb89=payback86;payback86=function(){try{if(!S||!S.me||S.over||S.reg||S.ev||S.ch||S.scn||(S.q||[]).length)return;const L=led86();const el=L.filter(x=>x.k==='察'&&S.t-x.t>=4&&S.t-x.t<=30);if(el.length&&P(.2)&&S.t-(S.lp86===undefined?-9:S.lp86)>=3){const x=pk(el),n=S.npcs.find(y=>y.n===x.n);L.splice(L.indexOf(x),1);if(!n||n.st)return;S.lp86=S.t;const m=S.me,i=S.npcs.indexOf(n);S.q.push({keep:1,t:`${n.n}不知從哪裡得知，你一直在暗中查她的底細。這天她堵在你的門口，笑容很淡：「聽說姐姐對我很感興趣？」`,o:[['矢口否認，說只是誤會',()=>{if(P(cl(.4+m.scheme/250,.2,.75))){n.host=cl(n.host+3);return'你滴水不漏地圓了過去，她若有所思地離開了。'}n.host=cl(n.host+15);m.ally-=2;return'你的解釋站不住腳，她笑了笑，什麼也沒說，只是從此處處提防你。'}],['坦然承認，索性攤牌',()=>{n.host=cl(n.host+6);n.al+=3;return'你直接承認了。她愣了一下，反倒收起了笑容，雙方都明白了彼此的底線。'}],['先下手為強，反咬一口',()=>{if(P(.4)){S.evid[i]=(S.evid[i]||0)+1;return'你搶先抖出一條她的把柄，她臉色一變，悻悻離去。'}m.favor-=3;n.host=cl(n.host+14);return'你的反咬沒能奏效，局面更僵了。'}]]});next();return}}catch(e){console.log('r89pb',e)}return _pb89.apply(this,arguments)};
+
+function crownPen86(m){try{const hs=S.npcs.filter(n=>!n.st).map(n=>n.host||0).sort((a,b)=>b-a).slice(0,3),h=hs.length?hs.reduce((a,b)=>a+b,0)/hs.length:0,d=S.diff===0?.6:S.diff===2?1.4:1;return d*(14+(h-30)*.25+(m.scand||0)*.4+(m.dsus||0)*.12)}catch(e){return 0}}
+/* 後宮風波：每年有機會被對頭陷害，處理不好真的會掉位份 */
+function storm89(){try{if(!S||!S.me||S.over||S.reg||S.ev||S.ch||S.scn||(S.q||[]).length||S.t<12||S.t%12!==9)return;const m=S.me,d=typeof S.diff==='number'?S.diff:1;
+ const es=S.npcs.map((n,i)=>[n,i]).filter(x=>!x[0].st&&(x[0].host||0)>=28&&x[0].rank>=Math.max(1,m.rank-2));if(!es.length)return;
+ const base=d==0?.35:d==2?.7:.55;if(!P(cl(base+((es[0][0].host||0)-40)/300,.25,.85)))return;
+ const[n,i]=pk(es),sev=()=>{if(m.rank>=3&&(m.scand||0)>=25&&P(.35)){m.rank=Math.max(0,m.rank-1);m.favor-=8;return`　事情鬧大，你被降為${RK[m.rank]}。`}return''};
+ const k=R(0,3);let e;
+ if(k===0)e={p84:1,t:`宮裡忽然流傳你與侍衛有私的流言，越傳越兇。你查了幾日，發現源頭隱隱指向${n.n}。`,o:[['求見皇上，請他親自查問',()=>{if(P(cl(m.favor/120+.1+m.ally/500,.15,.8))){m.favor+=3;n.host=cl(n.host+8);return'皇上命人徹查，還了你清白，也隱隱記住了這場風波。'}m.favor-=12;m.scand=(m.scand||0)+10;return'皇上聽得皺眉，沒有明說相信誰。你的聖寵掉了一截。'+sev()}],['花銀兩壓下流言（耗銀60）',()=>{if(!pay(60)){m.scand=(m.scand||0)+8;return'銀兩不足，流言越傳越盛。'+sev()}if(P(.55)){return'你把宮人的嘴一個個堵上了，這事總算平息。'}m.scand=(m.scand||0)+5;m.favor-=4;return'錢花出去了，流言卻沒止住。'}],['順藤摸瓜，反咬一口',()=>{if(P(cl(.35+m.scheme/220,.15,.75))){n.favor=cl(n.favor-12);n.host=cl(n.host+10);m.scheme+=2;return`你抓住她的把柄反擊，${n.n}自顧不暇，風波不了了之。`}m.favor-=8;m.scand=(m.scand||0)+12;return'反擊露了破綻，你成了眾人口中的「心機深沉」。'+sev()}]]};
+ else if(k===1)e={p84:1,t:`你發現自己的份例被人悄悄剋扣，連最基本的炭火、衣料都短了。查下去，是${n.n}買通了內務府的人。`,o:[['忍下，暗中找內務府的對頭',()=>{if(!pay(25)){m.silver-=Math.min(m.silver,25);return'銀兩不足，只能繼續吃悶虧。'}m.ally+=3;return'你悄悄聯絡了另一撥人，份例漸漸補了回來。'}],['找皇后做主',()=>{const q=typeof S.qi==='number'?S.npcs[S.qi]:null;if(S.qi==='me'){return'你自己就是六宮之主，雷厲風行地處置了這件事。'}if(q&&P(cl(q.al/150+.2,.15,.75))){m.silver+=40;return'皇后出面，內務府立刻改了口，還補給你一些銀子。'}m.favor-=5;return'皇后說宮裡的事要講證據，輕描淡寫地把你打發了。'}],['鬧到皇上面前',()=>{if(P(.4)){m.favor+=2;n.favor=cl(n.favor-10);return`皇上動怒，${n.n}被禁足思過。`}m.favor-=10;return'皇上覺得你為這點小事驚動聖駕，很是不悅。'+sev()}]]};
+ else if(k===2)e={p84:1,t:`有人在皇上耳邊說你近來「恃寵而驕」，還舉了幾件小事作例子，話裡話外是${n.n}的口吻。`,o:[['主動請罪，姿態放低',()=>{if(P(.6)){m.favor+=2;return'皇上見你識大體，反而更放心你。'}m.favor-=5;return'你的低頭被當成了默認，皇上冷淡了好幾日。'}],['親手做一碗羹湯，什麼都不提',()=>{if(P(cl(.5+perfB(m)/2,.2,.85))){m.favor+=5;return'皇上嘗完，只說了句「你有心」，那些閒話不再提了。'}m.favor-=3;return'皇上嘗了一口，沒有說話。'}],['當面向皇上說明',()=>{if(P(cl(m.favor/130+.2,.2,.8))){return'皇上笑你多心，風波不了了之。'}m.favor-=10;m.scand=(m.scand||0)+6;return'皇上說：「朕不想聽這些。」'+sev()}]]};
+ else e={p84:1,t:`你的貼身宮女被人收買，悄悄把你的行蹤告訴了${n.n}，這幾日接連有人「恰好」撞見你私下的小動作。`,o:[['抓出內鬼，嚴加處置',()=>{if(P(cl(.45+m.scheme/250,.2,.8))){m.ally+=3;n.host=cl(n.host+6);return'你揪出了內鬼，也讓對方知道你不好惹。'}m.ally-=3;return'你疑錯了人，宮裡人心浮動。'}],['將計就計，放假消息',()=>{if(P(cl(.35+m.scheme/200,.15,.8))){n.favor=cl(n.favor-10);return`${n.n}按你放的假消息出手，反倒落了把柄。`}m.favor-=6;m.scand=(m.scand||0)+8;return'對方識破了你的計謀，你反倒更被動。'+sev()}],['全部換掉身邊的人（耗銀40）',()=>{if(!pay(40)){return'銀兩不足，只換了幾個人。'}m.ally-=2;return'你換了一批新人，雖然花了力氣，卻總算安穩了。'}]]};
+ S.q.push(e);next()}catch(e){console.log('r89storm',e)}}
+const _md90=mend;mend=function(){const r=_md90.apply(this,arguments);try{storm89()}catch(e){}return r};
 
 deco();intro();
 
