@@ -7431,6 +7431,68 @@ const _r83=render;render=function(){const r=_r83.apply(this,arguments);try{ev83(
 
 const _ar83=autoRun;autoRun=function(){const r=_ar83.apply(this,arguments);try{if(S&&S.me&&!S.over&&!S.reg&&S.me.preg>0){ntfAdd('你已懷孕（孕 '+(10-S.me.preg)+'／10 月），預計'+MON[(S.t+S.me.preg)%12]+'月臨盆。','me');if(!S.ev&&!S.scn&&!S.ch)render()}}catch(e){console.log('r83ar',e)}return r};
 
+/* ===== V198: 孕期宮鬥——暗算事件／早產／孱弱的孩子／追查凶手／安胎 ===== */
+KT.push(['先天孱弱','先天不足，才學稍遜，需悉心調養',{cai:-6,chong:4,weak:2}]);const WK84=KT.length-1;
+let FORCE84=0;const _kid84=kid;kid=function(){const k=_kid84.apply(this,arguments);try{if(k.t===WK84&&!FORCE84){const old=KT[WK84][2],alt=R(0,WK84-1),nw=KT[alt][2];['cai','de','chong','pow','bond'].forEach(x=>{k[x]+=(nw[x]||0)-(old[x]||0)});k.t=alt}}catch(e){}return k};
+function setWeak84(k){const old=KT[k.t][2],nw=KT[WK84][2];['cai','de','chong','pow','bond'].forEach(x=>{k[x]+=(nw[x]||0)-(old[x]||0)});k.t=WK84;k.wk84=1}
+function pg84(){return S.pg84=S.pg84||{act:0,dmg:0,pre:0,n:0,cul:null,hint:0,done:0,exp:0,guard:0,gw:0,known:null,sure:0}}
+function rst84(g){g.act=0;g.dmg=0;g.pre=0;g.n=0;g.guard=0}
+const labPend84=()=>[S.ev].concat(S.q||[]).some(e=>e&&/臨盆在即/.test(e.t||''));
+function hurt84(sev,why){const m=S.me,g=pg84(),mo=10-m.preg;if(sev<=0)return why+'，幸而無大礙。';
+ if(sev>=2){if(mo<6&&P(.55)){miscarry(m,why+'，胎兒沒能保住');return why+'。太醫搖了搖頭——孩子沒能保住。'}
+  if(m.preg>=2){m.preg=R(1,2);g.pre=1;g.dmg++;m.hp-=8;return why+'，你動了胎氣，腹痛如絞，孩子怕是要提早來了。'}}
+ g.dmg+=sev>=2?2:1;m.hp-=sev>=2?8:4;return why+'，胎象不穩，太醫囑咐務必靜養。'}
+const gb84=()=>{const g=pg84();return(g.gw?.2:0)+tf('guard')*.05+tf('pois')*.12};
+function mkEv84(){const m=S.me,g=pg84(),k=R(0,2);
+ if(k==0)return{p84:1,t:'你近日服的安胎藥氣味有些不對，喝下去便頭暈作嘔，貼身的宮女神色慌張。',o:[
+  ['請太醫暗中驗藥（耗銀25）',()=>{if(!pay(25))return hurt84(P(.5)?1:0,'銀兩不足，沒能及時驗藥');if(P(cl(.6+gb84()+m.ally/400,.2,.92))){g.hint++;m.ally+=3;return'太醫驗出藥渣裡摻了東西，所幸發現得早，胎氣無礙。你記下了經手之人。'}return hurt84(1,'驗得太遲，藥性已入體')}],
+  ['換掉身邊的宮人，自己盯著煎藥',()=>{m.ally-=2;return P(.55+gb84())?'你換了一批信得過的人，此後飲食滴水不漏，胎象平穩。':hurt84(1,'新換的人也不乾淨')}],
+  ['不當一回事',()=>P(.5-gb84())?'只是虛驚一場。':hurt84(2,'毒性漸漸發作')]]};
+ if(k==1)return{p84:1,t:'你在御花園散步時，一隻發狂的貓突然衝向你，身後似有人推了你一把。',o:[
+  ['側身避開，命人拿下推你的人',()=>{if(P(cl(.5+gb84()+m.ally/300,.15,.9))){g.hint++;return'宮人拿住了一個形跡可疑的小太監，他咬死不開口，你卻記住了他袖口的宮花。'}return hurt84(1,'你雖避開了，仍受了驚嚇')}],
+  ['緊緊護住小腹，先回宮再說',()=>P(.6+gb84())?'你護著肚子退了回去，有驚無險。':hurt84(1,'慌亂中扭到了身子')],
+  ['當場厲聲追問在場的人',()=>{m.favor-=2;if(P(.4)){g.hint++;return'有人臉色驟變，被你看出端倪。'}return hurt84(2,'你一動怒，胎氣翻湧')}]]};
+ return{p84:1,t:'宮裡忽然傳出流言，說你腹中的孩子「命格犯沖」，還有人遞上一張寫著生辰的符紙，說是從你宮裡搜出來的。',o:[
+  ['求見皇上，當面澄清',()=>{if(P(cl(m.favor/130+.15+S.mood/500+gb84()/2,.15,.8))){m.favor+=6;return'皇上看了符紙，斥為栽贓陷害，反而更疼惜你。'}m.favor-=12;return hurt84(1,'皇上將信將疑，你急怒攻心')}],
+  ['花銀兩收買散播流言的人（耗銀40）',()=>{if(!pay(40))return hurt84(1,'銀兩不足，流言越傳越盛');if(P(.6)){g.hint++;return'你順著銀子摸到了流言的源頭。'}return'流言壓了下去，但源頭沒有查到。'}],
+  ['閉門不出，等風頭過去',()=>{if(P(.5))return'風波漸漸平息。';m.favor-=8;return hurt84(1,'流言越傳越難聽，你日夜難安')}]]}}
+function tick84(){try{if(!S||!S.me||S.over||S.reg)return;const m=S.me,g=pg84();
+ if(!(m.preg>0)){if(g.act&&!labPend84())rst84(g)}
+ else{if(!g.act){rst84(g);g.act=1}const active=g.guard>0;if(g.guard>0)g.guard--;const mo=10-m.preg;
+  if(mo>=2&&m.preg>=2&&g.n<2){const hs=S.npcs.filter(n=>!n.st).map(n=>n.host||0),mh=hs.length?Math.max.apply(null,hs):0;
+   const ch=cl(.035+(mh-30)/900+(m.favor-40)/700+m.rank/40-(active?.1:0)-tf('guard')*.02,.015,.2);
+   if(P(ch)){const c=S.npcs.map((n,i)=>[n,i]).filter(x=>!x[0].st);if(c.length){let tot=0;const w=c.map(x=>{const v=(x[0].host||10)**2+(x[0].rank>=m.rank?200:0);tot+=v;return v});let r=Math.random()*tot,j=0;while(j<w.length-1&&r>w[j]){r-=w[j];j++}
+    g.cul=c[j][1];g.known=null;g.sure=0;g.done=0;g.exp=S.t+10;g.n++;g.gw=active;const ev=mkEv84();S.q.push(ev);if(!S.ev&&!S.ch&&!S.scn)next();else render()}}}}
+ /* 孱弱孩子生病 */
+ (m.kids||[]).slice().forEach(k=>{if(k.t!==WK84||yr(k)>=8||(k.sv||0)>=3||!P(.05))return;if(S.q.some(e=>e&&e.p84)||S.ev&&S.ev.p84)return;
+  const die=()=>{m.kids=m.kids.filter(x=>x!==k);if(S.heir===k)S.heir=null;m.hp-=8;S.mood=cl(S.mood-3);return`${k.n}沒能熬過來。你守在小小的靈前，久久說不出話。`},ok=()=>{k.sv=(k.sv||0)+1;k.bond=cl(k.bond+5);return k.sv>=3?`${k.n}終於一天天強健起來，太醫說往後不必再擔心了。`:`${k.n}的燒退了，雖仍瘦弱，總算熬過了這一關。`};
+  S.q.push({p84:1,t:`${k.n}忽然高燒不退，太醫說是先天不足，這幾天最是兇險。`,o:[['請最好的太醫日夜守著（耗銀40）',()=>pay(40)?(P(.88)?ok():die()):(P(.5)?ok():die())],['自己守在床前親自照料',()=>{m.hp-=5;return P(.72)?ok():die()}],['聽天由命，只命人煎藥',()=>P(.5)?ok():die()]]});if(!S.ev&&!S.ch&&!S.scn)next();else render()})
+ }catch(e){console.log('r84tick',e)}}
+const _md84=mend;mend=function(){const r=_md84.apply(this,arguments);tick84();return r};
+const _ec84=evCritical;evCritical=function(e){return _ec84.apply(this,arguments)||!!(e&&e.p84)};
+const _dl84=deliver;deliver=function(risk,hl){const g=pg84(),m=S.me,n0=m.kids.length;let r=_dl84.call(this,risk+(g.dmg||0)*.04+(g.pre?.06:0),hl);try{if(m.kids.length>n0){const k=m.kids[m.kids.length-1];if(g.pre||g.dmg>=2){setWeak84(k);r+='　只是孩子'+(g.pre?'早產，':'在腹中受了損傷，')+'身子十分孱弱，往後要悉心調養。'}}}catch(e){}rst84(g);return r};
+const _mc84=miscarry;miscarry=function(n){const r=_mc84.apply(this,arguments);try{if(n===S.me)rst84(pg84())}catch(e){}return r};
+/* 行動：安胎調養、追查孕事 */
+ACT.push(['安胎調養','請太醫與護衛看護，三個月內孕期受襲的風險大減（耗銀40）',()=>{const m=S.me,g=pg84();if(!(m.preg>0)||S.reg)return L('你目前並未有孕。');if(g.guard>0)return L('安胎的人手仍在，不必重複安排。');if(!pay(40))return L('銀兩不足。');g.guard=3;m.hp=Math.min(100,m.hp+4);L('你請太醫日日請脈，又調了信得過的護衛守在宮門外。三個月內，旁人難以下手。')}]);const IA84=ACT.length-1;
+ACT.push(['追查孕事','查出是誰在孕期暗算你，再決定如何處置',()=>{const m=S.me,g=pg84();if(g.cul==null||g.done||S.t>g.exp)return L('眼下沒有需要追查的孕期之事。');
+ if(g.known==null)return choose('追查孕期遇襲之事',[{l:'秘密查探（耗銀30）',f(){if(!pay(30))return L('銀兩不足。');const n=S.npcs[g.cul];
+  if(P(cl(.3+m.scheme/200+m.ally/300+(g.hint||0)*.15+tf('insight')*.15,.15,.9))){g.known=g.cul;g.sure=1;S.evid[g.cul]=(S.evid[g.cul]||0)+2;L(`你的眼線查實了：暗中動手的正是${n.n}，證據確鑿。`);return}
+  const pool=S.npcs.map((x,i)=>i).filter(i=>!S.npcs[i].st&&i!==g.cul),w=pool.length&&P(.5)?pk(pool):g.cul;g.known=w;g.sure=0;L(`線索似乎指向${S.npcs[w].n}，但證據還不夠扎實。`)}},{l:'先不追究',f(){L('你把此事壓在心底，暫且按下。')}}]);
+ const i=g.known,n=S.npcs[i],tr=i===g.cul;
+ choose(`處置${n.n}（${g.sure?'證據確鑿':'證據不足，不能確定'}）`,[
+  {l:'上報皇上',f(){g.done=1;if(g.sure){S.evid[i]=Math.max(S.evid[i]||0,3);report(n,i)}else{if(tr&&P(.4)){S.evid[i]=Math.max(S.evid[i]||0,2);report(n,i)}else{m.favor-=8;n.host=cl(n.host+15);L('皇上聽了你的指控，覺得證據不足，反疑你借孕邀寵、構陷他人。')}}}},
+  {l:'暗中報復（耗銀40）',f(){if(!pay(40))return L('銀兩不足。');g.done=1;if(!tr){n.host=cl(n.host+25);n.al-=10;L(`你報復的竟是無辜之人，${n.n}從此恨你入骨。真兇仍逍遙在外。`)}else hit(n,i,18,0,.1)}},
+  {l:'按兵不動，再找證據',f(){if(!g.sure){g.hint++;g.known=null}L('你按下不動，吩咐眼線繼續盯著。')}}])}]);const IB84=ACT.length-1;
+{const c=ACTCAT.find(x=>x[0]=='子嗣');if(c)c[1].push(IA84,IB84);else ACTCAT[ACTCAT.length-1][1].push(IA84,IB84)}
+const rm84=(h,i)=>h.replace(new RegExp('<button[^>]*onclick="A\\('+i+'\\)"[^>]*>[\\s\\S]*?</button>'),'');
+const _ag84=actGroups;actGroups=function(){let h=_ag84.apply(this,arguments);try{const g=pg84(),m=S.me;if(!(m.preg>0&&!S.reg))h=rm84(h,IA84);if(!(g.cul!=null&&!g.done&&S.t<=g.exp))h=rm84(h,IB84)}catch(e){}return h};
+/* 重大時刻畫像卡 */
+function chk84(){try{if(!S||!S.me||S.over||S.reg)return;const m=S.me,g=pg84();if(!S._b84){S._b84={pre:g.pre,p:m.preg>0,k:(m.kids||[]).length};return}const b=S._b84;if(S.ev||S.ch||S.scn||document.querySelector('.scrim')||document.getElementById('mo83'))return;
+ if(g.pre&&!b.pre&&m.preg>0){mo83('me','動了胎氣','孩子恐怕要提早來了⋯⋯')}
+ else if(b.p&&!(m.preg>0)&&(m.kids||[]).length===b.k&&!labPend84()){mo83('me','失去了孩子','請節哀，先保重自己的身子')}
+ S._b84={pre:g.pre,p:m.preg>0,k:(m.kids||[]).length}}catch(e){}}
+const _r84=render;render=function(){const r=_r84.apply(this,arguments);try{setTimeout(chk84,420)}catch(e){}return r};
+
 deco();intro();
 
 
