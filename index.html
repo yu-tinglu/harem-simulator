@@ -7193,7 +7193,7 @@ let ly=0;window.addEventListener('scroll',()=>{try{const y=window.scrollY;if(y<4
 const _g82=uiPost;uiPost=function(){const r=_g82.apply(this,arguments);try{document.body.classList.remove('hid82');document.querySelectorAll('.goal82').forEach(e=>e.remove());
 if(typeof TAB!=='undefined'&&TAB==0&&S&&S.me&&!S.over&&S.npcs){const m=S.me;if(!S.g82)S.g82={r:m.rank};const kids=(m.kids||[]).length;
 const G=[['聖寵升到 60',m.favor>=60,'目前 '+(m.favor|0),'恩寵聖眷'],['晉升一級（現為「'+RK[S.g82.r]+'」）',m.rank>S.g82.r,'','恩寵聖眷'],['生下第一個孩子',kids>0,'','子嗣'],['晉升到「嬪」以上',m.rank>=3,'目前「'+RK[m.rank]+'」','恩寵聖眷'],['聖寵升到 85',m.favor>=85,'目前 '+(m.favor|0),'恩寵聖眷']];
-const g=G.find(x=>!x[1]);const mn=document.querySelector('main');const ss=mn&&mn.querySelector('.stat-strip');
+const g=G.find(x=>!x[1]);try{const gi=g?G.indexOf(g):G.length;if(typeof S.g82i==='number'&&gi>S.g82i&&!_AUTO)cel82(G[S.g82i][0],g?'下一個：'+g[0]:'目標都完成了，繼續創造自己的結局吧');S.g82i=gi}catch(e){}const mn=document.querySelector('main');const ss=mn&&mn.querySelector('.stat-strip');
 window.__G82K=g?g[3]:'';window.__G82=g?'🎯 下一個目標：<b>'+g[0]+'</b>'+(g[2]?'　<small>'+g[2]+'</small>':''):'';const put=()=>{try{document.querySelectorAll('.goal82').forEach(e=>e.remove());const s2=document.querySelector('main>.stat-strip')||document.querySelector('.stat-strip');if(window.__G82&&s2&&TAB==0){const d=document.createElement('div');d.className='goal82';d.innerHTML=window.__G82+'<small style="margin-left:auto">前往 ›</small>';d.setAttribute('data-k',window.__G82K||'');d.onclick=()=>go82(d.getAttribute('data-k'));s2.insertAdjacentElement('afterend',d)}}catch(e){}};put();setTimeout(put,120);setTimeout(put,600)}}catch(e){console.log('r82g',e)}return r}
 }catch(e){console.log('r82',e)}
 
@@ -7266,6 +7266,23 @@ e.addEventListener('click',ev=>{const b=ev.target.closest('button');if(b)setTime
 e.querySelectorAll('select').forEach(s=>{const o=s.getAttribute('onchange')||'';if(/apx/.test(o)){s.addEventListener('change',()=>setTimeout(()=>{const z=document.getElementById('adv82');if(z)z.remove()},200))}else if(/agoal/.test(o)){s.addEventListener('change',()=>setTimeout(()=>{const z=document.getElementById('adv82');if(z){z.remove();adv82()}},150))}});
 document.body.appendChild(e)}catch(x){console.log('r82adv',x)}}
 }catch(e){console.log('r82',e)}
+/* ===== V190：選擇後果看得見・目標慶祝・結局收集 ===== */
+try{
+const snap82=()=>{const o={f:S.me.favor,n:{}};Object.values(S.npcs||{}).forEach(n=>{if(n&&n.n&&typeof n.al==='number')o.n[n.n]=n.al});return o};
+const diff82=(a,b)=>{const p=[];const df=Math.round(b.f-a.f);if(Math.abs(df)>=3)p.push('聖寵'+(df>0?' ＋':' －')+Math.abs(df));
+const L=[];for(const k in b.n){if(k in a.n){const d=Math.round(b.n[k]-a.n[k]);if(Math.abs(d)>=4)L.push([k,d])}}L.sort((x,y)=>Math.abs(y[1])-Math.abs(x[1]));L.slice(0,3).forEach(([k,d])=>p.push(k+(d>0?' 對你更親近 ＋':' 對你疏遠 －')+Math.abs(d)));
+return p.length?'<br><small class=dl82>🔔 '+p.join('・')+'</small>':''};
+const _V82=V;V=function(i){let a=null;try{if(!_AUTO&&S.ev&&S.ev.o[i]){a=snap82();const o=S.ev.o[i],f=o[1];o[1]=function(){const r=f.apply(this,arguments);try{if(typeof r==='string')return r+diff82(a,snap82())}catch(e){}return r}}}catch(e){console.log('r82v',e)}return _V82.apply(this,arguments)};
+const st=document.createElement('style');st.textContent=`.dl82{display:block;margin-top:4px;color:#b0485a;font-size:12px}
+#cel82{position:fixed;left:50%;top:32%;transform:translate(-50%,-50%);z-index:60;background:linear-gradient(135deg,#fff6df,#ffe3c9);border:2px solid #e3b45a;border-radius:18px;padding:18px 22px;text-align:center;box-shadow:0 10px 36px rgba(120,40,40,.45);color:#6b3b32;max-width:82vw;animation:cel82 .35s ease}
+#cel82 .e{font-size:34px}#cel82 b{display:block;font-size:17px;margin:4px 0}#cel82 small{font-size:12px;opacity:.8}
+@keyframes cel82{from{transform:translate(-50%,-40%) scale(.85);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}`;document.head.appendChild(st);
+window.cel82=function(t,sub){try{let e=document.getElementById('cel82');if(e)e.remove();e=document.createElement('div');e.id='cel82';e.innerHTML='<div class=e>🎉</div><b>達成目標！</b><div>'+t+'</div><small>'+(sub||'點一下關閉')+'</small>';e.onclick=()=>e.remove();document.body.appendChild(e);setTimeout(()=>{try{e.remove()}catch(x){}},3200)}catch(x){}};
+}catch(e){console.log('r82',e)}
+/* 結局頁：這輩子的重點＋結局收集 */
+try{const _ec=endCard;endCard=function(){let r=_ec.apply(this,arguments);try{const t=S.over&&S.over.t||'';let set=[];try{set=JSON.parse(localStorage.getItem('hg82_end')||'[]')}catch(e){}const fresh=t&&!set.includes(t);if(fresh){set.push(t);try{localStorage.setItem('hg82_end',JSON.stringify(set))}catch(e){}}
+const m=S.me;const yrs=Math.floor(S.t/12)+1;const kids=(m.kids||[]).length;
+r+=`<div class=m style="margin:8px 0;padding:8px 10px;border-radius:10px;background:rgba(227,180,90,.18)"><b>這輩子的重點</b><br>入宮 ${yrs} 年・最終「${S.reg?S.reg.title:RK[m.rank]}」・子女 ${kids} 人・銀兩 ${Math.round(m.silver)}<br>結局收集：你已看過 <b>${set.length}</b> 種結局${fresh?'（<b>這是新結局！</b>）':'（這個之前看過了，換個選擇也許能看到新的）'}</div>`}catch(e){console.log('r82e',e)}return r}}catch(e){console.log('r82',e)}
 
 deco();intro();
 
