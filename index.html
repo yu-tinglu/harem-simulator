@@ -7289,8 +7289,8 @@ const st=document.createElement('style');st.textContent=`
 body:has(.scrim) footer.copyright{visibility:hidden}
 .scrim .scroll.end82c{background:linear-gradient(180deg,#fff8ea,#fbe6cc);border:1px solid #e3b45a;box-shadow:0 0 0 4px rgba(255,248,234,.6),0 14px 40px rgba(60,10,16,.5)}
 .end82{display:flex;flex-direction:column;align-items:center;gap:6px;margin:2px 0 10px;text-align:center}
-.end82 .fr{width:132px;height:168px;border-radius:66px 66px 12px 12px;padding:4px;background:linear-gradient(135deg,#f3d58a,#b8862b);box-shadow:0 6px 16px rgba(80,30,20,.35)}
-.end82 .fr img{width:100%;height:100%;object-fit:cover;border-radius:62px 62px 8px 8px;display:block;background:#fff}
+.end82 .fr{width:150px;height:150px;border-radius:50%;padding:4px;background:linear-gradient(135deg,#f3d58a,#b8862b);box-shadow:0 6px 16px rgba(80,30,20,.35)}
+.end82 .fr img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;background:#fff}
 .end82 .nm{font-size:17px;font-weight:700;color:#6b1d27;letter-spacing:.2em}
 .end82 .sc{font-size:13.5px;color:#8a5a2a}
 .end82 .gr{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%;margin-top:4px}
@@ -7298,8 +7298,8 @@ body:has(.scrim) footer.copyright{visibility:hidden}
 .end82 .gr b{display:block;font-size:15px;color:#6b1d27}.end82 .gr small{font-size:12px;color:#8a6a60}
 .pf82 .pg82{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
 .pf82 .pi82{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
-.pf82 .pi82 .im{width:84px;height:104px;border-radius:42px 42px 8px 8px;padding:3px;background:linear-gradient(135deg,#f3d58a,#b8862b)}
-.pf82 .pi82 img{width:100%;height:100%;object-fit:cover;border-radius:40px 40px 6px 6px;display:block;background:#fff}
+.pf82 .pi82 .im{width:92px;height:92px;border-radius:50%;padding:3px;background:linear-gradient(135deg,#f3d58a,#b8862b)}
+.pf82 .pi82 img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;background:#fff}
 .pf82 .pi82 b{font-size:13.5px}.pf82 .pi82 button{min-height:32px;font-size:12px;padding:0 10px}
 `;document.head.appendChild(st);
 /* 結局畫面：頂部加畫像與數據 */
@@ -7330,10 +7330,10 @@ x.fillStyle='rgba(240,205,120,.55)';for(let i=70;i<W-60;i+=22){x.fillRect(i,56,6
 const orn=(y,w)=>{x.strokeStyle=foilH(W/2-w,W/2+w);x.lineWidth=1.8;x.beginPath();x.moveTo(W/2-w,y);x.lineTo(W/2-26,y);x.moveTo(W/2+26,y);x.lineTo(W/2+w,y);x.stroke();x.fillStyle=foil(y-8,y+8);x.save();x.translate(W/2,y);x.rotate(Math.PI/4);x.fillRect(-6,-6,12,12);x.restore();[-18,18].forEach(d=>{x.beginPath();x.arc(W/2+d,y,2.6,0,Math.PI*2);x.fill()})};
 x.textAlign='center';x.fillStyle=foil(78,122);x.font='bold 48px '+SER;x.fillText('後 宮 模 擬 器',W/2,118);x.font='22px '+SER;x.fillStyle='#d8b36a';x.fillText('一入宮門深似海',W/2,156);orn(180,170);
 const sc0=scoreOf(),rank=S.reg?S.reg.title:RK[m.rank];
-const arch=(cx,top,w,h,pad)=>{const r=w/2+pad,L=cx-r,R=cx+r,B=top+h+pad;x.beginPath();x.moveTo(L,B);x.lineTo(L,top-pad+r);x.arc(cx,top-pad+r,r,Math.PI,0);x.lineTo(R,B);x.closePath()};
+const arch=(cx,top,w,h,pad)=>{x.beginPath();x.arc(cx,top+h/2,w/2+pad,0,Math.PI*2);x.closePath()};
 const cloud=(cx,cy,sc,al)=>{x.save();x.translate(cx,cy);x.scale(sc,sc);x.strokeStyle='rgba(240,205,120,'+al+')';x.lineWidth=2.2;x.beginPath();x.arc(0,0,14,Math.PI*.1,Math.PI*1.9);x.stroke();x.beginPath();x.arc(26,6,10,Math.PI*.15,Math.PI*1.85);x.stroke();x.beginPath();x.moveTo(36,12);x.bezierCurveTo(70,12,80,-6,110,4);x.stroke();x.beginPath();x.arc(-8,22,8,Math.PI*.2,Math.PI*1.8);x.stroke();x.restore()};
 const wrap=(t,maxw,font)=>{x.font=font;const out=[];let line='';for(const ch of t){if(x.measureText(line+ch).width>maxw&&line){out.push(line);line=ch}else line+=ch}if(line)out.push(line);return out};
-const cx=W/2,top=204,pw=300,ph=360,pad=10;
+const cx=W/2,top=206,pw=352,ph=352,pad=10;
 const rest=()=>{
 cloud(96,520,1.1,.38);x.save();x.translate(W,0);x.scale(-1,1);cloud(96,520,1.1,.38);x.restore();cloud(110,300,.8,.22);x.save();x.translate(W,0);x.scale(-1,1);cloud(110,300,.8,.22);x.restore();
 x.textAlign='center';x.fillStyle='#fff6df';x.shadowColor='rgba(0,0,0,.6)';x.shadowBlur=10;x.font='bold 52px '+SER;x.fillText(m.n,W/2,664);x.shadowBlur=0;
@@ -7352,11 +7352,11 @@ const L=recapList().slice(0,4);const lh=44,py=1166,ph2=64+L.length*lh;const pg=x
 x.fillStyle='#7a1522';x.font='bold 26px '+SER;x.fillText('一 生 重 點',W/2,py+42);
 x.font='23px '+SER;L.forEach((t,i)=>{let s=t;const lim=W-230;while(x.measureText(s).width>lim&&s.length>6)s=s.slice(0,-1);if(s!==t)s+='…';x.fillStyle='#b8862b';const full='◆  '+s,w=x.measureText(full).width;x.textAlign='left';x.fillText('◆',W/2-w/2,py+88+i*lh);x.fillStyle='#4a1a14';x.fillText(s,W/2-w/2+x.measureText('◆  ').width,py+88+i*lh);x.textAlign='center'});
 /* 印章：半蓋在畫像框右下 */
-x.save();x.translate(cx+pw/2-6,top+ph-4);x.rotate(-.2);x.shadowColor='rgba(0,0,0,.5)';x.shadowBlur=10;x.fillStyle='#b3202f';x.beginPath();x.arc(0,0,48,0,Math.PI*2);x.fill();x.shadowBlur=0;x.strokeStyle='#ffe9b8';x.lineWidth=2.5;x.beginPath();x.arc(0,0,41,0,Math.PI*2);x.stroke();x.fillStyle='#ffe9b8';x.textAlign='center';x.font='bold 50px '+SER;x.fillText('終',0,18);x.restore();
+x.save();x.translate(cx+pw/2*.74+6,top+ph/2+pw/2*.74+2);x.rotate(-.2);x.shadowColor='rgba(0,0,0,.5)';x.shadowBlur=10;x.fillStyle='#b3202f';x.beginPath();x.arc(0,0,48,0,Math.PI*2);x.fill();x.shadowBlur=0;x.strokeStyle='#ffe9b8';x.lineWidth=2.5;x.beginPath();x.arc(0,0,41,0,Math.PI*2);x.stroke();x.fillStyle='#ffe9b8';x.textAlign='center';x.font='bold 50px '+SER;x.fillText('終',0,18);x.restore();
 x.textAlign='center';x.fillStyle='#b99552';x.font='20px '+SAN;x.fillText('後宮模擬器',W/2,H-86);
 let o=document.getElementById('rimg');if(o)o.remove();o=document.createElement('div');o.id='rimg';o.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px;overflow:auto';o.innerHTML=`<img src="${c.toDataURL('image/png')}" style="max-width:100%;max-height:78vh;border-radius:4px"><div style="color:#f3e3c3;font-size:13.5px">長按（或右鍵）圖片即可儲存</div><button onclick="this.parentNode.remove()">關閉</button>`;document.body.appendChild(o)};
 const draw=img=>{x.save();x.shadowColor='rgba(0,0,0,.6)';x.shadowBlur=28;x.fillStyle='#2a0a10';arch(cx,top,pw,ph,0);x.fill();x.restore();x.save();arch(cx,top,pw,ph,0);x.clip();x.fillStyle='#2a0a10';x.fillRect(cx-pw/2,top,pw,ph);if(img){const ar=img.width/img.height;let dw=pw,dh=pw/ar;if(dh<ph){dh=ph;dw=ph*ar}const ox=cx-pw/2-(dw-pw)*(AVPOS[0]/100),oy=top-(dh-ph)*(AVPOS[1]/100);x.drawImage(img,ox,oy,dw,dh)}x.restore();
-x.strokeStyle=foilH(cx-170,cx+170);x.lineWidth=7;arch(cx,top,pw,ph,0);x.stroke();x.lineWidth=1.8;arch(cx,top,pw,ph,pad);x.stroke();x.strokeStyle='rgba(89,179,166,.7)';x.lineWidth=1.5;arch(cx,top,pw,ph,pad+9);x.stroke();x.strokeStyle='rgba(240,205,120,.4)';x.lineWidth=1;arch(cx,top,pw,ph,pad+17);x.stroke();rest()};
+x.strokeStyle=foilH(cx-170,cx+170);x.lineWidth=7;arch(cx,top,pw,ph,0);x.stroke();x.lineWidth=1.8;arch(cx,top,pw,ph,pad);x.stroke();x.strokeStyle='rgba(89,179,166,.7)';x.lineWidth=1.5;arch(cx,top,pw,ph,pad+9);x.stroke();x.strokeStyle='rgba(240,205,120,.4)';x.lineWidth=1;arch(cx,top,pw,ph,pad+17);x.stroke();x.strokeStyle='rgba(240,205,120,.65)';x.lineWidth=1.8;for(let i=0;i<36;i++){const a=i/36*Math.PI*2,rr=pw/2+pad+30;x.beginPath();x.arc(cx+rr*Math.cos(a),top+ph/2+rr*Math.sin(a),8.5,0,Math.PI*2);x.stroke()}rest()};
 const im=new Image();im.onload=()=>draw(im);im.onerror=()=>draw(null);im.src=AVS[0]}catch(e){console.log('r82img',e)}};
 }catch(e){console.log('r82',e)}
 /* 開局畫像設定（我／皇帝／太后） */
