@@ -7460,7 +7460,7 @@ function tick84(){try{if(!S||!S.me||S.over||S.reg)return;const m=S.me,g=pg84();
  if(!(m.preg>0)){if(g.act&&!labPend84())rst84(g)}
  else{if(!g.act){rst84(g);g.act=1}const active=g.guard>0;if(g.guard>0)g.guard--;const mo=10-m.preg;
   if(mo>=2&&m.preg>=2&&g.n<2){const hs=S.npcs.filter(n=>!n.st).map(n=>n.host||0),mh=hs.length?Math.max.apply(null,hs):0;
-   const ch=cl(.035+(mh-30)/900+(m.favor-40)/700+m.rank/40-(active?.1:0)-tf('guard')*.02,.015,.2);
+   const ch=cl(.01+(mh-30)/1500+(m.favor-40)/1200+m.rank/150-(active?.08:0)-tf('guard')*.015,.008,.14);
    if(P(ch)){const c=S.npcs.map((n,i)=>[n,i]).filter(x=>!x[0].st);if(c.length){let tot=0;const w=c.map(x=>{const v=(x[0].host||10)**2+(x[0].rank>=m.rank?200:0);tot+=v;return v});let r=Math.random()*tot,j=0;while(j<w.length-1&&r>w[j]){r-=w[j];j++}
     g.cul=c[j][1];g.known=null;g.sure=0;g.done=0;g.exp=S.t+10;g.n++;g.gw=active;const ev=mkEv84();S.q.push(ev);if(!S.ev&&!S.ch&&!S.scn)next();else render()}}}}
  /* 孱弱孩子生病 */
@@ -7574,6 +7574,32 @@ const _md85=mend;mend=function(){const r=_md85.apply(this,arguments);try{if(S&&S
 const m85=()=>S.me.scheme||0;
 /* 預設改為完整玩（沒有自己選過的玩家，小事也會問你）；明確選過「輕鬆玩」的人維持原設定 */
 window.rlxOn=()=>{try{return(localStorage.getItem('hg_rlx')||'off')==='on'}catch(e){return false}};
+
+/* ===== V201: 自動過季／年回顧卡 ===== */
+(function(){const st=document.createElement('style');st.id='st86';st.textContent=`
+#rc86{position:fixed;inset:0;z-index:55;display:flex;align-items:flex-end;justify-content:center;background:rgba(30,6,12,.5);animation:mo83i .25s ease}
+#rc86 .c{width:min(460px,100%);max-height:84vh;overflow:auto;background:linear-gradient(#fffaf0,#f6e8cc);border:2px solid #d9b45a;border-bottom:0;border-radius:18px 18px 0 0;padding:16px 16px calc(18px + env(safe-area-inset-bottom,0px));color:#4a2a26;box-shadow:0 -10px 30px rgba(0,0,0,.35)}
+#rc86 h4{margin:0 0 2px;font-size:17px;color:#7a1f2e;letter-spacing:.1em}
+#rc86 .sub{font-size:12px;color:#8a6a60;margin-bottom:10px}
+#rc86 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+#rc86 .chips span{font-size:12px;padding:3px 9px;border-radius:12px;background:#fff;border:1px solid rgba(190,120,100,.35);color:#6b3b32}
+#rc86 .chips span.up{color:#2c7a5a;border-color:rgba(44,122,90,.4)}#rc86 .chips span.dn{color:#b03a48;border-color:rgba(176,58,72,.4)}
+#rc86 h5{margin:10px 0 4px;font-size:13.5px;color:#7a1f2e;letter-spacing:.08em}
+#rc86 li{font-size:13.5px;line-height:1.55;margin:0 0 3px;color:#4a2a26;list-style:none;padding-left:14px;position:relative}
+#rc86 li:before{content:"◆";position:absolute;left:0;color:#c9a14a;font-size:9px;top:5px}
+#rc86 .why{margin-top:8px;font-size:13.5px;color:#a8472f}
+#rc86 button{margin-top:12px;width:100%;font-size:15px;padding:10px;border-radius:12px;border:0;background:linear-gradient(135deg,#e97f93,#cf4b66);color:#fff}
+`;document.head.appendChild(st)})();
+function rc86Snap(){const m=S.me;return{t:S.t,fv:m.favor,sv:m.silver,hp:m.hp,rk:m.rank,k:(m.kids||[]).length,pg:m.preg>0}}
+function rc86Show(b,why){try{if(!S||!S.me||S.over||S.reg)return;const m=S.me,mo=S.t-b.t;if(mo<=0)return;const old=document.getElementById('rc86');if(old)old.remove();
+ const d=(a,c)=>{const x=Math.round(c-a);return x>0?'＋'+x:x<0?'－'+(-x):'±0'},chip=(l,a,c)=>{const x=Math.round(c-a);return`<span class="${x>0?'up':x<0?'dn':''}">${l} ${d(a,c)}</span>`};
+ const ch=[chip('聖寵',b.fv,m.favor),chip('銀兩',b.sv,m.silver),chip('健康',b.hp,m.hp)];if(m.rank!==b.rk)ch.push(`<span class="${m.rank>b.rk?'up':'dn'}">位份 ${RK[b.rk]}→${RK[m.rank]}</span>`);const k=(m.kids||[]).length;if(k!==b.k)ch.push(`<span class="${k>b.k?'up':'dn'}">子女 ${d(b.k,k)}</span>`);if(m.preg>0)ch.push(`<span>🤰 孕 ${10-m.preg}／10 月</span>`);
+ const tl=(typeof tlList==='function'?tlList():[]).filter(e=>e.t>=b.t&&e.t<=S.t).slice(-5).map(e=>`<li>${e.x.replace(/[。！]$/,'')}</li>`).join('');
+ const dec=[];(S.alog||[]).forEach(e=>(e.e||[]).forEach(x=>dec.push(x)));const dl=dec.slice(0,5).map(x=>{const[a,c]=String(x).split('→');return`<li>${a}⋯⋯替你選了「${c||'—'}」</li>`}).join('');
+ ['mo83','cel82'].forEach(i=>{const x=document.getElementById(i);if(x)x.remove()});try{S._b83={r:m.rank,k,g:!!S.reg,p:m.preg>0};const g=pg84();S._b84={pre:g.pre,p:m.preg>0,k}}catch(e){}
+ const el=document.createElement('div');el.id='rc86';el.innerHTML=`<div class=c><h4>這 ${mo} 個月的回顧</h4><div class=sub>第 ${Math.floor(b.t/12)+1} 年 ${b.t%12+1} 月 → 第 ${Math.floor(S.t/12)+1} 年 ${S.t%12+1} 月</div><div class=chips>${ch.join('')}</div>${tl?`<h5>發生了什麼</h5><ul style="margin:0;padding:0">${tl}</ul>`:''}${dl?`<h5>替你做的決定${dec.length>5?`（另有 ${dec.length-5} 件）`:''}</h5><ul style="margin:0;padding:0">${dl}</ul><div class=sub style="margin-top:4px">想親自決定每件事，到「進階」把遇到事件時改成「每件都讓我決定」。</div>`:''}${why?`<div class=why>已停下：${why}</div>`:''}<button onclick="document.getElementById('rc86').remove()">知道了</button></div>`;
+ el.addEventListener('click',e=>{if(e.target===el)el.remove()});document.body.appendChild(el)}catch(e){console.log('r86',e)}}
+let _RC86=0;const _ar86=autoRun;autoRun=function(n){if(_RC86||!S||!S.me||S.over||S.reg||S.scn||S.ev||S.ch)return _ar86.apply(this,arguments);_RC86=1;let b;try{b=rc86Snap()}catch(e){}try{const r=_ar86.apply(this,arguments);try{if(b&&S&&S.me&&!S.over&&!S.reg){const w=S.ev?'有事件等你決定':S.scn?'有重要的事要你決定':'';setTimeout(()=>rc86Show(b,w),350)}}catch(e){}return r}finally{_RC86=0}};
 
 deco();intro();
 
