@@ -7792,6 +7792,31 @@ const _u94=uiPost;uiPost=function(){const r=_u94.apply(this,arguments);try{const
  const d=document.createElement('details');d.className='dec94';d.innerHTML='<summary>你人生中的十個關鍵選擇</summary>'+T.map(x=>`<div class=it><b>第${Math.floor(x.t/12)+1}年${x.t%12+1}月</b>・${ESC(x.e)}<br>選了「${ESC(x.l)}」→ ${x.d.map(ESC).join('、')}${x.r?`<small>${ESC(x.r)}</small>`:''}</div>`).join('');
  const e=sc.querySelector('.end82');if(e)e.insertAdjacentElement('afterend',d);else sc.insertBefore(d,sc.firstChild)}}catch(e){console.log('r94b',e)}return r};
 
+/* ===== V212: 人物弧線（盟友的裂痕、宿敵的求饒） ===== */
+function arc95(n){S.arc95=S.arc95||{};return S.arc95[n.n]=S.arc95[n.n]||{a:0,f:0,b:0,p:0}}
+function ev95(t,o){return{t,o,keep:1,p84:1}}
+function betray95(n){const m=S.me,A=arc95(n);A.b=1;
+ return ev95('盟友的裂痕：'+n.n,[
+ ['當面質問她，問個明白',()=>{n.al=Math.min(n.al,25);n.host=(n.host||0)+25;m.scand=(m.scand||0)+3;return '你把話攤開來問。'+n.n+'臉色一白，沉默良久，只說了句「身在宮中，誰沒有難處」。多年情分，自此薄了。'}],
+ ['假作不知，暗中提防',()=>{n.al=Math.max(0,n.al-15);n.host=(n.host||0)+10;m.scheme+=3;A.watch=1;return '你什麼也沒說，只是從此留了心眼，言談處處多一分遮掩。'+n.n+'似乎察覺到你的疏遠，卻也沒再靠近。'}],
+ ['先下手為強，揭發她的把柄（冒險）',()=>{const p=Math.max(.2,Math.min(.8,.35+(m.scheme-40)/150));if(Math.random()<p){n.favor=Math.max(0,(n.favor||0)-15);n.host=(n.host||0)+30;n.al=Math.min(n.al,10);m.favor+=3;return '你搶在她前面把她的錯處遞了出去，'+n.n+'失了聖心，恨你入骨，但你保住了自己。'}m.favor-=6;m.scand=(m.scand||0)+8;n.host=(n.host||0)+35;n.al=Math.min(n.al,5);return '證據不夠硬，反被'+n.n+'倒打一耙，皇上對你多了幾分疑心。'}]
+ ])}
+function plead95(n){const m=S.me,A=arc95(n);A.p=1;
+ return ev95('宿敵的求饒：'+n.n,[
+ ['出手相助（耗銀40）',()=>{m.silver=Math.max(0,m.silver-40);n.host=Math.max(0,(n.host||0)-40);n.al=(n.al||0)+30;m.ally+=4;try{led86().push({n:n.n,t:S.t,k:'恩'})}catch(e){}return n.n+'跪在你面前，泣不成聲：「從前是我糊塗。」你讓人送去藥材銀兩。宮裡人看在眼裡，都說你有容人之量。'}],
+ ['冷眼旁觀，不聞不問',()=>{n.host=(n.host||0)+5;m.scheme+=1;return '你只淡淡說了句「各人自有造化」，便讓人送客。'+n.n+'走時背影單薄，眼裡的恨意卻沒有散去。'}],
+ ['落井下石，徹底斷了她的路',()=>{n.favor=Math.max(0,(n.favor||0)-15);n.host=100;n.al=0;m.scand=(m.scand||0)+6;m.favor+=2;return '你讓人把她的處境傳了出去，她再難翻身。只是宮裡有人暗暗說你心狠，連'+n.n+'也發了狠話：此生必不饒你。'}]
+ ])}
+const _md95=mend;mend=function(){const r=_md95.apply(this,arguments);try{
+ if(!S||!S.me||S.over||S.dly)return r;const m=S.me;if(S.ev||S.ch||S.scn)return r;
+ let fired=0;(S.npcs||[]).forEach(n=>{if(fired||!n||n.st||!n.n)return;const A=arc95(n);
+  if((n.al||0)>=60&&(n.host||0)<30)A.a++;else A.a=0;
+  if((n.host||0)>=35)A.f++;else A.f=0;
+  if(!A.b&&A.a>=18&&Math.floor(S.t/12)>=3&&(S.arc95n||0)<2&&S.t-(S.arc95t||-99)>=36){const envy=(n.rank||0)>=(m.rank||0)-1||m.favor>(n.favor||0)+20||(m.scand||0)>=40;if(envy&&Math.random()<.025){S.arc95n=(S.arc95n||0)+1;S.arc95t=S.t;S.q.unshift(betray95(n));fired=1;return}}
+  if(!A.p&&A.f>=6&&(S.arc95p||0)<3&&((m.rank||0)-(n.rank||0)>=2||(n.favor||0)<=15)&&Math.random()<.16){S.arc95p=(S.arc95p||0)+1;S.q.unshift(plead95(n));fired=1}});
+ if(fired&&!S.ev&&!S.ch)try{next()}catch(e){}
+ }catch(e){console.log('r95',e)}return r};
+
 deco();intro();
 
 
