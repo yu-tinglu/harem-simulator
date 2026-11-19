@@ -7858,6 +7858,60 @@ const _md96=mend;mend=function(){const r=_md96.apply(this,arguments);try{kidTick
 /* 結局卡：子女成長記 */
 const _u96=uiPost;uiPost=function(){const r=_u96.apply(this,arguments);try{const sc=document.querySelector('.scrim .scroll');if(sc&&S&&S.over&&S.me&&!sc.querySelector('.kg96')){const ks=(S.me.kids||[]).filter(k=>k.g96&&k.g96.length);if(ks.length){const d=document.createElement('details');d.className='dec94 kg96';d.innerHTML='<summary>子女成長記</summary>'+ks.slice(0,6).map(k=>`<div class=it><b>${ESC(k.n)}</b>${k.g96.map(g=>`<small>${g.a}歲・${ESC(g.x)}</small>`).join('')}</div>`).join('');const a=sc.querySelector('.dec94:not(.kg96)')||sc.querySelector('.end82');if(a)a.insertAdjacentElement('afterend',d)}}}catch(e){console.log('r96u',e)}return r};
 
+/* ===== V214: 人物誌／新手歡迎卡／輕量音效 ===== */
+(function(){const st=document.createElement('style');st.id='st97';st.textContent=`
+#pg97{position:fixed;inset:0;z-index:92;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:12px}
+#pg97 .bx{background:#fff8ef;border:1px solid #e3b45a;border-radius:16px;max-width:480px;width:100%;max-height:90vh;display:flex;flex-direction:column;color:#5a2b22;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+#pg97 .hd{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid #ecd2a8}
+#pg97 .hd b{font-size:17px}#pg97 .hd button{min-height:32px;padding:0 12px}
+#pg97 .bd{overflow:auto;padding:6px 14px 14px}
+#pg97 h5{margin:12px 0 4px;font-size:13.5px;color:#8a6a60;letter-spacing:.15em}
+#pg97 .rw97{display:flex;align-items:center;gap:10px;padding:7px 0;border-top:1px dashed rgba(180,130,60,.35)}
+#pg97 .rw97:first-of-type{border-top:0}
+#pg97 .rw97 .i{flex:1;min-width:0;font-size:13.5px;line-height:1.45}
+#pg97 .nm97{font-weight:700;font-size:13.5px}#pg97 .rw97 .f83{flex:none;width:48px!important;height:48px!important;min-width:48px}#pg97 .rw97 .i small{display:block;color:#8a6a60;font-size:12px}
+#pg97 .rw97 .tg{display:inline-block;font-size:12px;padding:1px 6px;border-radius:8px;margin-left:4px;background:#f3e3c8;color:#8a5a2a}
+#pg97 .rw97 .tg.a{background:#e1f3e9;color:#1f6f4a}#pg97 .rw97 .tg.f{background:#fde3dc;color:#b03a2e}#pg97 .rw97 .tg.l{background:#e8e0f7;color:#5b3fa0}
+#pg97 .rw97 .bt{display:flex;flex-direction:column;gap:4px}#pg97 .rw97 .bt button{min-height:28px;font-size:12px;padding:0 8px;white-space:nowrap}
+#pg97 .pn{font-size:12px;color:#8a6a60;margin:4px 0}
+.wc97{margin:8px 0;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,#fff3dc,#ffe6e0);border:1px solid #e3b45a;color:#5a2b22;font-size:13.5px;line-height:1.7}
+.wc97 b{color:#8a1527}.wc97 .tb{margin-top:8px;display:flex;gap:8px}.wc97 .tb button{flex:1;min-height:36px}
+`;document.head.appendChild(st)})();
+function lab97(v,lo,hi){return v>=hi?'很高':v>=lo?'不錯':'普通'}
+function row97(w,name,sub,tags,up){const nm=up?encodeURIComponent(up):'';let f='';try{f=face83(w,44)}catch(e){f=''}
+ return`<div class=rw97>${f}<div class=i><span class=nm97>${ESC(name)}</span>${(tags||[]).map(t=>`<span class="tg ${t[0]}">${ESC(t[1])}</span>`).join('')}<small>${ESC(sub||'')}</small></div>${up?`<div class=bt><button class=s onclick="this.parentNode.querySelector('input').click()">${PH83[up]?'更換':'上傳'}</button><input type=file accept="image/*" hidden data-nm="${nm}" onchange="ph83up(this)">${PH83[up]?`<button class=s onclick="ph83rm('${nm}')">移除</button>`:''}</div>`:''}</div>`}
+function pg97open(){try{if(!S||!S.me)return;const o=document.getElementById('pg97');const keep=o?o.querySelector('.bd').scrollTop:0;if(o)o.remove();const m=S.me;window.PG97=1;let h='';
+ const emp=(typeof empName==='function'?empName():'')||'皇上';h+='<h5>宮廷</h5>'+row97('emp',emp,'皇上',[]);
+ try{h+=row97('dow',(PT&&PT.dow&&PT.dow.n)||'太后','太后・宮中最尊',[])}catch(e){}
+ h+=row97('me',m.n,'你・'+(S.reg?(S.reg.title||'太后'):(RK[m.rank]||''))+'・聖寵 '+Math.round(m.favor)+'・人脈 '+Math.round(m.ally),[]);
+ const L=(S.npcs||[]).filter(n=>n&&!n.st&&n.n).sort((a,b)=>(b.rank||0)-(a.rank||0));
+ const q=(typeof S.qi==='number')?S.npcs[S.qi]:null;
+ const tg=n=>{const t=[];if(q&&n===q)t.push(['',' 皇后'.trim()]);if(n.lin93==='ally')t.push(['l','前世舊識']);if(n.lin93==='foe')t.push(['l','前世宿敵']);if((n.al||0)>=60&&(n.host||0)<30)t.push(['a','盟友']);if((n.host||0)>=45)t.push(['f','宿敵']);return t};
+ h+='<h5>後宮（'+L.length+' 人）</h5>'+L.slice(0,40).map(n=>row97(n,n.n,(RK[n.rank]||'')+'・好感'+lab97(n.al||0,35,60)+'・敵意'+((n.host||0)>=45?'深':(n.host||0)>=20?'有':'無'),tg(n),n.n)).join('')+(L.length>40?'<div class=pn>僅顯示前 40 位。</div>':'');
+ const ks=(m.kids||[]).filter(k=>!k.dead);if(ks.length)h+='<h5>子女</h5>'+ks.map(k=>{let a='';try{a=yr(k)+'歲'}catch(e){}return row97(k,k.n,(k.sex==='男'?'皇子':'公主')+'・'+a+'・親密'+lab97(k.bond||50,50,72),[],k.n)}).join('');
+ const d=document.createElement('div');d.id='pg97';d.innerHTML='<div class=bx><div class=hd><b>人物誌</b><button class=s id=pgx>關閉</button></div><div class=bd><div class=pn>點「上傳」可替人物設定畫像，照片只存在這台裝置。</div>'+h+'</div></div>';
+ document.body.appendChild(d);d.addEventListener('click',e=>{if(e.target===d){d.remove();window.PG97=0}});d.querySelector('#pgx').onclick=()=>{d.remove();window.PG97=0};d.querySelector('.bd').scrollTop=keep}catch(e){console.log('r97pg',e)}}
+const _re97=ph83re;ph83re=function(){const r=_re97.apply(this,arguments);try{if(window.PG97)setTimeout(pg97open,150)}catch(e){}return r};
+/* 歡迎卡（不擋操作） */
+function wc97(){try{if(!S||!S.me||S.over||TAB!==0||S.t>1||S.ev||S.ch||S.scn)return;let seen='';try{seen=localStorage.getItem('hg_ob97')}catch(e){}if(seen)return;const mn=document.querySelector('#app main');if(!mn||mn.querySelector('.wc97'))return;
+ mn.insertAdjacentHTML('afterbegin',`<div class=wc97><b>歡迎入宮。三件事先記住：</b><br>① 每個月有 <b>4 次行動</b>，用完就過一個月。<br>② 先顧好 <b>聖寵、人脈、健康</b>，再想晉位、生子。<br>③ 遇到事件，選項旁的「穩妥／冒險」小標籤可以參考；你的每個選擇都會寫進結局的「十個關鍵選擇」。<br><span style="font-size:12px;color:#8a6a60">卡關或發現問題，可回首頁按「回報問題」。</span><div class=tb><button class="s" onclick="try{localStorage.setItem('hg_ob97','1')}catch(e){}this.closest('.wc97').remove()">知道了</button></div></div>`)}catch(e){console.log('r97w',e)}}
+/* 輕量音效（預設開、很小聲，可在設定關閉） */
+const SFX97={on:true,ctx:null,last:{}};try{const v=localStorage.getItem('hg_sfx');if(v==='0')SFX97.on=false}catch(e){}
+function sfxCtx97(){try{if(!SFX97.ctx){const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;SFX97.ctx=new A()}if(SFX97.ctx.state==='suspended')SFX97.ctx.resume();return SFX97.ctx}catch(e){return null}}
+function tone97(f,t0,d,v){const c=SFX97.ctx;if(!c)return;const o=c.createOscillator(),g=c.createGain(),t=c.currentTime+t0;o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.015);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+d+.05)}
+function sfx97(k){try{if(!SFX97.on)return;const now=Date.now();if(SFX97.last[k]&&now-SFX97.last[k]<900)return;SFX97.last[k]=now;if(!sfxCtx97())return;
+ if(k==='ev'){tone97(660,0,.35,.035)}else if(k==='up'){[523,659,784,1047].forEach((f,i)=>tone97(f,i*.11,.6,.05))}else if(k==='birth'){[659,784,988].forEach((f,i)=>tone97(f,i*.14,.7,.045))}else if(k==='end'){[392,330,262].forEach((f,i)=>tone97(f,i*.25,1.1,.05))}else if(k==='down'){[330,262].forEach((f,i)=>tone97(f,i*.18,.7,.04))}}catch(e){}}
+try{document.addEventListener('pointerdown',()=>{if(SFX97.on)sfxCtx97()},{once:true,passive:true})}catch(e){}
+function sfxToggle97(){SFX97.on=!SFX97.on;try{localStorage.setItem('hg_sfx',SFX97.on?'1':'0')}catch(e){}if(SFX97.on){sfx97('ev')}try{intro()}catch(e){}}
+const _ap97=avPanel;avPanel=function(){return _ap97.apply(this,arguments)+`<div class=cd><h3>音效</h3><div class=m>事件、晉位、生子與結局時的短提示音，很小聲。</div><p><button class=s onclick="sfxToggle97()">提示音效：${SFX97.on?'開':'關'}</button></p></div>`};
+let st97={r:null,k:null,o:0,e:''};
+const _r97=render;render=function(){const r=_r97.apply(this,arguments);try{
+ if(S&&S.me){const m=S.me;if(st97.r!==null&&!S.over){if(m.rank>st97.r)sfx97('up');else if(m.rank<st97.r)sfx97('down');if((m.kids||[]).length>st97.k)sfx97('birth')}
+  st97.r=m.rank;st97.k=(m.kids||[]).length;if(S.over&&!st97.o){st97.o=1;sfx97('end')}if(!S.over)st97.o=0;
+  const t=S.ev&&S.ev.t||'';if(t&&t!==st97.e){st97.e=t;sfx97('ev')}if(!t)st97.e='';
+  if(TAB===1&&!S.over){const mn=document.querySelector('#app main');if(mn&&!mn.querySelector('.pg97b'))mn.insertAdjacentHTML('afterbegin','<div class="cd pg97b" style="padding:8px 12px"><button class=s style="width:100%" onclick="pg97open()">人物誌・人物關係與畫像設定</button></div>')}
+  wc97()}else{st97.r=null;st97.k=null}}catch(e){console.log('r97',e)}return r};
+
 deco();intro();
 
 
