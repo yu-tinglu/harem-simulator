@@ -7766,6 +7766,32 @@ function lin93Apply(){try{if(DLY||!S||!S.me||S.lin93done||S.dly)return;const a=l
 const _la93=lgApply;lgApply=function(){const r=_la93.apply(this,arguments);try{lin93Apply()}catch(e){}return r};
 const _lc93=lgCard;lgCard=function(){let h=_lc93.apply(this,arguments);try{const a=linGet();if(a.length){const p=a[a.length-1];h=h.replace(/<\/div><div class=g>/,'</div><div class=m style="margin:6px 0">前世羈絆：上一世你是「'+ESC(p.me)+'」，最終'+ESC(p.end||'—')+(p.ally?'；生前摯友「'+ESC(p.ally)+'」':'')+(p.foe?'；宿敵「'+ESC(p.foe)+'」':'')+(p.kid?'；牽掛的孩子「'+ESC(p.kid)+'」':'')+'。這些人會在下一世再度出現。</div><div class=g>')}}catch(e){}return h};
 
+/* ===== V211: 人生十大抉擇（結局卡回顧） ===== */
+(function(){const st=document.createElement('style');st.id='st94';st.textContent=`
+.dec94{margin-top:10px;width:100%;text-align:left;background:rgba(255,255,255,.65);border:1px solid rgba(227,180,90,.7);border-radius:12px;padding:8px 10px}
+.dec94 summary{cursor:pointer;font-weight:700;color:#6b1d27;font-size:13.5px}
+.dec94 .it{padding:7px 0;border-top:1px dashed rgba(180,130,60,.4);font-size:13.5px;line-height:1.55;color:#5a2b22}
+.dec94 .it:first-of-type{border-top:0}.dec94 .it b{color:#8a1527}.dec94 .it small{display:block;color:#8a6a60;font-size:12px}
+`;document.head.appendChild(st)})();
+function sn94(){const o={f:S.me.favor||0,r:S.me.rank||0,s:S.me.silver||0,h:S.me.hp||0,sc:S.me.scheme||0,a:S.me.ally||0,k:(S.me.kids||[]).length,ds:S.me.dsus||0,sd:S.me.scand||0,n:{}};(S.npcs||[]).forEach(n=>{if(n&&n.n)o.n[n.n]=[n.al||0,n.host||0,n.st?1:0]});return o}
+function df94(a,b){const p=[];let sc=0;const add=(w,lab,d,k)=>{if(!d)return;sc+=Math.abs(d)*k;p.push([Math.abs(d)*k,lab+(d>0?'+':'')+Math.round(d)])};
+ add(0,'聖寵',b.f-a.f,1);add(0,'健康',b.h-a.h,.7);add(0,'心機',b.sc-a.sc,1);add(0,'人脈',b.a-a.a,.8);add(0,'銀兩',(b.s-a.s),.05);add(0,'嫌疑',b.ds-a.ds,.8);add(0,'醜聞',b.sd-a.sd,.5);
+ if(b.r!==a.r){sc+=Math.abs(b.r-a.r)*25;p.push([25,(typeof RK!=='undefined'&&RK[b.r]?(b.r>a.r?'晉為'+RK[b.r]:'降為'+RK[b.r]):'位份變動')])}
+ if(b.k!==a.k){sc+=Math.abs(b.k-a.k)*30;p.push([30,b.k>a.k?'添子女':'失子女'])}
+ Object.keys(b.n).forEach(k=>{const x=a.n[k],y=b.n[k];if(!x)return;const da=Math.round(y[0]-x[0]),dh=Math.round(y[1]-x[1]);if(Math.abs(da)>=6){sc+=Math.abs(da)*.6;p.push([Math.abs(da)*.6+3,k+'好感'+(da>0?'+':'')+da])}if(Math.abs(dh)>=6){sc+=Math.abs(dh)*.6;p.push([Math.abs(dh)*.6+3,k+'敵意'+(dh>0?'+':'')+dh])}if(y[2]&&!x[2]){sc+=25;p.push([25,k+'殞命'])}});
+ p.sort((u,v)=>v[0]-u[0]);return{sc:Math.round(sc),d:p.slice(0,3).map(x=>x[1])}}
+function rec94(a,t,lab){try{if(!a||!S||!S.me||S.dly&&0)return;const b=sn94(),r=df94(a,b);if(r.sc<14)return;const L=S.dec94=S.dec94||[];
+ const res=String(S.res||'').replace(/<[^>]*>/g,'').split('🔔')[0].trim().slice(0,56);L.push({t:S.t,e:String(t||'').length>26?String(t).slice(0,25)+'…':String(t||''),l:String(lab||'').replace(/\s*[★☆].*$/,'').slice(0,30),sc:r.sc,d:r.d,r:res});
+ if(L.length>60){L.sort((x,y)=>y.sc-x.sc);L.length=40;L.sort((x,y)=>x.t-y.t)}}catch(e){console.log('r94a',e)}}
+const _V94=V;V=function(i){let a=null,t='',lab='';try{if(S&&S.me&&S.ev&&S.ev.o&&S.ev.o[i]){a=sn94();t=S.ev.t||'';lab=S.ev.o[i][0]}}catch(e){}
+ const r=_V94.apply(this,arguments);rec94(a,t,lab);return r};
+const _C94=C;C=function(i){let a=null,t='',lab='';try{if(S&&S.me&&S.ch&&S.ch.o&&S.ch.o[i]){a=sn94();t=S.ch.t||'';lab=S.ch.o[i].l}}catch(e){}
+ const r=_C94.apply(this,arguments);rec94(a,t,lab);return r};
+function top94(){const L=(S&&S.dec94)||[];return L.slice().sort((x,y)=>y.sc-x.sc).slice(0,10).sort((x,y)=>x.t-y.t)}
+const _u94=uiPost;uiPost=function(){const r=_u94.apply(this,arguments);try{const sc=document.querySelector('.scrim .scroll');if(sc&&S&&S.over&&!sc.querySelector('.dec94')){const T=top94();if(!T.length)return r;
+ const d=document.createElement('details');d.className='dec94';d.innerHTML='<summary>你人生中的十個關鍵選擇</summary>'+T.map(x=>`<div class=it><b>第${Math.floor(x.t/12)+1}年${x.t%12+1}月</b>・${ESC(x.e)}<br>選了「${ESC(x.l)}」→ ${x.d.map(ESC).join('、')}${x.r?`<small>${ESC(x.r)}</small>`:''}</div>`).join('');
+ const e=sc.querySelector('.end82');if(e)e.insertAdjacentElement('afterend',d);else sc.insertBefore(d,sc.firstChild)}}catch(e){console.log('r94b',e)}return r};
+
 deco();intro();
 
 
