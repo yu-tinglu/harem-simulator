@@ -7705,6 +7705,22 @@ const nAge90=n=>{try{return typeof nAge==='function'?nAge(n):40}catch(e){return 
 const _mc90=miscarry;miscarry=function(n){const r=_mc90.apply(this,arguments);try{if(n===S.me)S.lost90=1}catch(e){}return r};
 const _md91=mend;mend=function(){const r=_md91.apply(this,arguments);try{end90()}catch(e){}return r};
 
+/* ===== V207: 選項標示（穩妥／冒險／耗銀） ===== */
+(function(){const st=document.createElement('style');st.id='st91';st.textContent=`
+.scrim .scroll button .t91{float:right;margin-left:8px;font-size:12px;line-height:1;padding:3px 7px;border-radius:9px;font-style:normal;letter-spacing:0;vertical-align:middle}
+.scrim .scroll button .t91.sf{background:#e1f3e9;color:#1f6f4a}
+.scrim .scroll button .t91.rk{background:#fde3dc;color:#b03a2e}
+.scrim .scroll button .t91.co{background:#fff3d2;color:#8a6a14}
+.scrim .scroll .n91{margin-top:8px;font-size:12px;color:#8a6a60;line-height:1.5;text-align:center}
+`;document.head.appendChild(st)})();
+const RK91=/澄清|求見|面聖|攤牌|翻臉|不留情|險|極|暗中|栽贓|陷害|下毒|暗算|報復|反咬|將計就計|先發制人|強行|孤注|逼問|揭發|對質|鬧到|以牙還牙|煽風|冷嘲|偷聽|跟上去|查探|大膽|放假消息|當場|厲聲/;
+const SF91=/閉門|等風頭|靜觀|忍一|忍下|觀望|低調|不追究|算了|退避|靜靜|婉拒|婉言|婉轉|謙|隱忍|按兵|不當一回事|不理|裝作|低頭|請罪|安撫|化解|息事|知道了|作罷|離開|放回|謝過|不打擾|不敢|退開|再撐|先不|不必/;
+const CO91=/耗銀\s*\d|銀\s*\d+\s*兩|重金|花銀/;
+function tag91(l){const t=[];const s=String(l||'');if(CO91.test(s))t.push(['co','耗銀']);if(RK91.test(s))t.push(['rk','冒險']);else if(SF91.test(s))t.push(['sf','穩妥']);return t}
+function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||sc.querySelector('.t91'))return;let n=0;sc.querySelectorAll('button').forEach(b=>{if(b.querySelector('.t91'))return;const oc=b.getAttribute('onclick')||'';if(!/^(V|C)\(/.test(oc))return;const t=tag91(b.textContent);if(!t.length)return;n++;b.insertAdjacentHTML('beforeend',t.map(x=>`<em class="t91 ${x[0]}">${x[1]}</em>`).join(''))});
+ if(n&&!sc.querySelector('.n91'))sc.insertAdjacentHTML('beforeend','<div class=n91>標示只是依選項字面推測：穩妥＝後果通常較小；冒險＝可能得罪人或失敗，但也可能有收穫。</div>')}catch(e){console.log('r91',e)}}
+const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
+
 deco();intro();
 
 
