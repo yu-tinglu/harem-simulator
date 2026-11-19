@@ -7572,6 +7572,8 @@ PLC.push(
 /* —— 月底偶遇：不花行動點，也會在宮裡碰上事 —— */
 const _md85=mend;mend=function(){const r=_md85.apply(this,arguments);try{if(S&&S.me&&!S.over&&!S.reg&&!S.ev&&!S.ch&&!S.scn&&(S.q||[]).length===0&&S.t-(S.lw85===undefined?-9:S.lw85)>=3&&P(.1)){const p=pk(PLC),e=pk(p[2])();if(e){S.lw85=S.t;e.keep=1;e.t='〔偶遇・'+p[0]+'〕'+e.t;S.q.push(e);next()}}}catch(e){console.log('r85amb',e)}return r};
 const m85=()=>S.me.scheme||0;
+/* 預設改為完整玩（沒有自己選過的玩家，小事也會問你）；明確選過「輕鬆玩」的人維持原設定 */
+window.rlxOn=()=>{try{return(localStorage.getItem('hg_rlx')||'off')==='on'}catch(e){return false}};
 
 deco();intro();
 
