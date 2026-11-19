@@ -7745,6 +7745,27 @@ const _r92=render;render=function(){const r=_r92.apply(this,arguments);try{btn92
 
 try{const ap=document.getElementById('app');if(ap){let t92=0;new MutationObserver(()=>{if(t92)return;t92=setTimeout(()=>{t92=0;btn92()},50)}).observe(ap,{childList:true,subtree:true});btn92()}}catch(e){}
 
+/* ===== V210: 多週目羈絆（上一世的盟友與宿敵會在下一世重逢） ===== */
+const LIN93='hg93_lin';
+function linGet(){try{const a=JSON.parse(stg.get(LIN93)||'[]');return Array.isArray(a)?a:[]}catch(e){return[]}}
+function linSet(a){try{stg.set(LIN93,JSON.stringify(a.slice(-3)))}catch(e){}}
+function lin93Save(){try{if(!S||!S.me||S.lin93||S.dly)return;S.lin93=1;const L=(S.npcs||[]).filter(n=>n&&n.n);
+ const ally=L.filter(n=>(n.al||0)>=55&&!(n.host>=40)).sort((a,b)=>(b.al||0)-(a.al||0))[0];
+ const foe=L.filter(n=>(n.host||0)>=45).sort((a,b)=>(b.host||0)-(a.host||0))[0];
+ const kid=(S.me.kids||[]).filter(k=>!k.dead).sort((a,b)=>((b.cai||0)+(b.de||0)+(b.pow||0))-((a.cai||0)+(a.de||0)+(a.pow||0)))[0];
+ const a=linGet();a.push({me:S.me.n,end:(S.over&&S.over.t)||'',rk:(typeof RK!=='undefined'&&RK[S.me.rank])||'',y:Math.floor((S.t||0)/12),ally:ally?ally.n:'',foe:foe?foe.n:'',kid:kid?kid.n:'',sc:(typeof scoreOf==='function'?scoreOf():0)});linSet(a)}catch(e){console.log('r93a',e)}}
+const _o93=over;over=function(){const r=_o93.apply(this,arguments);try{lin93Save()}catch(e){}return r};
+function lin93Apply(){try{if(DLY||!S||!S.me||S.lin93done||S.dly)return;const a=linGet();if(!a.length)return;S.lin93done=1;const p=a[a.length-1];const L=S.npcs||[];const free=L.filter(n=>n&&!n.st&&n.n);
+ const used={};const pick=(rk)=>{let b=null;free.forEach(n=>{if(used[n.n])return;if(!b||Math.abs((n.rank||0)-rk)<Math.abs((b.rank||0)-rk))b=n});return b};
+ let msg=[];
+ if(p.ally&&p.ally!==S.me.n){const n=pick(2);if(n){used[n.n]=1;n.n=p.ally;n.al=Math.max(n.al||0,55);n.host=0;n.lin93='ally';msg.push('舊識「'+p.ally+'」也在宮中，對你格外親近')}}
+ if(p.foe&&p.foe!==S.me.n&&p.foe!==p.ally){const n=pick(5);if(n){used[n.n]=1;n.n=p.foe;n.host=Math.max(n.host||0,45);n.al=Math.min(n.al||0,20);n.lin93='foe';msg.push('「'+p.foe+'」眼神裡帶著說不出的敵意')}}
+ if(p.kid){S.me.ally+=3;msg.push('夢裡總聽見一個叫「'+p.kid+'」的孩子喊娘')}
+ S.lin93msg=msg;S.lin93p=p;
+ const f=()=>{try{if(!msg.length)return;S.q.unshift({t:'前世的影子',o:[['記在心裡',()=>{S.me.scheme+=2;return '你說不清這種熟悉感從哪裡來，只是多留了個心眼。'+msg.join('；')+'。'}]]})}catch(e){}};f()}catch(e){console.log('r93b',e)}}
+const _la93=lgApply;lgApply=function(){const r=_la93.apply(this,arguments);try{lin93Apply()}catch(e){}return r};
+const _lc93=lgCard;lgCard=function(){let h=_lc93.apply(this,arguments);try{const a=linGet();if(a.length){const p=a[a.length-1];h=h.replace(/<\/div><div class=g>/,'</div><div class=m style="margin:6px 0">前世羈絆：上一世你是「'+ESC(p.me)+'」，最終'+ESC(p.end||'—')+(p.ally?'；生前摯友「'+ESC(p.ally)+'」':'')+(p.foe?'；宿敵「'+ESC(p.foe)+'」':'')+(p.kid?'；牽掛的孩子「'+ESC(p.kid)+'」':'')+'。這些人會在下一世再度出現。</div><div class=g>')}}catch(e){}return h};
+
 deco();intro();
 
 
