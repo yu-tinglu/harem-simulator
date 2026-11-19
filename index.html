@@ -7721,6 +7721,30 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
  if(n&&!sc.querySelector('.n91'))sc.insertAdjacentHTML('beforeend','<div class=n91>標示只是依選項字面推測：穩妥＝後果通常較小；冒險＝可能得罪人或失敗，但也可能有收穫。</div>')}catch(e){console.log('r91',e)}}
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
+/* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
+const VER92='V209';const ERR92=[];
+try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
+(function(){const st=document.createElement('style');st.id='st92';st.textContent=`
+#fb92{position:fixed;inset:0;z-index:95;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
+#fb92 .bx{background:#fff8ef;border:1px solid #e3b45a;border-radius:16px;max-width:460px;width:100%;max-height:88vh;overflow:auto;padding:16px;color:#5a2b22;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+#fb92 h3{margin:0 0 6px;font-size:17px}#fb92 p{margin:6px 0;font-size:13.5px;line-height:1.6;color:#7a5a50}
+#fb92 textarea{width:100%;box-sizing:border-box;border:1px solid #e3c6a0;border-radius:10px;padding:8px;font:inherit;font-size:13.5px;background:#fff;color:#4a2a22}
+#fb92 .row{display:flex;gap:8px;margin-top:10px}#fb92 .row button{flex:1;padding:11px;border-radius:12px;border:1px solid #e3b45a;background:#fff;color:#8a3a2e;font:inherit;font-size:13.5px}
+#fb92 .row button.pr{background:linear-gradient(#f08a9c,#d4566e);color:#fff;border-color:transparent}
+#fb92 .ms{font-size:12px;color:#1f6f4a;min-height:18px;margin-top:6px}
+`;document.head.appendChild(st)})();
+function rep92(note){let s='';try{s=S&&!S.over?('HGS1:'+btoa(unescape(encodeURIComponent(snap())))):'（目前沒有進行中的遊戲）'}catch(e){s='（存檔產生失敗）'}
+ let st='';try{st=S&&S.me?('第'+(S.y!=null?S.y:'?')+'年 位份:'+(typeof RK!=='undefined'&&RK[S.me.rank]?(RK[S.me.rank].n||RK[S.me.rank]):S.me.rank)+' 難度:'+S.diff):''}catch(e){}
+ return '【後宮模擬器 問題回報】\n版本:'+VER92+'\n時間:'+new Date().toLocaleString()+'\n畫面:'+innerWidth+'x'+innerHeight+' DPR'+(window.devicePixelRatio||1)+'\n瀏覽器:'+navigator.userAgent+'\n遊戲狀態:'+(st||'無')+'\n近期錯誤:'+(ERR92.length?ERR92.join(' | '):'無')+'\n\n我遇到的情況:\n'+(note||'（請在這裡描述）')+'\n\n存檔:\n'+s}
+function fb92(){if(document.getElementById('fb92'))return;const d=document.createElement('div');d.id='fb92';d.innerHTML=`<div class=bx><h3>回報問題／提出建議</h3><p>不需要帳號。寫下你遇到的狀況，按「複製回報」，再貼給作者就好。回報會自動附上版本、畫面大小和目前存檔，方便重現問題。</p><textarea id=fbt rows=5 placeholder="例如：點了某個選項後畫面卡住／某段文字看不懂／覺得太簡單…"></textarea><div class=ms id=fbm></div><div class=row><button class=pr id=fbc>複製回報</button><button id=fbx>關閉</button></div></div>`;document.body.appendChild(d);
+ d.addEventListener('click',e=>{if(e.target===d)d.remove()});document.getElementById('fbx').onclick=()=>d.remove();
+ document.getElementById('fbc').onclick=()=>{const t=rep92(document.getElementById('fbt').value.trim());const m=document.getElementById('fbm');let done=0;try{navigator.clipboard.writeText(t).then(()=>{m.textContent='已複製，請貼給作者。'},()=>fb92sel(t,m));done=1}catch(e){}if(!done)fb92sel(t,m)}}
+function fb92sel(t,m){const ta=document.getElementById('fbt');ta.value=t;ta.rows=10;ta.select();m.textContent='請手動全選複製上方文字，再貼給作者。'}
+function btn92(){try{if(document.getElementById('fbBtn92'))return;const b=[...document.querySelectorAll('button')].find(x=>/menuGo\('set'\)/.test(x.getAttribute('onclick')||''));if(!b)return;const c=b.cloneNode(true);c.id='fbBtn92';c.setAttribute('onclick','fb92()');const ch=c.children;if(ch.length>=2){ch[0].textContent='回報問題';ch[1].textContent='一鍵複製回報，附上存檔，不需帳號'}else c.textContent='回報問題';b.insertAdjacentElement('afterend',c)}catch(e){console.log('r92',e)}}
+const _r92=render;render=function(){const r=_r92.apply(this,arguments);try{btn92();setTimeout(btn92,60)}catch(e){}return r};
+
+try{const ap=document.getElementById('app');if(ap){let t92=0;new MutationObserver(()=>{if(t92)return;t92=setTimeout(()=>{t92=0;btn92()},50)}).observe(ap,{childList:true,subtree:true});btn92()}}catch(e){}
+
 deco();intro();
 
 
