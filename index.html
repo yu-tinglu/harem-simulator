@@ -1176,9 +1176,9 @@ if(S.earc){if(S.earc.done&&S.t-S.earc.t>14&&P(.08))S.earc={k:R(0,EARC.length-1),
 if(S.dow&&S.darc){if(S.darc.done&&S.t-S.darc.t>16&&P(.08))S.darc={k:R(0,DARC.length-1),s:0,t:S.t,w:R(8,22),f:{}};tickArc(S.darc,{},DARC,'后','太后',evs)}}
 S.cr.forEach(f=>{if(f.A.done&&S.t-f.A.t>10&&P(.1))f.A={k:R(0,CARC.length-1),s:0,t:S.t,w:R(6,24),f:{}};tickArc(f.A,{f},CARC[f.A.k],'朝',f.role+f.n,evs)});return evs}
 function chrPanel0(){const F=['全部','皇帝','太后','前朝','後宮'],K=[null,'帝','后','朝','宮'],ts=t=>`第${Math.floor(t/12)+1}年${t%12+1}月`;let h=`<div class=chips style="margin:0 0 8px">`+F.map((f,i)=>`<button class="${CHF==i?'':'s'} mini" onclick="CHF=${i};render()">${f}</button>`).join('')+'</div>';
-if(CHF==0||CHF==1){const e=S.earc;h+=`<div class=cd><h3>皇帝傳${S.reg?'（已駕崩）':''}</h3><div class=m>${EPS[S.ep][0]}・${e&&EARC[e.k]?EARC[e.k].k+'（第'+Math.min(e.s,5)+'/5幕'+(e.done?'・完結':'')+'）':''}</div></div>`}
-if((CHF==0||CHF==2)&&S.dow&&S.darc)h+=`<div class=cd><h3>太后傳</h3><div class=m>${DARC[S.darc.k].k}（第${Math.min(S.darc.s,4)}/4幕${S.darc.done?'・完結':''}）</div></div>`;
-if(CHF==0||CHF==3)h+=`<div class=cd><h3>前朝人物</h3>`+S.cr.map(f=>`<div class=k><b>${f.role}${f.n}</b>・${FACN[f.fac]}<br><span class=m>${CARC[f.A.k].k}（第${Math.min(f.A.s,4)}/4幕${f.A.done?'・完結':''}）</span></div>`).join('')+'</div>';
+if(CHF==0||CHF==1){const e=S.earc;h+=`<div class=cd><h3>皇帝傳${S.reg?'（已駕崩）':''}</h3><div class=m>${EPS[S.ep][0]}・${e&&EARC[e.k]?EARC[e.k].k+'（'+(e.done?'完結':'進行中')+'）':''}</div></div>`}
+if((CHF==0||CHF==2)&&S.dow&&S.darc)h+=`<div class=cd><h3>太后傳</h3><div class=m>${DARC[S.darc.k].k}（${S.darc.done?'完結':'進行中'}）</div></div>`;
+if(CHF==0||CHF==3)h+=`<div class=cd><h3>前朝人物</h3>`+S.cr.map(f=>`<div class=k><b>${f.role}${f.n}</b>・${FACN[f.fac]}<br><span class=m>${CARC[f.A.k].k}（${f.A.done?'完結':'進行中'}）</span></div>`).join('')+'</div>';
 const L2=(S.chr||[]).filter(x=>!K[CHF]||x.k===K[CHF]).slice(0,60);h+=`<div class="cd l"><h3>大事記</h3>`+(L2.length?L2.map(x=>`<p><b>${ts(x.t)}</b>　${x.x}</p>`).join(''):'<span class=m>故事尚未展開，請繼續度過歲月。</span>')+'</div>';return h}
 /* ===== v18：太妃制度・子女聯姻和親 ===== */
 const NAT6=['暹羅','高麗','蒙古','吐蕃','安南','準噶爾'];
@@ -1825,7 +1825,7 @@ R_.pw-=5;R_.rv=cl(R_.rv+4);return txt+`廷辯落敗，「${top}」依對手之�
 RGE.push(()=>P(.8)&&debateEv(1,0,0,pk(['鹽鐵專賣之爭','減免賦稅之議','北伐還是議和','選官制度改革','宗室歲祿削減'])));
 function playMonth(){const ev=[];if(!S.reg&&S.t%12==2&&ids().length>=3)ev.push(feastEv());return ev}
 function start(){start0();S.goal=GOAL;S.diff=DIFF;S.gdone=0;S.ag=[];if(DIFF==0)S.me.silver+=40;if(DIFF==2){S.me.silver=Math.max(0,S.me.silver-15);S.npcs.forEach(n=>n.host=cl(n.host+8))}render()}
-function chrPanel(){let h='';if(S.reg&&S.rarc&&(CHF==0||CHF==1)){const e=S.rarc;h+=`<div class=cd><h3>新帝傳　${S.reg.k.n}</h3><div class=m>${RARC[e.k].k}（第${Math.min(e.s,4)}/4幕${e.done?'・完結':''}）</div></div>`}return h+chrPanel0()}
+function chrPanel(){let h='';if(S.reg&&S.rarc&&(CHF==0||CHF==1)){const e=S.rarc;h+=`<div class=cd><h3>新帝傳　${S.reg.k.n}</h3><div class=m>${RARC[e.k].k}（${e.done?'完結':'進行中'}）</div></div>`}return h+chrPanel0()}
 /* ===== 存檔：4 格 ===== */
 let UID=0,PEND=null,SMSG='';const MEM={},SK=i=>'shengong_slot_'+i;
 const stg={get(k){try{const v=localStorage.getItem(k);if(v!==null)return v}catch(e){}return MEM[k]||null},set(k,v){let ok=1;try{localStorage.setItem(k,v)}catch(e){ok=0}MEM[k]=v;return ok},del(k){try{localStorage.removeItem(k)}catch(e){}delete MEM[k]}};
@@ -2108,7 +2108,7 @@ return`<div class=cd data-open=1><h3>皇室子嗣總覽　共 ${arr.length} 位<
 return`<details class="cd con" data-i data-t="${k.n} ${k.sex=='男'?'皇子':'公主'} ${mom} ${mine?'我的':''} ${S.heir===k?'儲君':''} ${k.sp&&!k.sp.end?'已婚':''} ${a<12?'幼年':'成年'} ${KT[k.t][0]}"><summary><span class=nm>${k.n}</span><span class="pill ${k.sex=='男'?'r':''}">${k.sex=='男'?'皇子':'公主'}</span><span class=pill>${a}歲</span>${S.heir===k?'<span class="pill r">儲君</span>':''}${mine?'<span class=pill>我的</span>':''}<span class=mm>${mom}所出・聲勢${sc(k)|0}・〔${KT[k.t][0]}〕</span></summary><div class=kb>${kb2('才',k.cai)}${kb2('德',k.de)}${kb2('寵',k.chong)}${kb2('勢',k.pow)}${kb2('孝',k.bond)}</div><div class=m>${KT[k.t][1]}<br>顏${k.at.lk|0}・氣質${k.at.qi|0}・智${k.at.iq|0}・${whT(k.at.wh)}｜擅長：${topSk(k.at,3)}<br>${dsPills(k.at)}<br>${spLine(k)}</div></details>`}).join('')+`</div></div>`}
 const _rd2=render;render=function(){_rd2();try{foldPost();fApply()}catch(e){console.log(e)}};
 
-function ROW(n,i){return`<details class="cd con ${n.st?'dead':''}${n===S.me?' meRow':''}" data-i data-t="${rowT(n)}"><summary><span class=nm>${n.name||n.n}${n===S.me?'（你）':''}</span><span class="pill ${n.st?'':'r'}">${n.st?n.st:n===S.me?(S.reg?S.reg.title:RKD(n)):RKN(n)}</span><span class=pill>${n===S.me?pAge():nAge(n)}歲</span>${i===S.qi?'<span class=pill>中宮</span>':''}${n.preg?'<span class="pill g">有孕</span>':''}<span class=mm>寵${n.favor|0}・母族${(n.pow===undefined?n.clan:n.pow)|0}・子女${n.kids.length}・〔${TS[n.g][0]}〕</span></summary><div class=m>${TS[n.g][1]}<br>顏${n.at.lk|0}・氣質${n.at.qi|0}・智${n.at.iq|0}・${whT(n.at.wh)}・${n.at.ht}cm/${n.at.wt}kg・腳${n.at.ft}cm<br>擅長：${topSk(n.at,3)}<br>${dsPills(n.at)}${S.reg?(n.arc2?`<br>故事線：${TARC[n.arc2.k].k}（第${Math.min(n.arc2.s,4)}/4幕${n.arc2.done?'・完結':''}）${(S.chr||[]).filter(x=>x.w&&x.w.endsWith(n.n)).slice(0,3).map(x=>'<br>・'+x.x).join('')}`:''):n.arc?`<br>故事線：${ARCN[n.arc.k].k}（第${Math.min(n.arc.s,4)}/4幕${n.arc.done?'・完結':''}）${(S.chr||[]).filter(x=>x.w===n.n).slice(0,3).map(x=>'<br>・'+x.x).join('')}`:''}<br>${kinTxt(n)}派系：${FAC[n.fac]}　與你：盟友度${n.al|0}・敵意${n.host|0}・罪證${S.evid[i]||0}　體力${n.hp|0}<br>${(famInit(n),n.fam).map(x=>`${famTxt(x)}　權${x.pw|0}`).join('<br>')}</div></details>`}
+function ROW(n,i){return`<details class="cd con ${n.st?'dead':''}${n===S.me?' meRow':''}" data-i data-t="${rowT(n)}"><summary><span class=nm>${n.name||n.n}${n===S.me?'（你）':''}</span><span class="pill ${n.st?'':'r'}">${n.st?n.st:n===S.me?(S.reg?S.reg.title:RKD(n)):RKN(n)}</span><span class=pill>${n===S.me?pAge():nAge(n)}歲</span>${i===S.qi?'<span class=pill>中宮</span>':''}${n.preg?'<span class="pill g">有孕</span>':''}<span class=mm>寵${n.favor|0}・母族${(n.pow===undefined?n.clan:n.pow)|0}・子女${n.kids.length}・〔${TS[n.g][0]}〕</span></summary><div class=m>${TS[n.g][1]}<br>顏${n.at.lk|0}・氣質${n.at.qi|0}・智${n.at.iq|0}・${whT(n.at.wh)}・${n.at.ht}cm/${n.at.wt}kg・腳${n.at.ft}cm<br>擅長：${topSk(n.at,3)}<br>${dsPills(n.at)}${S.reg?(n.arc2?`<br>故事線：${TARC[n.arc2.k].k}（${n.arc2.done?'完結':'進行中'}）${(S.chr||[]).filter(x=>x.w&&x.w.endsWith(n.n)).slice(0,3).map(x=>'<br>・'+x.x).join('')}`:''):n.arc?`<br>故事線：${ARCN[n.arc.k].k}（${n.arc.done?'完結':'進行中'}）${(S.chr||[]).filter(x=>x.w===n.n).slice(0,3).map(x=>'<br>・'+x.x).join('')}`:''}<br>${kinTxt(n)}派系：${FAC[n.fac]}　與你：盟友度${n.al|0}・敵意${n.host|0}・罪證${S.evid[i]||0}　體力${n.hp|0}<br>${(famInit(n),n.fam).map(x=>`${famTxt(x)}　權${x.pw|0}`).join('<br>')}</div></details>`}
 /* ===== v35 匿名遊玩回報與後台統計（需在 Claude 頁面內，並由作者分享為可互動） ===== */
 let EDITOR=0;
 const hasCl=()=>typeof claude!=='undefined'&&claude&&typeof claude.use==='function';
@@ -2291,7 +2291,7 @@ heir:[()=>{const k=S.me.kids.find(x=>x.sex=='男')||S.me.kids[0];if(!k)return nu
 edict:[()=>({t:'整理舊物時，你發現一冊先帝手札，字跡殘缺，似乎寫著宮闈機密。',o:[['細細研讀',()=>{S.pl.f.c=1;plAdv(R(12,18));S.me.scheme+=3;return'你讀到一些驚人的線索。'}],['交給皇上',()=>{plAdv(0,1);S.me.favor+=3;return'皇上接過手札，目光複雜。'}],['燒掉',()=>{plAdv(0,1);return'你將手札付之一炬。'}]]}),
 ()=>({t:'你察覺有人暗中也在找那本手札。',o:[['設局引蛇出洞',()=>{plAdv(R(12,18));if(P(.5+S.me.scheme/200)){S.pl.f.c=2;const i=ids()[R(0,ids().length-1)];if(i!=null)S.evid[i]=(S.evid[i]||0)+1;return'你抓到了窺探之人，並握住她的把柄。'}S.me.hp=Math.max(3,S.me.hp-6);return'圈套被識破，你受了驚嚇。'}],['躲藏不出',()=>{plAdv(R(12,18));return'你把手札藏得更深。'}]]}),
 ()=>({t:'手札上的真相終於拼湊完整，足以動搖朝局。',o:[['呈給太后',()=>{plAdv(0,1);if(S.dow){S.me.dw=cl(S.me.dw+12);S.me.favor-=2;return'太后震驚，對你多了幾分信任。'}S.me.favor-=2;return'宮中已無太后，只好作罷。'}],['獻給皇上',()=>{plAdv(0,1);S.me.favor+=8;return'皇上沉默良久，賞了你很多東西。'}],['藏作底牌',()=>{plAdv(0,1);S.me.scheme+=8;S.me.ally+=4;msPush('握有先帝遺詔的秘密');return'你把秘密藏進心底，這是你最大的底牌。'}]]})]};
-function plotCard(){const p=S.pl;if(!p)return'';return`<div class=cd data-open=1><h3>主線劇情</h3><div class=m>「${PLN[p.id]}」${p.done?'・已落幕':`・第${Math.min(p.st+1,3)}幕 / 共3幕`}</div></div>`}
+function plotCard(){const p=S.pl;if(!p)return'';return`<div class=cd data-open=1><h3>主線劇情</h3><div class=m>「${PLN[p.id]}」${p.done?'・已落幕':'・進行中'}</div></div>`}
 /* 主流程 */
 const _mQ=mend;mend=function(){const r=_mQ.apply(this,arguments);try{if(!S||!S.me||S.over||S.reg)return r;const m=S.me,mo=S.t%12,ev=[];S.cn=S.cn||[];const due=S.cn.filter(c=>c.at<=S.t);S.cn=S.cn.filter(c=>c.at>S.t);due.forEach(c=>{if(CHN[c.k])ev.push(CHN[c.k]())});
 if(S.epi&&S.epi.m>0){if(!S.epi.p)m.hp=Math.max(3,m.hp-R(1,3));S.npcs.forEach(n=>{if(!n.st&&!S.epi.p)n.hp=Math.max(5,n.hp-R(0,2))});S.epi.m--;if(S.epi.m<=0){S.epi=null;L('宮中疫情漸漸平息。')}}
@@ -2428,7 +2428,7 @@ function plOrg(){const n=(GS[G]||[''])[0]||'';return/公主/.test(n)?'envoy':n==
 function plPick(old){const g=['love','plot','heir','edict'];return plNew((!old&&plOrg())||g[R(0,3)],old)}
 function plRun(ev){if(!S.pl)return;const ls=[S.pl];if(S.pl2)ls.push(S.pl2);else if(!S.pl2d&&(S.pl.done||S.t>=84)){const all=['love','plot','heir','edict'].concat(plOrg()?[plOrg()]:[]).filter(x=>x!==S.pl.id);S.pl2=plNew(all[R(0,all.length-1)],0);S.pl2d=1;S.pl2.nx=S.t+R(6,12);ls.push(S.pl2)}
 ls.forEach(p=>{if(p.done||S.t<p.nx||!PLT[p.id]||!PLT[p.id][p.st])return;const e=PLT[p.id][p.st](p);if(e)ev.push(plWrap(e,p));else p.nx=S.t+3})}
-function plotCard(){const a=[S.pl,S.pl2].filter(Boolean);if(!a.length)return'';return`<div class=cd data-open=1><h3>主線劇情</h3>`+a.map(p=>`<div class=m>「${PLN[p.id]}」${p.done?'・已落幕':`・第${Math.min(p.st+1,PLT[p.id].length)}幕 / 共${PLT[p.id].length}幕`}</div>`).join('')+'</div>'}
+function plotCard(){const a=[S.pl,S.pl2].filter(Boolean);if(!a.length)return'';return`<div class=cd data-open=1><h3>主線劇情</h3>`+a.map(p=>`<div class=m>「${PLN[p.id]}」${p.done?'・已落幕':'・進行中'}</div>`).join('')+'</div>'}
 /* 常駐人物 */
 const SURX=['顧','蕭','沈','陸','謝','周','林','韓','魏','裴'];
 function castInit(){if(S.cast)return;const sr=()=>SURX[R(0,SURX.length-1)];S.cast={prince:{n:['靖','安','端','誠','敬'][R(0,4)]+'親王',r:'親王',af:R(35,55),st:'在世',lt:-99},censor:{n:sr()+'御史',r:'御史',af:R(35,55),st:'在世',lt:-99},doc:{n:sr()+'太醫',r:'太醫',af:R(40,60),st:'在世',lt:-99},maid:{n:['青杏','碧桃','秋月','春杏','冬梅'][R(0,4)],r:'心腹宮女',af:R(55,75),st:'在世',lt:-99}}}
@@ -2531,9 +2531,9 @@ const PLD={love:{k:'宮外舊情',d:'御花園裡偶遇少時同鄉的侍衛統�
 function plRec(p,a,l,r){if(!p)return;(p.h=p.h||[]).push({t:S.t,a,l,r:typeof r==='string'?r:''})}
 function plWrap(e,p){try{p=p||S.pl;const act=p.st;e.o=e.o.map(o=>[o[0],()=>{const r=o[1]();plRec(p,act,o[0],r);return r}])}catch(x){}return e}
 function plotOne(p){if(!p||!PLD[p.id]||!PLT[p.id])return'';const d=PLD[p.id],h=p.h||[],N=PLT[p.id].length,an=i=>d.a[i]||('第'+(i+1)+'幕');
-let t=`<div class=cd data-open=1><h3>主線劇情：「${d.k}」</h3><div class=m>${d.d}</div><div class=m style="margin-top:4px">進度：${p.done?'已落幕':`第 ${Math.min(p.st+1,N)} 幕「${an(Math.min(p.st,N-1))}」／共 ${N} 幕`}</div>`;
-t+=d.a.slice(0,N).map((a,i)=>{const e=h.filter(x=>x.a===i)[0];return`<div class=k>${i<p.st||(p.done&&i<N)?'✔':'○'} 第${i+1}幕「${a}」${e?`<br><span class=m>${TSF(e.t)}　你選擇「${e.l}」${e.r?'<br>→ '+e.r:''}</span>`:''}</div>`}).join('');
-if(!p.done){const lf=Math.max(0,p.nx-S.t),need=p.id==='heir'&&!S.me.kids.length;t+=`<div class=m style="margin-top:4px">${need?'你目前沒有子嗣，這條主線要等你有孩子後才會展開。':lf>0?`下一幕預計約 ${lf} 個月後出現。`:'下一幕即將出現。'}</div>`}
+let t=`<div class=cd data-open=1><h3>主線劇情：「${d.k}」</h3><div class=m>${d.d}</div><div class=m style="margin-top:4px">進度：${p.done?'已落幕':`進行中：「${an(Math.min(p.st,N-1))}」`}</div>`;
+t+=d.a.slice(0,N).map((a,i)=>{const e=h.filter(x=>x.a===i)[0];if(!(i<p.st||(p.done&&i<N)))return'';return`<div class=k>✔ 「${a}」${e?`<br><span class=m>${TSF(e.t)}　你選擇「${e.l}」${e.r?'<br>→ '+e.r:''}</span>`:''}</div>`}).join('');
+if(!p.done){const lf=Math.max(0,p.nx-S.t),need=p.id==='heir'&&!S.me.kids.length;t+=`<div class=m style="margin-top:4px">${need?'你目前沒有子嗣，這條主線要等你有孩子後才會展開。':'故事仍在進行中。'}</div>`}
 else t+=`<div class=m style="margin-top:4px">這條主線已經結束${(S.pf||[]).find(x=>x.id===p.id)?'：'+(S.pf.find(x=>x.id===p.id).res||''):''}。</div>`;
 return t+`</div>`}
 function plotCard(){const a=[S.pl,S.pl2].filter(Boolean);let t=a.map(plotOne).join('');const old=(S.plh||[]).slice(-3);if(t&&old.length)t+=`<div class=m style="margin:4px 4px 0">過往主線：${old.map(o=>`「${PLD[o.id]?PLD[o.id].k:o.id}」`).join('、')}</div>`;return t}
@@ -2569,7 +2569,7 @@ const HELP_V50=[
 ['皇后與中宮','皇后位只有 1 個。當皇后被廢、薨逝，或被降位時，中宮立刻空懸，名冊與畫面上方會同步顯示「空懸」。<br><b>誰能爭后：</b>只有貴妃（含）以上才有資格，你位居貴妃以上時會收到爭后事件，可選擇重金疏通、聯合舉薦或按兵不動。<br>評分大致看：位份、聖寵、母族勢力、人脈、是否有皇子，再加一點運氣。<br>登上后位後，你可以用「掌理六宮」處置妃嬪、立威施恩。'],
 ['子嗣與奪嫡','有孩子後可在「子嗣」分頁看他們的才、德、寵、勢、孝。皇子聲勢高才有機會被立為儲君。<br>「教養子女」提升才德孝，「為子籌謀」拉攏朝臣或為公主聯姻。<br>母族勢力會加到皇子聲勢上，所以母家越強越有利。皇帝駕崩後，新帝若是你的孩子，你就能臨朝稱制。'],
 ['前朝、母家與升遷歷程','「朝堂」分頁可以看前朝官員、他們在後宮的女兒、你的母家族人。前朝的升貶、科舉、黨爭都會牽連後宮，你的母家也會跟著起落。<br><b>官職編制：</b>每種官職都有人數上限（例如首輔 2、尚書各 2、大學士 4……），朝堂分頁的「官職編制」列出每個官職現在有幾個人、是誰、還缺幾個。<br><b>升遷歷程：</b>後宮每位妃嬪展開後，最下方有她的位份升降紀錄；母家族人名字後面會列出歷任官職；「前朝官員履歷」點開可看每位官員的升降原因。'],
-['主線劇情','「行動」分頁會顯示目前的主線劇情，每條有 5～6 幕。每一幕到時間會跳出事件，讓你做選擇，你的選擇會記在卡片裡，之後還能回頭看。<br>卡片會顯示簡介、每一幕的標題、你當時的選擇與結果，以及下一幕大約幾個月後出現。<br>主線共有九條：宮外舊情、家族疑雲、皇子之路（需有子嗣）、先帝遺詔，以及依你出身才會出現的沉冤待雪（罪臣之女）、異國和親（公主）、商號風雲（商賈）、舊主恩仇（宮女）、才名之累（書香／評彈）。遊戲中期會有第二條主線同時進行，結局還會回顧你走過的主線。'],
+['主線劇情','「行動」分頁會顯示目前的主線劇情，每條都是一段長篇故事，到時間會陸續跳出事件，讓你做選擇，你的選擇會記在卡片裡，之後還能回頭看。<br>卡片會顯示簡介、已發生段落的標題，以及你當時的選擇與結果。<br>主線共有九條：宮外舊情、家族疑雲、皇子之路（需有子嗣）、先帝遺詔，以及依你出身才會出現的沉冤待雪（罪臣之女）、異國和親（公主）、商號風雲（商賈）、舊主恩仇（宮女）、才名之累（書香／評彈）。遊戲中期會有第二條主線同時進行，結局還會回顧你走過的主線。'],
 ['記憶、派系、皇帝與缺額','<b>往事</b>：你施恩或加害過的人會記得，多年後可能報恩或報復，在名冊展開可看到「往事」。<br><b>派系</b>：「朝堂」分頁最下方有五個派系的領袖與勢力，會結盟、反目、拉攏你。<br><b>皇帝人生</b>：「史冊」分頁看皇帝的健康、儲君與大事，皇帝可能重病、立儲、禪位或駕崩。<br><b>謀缺</b>：高官出缺時，你可以舉薦朝臣或母家族人去補缺，名額有限，要和別人競爭。<br><b>年表</b>：「史冊」分頁有本局大事年表，結局時會完整列出。'],
 ['通知、紀事、存檔與結局','晉封、降位、母家與前朝的變動都會跳通知，也都記在「紀事」分頁。<br>遊戲會自動存檔（回到首頁會看到「繼續遊戲」），另有 4 個手動存檔格，只存在這個瀏覽器裡。換檔案或換瀏覽器前，請在「讀取存檔」或「紀事」分頁使用「完整備份」，之後用「還原」帶回全部紀錄。<br>結局很多種，終局會依存活年數、位份、子嗣、成就等計分，也可以先在開局選一個人生目標，達成有獎勵。']];
 
@@ -3725,7 +3725,7 @@ const _mt16=mend;mend=function(){const r=_mt16.apply(this,arguments);try{lateTic
 function lateCard(){const lt=S.lt;if(!lt)return'';const A=LATE[lt.id];return`<div class="cd lcard"><h3>終局大計：「${A.n}」</h3><div class=m>${A.d}</div><div class=m style="margin-top:4px">${A.a.map((x,i)=>i<lt.st?'✔'+x:i==lt.st?'▶'+x:'・'+x).join('　')}</div></div>`}
 const _up16b=uiPost;uiPost=function(){const r=_up16b.apply(this,arguments);try{if(TAB==0&&S&&S.me&&!S.over&&!S.reg&&!S.scn&&S.lt){const main=document.querySelector('main');if(main&&!main.querySelector('.lcard')){const t=[...main.children].find(e=>/^主線劇情/.test((e.innerText||'').trim()));if(t)t.insertAdjacentHTML('afterend',lateCard());else{const s=[...main.children].find(e=>e.classList&&e.classList.contains('sec13')&&/行動/.test(e.textContent));if(s)s.insertAdjacentHTML('afterend',lateCard())}}}}catch(e){console.log('ui16b',e)}return r};
 const _ec16=evCritical;evCritical=function(e){return !!(e&&e.late)||_ec16(e)};
-HELP.push(['終局大計','玩到第十年以後，若條件成立，會出現「垂簾之路」「外戚之憂」「六宮之主」「青史留名」之一的後期主線，共五幕，每一幕都要你做抉擇，結局會影響評分。一次只有一條，一局最多三條。']);
+HELP.push(['終局大計','玩到第十年以後，若條件成立，會出現「垂簾之路」「外戚之憂」「六宮之主」「青史留名」之一的後期主線，是多段式的長篇，過程中每一步都要你做抉擇，結局會影響評分。一次只有一條，一局最多三條。']);
 
 /* ===== round17：長期關係（結拜／宿敵）與嬪妃個性 ===== */
 const QUIRK={0:['「本宮不過是長得好看罷了。」','出門前總要對鏡整理許久'],1:['「昨夜得了一句好詩……」','隨身帶著詩箋'],2:['「這件事，不簡單。」','說話前總要先沉吟片刻'],3:['「讓我看看你的脈。」','袖裡常藏著幾味藥材'],4:['「孩子們才是正經。」','最愛逗弄別人家的孩子'],5:['「姐妹之間，何必見外。」','見誰都能聊上幾句'],6:['「這事我記得。」','什麼細節都記得一清二楚'],7:['「不如唱一曲？」','走路輕盈，像在踩著鼓點'],8:['「妹妹這話可就不對了。」','三言兩語能把人說得啞口無言'],9:['「我這人福氣好。」','遇事總說「會好的」'],10:['「規矩就是規矩。」','處事果決，不留餘地'],11:['「姐姐說得是。」','說話輕聲細語，從不與人爭'],12:['「這點銀子，不算什麼。」','賞人時出手闊綽'],13:['「來，過兩招？」','走路帶風，像個將軍'],14:['「與我何干。」','獨來獨往，不愛熱鬧'],15:['「這筆帳，得算清楚。」','隨身帶著小算盤'],16:['「我看人，不會錯。」','初見便能看出誰靠得住'],17:['「這是命。」','信命，常問卜算卦'],18:['「手腳放輕些。」','身手利落，腳步無聲'],19:['「你辛苦了。」','總在替旁人張羅打點'],20:['「這針腳不夠細。」','閒來就拿針線'],21:['「古人云……」','開口便是典故'],22:['「忍一忍，就過去了。」','從不輕易表露情緒'],23:['「容顏易老，且珍惜。」','常對著鏡子嘆氣'],24:['「再往上走一步，如何？」','眼神總看向更高處'],25:['「皇上今日在哪兒？」','舉手投足都帶著媚意'],26:['「可憐見的。」','見不得人受苦'],27:['「這茶，味道不對。」','聞一聞就知道藥性'],28:['「大家都是朋友。」','宮裡宮外人緣極好'],29:['「怕什麼？」','遇事從不後退']};
@@ -4620,7 +4620,7 @@ const _m38=mend;mend=function(){const r=_m38.apply(this,arguments);
  try{if(!S||!S.me||S.over||S.reg||S.t<30)return r;if(!S.arc37){if(!S.arc37w){S.arc37w=S.t+R(0,10)}if(S.t>=S.arc37w)start();return r}
   const a=S.arc37;if(a.done){if(S.t>=a.nx+10){(S.arcDone37=S.arcDone37||[]).push(a.id);S.arc37=null;S.arc37w=S.t+R(6,14)}return r}
   if(S.t>=a.nx&&ACTS[a.id][a.st]){const e=ACTS[a.id][a.st]();if(e){S.q.push(e);if(!S.ev&&!S.ch&&!S.scn)next();else render()}else a.nx=S.t+3}}catch(x){console.log('r38',x)}return r};
-const _g38=goalChip;goalChip=function(){let s='';try{const a=S.arc37;if(a&&!S.reg)s=`<div class=cd data-open=1><h3>長線劇情</h3><div class=m>「${NM[a.id]}」${a.done?'・已落幕':`・第${Math.min(a.st+1,4)}幕 / 共4幕`}</div></div>`}catch(e){}return _g38.apply(this,arguments)+s};
+const _g38=goalChip;goalChip=function(){let s='';try{const a=S.arc37;if(a&&!S.reg)s=`<div class=cd data-open=1><h3>長線劇情</h3><div class=m>「${NM[a.id]}」${a.done?'・已落幕':'・進行中'}</div></div>`}catch(e){}return _g38.apply(this,arguments)+s};
 })();
 
 /* ===== round39：後宮人物專屬事件（依性格特質與關係親疏，每位妃嬪都有自己的故事） ===== */
@@ -6381,7 +6381,7 @@ window.pExtra68=p=>xp(p);window.eExtra70=p=>xp(p,'共同經歷的故事');
 const _up=uiPost;uiPost=function(){const r=_up.apply(this,arguments);
  try{if(!S||!S.reg||S.over)return r;const main=document.querySelector('main');if(!main)return r;const list=cbs(),e0=(rx()||{}).emp;
   main.querySelectorAll('details.hg66').forEach(d=>{if(d.querySelector('.sg70'))return;const n=(d.querySelector('.nm')||{}).textContent;const c=list.find(x=>x.n===n)||(e0&&e0.n===n?e0:null);if(!c)return;const h=window.sRecap70(c);if(!h)return;const dv=document.createElement('div');dv.className='sg70 m';dv.style.cssText='margin:8px 0;line-height:1.7';dv.innerHTML='<b>你們之間的故事</b>'+h;const b=d.querySelector('.bio69');if(b&&b.parentNode===d)d.insertBefore(dv,b.nextSibling);else d.appendChild(dv)})}catch(e){console.log('r70u',e)}return r};
-try{HELP.push(['長篇故事','遊戲進行中，會隨機在妃嬪、皇上（或太后期的皇帝）身上展開 3～4 幕的長篇故事（如「一封燒不盡的舊信」「兄長的遺信」「親政之爭」）。每一幕你的選擇都會被記下，影響下一幕的內容與最終結局。同一人同時只會有一個進行中的故事，已發生的故事可在人物檔案的「你們之間的故事」裡回顧。'])}catch(e){}
+try{HELP.push(['長篇故事','遊戲進行中，會隨機在妃嬪、皇上（或太后期的皇帝）身上展開長篇故事（如「一封燒不盡的舊信」「兄長的遺信」「親政之爭」）。你的每個選擇都會被記下，影響後續的內容與最終結局。同一人同時只會有一個進行中的故事，已發生的故事可在人物檔案的「你們之間的故事」裡回顧。'])}catch(e){}
 window.__ST70=ST;
 })();
 
@@ -6803,7 +6803,7 @@ const ESC=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;',
 const g=k=>{try{return localStorage.getItem(k)}catch(e){return null}},st=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
 const nm0=n=>(n.name||n.n);
 /* ---------- 1. 新手說明：新增「人物、故事與後果」總覽並置頂 ---------- */
-try{HELP.push(['新功能上手：人物、故事與後果','<b>這一局最值得做的 5 件事</b><br>① 看到有「虛線」的人名就點進去——妃嬪、皇子公主、官員、皇上都有檔案。<br>② 在妃嬪檔案按「談心拉近」，她會一層層告訴你身世、心願、秘密；在皇帝檔案按「陪皇上說說話」，他會慢慢說起往事。<br>③ 選擇後看畫面頂端的「你剛才的選擇」：綠色是好事、紅色是壞事，列出實際變化。<br>④ 偶爾出現的長篇故事（標題有【】）有 3～4 幕，每幕的選擇會影響結局。<br>⑤ 被你幫過或得罪過的人會記得，幾個月後可能回頭報答或報復（「舊日的回響」）。<br><b>覺得畫面太雜？</b>到「紀事」頁最下方的設定，開啟「簡潔模式」。'])}catch(e){}
+try{HELP.push(['新功能上手：人物、故事與後果','<b>這一局最值得做的 5 件事</b><br>① 看到有「虛線」的人名就點進去——妃嬪、皇子公主、官員、皇上都有檔案。<br>② 在妃嬪檔案按「談心拉近」，她會一層層告訴你身世、心願、秘密；在皇帝檔案按「陪皇上說說話」，他會慢慢說起往事。<br>③ 選擇後看畫面頂端的「你剛才的選擇」：綠色是好事、紅色是壞事，列出實際變化。<br>④ 偶爾出現的長篇故事（標題有【】）會分成好幾段，每段的選擇都會影響結局。<br>⑤ 被你幫過或得罪過的人會記得，幾個月後可能回頭報答或報復（「舊日的回響」）。<br><b>覺得畫面太雜？</b>到「紀事」頁最下方的設定，開啟「簡潔模式」。'])}catch(e){}
 const _ho=helpOpen;helpOpen=function(){const r=_ho.apply(this,arguments);
  try{const hb=document.querySelector('#help .hb');if(!hb||hb.querySelector('.hcat74'))return r;
   const keys=['新功能上手','點人名看檔案','皇上的情緒與往事','太后期的皇帝','長篇故事','個人化故事','選擇的後果','個人化的故事'];
@@ -6816,7 +6816,7 @@ const _ho=helpOpen;helpOpen=function(){const r=_ho.apply(this,arguments);
   hb.querySelectorAll('.hcat55:not(.hcat74)').forEach(x=>{const n=x.querySelectorAll('.hin55>details').length;const sp=x.querySelector('summary .m');if(!n)x.remove();else if(sp)sp.textContent=n+' 則'})}catch(e){console.log('r74h',e)}return r};
 window.helpOpen=helpOpen;
 /* ---------- 首次出現的小提示 ---------- */
-const TIP={names:'畫面上有虛線的人名都可以點，看她（他）的檔案。',cq:'選完後，頂端會列出這個選擇的實際變化：綠色是好事、紅色是壞事。',story:'標題帶【】的是長篇故事，有 3～4 幕，每一幕的選擇都會影響結局。',emp:'到「朝堂」頁的「在位皇帝」卡，可查看皇帝檔案並陪他說話。',talk:'在妃嬪檔案裡按「談心拉近」，她會逐層告訴你身世與心事。'};
+const TIP={names:'畫面上有虛線的人名都可以點，看她（他）的檔案。',cq:'選完後，頂端會列出這個選擇的實際變化：綠色是好事、紅色是壞事。',story:'標題帶【】的是長篇故事，會分成好幾段，每段的選擇都會影響結局。',emp:'到「朝堂」頁的「在位皇帝」卡，可查看皇帝檔案並陪他說話。',talk:'在妃嬪檔案裡按「談心拉近」，她會逐層告訴你身世與心事。'};
 function tip(k){if(g('hg74t_'+k))return;st('hg74t_'+k,'1');try{toast('💡 '+TIP[k])}catch(e){}}
 const _r=render;render=function(){const r=_r.apply(this,arguments);
  try{if(S&&S.me&&!S.over&&!S.scn){
@@ -7723,7 +7723,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V229';const ERR92=[];
+const VER92='V230';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
