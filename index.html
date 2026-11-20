@@ -7722,7 +7722,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V209';const ERR92=[];
+const VER92='V216';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -7953,6 +7953,12 @@ const _md99=mend;mend=function(){const r=_md99.apply(this,arguments);try{end99()
  if(S&&S.me&&!S.over&&!S.reg&&S.t>=12*10&&S.t-(S.fcT99===undefined?-99:S.fcT99)>=48&&Math.random()<.25){S.fcT99=S.t;const e=fres99()||(Math.random()<.7?fev99():null);if(e)S.q.push(e)}}catch(x){console.log('r99m',x)}return r};
 /* 數值保險：好感／敵意維持在 0–100，且不出現 NaN */
 const _md99b=mend;mend=function(){const r=_md99b.apply(this,arguments);try{if(S&&S.npcs)S.npcs.forEach(n=>{if(!n)return;['al','host'].forEach(k=>{if(typeof n[k]==='number'){if(!isFinite(n[k]))n[k]=0;if(n[k]>100)n[k]=100;if(n[k]<0)n[k]=0}})})}catch(e){}return r};
+
+/* ===== V216：新版提示（網址開啟時，偵測網站上是否有較新版本） ===== */
+(function(){const st=document.createElement('style');st.id='st100';st.textContent=`#nv100{position:fixed;left:0;right:0;top:0;z-index:140;padding:8px 12px;padding-top:calc(8px + env(safe-area-inset-top,0px));background:#6b1d27;color:#fff;font-size:13.5px;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}#nv100 button{min-height:30px;padding:0 12px;border-radius:10px;border:0;background:#f5d78a;color:#4a1a14;font:inherit;font-size:13.5px}#nv100 .x{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.5)}`;document.head.appendChild(st)})();
+function ver100(t){const m=/VER92\s*=\s*['"](V\d+)['"]/.exec(t);return m?parseInt(m[1].slice(1),10):0}
+async function nv100(){try{if(!/^https?:/.test(location.protocol)||document.getElementById('nv100')||document.hidden)return;const r=await fetch(location.pathname+'?v='+Date.now(),{cache:'no-store'});if(!r.ok)return;const t=await r.text();const now=parseInt(VER92.slice(1),10);if(ver100(t)>now){const d=document.createElement('div');d.id='nv100';d.innerHTML='有新版本可用（遊戲進度不會消失）<button onclick="location.reload()">重新整理</button><button class=x onclick="this.parentNode.remove()">稍後</button>';document.body.appendChild(d)}}catch(e){}}
+try{setTimeout(nv100,4000);setInterval(nv100,30*60*1000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout(nv100,1500)})}catch(e){}
 
 deco();intro();
 
