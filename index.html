@@ -3976,7 +3976,7 @@ function mort(){if(!S||!S.me||S.over||S.reg||S.t<=0||S.t%12!==0)return;const m=S
  S.npcs.forEach((n,i)=>{if(n.st||typeof n.bt!=='number')return;const a=Math.floor((S.t-n.bt)/12),h=HZ(a)*(1+Math.max(0,50-(n.hp||50))/60)*(a<40?.6:1);if(P(h)){try{kill(i,a>=60?'年邁病故，宮中舉哀':'病逝，宮中舉哀')}catch(e){console.log('r25 kill',e)}}});
  const dieKid=(k,mine,own)=>{if(k===(S.reg&&S.reg.k)||k===S.nk)return false;const a=yr(k),q=(KT[k.t]||[])[2]||{};let h=HZ(a);if(q.weak)h*=1.6;if(q.luck)h*=.6;if(!P(h))return false;
   const w=k.sex=='男'?'皇子':'公主';if(S.heir===k)S.heir=null;
-  if(mine){const t=`${k.n}（${a}歲）因病${a<16?'夭折':'離世'}，你肝腸寸斷。`;m.hp=Math.max(1,m.hp-(a<16?10:6));L(t);try{ntfAdd(t,'medn');msPush(`${k.n}${a<16?'夭折':'離世'}`)}catch(e){}}
+  if(mine){const t=`${k.n}（${a}歲）因病${a<16?'夭折':'離世'}，你肝腸寸斷。`;m.hp=Math.max(1,m.hp-(a<16?10:6));L(t);(S.lost106=S.lost106||[]).push({n:k.n,sex:k.sex,t:S.t});try{ntfAdd(t,'medn');msPush(`${k.n}${a<16?'夭折':'離世'}`)}catch(e){}}
   else{if(bgOn()){const c=S.bgc=S.bgc||{born:[],died:[],ill:0,promo:[],preg:0,gk:0,kd:[]};c.kd.push(k.n)}else L(`${on(own)}所出的${w}${k.n}（${a}歲）不幸${a<16?'夭折':'病逝'}。`)}return true};
  m.kids=m.kids.filter(k=>!dieKid(k,1,'me'));
  S.npcs.forEach((n,i)=>{n.kids=n.kids.filter(k=>!dieKid(k,0,i))});
@@ -6057,7 +6057,7 @@ window.pTalk68=function(i){const n=S.npcs[i];if(!n)return;if(busy()){pOpen(i,'�
  try{jot('宮',nm0(n),`談心：${r}`)}catch(e){}try{L(`${nm0(n)}：${r}`)}catch(e){}
  (n._tl=n._tl||[]).push({t:S.t,x:`你與${nm0(n)}談心，彼此更近了一步。`});if(n._tl.length>12)n._tl.shift();
  closeM();spend()};
-window.pGo68=function(i){const n=S.npcs[i];if(n)goNpc67(nm0(n))};
+window.pGo68=function(i){const n=S.npcs[i];try{closeM()}catch(e){}if(n)goNpc67(nm0(n))};
 function pOpen(i,msg){const n=S.npcs[i];if(!n)return;const nm=nm0(n),ta=TS[n.g],at=n.at||{},fam=n.fam||[],dead=!!n.st;
  const mood=n.favor>70?'春風得意':n.favor>45?'安穩度日':n.favor>20?'有些落寞':'備受冷落';
  const un=unl(n),tk=n.tk68||0,ev=(S.evid&&S.evid[i])||0;
@@ -7723,7 +7723,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V231';const ERR92=[];
+const VER92='V232';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -8252,6 +8252,58 @@ const _r=render;render=function(){const r=_r.apply(this,arguments);try{if(S&&S.m
 
 function atmToggle105(){try{window.ATM105.set(!window.ATM105.isOn())}catch(e){}try{render()}catch(e){}}
 const _ap105=avPanel;avPanel=function(){let on='開';try{on=window.ATM105.isOn()?'開':'關'}catch(e){}return _ap105.apply(this,arguments)+`<div class=cd><h3>氣氛效果</h3><div class=m>依季節飄雪、落花、流螢、落葉；夜晚事件會有暖光暈染。很淡，不影響操作；覺得干擾或手機吃力可以關掉。</div><p><button class=s onclick="atmToggle105()">氣氛效果：${on}</button></p></div>`};
+
+/* ===== V232：子女人生線（夭折後的追思、抓周、成年禮、孫輩請安、兒女祝壽、母子疏離） ===== */
+const KE106=[
+ // 幼子抓周
+ {ok:(m,k)=>yr(k)>=1&&yr(k)<=2&&!(k.m106&1),f:(k)=>k.m106=(k.m106||0)|1,mk:(m,k)=>({t:`${k.n}滿週歲了，內務府在殿中擺開抓周的案几：印章、書卷、弓箭、胭脂、算盤一字排開。`,keep:1,p84:1,o:[
+  ['抱著孩子坐在一旁，笑看她自己挑',()=>{k.bond=cl(k.bond+3);const r=pk(['一把抓起了書卷，滿殿都笑說將來是讀書種子','抓住了算盤不肯放，嬤嬤們笑說將來會持家','伸手去夠弓箭，皇上聽說後龍顏大悅','撲向胭脂盒，惹得眾人哄堂大笑']);if(r.includes('弓箭'))m.favor+=2;return`${k.n}${r}。`}],
+  ['備一桌小宴，邀六宮同樂（耗銀15）',()=>{if(!pay(15))return'銀兩不足，只在宮裡自己熱鬧了一番。';m.ally+=2;k.bond=cl(k.bond+2);return`六宮道賀，抓周宴上笑語不斷，${k.n}也被誇得眉開眼笑。`}],
+  ['心裡掛著別的事，草草了事',()=>{k.bond=cl(k.bond-2);return`抓周匆匆結束，${k.n}癟著嘴不太高興。`}]]})},
+ // 成年禮（皇子）
+ {ok:(m,k)=>k.sex=='男'&&yr(k)>=16&&yr(k)<=18&&!(k.m106&2),f:k=>k.m106=(k.m106||0)|2,mk:(m,k)=>({t:`${k.n}年滿十六，宗人府擬定了冠禮的吉日，皇上要親自為他加冠賜字。`,keep:1,p84:1,o:[
+  ['親自為他縫製一套冠服（耗銀10）',()=>{if(!pay(10))return'銀兩不足，只能請針線房趕製。';k.bond=cl(k.bond+6);return`加冠那日，${k.n}穿著你縫的冠服向你深深一拜，眼眶微紅。`}],
+  ['叮囑他謹言慎行，莫要鋒芒太露',()=>{k.de=cl(k.de+3);k.pow=cl(k.pow-1);return`${k.n}把你的話一一記下，行事比從前沉穩了許多。`}],
+  ['託人向皇上進言，為他求個好差事（看聖寵）',()=>{if(P(cl(.3+m.favor/200,.1,.7))){k.pow=cl(k.pow+8);return`皇上念舊，在冠禮上特意交代${k.n}去六部歷練。`}m.favor-=1;return'皇上嫌你過問前朝之事，面色不豫。'}]]})},
+ // 笄禮（公主）
+ {ok:(m,k)=>k.sex=='女'&&yr(k)>=14&&yr(k)<=16&&!(k.m106&2),f:k=>k.m106=(k.m106||0)|2,mk:(m,k)=>({t:`${k.n}及笄之年，太后賜下一支金簪，要在慈寧宮為她行笄禮。`,keep:1,p84:1,o:[
+  ['親手為她綰髮插簪',()=>{k.bond=cl(k.bond+6);if(S.dow)m.dw+=2;return`你替${k.n}綰起第一個髮髻，銅鏡裡的她忽然不像孩子了，你不禁鼻酸。`}],
+  ['趁機教她宮中的處世之道',()=>{k.at&&(k.at.qi=cl((k.at.qi||50)+3));k.bond=cl(k.bond+2);return`你把這些年看過的暗湧一點點說給${k.n}聽，她聽得很認真。`}],
+  ['備一份厚重的及笄禮（耗銀25）',()=>{if(!pay(25))return'銀兩不足，只備了尋常禮數。';k.pow=cl(k.pow+3);m.ally+=1;return`${k.n}的及笄禮辦得體面，各宮送來的賀禮堆滿了偏殿。`}]]})},
+ // 孫輩請安
+ {ok:(m,k)=>k.sp&&!k.sp.end&&k.sp.gk>0&&k.sp.ty!=='出家'&&!k.out&&!(k.m106&4),f:k=>k.m106=(k.m106||0)|4,mk:(m,k)=>({t:`${k.n}帶著孫輩入宮請安，小娃娃跌跌撞撞撲進你懷裡，奶聲奶氣地喚了一聲「皇祖母」。`,keep:1,p84:1,o:[
+  ['留他們用膳，抱著孩子逗弄許久',()=>{k.bond=cl(k.bond+5);m.favor+=1;return'小孫兒把糕點渣沾了你一襟，你卻笑得合不攏嘴。宮人都說許久沒見你這樣開懷。'}],
+  ['賞一對長命鎖，囑咐好生教養（耗銀15）',()=>{if(!pay(15))return'銀兩不足，只賞了些點心。';k.bond=cl(k.bond+3);k.sp.hap=cl(k.sp.hap+4);return'你給孫兒戴上了長命鎖，親家那邊聽說了，對你多了幾分敬重。'}],
+  ['略坐片刻便打發回去',()=>{k.bond=cl(k.bond-2);return'你見了一面便說乏了，孩子被奶母牽著走遠，回頭望了你一眼。'}]]})},
+ // 母子疏離
+ {ok:(m,k)=>yr(k)>=16&&k.bond<32&&!(k.m106&8),f:k=>k.m106=(k.m106||0)|8,mk:(m,k)=>({t:`${k.n}近來見了你總是淡淡的，請安時話也不多。嬤嬤私下說，孩子心裡有疙瘩。`,keep:1,p84:1,o:[
+  ['把他單獨留下，推心置腹談一次',()=>{if(P(cl(.5+(k.at?(k.at.lk-50)/200:0),.25,.8))){k.bond=cl(k.bond+16);return`談到後來，${k.n}紅了眼眶，說這些年一直覺得你心裡裝的都是別的事。這個結，算是解開了。`}k.bond=cl(k.bond+3);return`你說了很多，${k.n}只是低頭聽著，臨走時輕輕說了一句「兒臣明白」。`}],
+  ['寫一封長信，讓他自己慢慢看（耗銀5）',()=>{if(!pay(5))return'銀兩不足。';k.bond=cl(k.bond+8);return`${k.n}收到信後沉默了一整天，第二日主動來向你請了安。`}],
+  ['認為孩子大了自然懂事，不去理會',()=>{k.bond=cl(k.bond-6);return`你什麼也沒做。${k.n}看你的目光，一日比一日疏遠。`}]]})}
+];
+const _md106=mend;mend=function(){const r=_md106.apply(this,arguments);try{
+ if(S&&S.me&&!S.over&&!S.reg&&S.t>=36&&S.t-(S.t106===undefined?-99:S.t106)>=4&&Math.random()<.5){
+  const m=S.me,c=[];m.kids.forEach(k=>{if(k===S.nk)return;KE106.forEach(e=>{if(e.ok(m,k))c.push([e,k])})});
+  if(c.length){const [e,k]=c[Math.floor(Math.random()*c.length)];e.f(k);S.t106=S.t;S.q.push(e.mk(m,k))}}
+ // 兒女祝壽（本人 40 歲以上，最多兩次，間隔 5 年）
+ const a=typeof yr0==='function'?yr0():0;
+ if(S&&S.me&&!S.over&&!S.reg&&a>=40&&(S.c106||0)<2&&S.t-(S.tb106===undefined?-99:S.tb106)>=60&&Math.random()<.3){
+  const m=S.me,ad=m.kids.filter(k=>yr(k)>=18&&k!==S.nk);
+  if(ad.length>=2){S.c106=(S.c106||0)+1;S.tb106=S.t;
+   S.q.push({t:`你的壽辰到了。${ad.slice(0,3).map(k=>k.n).join('、')}幾個孩子商量好了，要在你宮裡辦一場家宴。`,keep:1,p84:1,o:[
+    ['欣然入席，與孩子們說說笑笑',()=>{ad.forEach(k=>k.bond=cl(k.bond+4));m.favor+=1;return'席間孩子們爭著敬酒，說起小時候的糗事，笑聲傳到了殿外。這一夜你睡得格外安穩。'}],
+    ['拿出積蓄補貼孩子們（耗銀40）',()=>{if(!pay(40))return'銀兩不足，只能多給幾句叮嚀。';ad.forEach(k=>{k.bond=cl(k.bond+6);k.pow=cl(k.pow+2)});return'你給每個孩子都備了一份，他們嘴上推辭，眼裡卻都是暖意。'}],
+    ['借這個機會，訓誡孩子們兄友弟恭',()=>{ad.forEach(k=>{k.de=cl(k.de+2)});return'你把宮中這些年的教訓講給他們聽，孩子們神色鄭重，散席後各自思量。'}]]})}}
+}catch(e){console.log('ev106',e)}return r};
+const MEM106=(m,x)=>({t:`${x.n}（${x.sex=='男'?'皇子':'公主'}）離開你已有一段時日。今夜翻出了孩子留下的小物件：${pk(['一隻縫了一半的香囊','寫著歪歪扭扭字跡的功課','一支磨得發亮的木劍','一件穿小了的肚兜'])}。`,keep:1,p84:1,o:[
+ ['在佛前點一盞長明燈，為孩子抄經（耗銀10）',()=>{if(!pay(10))return'銀兩不足，只能在窗前默默燒了一炷香。';m.hp=Math.min(100,m.hp+4);m.ally+=1;return`你抄了整整三卷經，把名字寫在最後。心裡的空洞沒有填滿，卻像有了一個安放的地方。`}],
+ ['獨自坐了一夜，什麼也不說',()=>{m.hp=Math.max(1,m.hp-3);return'燭火燒到天亮。你不許任何人進來，只是靜靜地坐著。'}],
+ ['把更多心思放在其他孩子身上',()=>{m.kids.forEach(k=>k.bond=cl(k.bond+3));return`你開始更仔細地過問剩下的孩子冷暖，${m.kids.length?'他們都感受到了。':'只是宮裡，卻再沒有孩子的腳步聲了。'}`}]]});
+const _md106b=mend;mend=function(){const r=_md106b.apply(this,arguments);try{
+ const L6=S&&S.lost106;if(L6&&S.me&&!S.over&&(S.mc106||0)<4){
+  const x=L6.find(v=>!v.done&&S.t-v.t>=2);
+  if(x&&Math.random()<.6){x.done=1;S.mc106=(S.mc106||0)+1;S.q.push(MEM106(S.me,x))}}
+}catch(e){console.log('mem106',e)}return r};
 
 deco();intro();
 
