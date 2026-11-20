@@ -7723,7 +7723,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V226';const ERR92=[];
+const VER92='V227';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -8032,6 +8032,123 @@ html.dk18 body .sec13,html.dk18 body .grp40,html.dk18 body .rcnt{color:#f3d3ae;t
 (function(){try{const i=ACT.findIndex(a=>a[0]==='過問婚事');if(i<0)return;const f=ACT[i][2];ACT[i][2]=function(){const me=S.me;if(me&&me.kids&&me.kids.length&&!me.kids.some(k=>yr(k)>=wAge(k))){L('孩子們都還小，還沒到議婚的年紀。');if(S.w<4)S.w++;return}return f.apply(this,arguments)}}catch(e){console.log('r103',e)}})();
 /* 通用：選擇卡沒有任何選項時不彈出（避免只剩「取消」的空卡），改提示並退還本次行動 */
 (function(){try{const _c=choose;choose=function(t,o){if(Array.isArray(o)&&o.length===0&&S&&S.me&&!S.over){L('目前沒有可選的對象。');if(S.w<4)S.w++;return}return _c.apply(this,arguments)}}catch(e){console.log('r103b',e)}})();
+
+/* ===== V227：中後期事件擴充（第 5 年起，補 14 則新事件，降低重複感） ===== */
+const EV104=[
+ {id:'old',ok:m=>true,mk:m=>({t:'你宮裡伺候多年的老嬤嬤病倒了，臨終前拉著你的手，說這輩子最放心不下的是你。',keep:1,p84:1,o:[
+  ['請太醫盡力醫治，守在床邊（耗銀20）',()=>{if(!pay(20))return'銀兩不足，只能請最便宜的大夫。';m.ally+=3;m.at.sp=Math.min(100,m.at.sp+3);return'老嬤嬤走得安詳。宮人看在眼裡，都說跟著你不會吃虧。'}],
+  ['派人送些補品，自己不去',()=>{m.ally+=1;return'你讓人送了參湯過去。老嬤嬤走後，宮裡人說你心腸有些冷。'}],
+  ['忙於宮務，不多過問',()=>{m.ally-=2;return'你沒有去送她。下人們私下議論，對你多了幾分疏遠。'}]]})},
+ {id:'neng',ok:m=>m.rank>=1,mk:m=>({t:'內務府換了新總管，各宮都在揣測他的脾氣，也有人悄悄去送了見面禮。',keep:1,p84:1,o:[
+  ['備一份體面的見面禮（耗銀15）',()=>{if(!pay(15))return'銀兩不足，只得空手露了個面。';m.ally+=2;return'新總管笑著收下，往後你宮裡的炭火、綢緞都格外準時。'}],
+  ['不送禮，靜觀其變',()=>{return'你按兵不動。新總管對你不冷不熱，日子照舊。'}],
+  ['藉機探聽他的底細（冒險）',()=>{if(P(.55)){m.scheme+=2;return'你探到了新總管與別宮的來往，心裡有了數。'}m.ally-=2;return'你的人被新總管察覺，他看你的眼神帶著三分戒備。'}]]})},
+ {id:'dow',ok:m=>S.dow,mk:m=>({t:'太后壽辰將近，六宮都在琢磨該送什麼壽禮才能入太后的眼。',keep:1,p84:1,o:[
+  ['親手抄一卷經書，誠心敬獻',()=>{m.dw+=6;m.favor+=1;return'太后摩挲著經卷，說你有心了。'}],
+  ['獻上一份重禮（耗銀40）',()=>{if(!pay(40))return'銀兩不足，只能備了份普通的賀禮。';m.dw+=9;return'太后很是高興，當著眾人誇了你一句。'}],
+  ['隨大流，備份尋常賀禮',()=>{m.dw+=2;return'你的壽禮不好不壞，太后淡淡謝過。'}]]})},
+ {id:'home',ok:m=>true,mk:m=>({t:'母家捎來家書，說族中想在老家修繕祠堂、辦義學，盼你出一份力。',keep:1,p84:1,o:[
+  ['慷慨資助（耗銀30）',()=>{if(!pay(30))return'銀兩不足，只能回信道聲歉。';m.clan+=4;return'族中來信道謝，說你是家族的驕傲，母家聲望更盛了。'}],
+  ['出一小份，聊表心意（耗銀10）',()=>{if(!pay(10))return'銀兩不足。';m.clan+=1;return'母家收到你的心意，沒有多說什麼。'}],
+  ['婉言謝絕，說宮中用度緊',()=>{m.clan-=2;return'母家回信客氣，字裡行間卻透著失望。'}]]})},
+ {id:'snow',ok:m=>true,mk:m=>({t:'一夜大雪，宮牆下凍僵了幾個當差的小太監，領頭的嬤嬤不知該不該稟報。',keep:1,p84:1,o:[
+  ['賞炭賞衣，讓他們暖過這個冬天（耗銀10）',()=>{if(!pay(10))return'銀兩不足，只送去幾件舊棉襖。';m.ally+=2;m.favor+=1;return'你的善舉在宮人間傳開，皇上聽說後也點了點頭。'}],
+  ['悄悄吩咐人送些熱湯，不聲張',()=>{m.ally+=1;return'你的低調讓幾個小太監記在了心裡。'}],
+  ['裝作不知道',()=>{return'風雪很快蓋住了一切，沒有人再提起。'}]]})},
+ {id:'hunt',ok:m=>m.hp>=40,mk:m=>({t:'秋日圍獵，皇上點名讓幾位嬪妃隨駕，你的名字也在其中。',keep:1,p84:1,o:[
+  ['換上騎裝，策馬隨行（冒險）',()=>{if(P(cl(.45+(m.hp-50)/200,.2,.8))){m.favor+=7;return'你一路跟得穩穩當當，皇上回頭望了你好幾次。'}m.hp-=8;return'馬受了驚，你摔得不輕，皇上讓人把你送回帳中休養。'}],
+  ['乘軟轎在後頭賞景，不逞強',()=>{m.favor+=2;m.hp+=2;return'你一路平安，看盡了秋山紅葉。'}],
+  ['稱病不去',()=>{m.favor-=2;return'皇上沒說什麼，隨駕的名單上卻再沒了你的名字。'}]]})},
+ {id:'talk',ok:m=>m.rank>=2,mk:m=>({t:'皇上批閱奏章到深夜，你送去一碗蓮子羹，皇上忽然問起：「依你看，這事該怎麼辦？」',keep:1,p84:1,o:[
+  ['謹慎回答，只說自己見識淺薄',()=>{m.favor+=2;return'皇上笑了笑：「倒是知道分寸。」'}],
+  ['大膽說出自己的看法（冒險）',()=>{if(P(cl(.4+m.scheme/200,.2,.8))){m.favor+=7;m.ally+=2;return'你的見解切中要害，皇上沉思良久，眼神裡多了幾分欣賞。'}m.favor-=4;return'皇上沉下臉：「後宮不得干政。」你連忙告退。'}],
+  ['岔開話題，勸皇上早些歇息',()=>{m.favor+=3;return'皇上被你勸得放下了朱筆，順勢握住你的手。'}]]})},
+ {id:'rumor',ok:m=>true,mk:m=>({t:'宮裡傳出消息，說皇上要再辦一次選秀，各宮人心浮動，連你宮裡的人也在議論。',keep:1,p84:1,o:[
+  ['賞宮人些銀兩，安撫人心（耗銀15）',()=>{if(!pay(15))return'銀兩不足，只能口頭安撫。';m.ally+=2;return'你宮裡人心安定，別宮卻已亂成一團。'}],
+  ['藉機結交即將入宮的新人家眷',()=>{m.ally+=3;return'你提前遞了話，往後新人入宮，多半會先來拜訪你。'}],
+  ['置之不理，一切照舊',()=>{return'風聲來得快，去得也快。'}]]})},
+ {id:'doc',ok:m=>m.hp<80,mk:m=>({t:'太醫請脈後面色凝重，說你這些年操勞太過，需要好好調養，不宜再勞神。',keep:1,p84:1,o:[
+  ['聽從醫囑，暫停一段宮務（耗銀20）',()=>{if(!pay(20))return'銀兩不足，只能自己將養。';m.hp+=12;m.favor-=1;return'你靜養了一陣，氣色好多了，只是皇上多日沒見你，略有些想念。'}],
+  ['喝幾帖藥，照常操勞',()=>{m.hp+=4;return'藥喝下去好了些，你又忙起來，沒怎麼顧及身子。'}],
+  ['不信，把太醫的話當耳旁風',()=>{m.hp-=6;return'你硬撐了幾日，終究是病了一場。'}]]})},
+ {id:'pal',ok:m=>true,mk:m=>({t:'一位與你同年入宮的老姐妹遞來帖子，說多年未敘舊，想請你去她宮裡吃茶。',keep:1,p84:1,o:[
+  ['欣然赴約，說些體己話',()=>{const n=S.npcs.find(x=>!x.st);if(n)n.al=Math.min(100,(n.al||0)+12);m.ally+=2;return'你們聊起初入宮時的情形，彼此感慨良多。'}],
+  ['去坐一會兒就走',()=>{m.ally+=1;return'你禮數周到，卻沒有深談。'}],
+  ['推說有事，改日再約',()=>{m.ally-=1;return'老姐妹笑著說「不急」，帖子卻沒再遞來。'}]]})},
+ {id:'thief',ok:m=>true,mk:m=>({t:'你宮裡丟了一支簪子，查來查去，竟是跟了你多年的小宮女偷了，說是為給重病的母親抓藥。',keep:1,p84:1,o:[
+  ['按規矩重罰，以儆效尤',()=>{m.ally-=2;m.scheme+=1;return'宮人們噤若寒蟬，卻也有人暗暗寒心。'}],
+  ['私下貼補她藥錢，這事壓下（耗銀10）',()=>{if(!pay(10))return'銀兩不足，只能把這事壓下。';m.ally+=3;return'小宮女哭著給你磕頭，往後對你忠心耿耿。'}],
+  ['趕出宮去，眼不見為淨',()=>{m.ally-=1;return'她被遣出宮，往後的事再與你無關。'}]]})},
+ {id:'kid',ok:m=>m.kids&&m.kids.some(k=>!k.dead),mk:m=>{const k=m.kids.filter(k=>!k.dead)[0];return{t:`${k.n}拿著功課來見你，說先生誇了他，卻又悄悄問：「母親，別人的母親都很忙，您是不是也沒空陪我？」`,keep:1,p84:1,o:[
+  ['放下手邊的事，陪他讀書說話',()=>{k.bond=(k.bond||0)+6;k.de=(k.de||0)+2;return'他笑得很開心，一整天都跟在你身邊。'}],
+  ['誇他兩句，叫乳母帶他玩',()=>{k.bond=(k.bond||0)+1;return'他乖乖地點頭走了，回頭望了你一眼。'}],
+  ['說自己有要事，改天再說',()=>{k.bond=(k.bond||0)-4;return'他低著頭「哦」了一聲，轉身走了。'}]]}}},
+ {id:'rank',ok:m=>m.rank>=3,mk:m=>({t:'位份低的妃嬪來向你請安，其中有個才入宮不久的，緊張得手都在發抖。',keep:1,p84:1,o:[
+  ['溫言安撫，賜座賜茶',()=>{m.ally+=3;return'她紅著眼眶道謝，往後見了你總是恭恭敬敬。'}],
+  ['端著架子，不多說話',()=>{m.scheme+=1;return'你的威嚴讓殿中一片肅靜。'}],
+  ['藉機敲打，讓她知道規矩（冒險）',()=>{if(P(.6)){m.ally+=1;m.scheme+=2;return'她嚇得不敢再抬頭，其他人也收斂了不少。'}m.ally-=3;return'你的話傳了出去，宮裡說你仗勢欺人。'}]]})},
+ {id:'dream',ok:m=>true,mk:m=>({t:'夜裡你夢見初入宮那年，院子裡的海棠開得正好。醒來枕邊微濕，窗外已是三更。',keep:1,p84:1,o:[
+  ['披衣起身，把往事一件件想清楚',()=>{m.scheme+=3;m.at.sp=Math.min(100,m.at.sp+2);return'天亮時，你心裡比昨天更清明了些。'}],
+  ['喚宮女點燈，陪你說說話',()=>{m.ally+=1;m.at.sp=Math.min(100,m.at.sp+4);return'有人陪著，夜好像沒那麼長了。'}],
+  ['翻個身，繼續睡',()=>{return'一覺醒來，夢已記不清了。'}]]})}
+];
+const _md104=mend;mend=function(){const r=_md104.apply(this,arguments);try{
+ if(S&&S.me&&!S.over&&!S.reg&&S.t>=60&&S.t-(S.t104===undefined?-99:S.t104)>=5&&Math.random()<.4){
+  S.c104=S.c104||{};const m=S.me;const el=EV104.filter(e=>(S.c104[e.id]||0)<2&&e.ok(m));
+  if(el.length){const mn=Math.min(...el.map(e=>S.c104[e.id]||0));const pool=el.filter(e=>(S.c104[e.id]||0)===mn);const e=pool[Math.floor(Math.random()*pool.length)];S.c104[e.id]=(S.c104[e.id]||0)+1;S.t104=S.t;S.q.push(e.mk(m))}}
+ }catch(x){console.log('r104',x)}return r};
+/* ---- 後期專屬（第 10 年起） ---- */
+const EVL104=[
+ {id:'l_age',ok:m=>true,mk:m=>({t:'鏡子裡的你眼角添了細紋。宮女替你梳頭時小心翼翼，不敢提起那根白髮。',keep:1,p84:1,o:[
+  ['笑著讓她拔去，說歲月公平',()=>{m.at.sp=Math.min(100,m.at.sp+3);m.ally+=1;return'宮女鬆了口氣，你的從容讓整個宮裡都跟著安定。'}],
+  ['多用些脂粉香膏（耗銀20）',()=>{if(!pay(20))return'銀兩不足，只能將就。';m.favor+=2;return'新添的妝容很得體，皇上說你氣色極好。'}],
+  ['對鏡出神，半晌不語',()=>{m.at.sp=Math.max(0,m.at.sp-3);return'你想起初入宮的模樣，心裡空落落的。'}]]})},
+ {id:'l_rival',ok:m=>S.npcs.some(n=>n.st),mk:m=>({t:'當年與你爭得最凶的那位如今失了勢，被人遺忘在偏殿。她託人遞話，想見你一面。',keep:1,p84:1,o:[
+  ['親自去看她，舊事一筆勾銷',()=>{m.ally+=3;return'她握著你的手說不出話。這件事傳出去，人人稱你寬厚。'}],
+  ['派人送些吃穿，不見面',()=>{m.ally+=1;return'她收下了東西，一句話也沒託人帶回。'}],
+  ['不理睬，當年的賬還沒算完',()=>{m.scheme+=1;m.ally-=1;return'你沒有回話。偏殿的燈那夜亮到很晚。'}]]})},
+ {id:'l_new',ok:m=>m.rank>=3,mk:m=>({t:'新入宮的年輕嬪妃很得皇上喜歡，連著幾日都被召見，宮裡人看你的眼神有些微妙。',keep:1,p84:1,o:[
+  ['大度地賞她些東西，示好',()=>{m.favor-=1;m.ally+=3;return'你的大方堵住了不少閒話，新人對你也多了幾分敬重。'}],
+  ['不動聲色，加緊自己的功夫',()=>{m.favor+=2;m.scheme+=1;return'你不爭一時之長短，皇上來時你總是剛好在。'}],
+  ['派人盯著她的動靜（冒險）',()=>{if(P(.55)){m.scheme+=3;return'你摸清了她的底細，心裡有了成算。'}m.ally-=3;m.favor-=2;return'事情敗露，宮裡說你容不下新人。'}]]})},
+ {id:'l_fo',ok:m=>true,mk:m=>({t:'你有意在宮中修一間小佛堂，供奉香火，也給自己尋個清淨處。',keep:1,p84:1,o:[
+  ['請工匠精心修建（耗銀40）',()=>{if(!pay(40))return'銀兩不足，只能簡單布置。';m.hp+=5;m.at.sp=Math.min(100,m.at.sp+8);m.ally+=1;return'佛堂落成，檀香繚繞，你在此處總能靜下心來。'}],
+  ['簡單收拾一間偏房',()=>{m.at.sp=Math.min(100,m.at.sp+3);return'雖然簡陋，卻也夠你清修。'}],
+  ['作罷，宮務太忙',()=>{return'這件事被擱下了，一直沒再提起。'}]]})},
+ {id:'l_old',ok:m=>true,mk:m=>({t:'母家傳來消息，族中最年長的那位老人過世了，族人盼你能有所表示。',keep:1,p84:1,o:[
+  ['送上厚重奠儀，請旨追封（耗銀30）',()=>{if(!pay(30))return'銀兩不足，只送了份薄奠。';m.clan+=4;m.favor+=1;return'母家風光大葬，族中人人感念你的恩典。'}],
+  ['按禮制送去奠儀',()=>{m.clan+=1;return'禮數周全，不多不少。'}],
+  ['稱不便出宮，寫封信慰問',()=>{m.clan-=1;return'母家回信客氣，卻是淡淡的。'}]]})},
+ {id:'l_med',ok:m=>m.hp<90,mk:m=>({t:'太醫院新配出一種養身方子，說是對你這樣的年紀最合適，只是價錢不菲。',keep:1,p84:1,o:[
+  ['按方服用，調理身子（耗銀35）',()=>{if(!pay(35))return'銀兩不足，只抓了幾味便宜的。';m.hp+=14;return'吃了月餘，你覺得身子輕快了許多。'}],
+  ['只買一半，試試效果（耗銀15）',()=>{if(!pay(15))return'銀兩不足。';m.hp+=6;return'有些效果，卻不明顯。'}],
+  ['不信這些，繼續老辦法',()=>{return'你還是照舊過日子。'}]]})},
+ {id:'l_min',ok:m=>m.ally>=40,mk:m=>({t:'一位朝中老臣託人遞來帖子，說仰慕你這些年的賢名，想與你母家結個善緣。',keep:1,p84:1,o:[
+  ['回帖致謝，讓母家出面應酬',()=>{m.ally+=3;m.clan+=2;return'兩家往來漸多，母家在朝中也多了個說話的人。'}],
+  ['婉拒，不想與朝臣牽扯太深',()=>{m.favor+=1;return'你的謹慎傳到皇上耳中，他點頭稱讚。'}],
+  ['收下帖子，暗中試探（冒險）',()=>{if(P(.5)){m.scheme+=2;m.clan+=3;return'你摸清了他的來意，順勢結下了這份人情。'}m.dsus=(m.dsus||0)+3;return'來往被人看在眼裡，皇上開始對你起了幾分疑心。'}]]})},
+ {id:'l_gift',ok:m=>S.dow,mk:m=>({t:'太后年事已高，近來常念舊，說起先帝時候的許多往事，身邊的人漸漸都不在了。',keep:1,p84:1,o:[
+  ['日日陪伴，聽太后說舊事',()=>{m.dw+=8;m.favor+=1;return'太后拉著你說到很晚，說你是她身邊最貼心的人。'}],
+  ['帶孩子去給太后解悶',()=>{m.dw+=5;(m.kids||[]).forEach(k=>k.bond=(k.bond||0)+2);return'孩子們的笑聲讓慈寧宮難得熱鬧起來。'}],
+  ['有空才去，宮務要緊',()=>{m.dw+=1;return'太后聽完你的請安，淡淡說了句「去忙吧」。'}]]})},
+ {id:'l_kid',ok:m=>m.kids&&m.kids.some(k=>!k.dead&&yr(k)>=12),mk:m=>{const k=m.kids.filter(k=>!k.dead&&yr(k)>=12)[0];return{t:`${k.n}已經長大，近來常一個人發呆，似乎有什麼心事。你問起，他只說「沒事」。`,keep:1,p84:1,o:[
+  ['找個時間，耐心與他長談',()=>{k.bond=(k.bond||0)+7;return'他終於說起自己的煩惱，你們母子的關係更近了一步。'}],
+  ['讓先生多留意他的功課',()=>{k.de=(k.de||0)+1;return'先生回話說他一切正常，只是年紀到了。'}],
+  ['由他去，孩子大了有自己的事',()=>{k.bond=(k.bond||0)-3;return'他沒再提起，只是見你時多了幾分客氣。'}]]}}},
+ {id:'l_pal',ok:m=>m.rank>=5,mk:m=>({t:'皇上說你這些年辛苦，問你想要什麼賞賜，語氣裡帶著難得的溫和。',keep:1,p84:1,o:[
+  ['請皇上多陪陪你，別無他求',()=>{m.favor+=6;return'皇上怔了怔，握住你的手說：「朕記下了。」'}],
+  ['替母家求個恩典（冒險）',()=>{if(P(.55)){m.clan+=6;return'皇上准了，母家上下歡騰。'}m.favor-=3;return'皇上淡淡道：「你的心思倒是周全。」氣氛冷了幾分。'}],
+  ['說什麼都不缺，只願皇上康健',()=>{m.favor+=3;m.ally+=1;return'皇上點點頭，吩咐人賞了你一對玉如意。'}]]})},
+ {id:'l_note',ok:m=>true,mk:m=>({t:'整理舊物時，你翻出一封當年入宮前母親寫的家書，字跡已經發黃。',keep:1,p84:1,o:[
+  ['仔細讀完，收好',()=>{m.at.sp=Math.min(100,m.at.sp+5);return'你把信重新折好，放回匣子深處。'}],
+  ['給母家回一封長信（耗銀5）',()=>{if(!pay(5))return'銀兩不足，只寫了幾句。';m.clan+=2;m.at.sp=Math.min(100,m.at.sp+3);return'母家收到你的信，一家人傳著看了好幾遍。'}],
+  ['不敢多看，原樣放回',()=>{return'你合上匣子，沒有再想。'}]]})}
+];
+const _mdL104=mend;mend=function(){const r=_mdL104.apply(this,arguments);try{
+ if(S&&S.me&&!S.over&&!S.reg&&S.t>=120&&S.t-(S.tL104===undefined?-99:S.tL104)>=4&&Math.random()<.45){
+  S.cL104=S.cL104||{};const m=S.me;const el=EVL104.filter(e=>(S.cL104[e.id]||0)<2&&e.ok(m));
+  if(el.length){const mn=Math.min(...el.map(e=>S.cL104[e.id]||0));const pool=el.filter(e=>(S.cL104[e.id]||0)===mn);const e=pool[Math.floor(Math.random()*pool.length)];S.cL104[e.id]=(S.cL104[e.id]||0)+1;S.tL104=S.t;S.q.push(e.mk(m))}}
+ }catch(x){console.log('r104L',x)}return r};
 
 deco();intro();
 
