@@ -7723,7 +7723,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V230';const ERR92=[];
+const VER92='V231';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -8212,6 +8212,46 @@ function lead104(n){const m=S.me,y=Math.floor(S.t/12),rk=(typeof RK!=='undefined
  return L[n%L.length]}
 const _nf104=next;next=function(){const r=_nf104.apply(this,arguments);try{const e=S&&S.ev;if(e&&e.t&&!e._v104&&!e.env){const t=String(e.t);const h=FES104.find(c=>c[1].test(t));
  if(h){S.fs104=S.fs104||{};const n=(S.fs104[h[0]]||0);S.fs104[h[0]]=n+1;if(n>=1){e._v104=1;e.t=lead104(n+Math.floor(S.t/12))+'\n'+t;render()}}}}catch(x){console.log('r104f',x)}return r};
+
+/* ===== V231：季節與時辰氣氛效果（程式繪製，粒子很淡、不擋點擊，可在設定關閉） ===== */
+(function(){
+const KEY='hg_atm';let on=true;try{on=localStorage.getItem(KEY)!=='off'}catch(e){}
+const reduce=(()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){return false}})();
+let cv,cx,W=0,H=0,P=[],season='spring',night=false,raf=0,last=0,forced=null,vg;
+const CFG={
+ winter:{n:46,col:()=>`rgba(255,255,255,${.8+Math.random()*.2})`,mk:()=>({x:Math.random()*W,y:Math.random()*H,r:2+Math.random()*3.6,vy:.35+Math.random()*.7,vx:-.15+Math.random()*.3,ph:Math.random()*6.28,t:'dot'}),tint:'rgba(205,225,255,.10)'},
+ spring:{n:28,col:()=>`rgba(255,${190+Math.random()*30|0},${205+Math.random()*30|0},${.6+Math.random()*.3})`,mk:()=>({x:Math.random()*W,y:Math.random()*H,r:3+Math.random()*3.5,vy:.35+Math.random()*.55,vx:.1+Math.random()*.5,ph:Math.random()*6.28,rot:Math.random()*6.28,vr:(Math.random()-.5)*.03,t:'petal'}),tint:'rgba(255,205,225,.06)'},
+ summer:{n:30,col:()=>`rgba(255,${205+Math.random()*30|0},${90+Math.random()*50|0},${.7+Math.random()*.3})`,mk:()=>({x:Math.random()*W,y:Math.random()*H,r:2.2+Math.random()*3,vy:-.12+Math.random()*.24,vx:-.2+Math.random()*.4,ph:Math.random()*6.28,t:'glow'}),tint:'rgba(255,225,150,.07)'},
+ autumn:{n:26,col:()=>{const c=[[222,120,40],[200,80,36],[232,168,52],[170,70,40]][Math.random()*4|0];return `rgba(${c[0]},${c[1]},${c[2]},${.65+Math.random()*.3})`},mk:()=>({x:Math.random()*W,y:Math.random()*H,r:4+Math.random()*4,vy:.5+Math.random()*.8,vx:-.3+Math.random()*.6,ph:Math.random()*6.28,rot:Math.random()*6.28,vr:(Math.random()-.5)*.05,t:'leaf'}),tint:'rgba(255,190,120,.08)'}
+};
+function seasonOf(){const mo=((S&&S.t)||0)%12+1;return mo>=12||mo<=2?'winter':mo<=5?'spring':mo<=8?'summer':'autumn'}
+function isNight(){try{const e=S&&S.ev;if(!e)return false;return /今夜|夜裡|夜深|夜色|燈下|燭|翻牌|三更|更鼓/.test(String(e.t||''))}catch(x){return false}}
+function mount(){if(cv)return;cv=document.createElement('canvas');cv.id='atm105';cv.setAttribute('aria-hidden','true');cv.style.cssText='position:fixed;inset:0;width:100%;height:100%;z-index:60;pointer-events:none;opacity:.85';
+ vg=document.createElement('div');vg.id='atm105v';vg.setAttribute('aria-hidden','true');vg.style.cssText='position:fixed;inset:0;z-index:0;pointer-events:none;transition:opacity 1.2s ease;opacity:0;background:radial-gradient(120% 90% at 50% 40%,rgba(255,170,90,.0) 0%,rgba(90,30,40,.22) 62%,rgba(40,10,24,.5) 100%),radial-gradient(60% 35% at 50% 12%,rgba(255,196,120,.22),rgba(255,196,120,0) 70%)';
+ const anchor=document.getElementById('bg63')||document.getElementById('bgh101')||document.getElementById('bg');
+ if(anchor&&anchor.parentNode){anchor.parentNode.insertBefore(vg,anchor.nextSibling)}else{document.body.insertBefore(vg,document.body.firstChild)}document.body.appendChild(cv)
+ cx=cv.getContext('2d');size();addEventListener('resize',size)}
+function size(){if(!cv)return;const d=Math.min(2,devicePixelRatio||1);W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;cx.setTransform(d,0,0,d,0,0);reseed()}
+function reseed(){const c=CFG[season];P=[];for(let i=0;i<c.n;i++){const p=c.mk();p.c=c.col();P.push(p)}}
+function draw(p){cx.fillStyle=p.c;if(p.t==='dot'){cx.save();cx.shadowColor='rgba(110,140,200,.75)';cx.shadowBlur=5;cx.beginPath();cx.arc(p.x,p.y,p.r,0,6.283);cx.fill();cx.restore()}
+ else if(p.t==='glow'){const g=cx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*4);g.addColorStop(0,p.c);g.addColorStop(1,'rgba(255,200,90,0)');cx.fillStyle=g;cx.beginPath();cx.arc(p.x,p.y,p.r*4,0,6.283);cx.fill()}
+ else{cx.save();cx.translate(p.x,p.y);cx.rotate(p.rot);cx.beginPath();if(p.t==='petal'){cx.ellipse(0,0,p.r,p.r*.55,0,0,6.283)}else{cx.moveTo(0,-p.r);cx.quadraticCurveTo(p.r*.9,0,0,p.r);cx.quadraticCurveTo(-p.r*.9,0,0,-p.r)}cx.fill();cx.restore()}}
+function tick(ts){raf=requestAnimationFrame(tick);if(document.hidden||!on)return;if(ts-last<33)return;last=ts;
+ const s=forced?forced.season:seasonOf();if(s!==season){season=s;reseed()}
+ const nt=forced?forced.night:isNight();if(nt!==night){night=nt;vg.style.opacity=night?'1':'0'}
+ cx.clearRect(0,0,W,H);const c=CFG[season];cx.fillStyle=c.tint;cx.fillRect(0,0,W,H);
+ for(const p of P){p.ph+=.02;p.x+=p.vx+Math.sin(p.ph)*(p.t==='glow'?.35:.45);p.y+=p.vy;if(p.rot!==undefined)p.rot+=p.vr;
+  if(p.t==='glow'){if(p.y<-10)p.y=H+10;if(p.y>H+10)p.y=-10}else if(p.y>H+12){p.y=-12;p.x=Math.random()*W}
+  if(p.x>W+12)p.x=-12;if(p.x<-12)p.x=W+12;
+  if(p.t==='glow'){const a=.5+Math.sin(p.ph*1.6)*.5;cx.globalAlpha=a}else cx.globalAlpha=1;draw(p)}
+ cx.globalAlpha=1}
+function start(){if(reduce||raf)return;mount();season=seasonOf();reseed();raf=requestAnimationFrame(tick)}
+window.ATM105={force(s,n){forced=s?{season:s,night:!!n}:null;mount();if(!raf)raf=requestAnimationFrame(tick)},set(v){on=!!v;try{localStorage.setItem(KEY,on?'on':'off')}catch(e){}if(cv){cv.style.display=on?'':'none';vg.style.display=on?'':'none'}},isOn:()=>on};
+const _r=render;render=function(){const r=_r.apply(this,arguments);try{if(S&&S.me&&!S.over){start()}else if(cv){cv.style.display='none';vg.style.display='none'}if(S&&S.me&&!S.over&&cv&&on){cv.style.display='';vg.style.display=''}}catch(e){}return r};
+})();
+
+function atmToggle105(){try{window.ATM105.set(!window.ATM105.isOn())}catch(e){}try{render()}catch(e){}}
+const _ap105=avPanel;avPanel=function(){let on='開';try{on=window.ATM105.isOn()?'開':'關'}catch(e){}return _ap105.apply(this,arguments)+`<div class=cd><h3>氣氛效果</h3><div class=m>依季節飄雪、落花、流螢、落葉；夜晚事件會有暖光暈染。很淡，不影響操作；覺得干擾或手機吃力可以關掉。</div><p><button class=s onclick="atmToggle105()">氣氛效果：${on}</button></p></div>`};
 
 deco();intro();
 
