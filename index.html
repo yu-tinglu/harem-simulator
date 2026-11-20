@@ -7723,7 +7723,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V233';const ERR92=[];
+const VER92='V234';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -8388,6 +8388,85 @@ const tk107=(slot,list,key)=>{
 const _md107=mend;mend=function(){const r=_md107.apply(this,arguments);try{
  if(S&&S.me&&!S.over&&!S.reg){tk107('c',SL107.COURT);tk107('e',SL107.EMP)}
 }catch(e){console.log('sl107',e)}return r};
+
+/* ===== V234：宿敵／閨友長篇故事線；結局「你的一生」敘事回顧 ===== */
+const RV108=(()=>{const M=()=>S.me,Nn=a=>S.npcs.find(x=>x.n===a.nm)||{al:0,host:0};
+const E=(t,o)=>({t,o});
+const FOE=[
+[0,0,a=>E(`請安時，${a.nm}當著眾人的面，笑盈盈地說起你宮裡的陳設「素淨得很，倒像是庵堂」，滿座都低低笑了。`,[
+ ['反唇相譏，把話頂回去',()=>{const n=Nn(a);n.host=(n.host||0)+12;M().favor+=1;a.f.hard=1;return`你四兩撥千斤地回了一句，滿座皆靜。${a.nm}的笑容僵了一瞬，眼底卻冷了。`}],
+ ['笑而不語，只當沒聽見',()=>{M().ally+=1;a.f.soft=1;return`你端茶淺啜，不接話。旁人看在眼裡，倒覺得你有氣度。`}],
+ ['事後備一份禮，主動示好（耗銀15）',()=>{if(!pay(15))return'銀兩不足，只遣人帶了句問候。';const n=Nn(a);n.al=(n.al||0)+8;n.host=Math.max(0,(n.host||0)-8);a.f.gift=1;return`${a.nm}收下禮物，客氣地道了謝，神色卻看不出是真心還是假意。`}]])],
+[6,12,a=>E(`皇上賞下一匹難得的貢緞，內務府只備了一匹，${a.nm}與你都遞了牌子。`,[
+ ['據理力爭，說自己更需要',()=>{if(P(cl(.4+M().favor/300,.2,.75))){M().favor+=3;a.f.win=(a.f.win||0)+1;return`內務府看了皇上近來的臉色，把緞子送來了你宮裡。${a.nm}面上笑著，指甲卻掐進了掌心。`}M().favor-=1;a.f.lose=(a.f.lose||0)+1;return`緞子被${a.nm}拿走了，她得意地在你面前轉了個圈。`}],
+ ['讓給她，換一份人情',()=>{M().ally+=2;a.f.lose=(a.f.lose||0)+1;const n=Nn(a);n.host=Math.max(0,(n.host||0)-5);return`你主動讓了。${a.nm}愣了愣，嘴上說「妹妹客氣」，卻再沒說什麼難聽話。`}],
+ ['暗中使人讓緞子「出了點岔子」（看心機）',()=>{if(ckp(.35+M().scheme/250)){a.f.win=(a.f.win||0)+1;M().scheme+=2;return`緞子在送去她宮裡的路上被雨水洇了，皇上一聽，倒又另賞了你一匹。`}M().ally-=2;a.f.lose=(a.f.lose||0)+1;return`手腳被人看出，雖無實證，宮裡卻有了你「不厚道」的議論。`}]])],
+[8,14,a=>E(`你宮裡的老嬤嬤在牆角花盆下，挖出一個寫著你生辰八字的布偶。她抖著手說：「娘娘，這東西不是我們放的。」`,[
+ ['稟報皇上，請他明察',()=>{if(P(cl(.4+M().favor/250,.2,.75))){a.f.proof=1;M().favor+=3;return`皇上命人徹查，線索隱隱指向${a.nm}的人。只是她早有準備，推了個小太監出來頂罪。`}M().favor-=2;return'皇上只說了句「後宮之事，自己處置」，便不再過問。'}],
+ ['按下不表，暗中查是誰做的（看心機）',()=>{if(ckp(.4+M().scheme/250)){a.f.proof=1;M().scheme+=2;return`你查了半個月，抓到了一個收買宮人的小太監，供出了${a.nm}的名字，卻拿不出更多實證。`}M().hp-=3;return'線索查到一半就斷了，你夜裡再也睡不安穩。'}],
+ ['當面把布偶丟到她面前',()=>{const n=Nn(a);n.host=(n.host||0)+25;M().scand=(M().scand||0)+2;a.f.hard=1;return`${a.nm}臉色微變，卻仍冷笑：「娘娘這是什麼意思？」你們的關係從此撕破了臉。`}]])],
+[8,16,a=>{const w=(a.f.win||0)>=(a.f.lose||0);return E(w?`${a.nm}近來頻頻失勢，被皇上冷落許久，宮人們也開始怠慢她。她遣人送來一封信，只有一句話：「求見娘娘一面。」`:`${a.nm}近來聖眷正濃，連你宮裡的份例都被內務府「按例」壓了幾分。她在宮道上遇見你，微微頷首，姿態從容。`,w?[
+ ['去見她，聽她說什麼',()=>{a.f.hear=1;const n=Nn(a);n.host=Math.max(0,(n.host||0)-20);n.al=(n.al||0)+10;return`${a.nm}跪下來，說這些年爭來鬥去，不過是怕輸。你讓人扶起她，倒覺得有些唏噓。`}],
+ ['不見，順勢再補一刀',()=>{a.f.cut=1;const n=Nn(a);n.favor=Math.max(0,(n.favor||0)-12);n.host=100;n.al=0;M().scheme+=2;return`你命人把信退了回去，又讓人在內務府那邊遞了句話。她從此再難翻身，也徹底成了你的死敵。`}],
+ ['置之不理',()=>'你沒有回應，信像石沉大海。']]:[
+ ['忍下這口氣，積蓄實力',()=>{a.f.bear=1;M().ally+=3;M().hp-=1;return'你忍了又忍，轉身把精力放在自己的事上。'}],
+ ['抓住她的小辮子，伺機反擊（看心機）',()=>{if(ckp(.35+M().scheme/250)){a.f.turn=1;M().favor+=3;return`你尋到她一個疏漏，在皇上面前輕輕一點，她的氣焰頓時矮了半截。`}M().favor-=3;return'你的反擊落了空，她笑得更溫柔了。'}],
+ ['請皇后或太后出面調停',()=>{M().ally+=1;return'長輩出面和稀泥，面上和氣了一段日子。'}]])}],
+[10,18,a=>{const f=a.f;const g=f.hear||f.soft||f.gift;return E(f.cut?`${a.nm}的宮門早已冷清，她病了好幾場。有人說她是被「逼」出病來的，也有人說，是報應。`:g?`${a.nm}近來待你和氣了許多，逢年過節還會送來自己做的點心。你們雖稱不上朋友，卻已不是敵人。`:`你與${a.nm}的恩怨成了宮裡人人皆知的故事，每次兩人同時出現，連空氣都繃緊三分。`,[['把這段恩怨放下，繼續走自己的路',()=>{const n=Nn(a);if(f.cut){M().scand=(M().scand||0)+1;return'你沒有再提起她。只是偶爾經過她的宮門，腳步會不由自主地慢下來。'}if(g){n.host=Math.max(0,(n.host||0)-15);M().ally+=3;return'你們沒有說開，卻默契地不再為難彼此。'}return'這場對峙沒有結局，只是一日一日地拖了下去。'}]])}]];
+const FRI=[
+[0,0,a=>E(`${a.nm}病了，連著幾日高熱不退，宮裡人都避著她，怕沾了病氣。`,[
+ ['親自去探病，守了一夜',()=>{M().hp-=2;const n=Nn(a);n.al=(n.al||0)+15;a.f.care=1;return`${a.nm}在昏沉中握著你的手，輕輕說了聲謝。你們之間，似乎多了一層別人沒有的默契。`}],
+ ['遣人送藥和補品（耗銀20）',()=>{if(!pay(20))return'銀兩不足，只送了點藥。';const n=Nn(a);n.al=(n.al||0)+8;return`${a.nm}收到補品，回了一封短箋，字跡有些虛弱。`}],
+ ['遠遠問候，不便沾染',()=>{const n=Nn(a);n.al=Math.max(0,(n.al||0)-8);return`${a.nm}病癒後，待你客氣了些，也生疏了些。`}]])],
+[6,12,a=>E(`${a.nm}找上門，吞吞吐吐說起一件事：她收了娘家兄長託的一份禮，想請你幫忙在皇上面前遮掩過去。`,[
+ ['幫她遮掩',()=>{a.f.cover=1;M().scand=(M().scand||0)+1;const n=Nn(a);n.al=(n.al||0)+12;return`你替她圓了過去。${a.nm}眼眶紅了，說這份情她記一輩子。`}],
+ ['勸她主動向皇上坦白',()=>{a.f.honest=1;const n=Nn(a);n.al=(n.al||0)+4;return`${a.nm}猶豫了很久，最後照你的話做了，皇上只輕輕訓了她幾句。`}],
+ ['婉拒，說此事與己無關',()=>{const n=Nn(a);n.al=Math.max(0,(n.al||0)-15);a.f.refuse=1;return`${a.nm}臉上的光暗了下去：「我明白了。」`}]])],
+[8,16,a=>E(`宮裡來了新人，皇上的目光落在她身上，同時也看見了${a.nm}與你。這一回，皇上要在你們兩人中挑一個晉位。`,[
+ ['把機會讓給她',()=>{a.f.yield=1;const n=Nn(a);n.al=(n.al||0)+20;n.favor=(n.favor||0)+8;return`${a.nm}被晉了位分。她來謝你時，眼裡是真的感激。`}],
+ ['公平競爭，各憑本事',()=>{if(P(cl(.45+M().favor/300,.2,.75))){a.f.won=1;M().favor+=4;return`皇上選了你。${a.nm}笑著道賀，笑意卻有些不自然。`}a.f.lost=1;M().favor-=1;return`皇上選了${a.nm}。你輕聲說了句恭喜，把心事咽了回去。`}],
+ ['暗中使些手段，確保自己勝出（看心機）',()=>{if(ckp(.35+M().scheme/250)){a.f.won=1;a.f.dirty=1;M().favor+=5;M().scheme+=2;return`你順利拿到了晉位，只是這份勝利，沾了些不能說的顏色。`}a.f.lost=1;a.f.dirty=1;M().favor-=3;return`你的手段被她察覺，她看著你，像看著一個陌生人。`}]])],
+[10,20,a=>{const f=a.f;let tx;if(f.yield||f.honest&&!f.dirty)tx=`${a.nm}與你一同走過了許多年，如今雖各有各的歸宿，每到年節，仍會遣人送來一籃自己種的桂花。`;else if(f.dirty||f.refuse)tx=`${a.nm}與你漸行漸遠。宮裡仍常見你們同席，卻再沒有人聽過她喚你一聲「姐姐」。`;else tx=`${a.nm}與你的情分，淡淡地留了下來。不算親密，也不曾斷絕。`;return E(tx,[['記下這段情誼',()=>{const n=Nn(a);if(f.yield||f.honest&&!f.dirty){n.al=Math.max(n.al||0,80);M().ally+=4;return'一段宮中難得的真情，成了你日後的底氣。'}if(f.dirty||f.refuse){n.al=Math.min(n.al||0,20);return'有些情分，終究沒能熬過宮牆。'}return'你們各自安好。'}]])}]];
+return{FOE,FRI}})();
+const tkR108=()=>{
+ const c=S.rv108=S.rv108||{done:[],last:-99,act:null};let a=c.act;
+ if(!a){if(S.t<36||S.t-c.last<14||Math.random()>.2)return;
+  const alive=S.npcs.filter(n=>n&&n.n&&!n.st);
+  const foe=alive.filter(n=>(n.host||0)>=20&&!c.done.includes('f'+n.n)).sort((x,y)=>(y.host||0)-(x.host||0))[0];
+  const fr=alive.filter(n=>(n.al||0)>=55&&(n.host||0)<30&&!c.done.includes('h'+n.n)).sort((x,y)=>(y.al||0)-(x.al||0))[0];
+  const nf=c.done.filter(x=>x[0]==='f').length,nh=c.done.filter(x=>x[0]==='h').length;
+  let pick=null,kind='';
+  if(foe&&nf<3&&(!fr||nh>=nf||Math.random()<.5)){pick=foe;kind='f'}else if(fr&&nh<3){pick=fr;kind='h'}else if(foe&&nf<3){pick=foe;kind='f'}
+  if(!pick)return;
+  a=c.act={id:kind+pick.n,kind,nm:pick.n,s:0,t:S.t,w:R(1,3),f:{}};return}
+ if(S.t-a.t<a.w)return;
+ const bl=a.kind==='f'?RV108.FOE:RV108.FRI,b=bl[a.s];
+ const npc=S.npcs.find(x=>x.n===a.nm);if(!npc||npc.st){c.done.push(a.id);c.last=S.t;c.act=null;return}
+ if(!b){c.done.push(a.id);c.last=S.t;c.act=null;return}
+ const ev=b[2](a);
+ S.q.push({t:ev.t,keep:1,p84:1,story:1,o:ev.o.map(([l,f])=>[l,()=>{const r=f();if(r)jot('宮',a.nm,r);return r}])});
+ a.s++;a.t=S.t;const nx=bl[a.s];if(nx)a.w=R(nx[0],nx[1]);else{c.done.push(a.id);c.last=S.t;c.act=null}};
+const _md108=mend;mend=function(){const r=_md108.apply(this,arguments);try{if(S&&S.me&&!S.over&&!S.reg)tkR108()}catch(e){console.log('rv108',e)}return r};
+/* ----- 結局：你的一生（敘事回顧） ----- */
+function nar108(){try{
+ const m=S.me,yrs=Math.floor(S.t/12),ra=(typeof RK!=='undefined'&&RK[m.rank])||'妃嬪';
+ const al=(S.npcs||[]).filter(n=>n&&n.n).slice().sort((x,y)=>(y.al||0)-(x.al||0))[0],fo=(S.npcs||[]).filter(n=>n&&n.n).slice().sort((x,y)=>(y.host||0)-(x.host||0))[0];
+ const kids=m.kids||[],lost=(S.lost106||[]).length,gk=kids.reduce((t,k)=>t+((k.sp&&k.sp.gk)||0),0);
+ const p=[];
+ p.push(`你在宮中度過了${yrs}年。從一個初入宮門的新人，走到${ra}的位置，${m.rank>=5?'一路上不知踏過多少人的前程':m.rank>=3?'不算最高，卻也站穩了腳跟':'始終在宮牆的陰影裡小心行走'}。`);
+ if(al&&(al.al||0)>=45)p.push(`${(fo&&fo!==al&&(fo.host||0)>=40)?'':''}宮裡最懂你的人是${al.n}，${(al.al||0)>=70?'你們彼此信任，是這座宮城裡少有的溫暖':'你們互相扶持了一段，也各自留了心眼'}。`);
+ if(fo&&(fo.host||0)>=40)p.push(`${fo.n}是你一生的對手，${(fo.host||0)>=80?'你們誰也沒有真正放過誰':'你們爭過、鬥過，也都學會了在對方面前不露破綻'}。`);
+ const rv=(S.rv108&&S.rv108.done)||[];const fs=rv.filter(x=>x[0]==='h').map(x=>x.slice(1)),es=rv.filter(x=>x[0]==='f').map(x=>x.slice(1));
+ if(fs.length)p.push(`你與${fs.join('、')}的情分，是這段歲月裡最珍貴的部分。`);
+ if(es.length)p.push(`你與${es.join('、')}的恩怨，成了宮裡人人皆知的故事。`);
+ if(kids.length||lost)p.push(`你育有${kids.length+lost}個孩子${lost?`，其中${lost}個沒能長大，這是你心底最深的傷`:''}${kids.length?`；${kids.length}個孩子長大成人${gk?`，你還抱上了${gk}個孫輩`:''}`:''}。`);
+ else p.push('你終其一生沒有自己的孩子，宮裡的歲月顯得格外安靜。');
+ const cs=(S.cs107&&S.cs107.done||[]).filter(x=>x[0]!=='e').length;
+ if(cs)p.push(`朝堂上的風雲也曾牽動過你：${cs}樁大事，有些你伸過手，有些只是遠遠看著。`);
+ const tp=((S.dec94||[]).slice().sort((x,y)=>y.sc-x.sc)[0]);
+ if(tp)p.push(`若要說哪個選擇改變了你的一生，也許是第${Math.floor(tp.t/12)+1}年那次「${tp.l}」。`);
+ return p.join('')}catch(e){console.log('nar108',e);return''}}
+const _u108=uiPost;uiPost=function(){const r=_u108.apply(this,arguments);try{const sc=document.querySelector('.scrim .scroll');if(sc&&S&&S.over&&!sc.querySelector('.nar108')){const t=nar108();if(t){const d=document.createElement('div');d.className='nar108';d.style.cssText='margin-top:10px;width:100%;text-align:left;background:rgba(255,255,255,.65);border:1px solid rgba(227,180,90,.7);border-radius:12px;padding:10px 12px;font-size:13.5px;line-height:1.85;color:#5a2b22';d.innerHTML='<div style="font-weight:700;color:#6b1d27;margin-bottom:4px">你的一生</div>'+ESC(t);const dec=sc.querySelector('.dec94'),e=sc.querySelector('.end82');if(dec)dec.insertAdjacentElement('beforebegin',d);else if(e)e.insertAdjacentElement('afterend',d);else sc.insertBefore(d,sc.firstChild)}}}catch(e){console.log('nu108',e)}return r};
 
 deco();intro();
 
