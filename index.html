@@ -7722,7 +7722,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V221';const ERR92=[];
+const VER92='V222';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -8006,6 +8006,20 @@ function sp102(){try{if(document.getElementById('sp102'))return;let seen='';try{
  document.getElementById('sp102go').onclick=()=>close();document.getElementById('sp102v').onclick=()=>chkv100();
  const c=document.getElementById('sp102ct');if(c)c.onclick=()=>close(()=>loadAuto())}catch(e){console.log('r102',e)}}
 try{const ap=document.getElementById('app');if(ap){new MutationObserver(()=>sp102()).observe(ap,{childList:true,subtree:true});sp102()}}catch(e){}
+
+/* ===== V222：配色與字級平衡（對比度、小字、事件卡底色） ===== */
+(function(){const st=document.createElement('style');st.id='st103';st.textContent=`
+html body .scroll button:not(.s),html body #app .go,html body #sp102 .go,html body #adv82 .go82,html body #fb92 .row button.pr{background-image:linear-gradient(160deg,#d65a74,#b53a56)}
+html body .pill.r{background:linear-gradient(135deg,#d65a74,#b53a56)}
+html body .tabs button[aria-current=true] i{background:linear-gradient(160deg,#d65a74,#b53a56)}
+html body .scroll .tag{font-size:13.5px;background:#a8283f}
+html body .scroll.bad .tag{background:#8f2a3a}
+html body .pill{font-size:13.5px!important}
+html body .goal82 small{color:#6f4f45!important}
+html:not(.dk18) body .s{background:rgba(255,248,238,.92)!important;color:#5a3a2c}
+html:not(.dk18) body .s small{color:#6b4a3c!important;font-size:13.5px}
+html:not(.dk18) body .scroll{background:radial-gradient(120% 80% at 30% 0,#fff2d6,transparent 60%),linear-gradient(180deg,#f3e2c2,#e4cb98)}
+`;document.head.appendChild(st)})();
 
 deco();intro();
 
