@@ -7723,7 +7723,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V224';const ERR92=[];
+const VER92='V225';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -8001,7 +8001,7 @@ footer.copyright{display:none!important}
 function sp102(){try{if(document.getElementById('sp102'))return;let seen='';try{seen=sessionStorage.getItem('hg_sp102')}catch(e){}
  const force=/[?&]splash=1/.test(location.search);if(seen&&!force)return;if(navigator.webdriver&&!force)return;
  const m=document.querySelector('.mcover');if(!m||!m.src)return;const au=(typeof autoCard==='function')&&autoCard();
- const d=document.createElement('div');d.id='sp102';d.innerHTML=`<div class=bgx style="background-image:url(${typeof BG101!=='undefined'?BG101.H:''})"></div><img class=pic alt="後宮模擬器" src="${m.src}"><div class=tg>一入宮門深似海</div><button class=go id=sp102go>踏入宮門</button>${au?'<button class=ct id=sp102ct>繼續上次的遊戲</button>':''}<div class=ft><button id=sp102v>版本 ${vd100(VER92)}　<u>檢查更新</u></button><br><b>© 2026 yu-tinglu</b>　後宮模擬器 版權所有<br>未經授權，請勿轉載、改作或作商業使用</div>`;
+ const d=document.createElement('div');d.id='sp102';d.innerHTML=`<div class=bgx style="background-image:url(${typeof BG101!=='undefined'?BG101.H:''})"></div><img class=pic alt="後宮模擬器" src="${m.src}"><div class=tg>一入宮門深似海</div><button class=go id=sp102go>踏入宮門</button><div class=ft><button id=sp102v>版本 ${vd100(VER92)}　<u>檢查更新</u></button><br><b>© 2026 yu-tinglu</b>　後宮模擬器 版權所有<br>未經授權，請勿轉載、改作或作商業使用</div>`;
  document.body.appendChild(d);
  const close=(cb)=>{try{sessionStorage.setItem('hg_sp102','1')}catch(e){}d.classList.add('out');setTimeout(()=>{try{d.remove()}catch(e){}if(cb)try{cb()}catch(e){console.log('r102',e)}},430)};
  document.getElementById('sp102go').onclick=()=>close();document.getElementById('sp102v').onclick=()=>chkv100();
