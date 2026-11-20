@@ -7723,7 +7723,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V228';const ERR92=[];
+const VER92='V229';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -8159,6 +8159,59 @@ const CD104=[
 function skip104(e){try{if(!e||!e.t||e.env)return false;const t=String(e.t);const h=CD104.find(c=>c[1].test(t));if(!h)return false;
  S.cd104=S.cd104||{};const r=S.cd104[h[0]]||{n:0,t:-99};if(r.n>=3||S.t-r.t<20)return true;r.n++;r.t=S.t;S.cd104[h[0]]=r;return false}catch(x){return false}}
 const _nx104=next;next=function(){const r=_nx104.apply(this,arguments);try{let g=0,sk=false;while(S&&S.ev&&g++<6&&skip104(S.ev)){S.ev=S.q.shift()||null;sk=true}if(sk)render()}catch(x){console.log('r104n',x)}return r};
+/* ---- 第 15 年起（S.t>=180）後期事件 ---- */
+const EVX104=[
+ {id:'x_white',ok:m=>true,mk:m=>({t:'晨起請安時你發現，皇上鬢邊的白髮又添了不少，批閱奏章也比從前慢了。',keep:1,p84:1,o:[
+  ['親手熬一碗安神湯送去',()=>{m.favor+=4;return'皇上喝完，說這些年身邊只有你最懂他的脾胃。'}],
+  ['勸皇上少熬夜，多歇息',()=>{m.favor+=2;m.ally+=1;return'皇上笑你囉嗦，卻到底聽了進去。'}],
+  ['只在心裡嘆息，不多言',()=>{return'你低頭行了禮，什麼也沒說。'}]]})},
+ {id:'x_gone',ok:m=>true,mk:m=>({t:'當年與你一同入宮的姐妹又走了一個。靈前冷清，只有零星幾個人來上香。',keep:1,p84:1,o:[
+  ['親自去送她最後一程（耗銀15）',()=>{if(!pay(15))return'銀兩不足，只備了簡單的香燭。';m.ally+=3;m.at.sp=Math.max(0,m.at.sp-2);return'你在靈前站了很久。回宮的路上，宮燈一盞盞亮了起來。'}],
+  ['派人送去奠儀',()=>{m.ally+=1;return'你讓人送去了該送的。'}],
+  ['稱病不去',()=>{m.ally-=2;return'你沒有去。宮裡人說你薄情。'}]]})},
+ {id:'x_son',ok:m=>m.kids&&m.kids.some(k=>!k.dead&&k.sex==='男'&&yr(k)>=16),mk:m=>{const k=m.kids.filter(k=>!k.dead&&k.sex==='男'&&yr(k)>=16)[0];return{t:`${k.n}近來常被皇上召去議事，朝臣們看他的目光也與從前不同了。`,keep:1,p84:1,o:[
+  ['叮囑他謹言慎行，不要出風頭',()=>{k.de=(k.de||0)+2;k.bond=(k.bond||0)+3;return'他點頭應下，說母親的話他都記著。'}],
+  ['替他結交幾位可靠的老臣（耗銀30）',()=>{if(!pay(30))return'銀兩不足，只能作罷。';k.pow=(k.pow||0)+4;m.clan+=1;return'老臣們對他多了幾分照拂。'}],
+  ['不插手，讓他自己闖',()=>{k.bond=(k.bond||0)-1;return'你選擇放手，看著他獨自走進朝堂。'}]]}}},
+ {id:'x_star',ok:m=>true,mk:m=>({t:'欽天監奏報天象有異，宮裡又開始傳言紛紛，有人說是某位妃嬪命格相沖。',keep:1,p84:1,o:[
+  ['一笑置之，不參與議論',()=>{m.ally+=1;return'流言不過幾日便散了。'}],
+  ['替受牽連的人說句公道話',()=>{m.ally+=3;m.favor-=1;return'有人暗暗感激你，也有人覺得你多事。'}],
+  ['藉流言打壓對手（冒險）',()=>{if(P(.5)){m.scheme+=2;m.ally+=1;return'流言的矛頭悄悄轉了方向。'}m.ally-=3;m.favor-=3;return'你的手腳被人看穿，宮裡都說你城府太深。'}]]})},
+ {id:'x_rule',ok:m=>m.rank>=4,mk:m=>({t:'宮裡新添了幾條規矩，說是為了節儉，其實誰都看得出是衝著幾位高位嬪妃的用度來的。',keep:1,p84:1,o:[
+  ['帶頭遵守，主動縮減用度',()=>{m.favor+=2;m.ally+=2;m.silver=Math.max(0,m.silver-10);return'你的表率讓人無話可說，皇上聽說後讚了一句。'}],
+  ['私下託人通融',()=>{m.silver=Math.max(0,m.silver-20);m.ally+=1;return'事情辦成了，花費卻不小。'}],
+  ['照常過日子，不理這些規矩',()=>{m.favor-=2;m.ally-=1;return'有人把這事記在了心上。'}]]})},
+ {id:'x_nephew',ok:m=>true,mk:m=>({t:'母家的晚輩進京趕考，託人遞話想來拜見你，說是想求你指點一二。',keep:1,p84:1,o:[
+  ['召見，鼓勵他用心讀書',()=>{m.clan+=3;return'少年紅著臉告退，你彷彿看見了當年的自己。'}],
+  ['賞些盤纏，不見面',()=>{m.clan+=1;m.silver=Math.max(0,m.silver-8);return'你讓人送去了盤纏和幾本書。'}],
+  ['為避嫌，婉拒會面',()=>{m.favor+=1;m.clan-=1;return'你謹守分寸，母家雖有些失望，卻也明白你的難處。'}]]})},
+ {id:'x_coffin',ok:m=>m.silver>=60,mk:m=>({t:'你忽然意識到，自己還沒有為身後事做過任何安排。夜裡你把嬤嬤叫來，細細說了一些話。',keep:1,p84:1,o:[
+  ['請人備一副上好的壽材（耗銀50）',()=>{if(!pay(50))return'銀兩不足，只能先記在心裡。';m.at.sp=Math.min(100,m.at.sp+6);return'事情辦妥，你心裡反倒踏實了許多。'}],
+  ['只交代幾句，一切從簡',()=>{m.at.sp=Math.min(100,m.at.sp+2);return'你把想說的說完，覺得輕鬆了一些。'}],
+  ['不願多想，揮手讓她退下',()=>{return'你轉頭望向窗外，一句話也沒再說。'}]]})},
+ {id:'x_trip',ok:m=>m.rank>=2,mk:m=>({t:'皇上忽然興起，說要去當年你們初遇的園子走一走，只帶你一人。',keep:1,p84:1,o:[
+  ['陪皇上慢慢走，聽他說起往事',()=>{m.favor+=8;return'皇上說起從前，你們都笑了。那一夜他沒有批摺子。'}],
+  ['提議多帶幾位姐妹同去',()=>{m.favor+=2;m.ally+=3;return'園子裡熱鬧了許多，皇上也不覺掃興。'}],
+  ['稱身子不適，婉拒',()=>{m.favor-=3;return'皇上點點頭，獨自去了。'}]]})},
+ {id:'x_dream',ok:m=>true,mk:m=>({t:'夜深人靜，你獨坐燈下，把這些年的事一件一件在心裡過了一遍，竟分不清哪些是榮耀，哪些是代價。',keep:1,p84:1,o:[
+  ['提筆把這些年的心得寫下來',()=>{m.scheme+=3;m.at.sp=Math.min(100,m.at.sp+4);return'寫完最後一個字，窗外已經泛白。'}],
+  ['喚來幾個老宮人陪你喝杯茶',()=>{m.ally+=2;m.at.sp=Math.min(100,m.at.sp+5);return'你們說了半宿的舊事，笑一陣又靜一陣。'}],
+  ['吹熄燈，睡去',()=>{return'夜很長，你很快睡著了。'}]]})}
+];
+const _mdX104=mend;mend=function(){const r=_mdX104.apply(this,arguments);try{
+ if(S&&S.me&&!S.over&&!S.reg&&S.t>=180&&S.t-(S.tX104===undefined?-99:S.tX104)>=4&&Math.random()<.45){
+  S.cX104=S.cX104||{};const m=S.me;const el=EVX104.filter(e=>(S.cX104[e.id]||0)<2&&e.ok(m));
+  if(el.length){const mn=Math.min(...el.map(e=>S.cX104[e.id]||0));const pool=el.filter(e=>(S.cX104[e.id]||0)===mn);const e=pool[Math.floor(Math.random()*pool.length)];S.cX104[e.id]=(S.cX104[e.id]||0)+1;S.tX104=S.t;S.q.push(e.mk(m))}}
+ }catch(x){console.log('r104X',x)}return r};
+/* ---- 節日／年度例行事件：第二次起，開頭加一句隨年份與處境變化的鋪陳 ---- */
+const FES104=[['duan',/端午/],['mid',/中秋/],['eve',/除夕|春節/],['yuan',/元宵/],['qi',/七夕/],['dong',/冬至/],['chong',/重陽/],['wan',/萬壽節/],['border',/邊關告急/],['fan',/削藩/]];
+function lead104(n){const m=S.me,y=Math.floor(S.t/12),rk=(typeof RK!=='undefined'&&RK[m.rank])||'';const kids=(m.kids||[]).filter(k=>!k.dead).length;
+ const L=[`入宮已是第 ${y} 年，這樣的日子你早已熟悉。`,`你如今是${rk}，座次與初入宮那年大不相同了。`,'身邊的人換了一茬又一茬，只有這時節的熱鬧依舊。',
+  kids?'孩子們又長高了一截，轉眼都不是當年的模樣。':'宮裡添了新人，也少了舊人。','窗外的樹又綠了一回，你已記不清上一次是怎麼過的。',
+  m.favor>=70?'這些年皇上待你不薄，這一天你也不覺得陌生。':'宮裡的風向每年都不一樣，你早學會了看。'];
+ return L[n%L.length]}
+const _nf104=next;next=function(){const r=_nf104.apply(this,arguments);try{const e=S&&S.ev;if(e&&e.t&&!e._v104&&!e.env){const t=String(e.t);const h=FES104.find(c=>c[1].test(t));
+ if(h){S.fs104=S.fs104||{};const n=(S.fs104[h[0]]||0);S.fs104[h[0]]=n+1;if(n>=1){e._v104=1;e.t=lead104(n+Math.floor(S.t/12))+'\n'+t;render()}}}}catch(x){console.log('r104f',x)}return r};
 
 deco();intro();
 
