@@ -7722,7 +7722,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V216';const ERR92=[];
+const VER92='V217';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -7959,6 +7959,12 @@ const _md99b=mend;mend=function(){const r=_md99b.apply(this,arguments);try{if(S&
 function ver100(t){const m=/VER92\s*=\s*['"](V\d+)['"]/.exec(t);return m?parseInt(m[1].slice(1),10):0}
 async function nv100(){try{if(!/^https?:/.test(location.protocol)||document.getElementById('nv100')||document.hidden)return;const r=await fetch(location.pathname+'?v='+Date.now(),{cache:'no-store'});if(!r.ok)return;const t=await r.text();const now=parseInt(VER92.slice(1),10);if(ver100(t)>now){const d=document.createElement('div');d.id='nv100';d.innerHTML='有新版本可用（遊戲進度不會消失）<button onclick="location.reload()">重新整理</button><button class=x onclick="this.parentNode.remove()">稍後</button>';document.body.appendChild(d)}}catch(e){}}
 try{setTimeout(nv100,4000);setInterval(nv100,30*60*1000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout(nv100,1500)})}catch(e){}
+/* 首頁顯示版本號，點一下手動檢查新版 */
+(function(){const st=document.createElement('style');st.id='st100b';st.textContent=`.vl100{display:block;margin:6px auto 0;width:max-content;max-width:100%;font-size:12px;color:#8a6a60;background:transparent;border:0;padding:4px 10px;min-height:28px;letter-spacing:.08em}.vl100 u{text-underline-offset:3px}#vt100{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:141;background:rgba(60,22,18,.92);color:#fff;border-radius:12px;padding:9px 16px;font-size:13.5px;max-width:86vw;text-align:center}`;document.head.appendChild(st)})();
+function vt100(t){let e=document.getElementById('vt100');if(e)e.remove();e=document.createElement('div');e.id='vt100';e.textContent=t;document.body.appendChild(e);setTimeout(()=>{try{e.remove()}catch(x){}},3500)}
+async function chkv100(){try{if(!/^https?:/.test(location.protocol)){vt100('這是下載的檔案，無法自動檢查，請重新下載最新版');return}vt100('檢查中…');const r=await fetch(location.pathname+'?v='+Date.now(),{cache:'no-store'});const t=await r.text();const now=parseInt(VER92.slice(1),10),nw=ver100(t);if(nw>now){document.getElementById('nv100')?.remove();nv100();vt100('有新版本 V'+nw+'，請按上方的「重新整理」')}else vt100('已是最新版（'+VER92+'）')}catch(e){vt100('檢查失敗，請稍後再試')}}
+function vlab100(){try{if(document.getElementById('vl100'))return;const a=document.getElementById('app');if(!a||!/開始新遊戲/.test(a.innerText||''))return;const sub=[...a.querySelectorAll('*')].find(x=>x.children.length===0&&/一入宮門深似海/.test(x.textContent));if(!sub)return;const b=document.createElement('button');b.id='vl100';b.className='vl100';b.innerHTML='版本 '+VER92+'　<u>檢查更新</u>';b.onclick=chkv100;sub.insertAdjacentElement('afterend',b)}catch(e){}}
+try{const ap=document.getElementById('app');if(ap){let t=0;new MutationObserver(()=>{if(t)return;t=setTimeout(()=>{t=0;vlab100()},60)}).observe(ap,{childList:true,subtree:true});vlab100()}}catch(e){}
 
 deco();intro();
 
