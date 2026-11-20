@@ -7723,7 +7723,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V243';const ERR92=[];
+const VER92='V244';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -8672,6 +8672,47 @@ let t=0;const go=()=>{if(t)return;t=setTimeout(()=>{t=0;walk(document.body)},40)
 try{new MutationObserver(go).observe(document.body,{childList:true,subtree:true,characterData:true})}catch(e){}
 walk(document.body);
 })();
+
+/* ===== V244：妃嬪之間自己的鬥爭（主角不動時，後宮也會結盟、陷害、反目、倒台） ===== */
+function tkN112(){
+ const st=S.nr112=S.nr112||{f:{},p:{},last:-9,n:0};
+ if(S.t-st.last<2||!P(.34))return;
+ const live=()=>S.npcs.filter((n,i)=>!n.st&&i!==S.qi&&n!==S.me);
+ const al=live();if(al.length<3)return;
+ const byN=nm=>S.npcs.find(n=>n.n===nm&&!n.st);
+ const rk=n=>{try{return RKN(n)}catch(e){return RK[n.rank]}};
+ const say=(w,t)=>{L(t);try{jot('宮',w,t)}catch(e){}st.last=S.t;st.n++};
+ const key=(a,b)=>a.n+'|'+b.n;
+ const fe=Object.entries(st.f).filter(([k,f])=>f.on);
+ if(fe.length&&P(.5)){const [k,f]=pk(fe);const [an,bn]=k.split('|');const A=byN(an),B=byN(bn);
+  if(!A||!B){f.on=0;return}
+  if(P(.18)&&f.lv<3){f.on=0;A.favor+=2;B.favor+=2;say(A.n,`${A.n}與${B.n}在${S.dow?'太后':'中宮'}面前被勸和，表面上握手言和，暗地裡未必真放下。`);return}
+  f.lv++;const win=P(cl(.38+(B.sc-A.sc)/220+(B.pow-A.pow)/320,.15,.7));
+  if(win){A.favor=cl(A.favor-R(10,18),0,100);B.favor=cl(B.favor+4,0,100);
+   if(f.lv>=3&&A.favor<18&&A.rank>0&&A.rank<8&&P(.5)){A.rank--;say(A.n,`${B.n}與${A.n}鬥了數月，終於抓到把柄，${A.n}被降為${rk(A)}。`)}
+   else if(f.lv>=4&&A.favor<10&&A.rank<8&&P(.5)){A.st='出家';A.favor=0;f.on=0;say(A.n,`${A.n}鬥輸了${B.n}，心灰意冷，奏請出宮帶髮修行。`)}
+   else say(A.n,`${B.n}尋到機會反咬一口，${A.n}被皇上冷落了好些日子。`)}
+  else{B.favor=cl(B.favor-R(8,14),0,100);A.favor=cl(A.favor+3,0,100);f.fl=(f.fl||0)+1;if(f.fl>=2){f.on=0;say(B.n,`${B.n}接連在${A.n}面前吃了虧，終於收斂，兩人的舊怨暫且擱下。`)}else say(B.n,pk([`${B.n}想再對${A.n}下手，卻被識破，反而惹了一身腥。`,`${B.n}設的局被${A.n}看穿，皇上聽聞後對${B.n}頗有微詞。`,`${A.n}早有防備，${B.n}這一回不但沒佔到便宜，還折損了心腹宮人。`]))}
+  return}
+ const A=pk(al.slice().sort((x,y)=>(y.sc+y.host/2+R(0,40))-(x.sc+x.host/2+R(0,40))).slice(0,5));
+ const cand=al.filter(b=>b!==A&&b.rank>=A.rank-1&&b.favor>=A.favor-12);if(!cand.length)return;
+ const B=pk(cand);if(!B)return;
+ const k1=key(A,B),k2=key(B,A);
+ if(st.f[k1]&&st.f[k1].on||st.f[k2]&&st.f[k2].on)return;
+ const pact=st.p[k1]||st.p[k2];
+ if(pact&&pact.on){if(P(.3)){pact.on=0;A.favor-=3;B.favor-=3;say(A.n,`${A.n}與${B.n}的同盟因為爭一個賞賜鬧翻，從此形同陌路。`)}return}
+ if(P(.3)&&A.fac===B.fac){st.p[k1]={on:1,t:S.t};A.favor+=3;B.favor+=3;say(A.n,`${A.n}與${B.n}走得越來越近，常一同請安、賞花，後宮已把她們看作一路。`);return}
+ const win=P(cl(.36+(A.sc-B.sc)/200+(A.pow-B.pow)/300-B.favor/450,.12,.7));
+ st.f[k1]={on:1,lv:1,t:S.t};
+ const how=pk(['在皇上面前說了幾句壞話','買通宮人在飲食裡動手腳','散佈了一則不堪的流言','偷偷在她的衣物上做了記號栽贓']);
+ if(win){B.favor=cl(B.favor-R(12,22),0,100);A.favor=cl(A.favor+4,0,100);
+  if(B.favor<22&&B.rank>0&&B.rank<8&&P(.35)){B.rank--;say(A.n,`${A.n}${how}，${B.n}因此失寵，被降為${rk(B)}。`)}
+  else say(A.n,`${A.n}${how}，${B.n}被皇上冷落了一陣。`)}
+ else{A.favor=cl(A.favor-R(10,18),0,100);B.favor=cl(B.favor+5,0,100);
+  if(A.favor<20&&A.rank>0&&A.rank<8&&P(.3)){A.rank--;say(A.n,`${A.n}${how}，事情敗露，被降為${rk(A)}。`)}
+  else say(A.n,`${A.n}${how}，卻被${B.n}識破，反倒丟了顏面。`)}
+}
+const _md112=mend;mend=function(){const r=_md112.apply(this,arguments);try{if(S&&S.me&&!S.over&&!S.reg)tkN112()}catch(e){console.log('nr112',e)}return r};
 
 deco();intro();
 
