@@ -7723,7 +7723,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V242';const ERR92=[];
+const VER92='V243';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -8634,6 +8634,44 @@ window.rt111=function(ix){try{const x=(window._rt111||[])[ix];if(!x)return;const
  d.innerHTML='<div class=c><div class=h>'+face83(w,88)+'<div><b>'+E(name)+'</b><i>'+role+'</i></div></div><p>'+ls.map(E).join('<br>')+'</p><div class=b><button data-a=go>'+(tab===1?'到後宮名冊':'前往')+'</button><button data-a=x>關閉</button></div></div>';
  d.onclick=function(e){const a=e.target.dataset&&e.target.dataset.a;if(a==='go'){d.remove();setTab(tab)}else if(a==='x'||e.target===d)d.remove()};document.body.appendChild(d)}catch(e){console.log('rt111',e)}};
 (function(){const st=document.createElement('style');st.textContent='#rt111m{position:fixed;inset:0;z-index:99998;background:rgba(40,20,20,.55);display:flex;align-items:center;justify-content:center;padding:16px}#rt111m .c{background:#fff8f2;border-radius:18px;padding:18px;width:min(92vw,340px);box-shadow:0 10px 40px rgba(0,0,0,.4);color:#4a2a24}#rt111m .h{display:flex;gap:14px;align-items:center}#rt111m .h b{display:block;font-size:18px}#rt111m .h i{font-style:normal;font-size:12px;color:#a8573f}#rt111m p{margin:12px 0;line-height:1.8;font-size:14px}#rt111m .b{display:flex;gap:10px;justify-content:flex-end}#rt111m button{padding:7px 16px;border-radius:16px;border:1px solid #d9b08a;background:#fff;color:#6b3b32;font-size:13px}#rt111m button[data-a=go]{background:#c8415a;color:#fff;border-color:#c8415a}';document.head.appendChild(st)})();
+
+/* ===== V243：以遊戲風格線描圖示取代彩色表情符號 ===== */
+(function(){
+const A='#e6c675';
+const P=(b)=>`<svg class="ic111" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${b}</svg>`;
+const face=(m,e)=>P(`<circle cx="12" cy="12" r="9.2" fill="${A}" fill-opacity=".35"/>${e}${m}`);
+const eyes='<circle cx="8.8" cy="10" r=".9" fill="currentColor"/><circle cx="15.2" cy="10" r=".9" fill="currentColor"/>';
+const IC={
+'🎯':P(`<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5.2"/><circle cx="12" cy="12" r="1.6" fill="${A}"/><path d="M12 12L20 4M17 3.5l3.5.5-.5 3.5"/>`),
+'🏆':P(`<path d="M7 4h10v5a5 5 0 0 1-10 0V4z" fill="${A}" fill-opacity=".5"/><path d="M7 6H4.5c0 3 1.2 4.5 3 4.8M17 6h2.5c0 3-1.2 4.5-3 4.8M12 14v4M8.5 20h7"/>`),
+'🔒':P(`<rect x="5" y="10.5" width="14" height="9.5" rx="2" fill="${A}" fill-opacity=".45"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/><circle cx="12" cy="15" r="1.2" fill="currentColor"/>`),
+'🔓':P(`<rect x="5" y="10.5" width="14" height="9.5" rx="2" fill="${A}" fill-opacity=".45"/><path d="M8 10.5V8a4 4 0 0 1 7.6-1.7"/><circle cx="12" cy="15" r="1.2" fill="currentColor"/>`),
+'⚔':P(`<path d="M5 19L17 7M17 7V3.5h3.5V7H17M19 19L7 7M7 7V3.5H3.5V7H7"/><path d="M4.5 16.5l3 3M19.5 16.5l-3 3" stroke="${A}"/>`),
+'⚠':P(`<path d="M12 3.5L21.5 20h-19z" fill="${A}" fill-opacity=".45"/><path d="M12 10v5M12 17.6v.1"/>`),
+'🎲':P(`<rect x="4" y="4" width="16" height="16" rx="3.5" fill="${A}" fill-opacity=".4"/><circle cx="8.6" cy="8.6" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="15.4" cy="15.4" r="1" fill="currentColor"/>`),
+'⏩':P(`<path d="M4 6l7 6-7 6zM12 6l7 6-7 6z" fill="currentColor"/>`),
+'💡':P(`<path d="M9 17.5h6M10 20.5h4M12 3.5a6 6 0 0 0-3.6 10.8c.7.6 1.1 1.3 1.1 2.2h5c0-.9.4-1.6 1.1-2.2A6 6 0 0 0 12 3.5z" fill="${A}" fill-opacity=".5"/>`),
+'🏅':P(`<circle cx="12" cy="14.5" r="5.5" fill="${A}" fill-opacity=".5"/><path d="M8.5 10L6.5 3.5h4l1.5 4M15.5 10l2-6.5h-4L12 7.5M12 12.2v4.6"/>`),
+'🔔':P(`<path d="M6 17c1.2-1.4 1.6-3 1.6-5.5a4.4 4.4 0 0 1 8.8 0c0 2.5.4 4.1 1.6 5.5z" fill="${A}" fill-opacity=".5"/><path d="M10.2 20a2 2 0 0 0 3.6 0M12 4.5V3"/>`),
+'🤰':P(`<path d="M12 20.5C5.500 16 3.500 12.500 3.500 9a4.500 4.500 0 0 1 8.500-2 4.500 4.500 0 0 1 8.500 2c0 3.500-2 7-8.500 11.500z" fill="${A}" fill-opacity=".5"/>`),
+'✅':P(`<circle cx="12" cy="12" r="9" fill="${A}" fill-opacity=".4"/><path d="M7.5 12.500l3 3 6-6.500"/>`),
+'✔':P(`<path d="M5 12.500l4.500 4.500L19 7"/>`),
+'🎉':P(`<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.500 2.500M15.500 15.500L18 18M18 6l-2.500 2.500M8.500 15.500L6 18"/><circle cx="12" cy="12" r="2.200" fill="${A}"/>`),
+'😄':face('<path d="M7.500 13.500c1 3.200 8 3.200 9 0z" fill="currentColor" fill-opacity=".25"/>',eyes),
+'🙂':face('<path d="M8 14c1.200 1.800 6.800 1.800 8 0"/>',eyes),
+'😐':face('<path d="M8.500 15h7"/>',eyes),
+'😟':face('<path d="M8.500 16c1.200-1.800 5.800-1.800 7 0"/>',eyes+'<path d="M7 7.600l3 .8M17 7.600l-3 .8"/>'),
+'😠':face('<path d="M8.500 16c1.200-1.600 5.800-1.600 7 0"/>','<circle cx="8.800" cy="11" r=".9" fill="currentColor"/><circle cx="15.200" cy="11" r=".9" fill="currentColor"/><path d="M6.800 7.800l3.600 1.800M17.200 7.800l-3.600 1.800"/>'),
+'😒':face('<path d="M8.500 15.500h7"/>','<path d="M7.500 10.500h2.600M13.900 10.500h2.600M7 8l3 .6"/>')
+};
+const KEYS=Object.keys(IC),rx=new RegExp('('+KEYS.join('|')+')\\uFE0F?','g');
+const st=document.createElement('style');st.textContent='.ic111{display:inline-block;width:1.15em;height:1.15em;vertical-align:-.22em;flex:none}';document.head.appendChild(st);
+function walk(root){try{const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode(n){const p=n.parentNode;if(!p||/^(SCRIPT|STYLE|TEXTAREA|OPTION|TITLE)$/.test(p.nodeName))return NodeFilter.FILTER_REJECT;rx.lastIndex=0;return rx.test(n.nodeValue)?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT}});const hit=[];while(w.nextNode())hit.push(w.currentNode);
+ hit.forEach(n=>{const s=n.nodeValue;rx.lastIndex=0;const span=document.createElement('span');span.style.display='contents';span.innerHTML=s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])).replace(rx,(m,k)=>IC[k]);n.parentNode.replaceChild(span,n)})}catch(e){console.log('ic111',e)}}
+let t=0;const go=()=>{if(t)return;t=setTimeout(()=>{t=0;walk(document.body)},40)};
+try{new MutationObserver(go).observe(document.body,{childList:true,subtree:true,characterData:true})}catch(e){}
+walk(document.body);
+})();
 
 deco();intro();
 
