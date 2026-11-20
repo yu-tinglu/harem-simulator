@@ -7723,7 +7723,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V227';const ERR92=[];
+const VER92='V228';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -8149,6 +8149,16 @@ const _mdL104=mend;mend=function(){const r=_mdL104.apply(this,arguments);try{
   S.cL104=S.cL104||{};const m=S.me;const el=EVL104.filter(e=>(S.cL104[e.id]||0)<2&&e.ok(m));
   if(el.length){const mn=Math.min(...el.map(e=>S.cL104[e.id]||0));const pool=el.filter(e=>(S.cL104[e.id]||0)===mn);const e=pool[Math.floor(Math.random()*pool.length)];S.cL104[e.id]=(S.cL104[e.id]||0)+1;S.tL104=S.t;S.q.push(e.mk(m))}}
  }catch(x){console.log('r104L',x)}return r};
+/* ---- 高頻模板冷卻：同一類「路人求見／求助」事件，一局最多 3 次、間隔至少 20 個月 ---- */
+const CD104=[
+ ['seek',/來求見，說自己遇上難處/],['probe',/一直在暗中查她的底細/],['father',/老父病重，家中斷了生計/],['recall',/當初娘娘幫過我/],
+ ['grudge',/早年結下的怨氣在作祟/],['ration',/份例時不時被人剋扣/],['bro',/與一位兄弟在書房起了衝突/],['law',/母家的一名子弟在外惹出人命官司/],
+ ['maid',/貼身宮女悄悄找到你，說想借你的東風/],['sis',/族姐妹各自派人送禮/],
+ ['hint',/暗示她知道你當年為爭寵/],['visit',/想回母家探望年邁的雙親/],['grave',/為先帝守陵，了此殘生/],['gan',/後宮不得干政」/]
+];
+function skip104(e){try{if(!e||!e.t||e.env)return false;const t=String(e.t);const h=CD104.find(c=>c[1].test(t));if(!h)return false;
+ S.cd104=S.cd104||{};const r=S.cd104[h[0]]||{n:0,t:-99};if(r.n>=3||S.t-r.t<20)return true;r.n++;r.t=S.t;S.cd104[h[0]]=r;return false}catch(x){return false}}
+const _nx104=next;next=function(){const r=_nx104.apply(this,arguments);try{let g=0,sk=false;while(S&&S.ev&&g++<6&&skip104(S.ev)){S.ev=S.q.shift()||null;sk=true}if(sk)render()}catch(x){console.log('r104n',x)}return r};
 
 deco();intro();
 
