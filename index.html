@@ -7723,7 +7723,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V223';const ERR92=[];
+const VER92='V224';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -8028,6 +8028,10 @@ html.dk18 body .sec13,html.dk18 body .grp40,html.dk18 body .rcnt{color:#f3d3ae;t
 `;document.head.appendChild(st)})();
 (function(){const st=document.createElement('style');st.id='st103c';st.textContent=`html body .grp40 *,html body .sec13 *{opacity:1!important;color:inherit!important}`;document.head.appendChild(st)})();
 (function(){const st=document.createElement('style');st.id='st103d';st.textContent=`html body .ach56 .no{opacity:.8;font-size:13.5px}html body tr.gy75{opacity:.85}`;document.head.appendChild(st)})();
+/* 過問婚事：沒有適齡子女時，直接提示並退還行動，不再彈出只有「取消」的卡片 */
+(function(){try{const i=ACT.findIndex(a=>a[0]==='過問婚事');if(i<0)return;const f=ACT[i][2];ACT[i][2]=function(){const me=S.me;if(me&&me.kids&&me.kids.length&&!me.kids.some(k=>yr(k)>=wAge(k))){L('孩子們都還小，還沒到議婚的年紀。');if(S.w<4)S.w++;return}return f.apply(this,arguments)}}catch(e){console.log('r103',e)}})();
+/* 通用：選擇卡沒有任何選項時不彈出（避免只剩「取消」的空卡），改提示並退還本次行動 */
+(function(){try{const _c=choose;choose=function(t,o){if(Array.isArray(o)&&o.length===0&&S&&S.me&&!S.over){L('目前沒有可選的對象。');if(S.w<4)S.w++;return}return _c.apply(this,arguments)}}catch(e){console.log('r103b',e)}})();
 
 deco();intro();
 
