@@ -6752,15 +6752,15 @@ const _C=C;C=function(i){try{const o=S.ch&&S.ch.o&&S.ch.o[i];if(o&&typeof o.f===
 function getP(nm){let n=S.npcs.find(x=>nm0(x)===nm&&!x.st);if(n)return{k:'npc',p:n};const c=cbs().find(x=>x.n===nm);if(c)return{k:'cb',p:c};return null}
 const AF=(h,d)=>{if(h.k==='npc')h.p.al=cl((h.p.al||0)+d);else h.p.ld=cl((h.p.ld||0)+d)};
 function rival(me){const o=S.npcs.filter(x=>!x.st&&nm0(x)!==me);o.sort((a,b)=>(b.host||0)-(a.host||0));return o[0]?nm0(o[0]):'某位妃嬪'}
-function echo(rp){const h=getP(rp.n);if(!h)return null;const n=rp.n,l=rp.l,mark=(f)=>()=>{const r=f();return r};
+function echo(rp){const h=getP(rp.n);if(!h)return null;if(/盟\d|怨\d|[？?]\s*$|^(對|向|讓|要|用).*(什麼|如何|怎麼)/.test(rp.l||'')||/[？?]\s*$|什麼手段|如何處置|要如何/.test(rp.e||''))return null;const n=rp.n,l=rp.l,mark=(f)=>()=>{const r=f();return r};
  if(rp.s>0){const v=pk(['gift','intel','word']);
-  if(v==='gift')return{t:`<b>【舊日的回響】</b><br>${n}沒忘記你當初在「${ESC(rp.e)}」時選擇「${ESC(l)}」，托人送來一份謝禮。`,o:[['收下，並回贈一句暖心的話',()=>{AF(h,4);S.me.silver+=R(30,70);return`你收下了謝禮。${n}看起來很高興。（銀兩＋、盟友度＋4）`}],['婉拒，說「舉手之勞，不必掛懷」',()=>{AF(h,8);S.me.ally+=1;return`${n}更加敬重你。（盟友度＋8、人脈＋1）`}]]};
+  if(v==='gift')return{t:`<b>【舊日的回響】</b><br>${n}沒忘記你當初${rp.e&&rp.e.length<22?'在「'+ESC(rp.e)+'」時':'那件事上'}選擇「${ESC(l)}」，托人送來一份謝禮。`,o:[['收下，並回贈一句暖心的話',()=>{AF(h,4);S.me.silver+=R(30,70);return`你收下了謝禮。${n}看起來很高興。（銀兩＋、盟友度＋4）`}],['婉拒，說「舉手之勞，不必掛懷」',()=>{AF(h,8);S.me.ally+=1;return`${n}更加敬重你。（盟友度＋8、人脈＋1）`}]]};
   if(v==='intel'){const rv=rival(n);return{t:`<b>【舊日的回響】</b><br>${n}悄悄找上你：「當初你「${ESC(l)}」，我一直記著。我聽說${rv}近來在暗中對你不利，你小心些。」`,o:[['多謝，細問她知道的內情',()=>{const j=S.npcs.findIndex(x=>nm0(x)===rv);if(j>=0)S.evid[j]=(S.evid[j]||0)+1;AF(h,3);return`${n}說了她所知的細節，你手上多了一份${rv}的把柄。（罪證＋1、盟友度＋3）`}],['謝她，並說「我自有分寸」',()=>{AF(h,5);return`${n}點頭，不再多言。（盟友度＋5）`}]]}}
   return{t:`<b>【舊日的回響】</b><br>${n}記得你當初「${ESC(l)}」的好，在皇上（太后）面前替你說了一番話。`,o:[['承她這份情',()=>{S.me.favor+=4;AF(h,2);return`風向對你有利了些。（聖寵＋4、盟友度＋2）`}]]}}
  const v=pk(['rumor','ally','cold']);
- if(v==='rumor')return{t:`<b>【舊日的回響】</b><br>${n}始終記得你當初在「${ESC(rp.e)}」時選擇了「${ESC(l)}」，近來在宮裡四處說你的閒話。`,o:[['不理會，清者自清',()=>{S.me.favor-=1;AF(h,-2);return`流言傳了一陣，慢慢平息。（聖寵－1、盟友度－2）`}],['找她當面說清楚',()=>{if(P(.5+S.me.ally/300)){AF(h,5);return`${n}態度緩和了些。（盟友度＋5）`}AF(h,-4);S.me.favor-=2;return`談崩了，反而讓她更恨你。（聖寵－2、盟友度－4）`}],['以牙還牙，也放些風聲',()=>{S.me.ally-=1;AF(h,-6);h.p.host=cl((h.p.host||0)+6);return`兩邊鬧得很難看。（人脈－1、盟友度－6）`}]]};
+ if(v==='rumor')return{t:`<b>【舊日的回響】</b><br>${n}始終記得你當初${rp.e&&rp.e.length<22?'在「'+ESC(rp.e)+'」時':'那件事上'}選擇了「${ESC(l)}」，近來在宮裡四處說你的閒話。`,o:[['不理會，清者自清',()=>{S.me.favor-=1;AF(h,-2);return`流言傳了一陣，慢慢平息。（聖寵－1、盟友度－2）`}],['找她當面說清楚',()=>{if(P(.5+S.me.ally/300)){AF(h,5);return`${n}態度緩和了些。（盟友度＋5）`}AF(h,-4);S.me.favor-=2;return`談崩了，反而讓她更恨你。（聖寵－2、盟友度－4）`}],['以牙還牙，也放些風聲',()=>{S.me.ally-=1;AF(h,-6);h.p.host=cl((h.p.host||0)+6);return`兩邊鬧得很難看。（人脈－1、盟友度－6）`}]]};
  if(v==='ally'){const rv=rival(n);return{t:`<b>【舊日的回響】</b><br>${n}與${rv}走得近了，兩人似乎有了共同的對手——你。起因是你當初「${ESC(l)}」。`,o:[[`拉攏${rv}（耗銀30）`,()=>{if(!pay(30))return'銀兩不足。';const j=S.npcs.findIndex(x=>nm0(x)===rv);if(j>=0)S.npcs[j].al=cl((S.npcs[j].al||0)+6);return`你從中周旋，兩人暫時沒有結成一線。（耗銀30）`}],['靜觀其變',()=>{S.me.ally-=1;return`兩人漸漸走近。（人脈－1）`}]]}}
- return{t:`<b>【舊日的回響】</b><br>${n}見到你時神色冷淡，顯然沒有忘記你當初在「${ESC(rp.e)}」時「${ESC(l)}」。`,o:[['送一份禮示好（耗銀20）',()=>{if(!pay(20))return'銀兩不足。';AF(h,5);return`${n}收下了，神色稍緩。（盟友度＋5）`}],['不予理會',()=>{AF(h,-2);return`你們之間的隔閡又深了一層。（盟友度－2）`}]]}}
+ return{t:`<b>【舊日的回響】</b><br>${n}見到你時神色冷淡，顯然沒有忘記你當初${rp.e&&rp.e.length<22?'在「'+ESC(rp.e)+'」時':'那件事上'}的選擇：「${ESC(l)}」。`,o:[['送一份禮示好（耗銀20）',()=>{if(!pay(20))return'銀兩不足。';AF(h,5);return`${n}收下了，神色稍緩。（盟友度＋5）`}],['不予理會',()=>{AF(h,-2);return`你們之間的隔閡又深了一層。（盟友度－2）`}]]}}
 function tickRp(){try{if(!S||!S.me||S.over||!S.rp73||!S.rp73.length||S.q.length>6)return;
  if(S.t-(S.ec73||-9)<3)return;const i=S.rp73.findIndex(r=>r.at<=S.t);if(i<0||!P(.6))return;S.ec73=S.t;const rp=S.rp73.splice(i,1)[0];const ev=echo(rp);if(!ev)return;
  const h=getP(rp.n);if(h&&h.p._mem73){const m=h.p._mem73.find(x=>x.s===rp.s&&!x.rp);if(m)m.rp=1}
@@ -7723,7 +7723,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V236';const ERR92=[];
+const VER92='V237';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
