@@ -7723,7 +7723,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V234';const ERR92=[];
+const VER92='V235';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -8467,6 +8467,89 @@ function nar108(){try{
  if(tp)p.push(`若要說哪個選擇改變了你的一生，也許是第${Math.floor(tp.t/12)+1}年那次「${tp.l}」。`);
  return p.join('')}catch(e){console.log('nar108',e);return''}}
 const _u108=uiPost;uiPost=function(){const r=_u108.apply(this,arguments);try{const sc=document.querySelector('.scrim .scroll');if(sc&&S&&S.over&&!sc.querySelector('.nar108')){const t=nar108();if(t){const d=document.createElement('div');d.className='nar108';d.style.cssText='margin-top:10px;width:100%;text-align:left;background:rgba(255,255,255,.65);border:1px solid rgba(227,180,90,.7);border-radius:12px;padding:10px 12px;font-size:13.5px;line-height:1.85;color:#5a2b22';d.innerHTML='<div style="font-weight:700;color:#6b1d27;margin-bottom:4px">你的一生</div>'+ESC(t);const dec=sc.querySelector('.dec94'),e=sc.querySelector('.end82');if(dec)dec.insertAdjacentElement('beforebegin',d);else if(e)e.insertAdjacentElement('afterend',d);else sc.insertBefore(d,sc.firstChild)}}}catch(e){console.log('nu108',e)}return r};
+
+/* ===== V235：宮外世界（省親、護國寺、隨駕行宮、南巡、微服出宮），各為 3 節短篇 ===== */
+const OUT109=(()=>{const M=()=>S.me,fm=v=>M().fam.forEach(x=>x.pw=cl(x.pw+v)),E=(t,o)=>({t,o});
+return[
+{id:'home',ok:m=>m.rank>=3&&S.t>=36,beats:[
+ [0,0,a=>E('皇上准你回母家省親。鳳輦出了宮門，沿街百姓跪了一路，母家的門樓披紅掛彩，父兄率全族在門外迎候。',[
+  ['端著儀態，按規矩受禮',()=>{fm(2);M().ally+=1;return'你受了全族的大禮。母親拉著你的手，只是不停地擦眼淚，一句話也說不出。'}],
+  ['不顧規矩，先扶起母親',()=>{M().clan+=2;a.f.warm=1;return'你扶起母親，母女相擁而泣。族人看在眼裡，都說你沒忘本。'}],
+  ['只匆匆露面，嫌路途勞頓',()=>{M().clan-=2;return'你略坐了坐便說乏了。族人面上恭敬，心裡卻涼了半截。'}]])],
+ [0,1,a=>E('夜裡，父親屏退左右，吞吞吐吐說起：兄長在外借了一筆債，債主是朝中某位大臣的門生，如今逼得緊，想請你在皇上面前「說句話」。',[
+  ['替兄長還債（耗銀60）',()=>{if(!pay(60))return'銀兩不足，只能先墊一部分。';a.f.paid=1;M().clan+=3;return'你拿出體己銀替兄長還了債。父親老淚縱橫，說你比兒子還頂事。'}],
+  ['答應在皇上面前提一提（冒險）',()=>{if(P(cl(.35+M().favor/250,.15,.7))){a.f.word=1;M().favor-=1;fm(3);return'你尋了個機會輕輕提了一句，皇上沒有追究，債主識趣地收了手。'}M().favor-=4;return'皇上聽出你在為母家說項，面色微沉。'}],
+  ['嚴詞拒絕，並勸兄長收斂',()=>{M().clan-=1;a.f.strict=1;fm(-2);return'兄長低頭不語，父親嘆了口氣。你知道這句話會讓家裡不好受，卻也不得不說。'}]])],
+ [0,1,a=>E(`臨行前，母親把你拉到一旁，塞給你一個舊荷包，裡面是你小時候戴過的長命鎖。她說：「宮裡不比家裡，萬事要小心。」`,[
+  ['收下，貼身帶著',()=>{M().hp=Math.min(100,M().hp+5);return'你把長命鎖貼身帶著。往後在宮裡難熬的夜裡，摸一摸它，心裡就踏實幾分。'}],
+  ['留給母親，讓她留個念想',()=>{M().clan+=1;return'母親把荷包又塞了回來，你們推讓了半天，最終各自留下一半的心意。'}],
+  ['叮囑母家低調行事，莫給自己添麻煩',()=>{fm(-1);M().favor+=1;return'你鄭重交代了幾句。母家一路送出十里，人人噤聲。'}]])]]},
+{id:'temple',ok:m=>true,beats:[
+ [0,0,a=>E('春日護國寺廟會，皇上准六宮輪流出宮上香。山門外人聲鼎沸，香火繚繞。',[
+  ['誠心上香祈福',()=>{M().hp=Math.min(100,M().hp+3);return'你在佛前跪了許久，心裡竟安靜了下來。'}],
+  ['抽一支籤，問前程',()=>{a.f.sign=P(.5)?1:0;return a.f.sign?'籤文是「雲開見月」，解籤的老僧含笑說你「否極泰來」。':'籤文是「風急浪高」，老僧只說「凡事須忍」，你心裡咯噔了一下。'}],
+  ['布施一筆香油錢（耗銀20）',()=>{if(!pay(20))return'銀兩不足。';M().ally+=2;a.f.alms=1;return'住持親自出來相送，寺中僧人都記住了你。'}]])],
+ [0,1,a=>E('離開大殿時，你在偏殿廊下遇見一位衣著樸素的婦人，正抱著病孩子苦苦哀求僧人施藥，卻被攔在門外。',[
+  ['讓隨行太醫為孩子診治（耗銀15）',()=>{if(!pay(15))return'銀兩不足，只留了些碎銀。';M().ally+=2;a.f.help=1;N109().pop+=1;return'婦人連連叩頭。孩子服了藥，不久便退了熱。'}],
+  ['給些碎銀，不便多管',()=>{N109().pop+=0;return'你給了些銀子。婦人千恩萬謝，你卻有些心虛。'}],
+  ['裝作沒看見，悄然離去',()=>{return'你走出山門，耳邊卻久久回響著那個孩子的咳嗽聲。'}]])],
+ [0,1,a=>E(a.f.help||a.f.alms?'臨走時，那位老住持特意送來一串開過光的念珠，說：「施主有福相，也有劫數，願此物護你一程。」':'臨走時，一個小沙彌追上來，遞給你一串粗糙的念珠，說是師父送的，沒說原因。',[
+  ['收下念珠，日日佩戴',()=>{M().hp=Math.min(100,M().hp+4);a.f.beads=1;return'你把念珠戴在腕上。此後每逢心緒不寧，便默默數上一圈。'}],
+  ['婉拒，說宮規不便',()=>'你婉謝了。小沙彌合十一禮，默默退去。']])]]},
+{id:'lodge',ok:m=>m.favor>=40&&S.t>=48,beats:[
+ [0,0,a=>E('秋獮的日子到了，皇上點名讓你隨駕前往行宮。一路旌旗獵獵，馬蹄聲揚起漫天塵土。',[
+  ['換上騎裝，策馬隨行',()=>{if(P(cl(.45+(M().hp-50)/200,.2,.8))){M().favor+=5;return'你策馬跟在皇上身側，英姿颯爽，皇上讚了一句。'}M().hp-=8;return'你在半路不慎落馬，所幸沒有大礙，只是狼狽。'}],
+  ['乘輦隨行，端莊守禮',()=>{M().favor+=1;return'你一路安穩，沒有出什麼差錯。'}],
+  ['稱病留在行宮歇息',()=>{M().favor-=1;return'你沒有跟去圍場，在行宮靜靜養了幾日。'}]])],
+ [0,1,a=>E('行宮夜裡，月色如水。你獨自在廊下納涼，遇見一位同樣睡不著的親王，他似乎想與你說什麼。',[
+  ['禮數周全地問安，隨即告退',()=>{M().favor+=1;return'你規規矩矩地行了禮，轉身離去。他在身後輕聲說了句「謹慎」。'}],
+  ['聊了幾句，探探他的口風（看心機）',()=>{if(ckp(.35+M().scheme/250)){M().scheme+=2;M().ally+=2;return'你從他的言談中探出了宗室的不少動向。'}M().favor-=2;return'你的試探太過明顯，他笑而不答，轉身離開。'}],
+  ['避而不見，回房歇息',()=>'你悄悄回了房。']])],
+ [0,1,a=>E('皇上在篝火旁多喝了幾杯，忽然拉著你的手說：「這一路上，只有你不怕朕。」',[
+  ['陪他說些體己話',()=>{M().favor+=5;return'那夜皇上說了許多從不對旁人說的話。'}],
+  ['勸他少飲，保重龍體',()=>{M().favor+=3;S.ehp=cl(S.ehp+3);return'皇上笑你囉嗦，卻聽話地放下了酒盞。'}],
+  ['趁機為自己或孩子求個恩典（冒險）',()=>{if(P(.45)){M().favor+=2;M().kids.forEach(k=>k.pow=cl(k.pow+4));return'皇上微醺中應允了。'}M().favor-=3;return'皇上酒意頓消，看你的眼神淡了幾分。'}]])]]},
+{id:'south',ok:m=>m.favor>=50&&S.t>=72,beats:[
+ [0,0,a=>E('皇上要南巡，點了你隨駕。龍舟順著運河南下，兩岸柳色如煙，百姓夾岸跪迎。',[
+  ['倚窗看岸上人家，想起自己的來處',()=>{M().hp=Math.min(100,M().hp+2);return'運河水慢慢地流，你第一次發現，宮牆之外的世界這麼大。'}],
+  ['陪皇上下棋解悶',()=>{M().favor+=3;return'皇上與你對弈三局，勝負各半，龍心大悅。'}],
+  ['留意沿途官員的進獻，暗記在心（看心機）',()=>{if(ckp(.4+M().scheme/250)){M().scheme+=2;a.f.noted=1;return'你把地方官員的進獻默默記下，誰在討好，誰在作秀，心裡有了數。'}return'人太多，你什麼也沒看出來。'}]])],
+ [1,2,a=>E('龍舟停在蘇杭，皇上准你下船逛一日。街市繁華，繡莊、茶樓、書肆一路排開。',[
+  ['買些江南特產，帶回宮中分賞（耗銀30）',()=>{if(!pay(30))return'銀兩不足，只買了些小玩意。';M().ally+=3;return'你買的絲綢和茶葉回宮後分賞各宮，人人都誇你周到。'}],
+  ['逛書肆，買幾本閒書',()=>{if(M().at)M().at.cu=cl((M().at.cu||50)+2);return'你淘到幾本宮中罕見的詩集，晚上讀得入了迷。'}],
+  ['去找一位同鄉的繡娘，打聽家鄉消息',()=>{M().clan+=1;return'她哭著說起家鄉的變遷。你忽然覺得，自己是宮中的人，也是故鄉的人。'}]])],
+ [1,2,a=>E(a.f.noted?'返京前夜，皇上問你沿途見聞。你把記下的幾件事挑著說了。':'返京前夜，皇上隨口問你：「這一路，你覺得什麼最難忘？」',[
+  ['如實說出沿途見聞，不偏不倚',()=>{N109().pop+=2;M().favor+=3;return'皇上若有所思：「你倒看得明白。」'}],
+  ['只說風景，不涉朝政',()=>{M().favor+=1;return'皇上笑了笑，沒有追問。'}],
+  ['藉機點出某位官員的不是（冒險）',()=>{if(a.f.noted&&P(.6)){M().favor+=4;M().scheme+=2;N109().stab+=1;return'皇上聽進去了，回京後暗中整飭了那名官員。'}M().favor-=3;return'皇上冷冷道：「後宮不議朝臣。」'}]])]]},
+{id:'disguise',ok:m=>m.rank>=2&&S.t>=60,beats:[
+ [0,0,a=>E('皇上忽然興起，要帶你微服出宮一日。你換了尋常衣裳，與他並肩走在長街，頭一回聞到了市井的煙火氣。',[
+  ['好奇地四處張望，買了一串糖葫蘆',()=>{M().favor+=4;M().hp=Math.min(100,M().hp+2);return'皇上看你吃得開心，笑著說：「你這模樣，倒像是剛入宮那會兒。」'}],
+  ['時刻留意皇上，替他擋開人流',()=>{M().favor+=3;return'皇上察覺到你的小心，輕輕握了握你的手。'}],
+  ['惦記著宮裡的事，心不在焉',()=>{M().favor-=1;return'皇上看了你一眼，沒有說什麼。'}]])],
+ [0,1,a=>E('路過一家酒肆，聽見裡面吵嚷：一個老掌櫃被地痞砸了攤子，說是欠了「保護費」，周圍人敢怒不敢言。',[
+  ['請皇上出面主持公道',()=>{N109().pop+=2;M().favor+=3;return'皇上低聲吩咐隨行侍衛，地痞很快被帶走。老掌櫃連連叩頭，卻不知道面前站著的是誰。'}],
+  ['悄悄塞銀子給掌櫃，不聲張（耗銀10）',()=>{if(!pay(10))return'銀兩不足。';M().ally+=1;return'你塞了銀子，轉身便走。皇上回頭看了你一眼，眼裡有了別樣的意味。'}],
+  ['拉著皇上快走，免得惹事',()=>{M().favor-=1;return'皇上皺了皺眉，被你拉走了。'}]])],
+ [0,1,a=>E('回宮時，皇上忽然說：「若不是生在帝王家，朕也想做個閒人。」',[
+  ['說：那臣妾就陪皇上做一日閒人',()=>{M().favor+=5;return'皇上笑了，那一刻他不像皇帝，像個普通的男人。'}],
+  ['勸皇上以天下為重',()=>{M().favor+=2;N109().stab+=1;return'皇上沉默片刻：「你說得對。」'}],
+  ['不接話，靜靜陪著走完最後一段路',()=>{M().favor+=3;return'兩人一路無話，卻都覺得今日很安心。'}]])]]}
+]})();
+const N109=()=>S.nat;
+const tkO109=()=>{
+ const c=S.ow109=S.ow109||{done:[],last:-99,act:null};let a=c.act;
+ if(!a){if(S.t<24||S.t-c.last<18||Math.random()>.15)return;
+  const pool=OUT109.filter(x=>x.ok(S.me)&&(c.done.filter(d=>d===x.id).length<(x.id==='temple'||x.id==='home'?2:1)));
+  if(!pool.length)return;const x=pool[Math.floor(Math.random()*pool.length)];
+  a=c.act={id:x.id,s:0,t:S.t,w:R(1,3),f:{}};return}
+ if(S.t-a.t<a.w)return;
+ const def=OUT109.find(x=>x.id===a.id),b=def.beats[a.s];
+ if(!b){c.done.push(a.id);c.last=S.t;c.act=null;return}
+ const ev=b[2](a);
+ S.q.push({t:ev.t,keep:1,p84:1,story:1,o:ev.o.map(([l,f])=>[l,()=>{const r=f();if(r)jot('宮',S.me.n,r);return r}])});
+ a.s++;a.t=S.t;const nx=def.beats[a.s];if(nx)a.w=R(nx[0],nx[1]);else{c.done.push(a.id);c.last=S.t;c.act=null}};
+const _md109=mend;mend=function(){const r=_md109.apply(this,arguments);try{if(S&&S.me&&!S.over&&!S.reg)tkO109()}catch(e){console.log('ow109',e)}return r};
 
 deco();intro();
 
