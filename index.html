@@ -7723,7 +7723,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V248';const ERR92=[];
+const VER92='V249';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -8769,6 +8769,19 @@ function tl113(){const h=S.h114||[];if(h.length<12)return'';const W=320,rows=[['
  svg+=`<text x="6" y="188" font-size="9" fill="currentColor" opacity=".6">第1年</text><text x="${W-6}" y="188" font-size="9" text-anchor="end" fill="currentColor" opacity=".6">第${Math.floor(t1/12)+1}年</text></svg>`;
  return `<div class=m style="margin:8px 0"><b>一生走勢</b>${svg}</div>`}
 const _ec113=endCard;endCard=function(){let r=_ec113.apply(this,arguments);try{const t=tl113();if(t)r+=t}catch(e){console.log('tl113',e)}return r};
+
+/* ===== V249：存檔匯出／匯入（換手機、清瀏覽器資料前可先備份，也能把存檔傳給朋友） ===== */
+window.exp114=function(){let m='';try{const s=btoa(unescape(encodeURIComponent(snap())));const ta=document.getElementById('sv114');if(ta){ta.value=s}
+ let ok=0;try{navigator.clipboard.writeText(s).then(()=>{const e=document.getElementById('sm114');if(e)e.textContent='已複製存檔文字，請貼到備忘錄或傳給自己保存。'}).catch(()=>{})}catch(e){}
+ try{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([s],{type:'text/plain'}));a.download='houguo-save-'+Date.now()+'.txt';document.body.appendChild(a);a.click();setTimeout(()=>a.remove(),500);ok=1}catch(e){}
+ m='存檔文字已放進下方框內（'+Math.round(s.length/1024)+'KB）'+(ok?'，並嘗試下載成檔案':'')+'。若沒有自動複製，請全選框內文字手動複製。'}catch(e){m='匯出失敗：'+e.message}
+ const e=document.getElementById('sm114');if(e)e.textContent=m};
+window.imp114=function(txt){const e=document.getElementById('sm114');try{const raw=(txt!==undefined?txt:(document.getElementById('sv114')||{}).value||'').trim();if(!raw){if(e)e.textContent='請先貼上存檔文字。';return}
+ const o=JSON.parse(decodeURIComponent(escape(atob(raw))));if(o.ver!==1||!o.S||!o.S.me)throw new Error('格式不符');
+ if(!confirm_114())return;restore(o);try{render()}catch(x){}if(e)e.textContent='已匯入存檔，從存檔的月份繼續。'}catch(x){if(e)e.textContent='匯入失敗：這不是有效的存檔文字。'}};
+let _cf114=0;function confirm_114(){if(Date.now()-_cf114<6000){_cf114=0;return true}_cf114=Date.now();const e=document.getElementById('sm114');if(e)e.textContent='匯入會覆蓋目前這一局，確定的話請在 6 秒內再按一次「匯入」。';return false}
+window.impF114=function(inp){const f=inp.files&&inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const ta=document.getElementById('sv114');if(ta)ta.value=String(r.result||'').trim();const e=document.getElementById('sm114');if(e)e.textContent='已讀入檔案，按「匯入」套用。'};r.readAsText(f)};
+const _sp114=setPanel;setPanel=function(){let h=_sp114.apply(this,arguments);try{h+=`<div class=m style="margin:14px 0 4px"><b>存檔備份</b></div><div class=m style="font-size:12px;opacity:.8;margin-bottom:6px">換手機或清除瀏覽器資料前，先匯出存檔；也能把存檔文字傳給朋友。</div><div class=g><button onclick="exp114()">匯出存檔</button><button class=s onclick="imp114()">匯入</button><button class=s onclick="document.getElementById('sf114').click()">選擇檔案</button></div><input id=sf114 type=file accept=".txt,text/plain" style="display:none" onchange="impF114(this)"><textarea id=sv114 rows=3 style="width:100%;margin-top:6px;font-size:11px" placeholder="在這裡貼上存檔文字"></textarea><div id=sm114 class=m style="font-size:12px;margin-top:4px"></div>`}catch(e){}return h};
 
 deco();intro();
 
