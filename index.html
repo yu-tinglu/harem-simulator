@@ -7725,7 +7725,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V258';const ERR92=[];
+const VER92='V259';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -9008,6 +9008,16 @@ window.useR118=function(i){try{const r=(S.rm118||[])[i];if(!r||r.used)return;con
 window.chk118=function(i){try{const r=(S.rm118||[])[i];if(!r||r.ck)return;if(S.me.silver<8){L('銀兩不足，查證不了這則傳聞。');render();return}S.me.silver-=8;r.ck=1;if(r.truth)S.me.scheme=(S.me.scheme||0)+1;L(r.truth?'你打聽之後確認：傳聞屬實，心機＋1。':'你打聽之後確認：這只是一則謠言。');render()}catch(e){console.log('np118',e)}};
 const _m2=mend;mend=function(){const r=_m2.apply(this,arguments);try{if(S&&S.me&&!S.over&&!S.reg&&S.t-(S.rl118||-9)>=4&&Math.random()<.5){const x=mkRumor();if(x){S.rl118=S.t;(S.rm118=S.rm118||[]).unshift(x);S.rm118.length=Math.min(S.rm118.length,12)}}}catch(e){console.log('np118',e)}return r};
 window.__r118={paper,wind,cardHTML,inject,mkRumor};
+})();
+
+/* ===== V259：「自動過一季」列貼齊導覽列，不再跑位 ===== */
+(function(){
+function upd(){try{const nav=document.querySelector('nav.tabs');const h=nav?Math.round(nav.getBoundingClientRect().height):0;if(h>0)document.documentElement.style.setProperty('--navh',h+'px')}catch(e){}}
+const st=document.createElement('style');st.textContent='html,body{overscroll-behavior-y:none}.ac31,body.hid82 .ac31{bottom:var(--navh,64px)!important;transform:none!important;transition:none!important}';document.head.appendChild(st);
+const _u=uiPost;uiPost=function(){const r=_u.apply(this,arguments);try{upd();requestAnimationFrame(upd);setTimeout(upd,250);setTimeout(upd,900)}catch(e){}return r};
+addEventListener('resize',upd);addEventListener('orientationchange',()=>setTimeout(upd,300));
+try{if(window.visualViewport)visualViewport.addEventListener('resize',upd)}catch(e){}
+try{if(window.ResizeObserver){const ro=new ResizeObserver(upd);const n=document.querySelector('nav.tabs');if(n)ro.observe(n);ro.observe(document.documentElement)}}catch(e){}
 })();
 
 deco();intro();
