@@ -7726,7 +7726,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V267';const ERR92=[];
+const VER92='V268';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -8617,7 +8617,7 @@ const _md110=mend;mend=function(){const r=_md110.apply(this,arguments);try{if(S&
 const _nar110=nar108;nar108=function(){let t=_nar110.apply(this,arguments);try{const c=S.rom110;if(c&&c.nm){const j=ROM110.TY[c.ty].j,m={cut:`你曾與${j}${c.nm}有過一段未及展開的情分，你親手斬斷了它。`,rest:`你與${j}${c.nm}之間，什麼都沒有發生，卻也從未真正結束。`,secret:`你與${j}${c.nm}有過一個無人知曉的夜晚，你把它帶進了歲月深處。`,exposed:`你與${j}${c.nm}的往事終究被人揭開，你為此付出了不小的代價。`,safe:`你與${j}${c.nm}的往來引過流言，最終被你壓了下去。`};if(m[c.end])t=t.replace(/(你的一生.*?)$/,'$1')+(m[c.end]||'')}}catch(e){}return t};
 
 /* ===== V238：妃嬪頭像（106 張內建畫像，臉部置中裁切；依位階／年齡／性情配圖；你上傳的照片優先） ===== */
-const PORT111=Array.from({length:126},(_,i)=>'images/t'+String(i).padStart(3,'0')+'.jpg');const NATIMG={吐蕃:[106,107,108,109],安南:[110,111,112,113],高麗:[114,115,116,117],準噶爾:[118,119,120,121],蒙古:[122,123,124,125]};
+const PORT111=Array.from({length:206},(_,i)=>'images/t'+String(i).padStart(3,'0')+'.jpg');const NATIMG={吐蕃:[106,107,108,109],安南:[110,111,112,113],高麗:[114,115,116,117],準噶爾:[118,119,120,121],蒙古:[122,123,124,125]};
 const PT_ME=95;const PT_TAL=[4, 5, 14, 22, 25, 26, 32, 52, 62, 68, 72, 81, 98, 97, 104, 105, 31, 39, 99],PT_WARM=[1, 2, 3, 7, 16, 17, 23, 24, 33, 59, 61, 66, 70, 40, 43, 46, 47, 50, 53, 63, 64],PT_LIVE=[10, 11, 18, 19, 27, 29, 36, 37, 12, 84, 93, 101, 35],PT_ALL=[51, 69, 75, 76, 79, 82, 83, 86, 87, 88, 89, 90, 91, 92, 78],PT_SAD=[0, 6, 8, 13, 28, 30, 41, 56, 57, 71, 21],PT_HERO=[34, 44, 48, 95, 65, 55, 38];const PT_REG=[42, 69, 80, 87, 89, 91, 92, 102, 103, 85, 90, 96],PT_COLD=[39, 44, 48, 54, 55, 56, 57, 65, 71, 74, 75, 76, 77, 79, 82, 86, 88, 95, 97, 98, 105, 99, 100],PT_MAT=[34, 58, 96, 57, 90, 91, 103, 56];
 function ptIdx111(n){try{if(!S)return -1;const m=S.pm111=S.pm111||{};if(n.fo116&&NATIMG[n.fo116]&&m[n.n]!==undefined&&m[n.n]<106)delete m[n.n];if(m[n.n]!==undefined&&m[n.n]<PORT111.length)return m[n.n];
  const used=new Set(Object.values(m));used.add(PT_ME);let age=0;try{age=(S.t-n.bt)/12}catch(e){}
@@ -9099,6 +9099,21 @@ const _nd=ntfDraw;ntfDraw=function(){try{if(S&&S.nt){const now=Date.now();S.nt=S
 /* ===== V266：電腦版面（寬螢幕左側導覽＋雙欄卡片；手機不變） ===== */
 (function(){
 const st=document.createElement('style');st.textContent="@media(min-width:1000px){\nhtml body #app{max-width:none!important;margin:0 0 0 112px!important;padding:0 28px 0 28px!important}\nhtml body #app>.top{max-width:1080px!important;width:100%!important;box-sizing:border-box!important;margin-left:auto!important;margin-right:auto!important}\nhtml body #app>main{max-width:calc(1080px / var(--fz81,1.1))!important;width:100%!important;box-sizing:border-box!important;margin-left:auto!important;margin-right:auto!important}\nhtml body #app>.top{border-radius:0 0 16px 16px;padding:10px 18px!important}\nhtml body nav.tabs{left:0!important;right:auto!important;top:0!important;bottom:0!important;width:100px!important;height:100vh!important;flex-direction:column!important;justify-content:center!important;gap:10px!important;padding:14px 6px!important;border-top:0!important;border-right:1px solid rgba(255,214,160,.3)!important;border-radius:0!important}\nhtml body nav.tabs button{flex:0 0 auto!important;padding:10px 0!important;width:100%}\nhtml body #app>main{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 18px!important;align-items:start;padding-bottom:140px!important}\nhtml body #app>main>*{grid-column:1/-1;min-width:0}\nhtml body #app>main>.cd{grid-column:auto}\nhtml body #app>main>.cd.hero,html body #app>main>.cd.fold.hero,html body #app>main>.cd.wide125{grid-column:1/-1}\nhtml body .ac31{left:112px!important;right:0!important;max-width:1060px;margin:0 auto}\nhtml body .scrim .box,html body .scrim>div{max-width:560px}\n}\n";document.head.appendChild(st);
+})();
+
+
+/* ===== V268：親生孩子畫像（20 位人物 × 幼年／少年／青年／老年；女 1～10、男 11～20；隨年齡自動換階段） ===== */
+(function(){
+const stage=a=>a<6?0:a<16?1:a<36?2:3;
+const mine=k=>{try{return !!(k&&k.n&&S&&S.me&&S.me.kids&&S.me.kids.indexOf(k)>=0)}catch(e){return false}};
+function pid(k){if(k.pid>=1&&k.pid<=20&&(k.sex==='男')===(k.pid>10))return k.pid;
+ const base=k.sex==='男'?11:1;const used=new Set((S.me.kids||[]).map(x=>x.pid).filter(Boolean));
+ let pool=[];for(let i=0;i<10;i++)if(!used.has(base+i))pool.push(base+i);if(!pool.length)for(let i=0;i<10;i++)pool.push(base+i);
+ k.pid=pool[Math.floor(Math.random()*pool.length)];return k.pid}
+function idx(k){let a=0;try{a=Math.max(0,Math.floor((S.t-k.b)/12))}catch(e){}return 126+(pid(k)-1)*4+stage(a)}
+function img(k,sz){const i=idx(k);return`<img class=pt111 loading=lazy decoding=async data-pi="${i}" src="${PORT111[i]}" alt="" style="width:${sz}px;height:${sz}px;object-fit:cover;border-radius:50%;display:block">`}
+const _av=avSvg;avSvg=function(n,sz){try{if(mine(n))return img(n,sz)}catch(e){}return _av.apply(this,arguments)};
+const _f=face83;face83=function(w,sz){try{if(mine(w)&&!PH83[w.n])return`<span class=f83 style="width:${sz}px;height:${sz}px">${img(w,sz)}</span>`}catch(e){}return _f.apply(this,arguments)};
 })();
 
 deco();intro();
