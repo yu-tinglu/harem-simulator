@@ -7726,7 +7726,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V263';const ERR92=[];
+const VER92='V264';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -9078,6 +9078,15 @@ add('異',[
  {t:'宮人笑你口音，私下學你說話取樂，被你撞見了。',o:[['當場用漢話回敬，不卑不亢','ally:2,favor:2','你一番話不卑不亢，宮人臊紅了臉，從此再不敢造次。'],['裝作沒聽見','scheme:1','你一笑置之，只在心裡記下了這筆賬。']]},
  {t:'節慶那日，你想按故國的習俗佈置宮室，管事嬤嬤卻說不合宮規。',o:[['請皇上准許','favor:3,scand:1','皇上笑著准了，說多些異域風情也好，只是有人暗中不滿。','favor:-2','皇上說了一句「入鄉隨俗」，你的請求被駁回了。',.6],['按宮規辦，只在心裡過節','scheme:1,hp:1','你默默按宮規辦了，夜裡獨自對著故國的方向敬了一杯。']]}])
 }catch(e){console.log('r122',e)}})();
+
+/* ===== V264：省親依各出身的家人設定改寫稱呼；外邦公主與罪臣之女不能省親 ===== */
+(function(){try{const h=OUT109.find(x=>x.id==='home');if(!h)return;
+const MP={8:{F:'養母',M:'養母',B:'師兄',H:'戲班'},20:{F:'師父',M:'師父',B:'義兄',H:'鏢局'},21:{F:'祖母',M:'祖母',B:'族叔',H:'將軍府舊宅'},23:{F:'父親',M:'師娘',B:'師兄',H:'戲班'}};
+const fx=(s,m)=>typeof s!=='string'?s:s.split('父兄率全族').join(m.F+'與'+m.B+'率眾人').split('母家').join(m.H).split('父親').join(m.F).split('母親').join(m.M).split('兄長').join(m.B).split('全族').join('眾人').split('族人').join('眾人');
+const prev=h.beats.map(b=>b[2]);
+h.beats=h.beats.map((b,i)=>[b[0],b[1],a=>{const e=prev[i](a);const m=(typeof G!=='undefined')&&MP[G];if(!m)return e;return{t:fx(e.t,m),o:e.o.map(x=>[fx(x[0],m),()=>fx(x[1](),m)].concat(x.slice(2)))}}]);
+const _ok=h.ok;h.ok=m=>!(typeof G!=='undefined'&&G>=9&&G<=15)&&_ok(m);
+}catch(e){console.log('r123',e)}})();
 
 deco();intro();
 
