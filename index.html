@@ -602,7 +602,7 @@ c=>yr(c)>=6&&c.sex=='男'&&{t:`皇上親自考校皇子功課，輪到${c.n}。`
 c=>yr(c)>=8&&{t:`${c.n}與一位兄弟在書房起了衝突，被先生告到皇上面前。`,o:[['教他先低頭認錯',()=>{c.de+=6;c.chong+=2;return'皇上誇他有容人之量。'}],['讓他據理力爭',()=>{if(P(.5)){c.chong+=6;return'他辯得有理有據，皇上點頭。'}c.chong-=8;return'他爭得面紅耳赤，皇上不悅。'}],['暗中施壓，讓對方受罰',()=>{const n=S.npcs[rn()];n.kids.forEach(k=>k.chong-=8);n.host+=10;S.me.scheme+=2;return`${n.n}的孩子挨了罰，對方記恨在心。`}]]},
 c=>yr(c)>=10&&c.sex=='男'&&{t:'秋獮圍獵，皇上讓皇子們一展身手。',o:[['讓他全力表現',()=>{if(P(.5+(KT[c.t][2].pow||0)/60)){c.pow+=6;c.chong+=8;return'他獵得頭彩，朝臣側目。'}c.chong-=3;c.pow-=2;return'他墜馬受傷，鬧了笑話。'}],['教他藏拙',()=>{c.de+=4;c.chong+=3;return'皇上讚他穩重。'}]]},
 c=>yr(c)>=12&&{t:`${c.n}的詩文被傳誦宮外，引來朝臣關注。`,o:[['低調壓下',()=>{c.de+=3;return'風頭漸息，孩子更為沉穩。'}],['順勢揚名',()=>{c.pow+=8;c.chong+=5;S.me.emp-=3;return'朝臣爭相結交，其他皇子的母妃也有警覺。'}]]},
-c=>c.chong<60&&{t:`有人在皇上面前誣陷${c.n}品行不端。`,o:[['動用人脈替他洗清',()=>{if(S.me.ally<25){c.chong-=6;return'人脈不夠，無力迴天。'}S.me.ally-=6;c.chong+=4;return'事情真相大白。'}],['讓他自己辯白',()=>{if(P(c.de/110)){c.chong+=4;return'他言辭誠懇，皇上信了。'}c.chong-=8;return'他百口莫辯。'}],['重金打點（耗銀30）',()=>{if(!pay(30))return'銀兩不足，只得作罷。';c.chong+=6;return'風波被壓了下去。'}]]},
+c=>c.chong<60&&{t:yr(c)<6?`有人在皇上面前嚼舌根，說${c.n}的生辰八字不吉，恐怕沖撞龍體。`:`有人在皇上面前誣陷${c.n}品行不端。`,o:[['動用人脈替他洗清',()=>{if(S.me.ally<25){c.chong-=6;return'人脈不夠，無力迴天。'}S.me.ally-=6;c.chong+=4;return'事情真相大白。'}],...(yr(c)>=6?[['讓他自己辯白',()=>{if(P(c.de/110)){c.chong+=4;return'他言辭誠懇，皇上信了。'}c.chong-=8;return'他百口莫辯。'}]]:[['請太后出面說句公道話',()=>{if(S.me.dw>=30){S.me.dw-=3;c.chong+=4;return'太后一句話，壓下了閒言碎語。'}c.chong-=4;return'太后不願多事，閒話沒能壓下去。'}]]),['重金打點（耗銀30）',()=>{if(!pay(30))return'銀兩不足，只得作罷。';c.chong+=6;return'風波被壓了下去。'}]]},
 c=>false&&{t:c.sex=='男'?`皇上要為${c.n}選妃。`:`皇上要為${c.n}選駙馬。`,o:[['選重臣之家',()=>{c.pow+=12;S.me.emp-=4;return'結下高門姻親，其他勢力有些不安。'}],['選寒門才俊',()=>{c.de+=5;c.bond+=8;c.pow+=3;return'孩子歡喜，母子更加親近。'}],['請皇上自行決斷',()=>{c.chong+=5;return'皇上滿意你的識大體。'}]]},
 c=>yr(c)>=2&&yr(c)<8&&{t:`${c.n}鬧著要你陪著，不肯睡。`,o:[['放下手邊事陪伴',()=>{c.bond+=8;return'母子倆說了一夜的話。'}],['讓乳母哄睡',()=>{c.bond-=3;return'孩子有些委屈。'}]]},
 c=>c.sex=='女'&&yr(c)>=12&&!c.sp&&!c.out&&{t:`邊關求和，朝臣提議以${c.n}和親。`,o:[['以死相諫',()=>{if(P(.5)){c.bond+=10;S.me.favor-=6;return'皇上收回成命，卻對你不滿。'}c.chong-=4;return'皇上不為所動，此事暫且擱置。'}],['動用人脈換人頂替',()=>{if(S.me.ally<30)return'人脈不足，無力迴天。';S.me.ally-=12;c.chong+=3;return'你保住了女兒。'}],['接受，換取母家封賞',()=>{c.bond-=20;S.me.fam.forEach(x=>x.pw+=8);const rl=ntr(),nn=NAT6.slice().sort((a,b)=>rl[a]-rl[b])[0];if(!c.sp){const r=hqDo(c,'me',nn);jot('宮',c.n,r);return'母家因此得了封賞，女兒對你心生怨懟。'+r}return'母家因此得了封賞，女兒對你心生怨懟。'}]]},
@@ -7726,7 +7726,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V264';const ERR92=[];
+const VER92='V265';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -9087,6 +9087,13 @@ const prev=h.beats.map(b=>b[2]);
 h.beats=h.beats.map((b,i)=>[b[0],b[1],a=>{const e=prev[i](a);const m=(typeof G!=='undefined')&&MP[G];if(!m)return e;return{t:fx(e.t,m),o:e.o.map(x=>[fx(x[0],m),()=>fx(x[1](),m)].concat(x.slice(2)))}}]);
 const _ok=h.ok;h.ok=m=>!(typeof G!=='undefined'&&G>=9&&G<=15)&&_ok(m);
 }catch(e){console.log('r123',e)}})();
+
+/* ===== V265：晉升等通知只在畫面最上層顯示一次，不再反覆出現 ===== */
+(function(){
+const st=document.createElement('style');st.textContent='html body #ntf.ntf14{top:calc(env(safe-area-inset-top,0px) + 62px)!important;bottom:auto!important;z-index:260!important}';document.head.appendChild(st);
+const _nd=ntfDraw;ntfDraw=function(){try{if(S&&S.nt){const now=Date.now();S.nt=S.nt.filter(n=>!n.d||now-n.d<=1600)}}catch(e){}
+ const r=_nd.apply(this,arguments);try{if(S&&S.nt){const now=Date.now();S.nt.forEach(n=>{if(!n.d)n.d=now})}}catch(e){}return r};
+})();
 
 deco();intro();
 
