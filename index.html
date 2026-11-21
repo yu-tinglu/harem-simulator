@@ -7723,7 +7723,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V249';const ERR92=[];
+const VER92='V250';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -8782,6 +8782,81 @@ window.imp114=function(txt){const e=document.getElementById('sm114');try{const r
 let _cf114=0;function confirm_114(){if(Date.now()-_cf114<6000){_cf114=0;return true}_cf114=Date.now();const e=document.getElementById('sm114');if(e)e.textContent='匯入會覆蓋目前這一局，確定的話請在 6 秒內再按一次「匯入」。';return false}
 window.impF114=function(inp){const f=inp.files&&inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const ta=document.getElementById('sv114');if(ta)ta.value=String(r.result||'').trim();const e=document.getElementById('sm114');if(e)e.textContent='已讀入檔案，按「匯入」套用。'};r.readAsText(f)};
 const _sp114=setPanel;setPanel=function(){let h=_sp114.apply(this,arguments);try{h+=`<div class=m style="margin:14px 0 4px"><b>存檔備份</b></div><div class=m style="font-size:12px;opacity:.8;margin-bottom:6px">換手機或清除瀏覽器資料前，先匯出存檔；也能把存檔文字傳給朋友。</div><div class=g><button onclick="exp114()">匯出存檔</button><button class=s onclick="imp114()">匯入</button><button class=s onclick="document.getElementById('sf114').click()">選擇檔案</button></div><input id=sf114 type=file accept=".txt,text/plain" style="display:none" onchange="impF114(this)"><textarea id=sv114 rows=3 style="width:100%;margin-top:6px;font-size:11px" placeholder="在這裡貼上存檔文字"></textarea><div id=sm114 class=m style="font-size:12px;margin-top:4px"></div>`}catch(e){}return h};
+
+/* ===== V250：結局圖鑑／新手引導／出身天賦專屬劇情／皇上的私下故事 ===== */
+(function(){
+const J=(w,t)=>{try{jot('宮',w,t)}catch(e){}return t};
+/* ---------- 結局圖鑑 ---------- */
+const END115=[['壽終正寢','平安老去，子孫滿堂。'],['兒孫繞膝','孩子成材，晚年安樂。'],['功成身退','在最高處急流勇退。'],['知己終老','與一位知己相伴終老。'],['幕後執棋人','不居其位，卻執掌乾坤。'],['賢德太后','兒子登基，你以賢德聞名。'],['唯一太后','兒子登基，後宮唯你獨尊。'],['東西太后','與另一位太后分庭抗禮。'],['太后薨逝','太后之位上走完一生。'],['母以子貴，止於太妃','兒子登基，你只止步於太妃。'],['宗室入繼','皇室無嗣，宗室子入繼大統。'],['女皇登基','走到了誰也不敢想的位置。'],['宮變奪位','一場宮變改寫了皇位。'],['稱帝失敗','野心太大，功敗垂成。'],['宮廷政變失敗','政變失敗，一敗塗地。'],['皇朝易主','這座王朝換了主人。'],['國祚斷絕','國運走到了盡頭。'],['山河破碎','戰火吞沒了一切。'],['兵變敗亡','兵權旁落，兵變之下覆滅。'],['事發賜死','把柄被人抓住，賜下白綾。'],['謀逆伏誅','牽涉謀逆，難逃一死。'],['通敵伏誅','被查出與外敵往來。'],['穢亂宮闈','宮闈醜聞敗露。'],['廢位幽禁','從高處跌落，被廢幽禁。'],['打入冷宮','聖寵盡失，打入冷宮。'],['撂牌子','選秀即被撂牌子，終身無緣。'],['權柄盡失','手中的權柄一點點流盡。'],['爭而不得','爭了一輩子，什麼也沒得到。'],['家門傾覆','母家傾覆，你也無處可依。'],['母家傾覆','母家獲罪，牽連於你。'],['青燈古佛','看破紅塵，青燈古佛一生。'],['宮外舊夢','最終走出宮牆，尋回舊夢。'],['香消玉殞','紅顏早逝，香消玉殞。'],['毒發身亡','被人下毒，死於非命。'],['產子殞命','難產，母子之間只留其一。'],['為子赴死','為了孩子，你選擇赴死。'],['骨肉離心','與親生骨肉漸行漸遠。']];
+const EK='hg_ends115';
+function seen(){try{return new Set(JSON.parse(stg.get(EK)||'[]'))}catch(e){return new Set()}}
+const _em=endMark;endMark=function(t){try{if(t){const s=seen();s.add(t);stg.set(EK,JSON.stringify([...s]))}}catch(e){}return _em.apply(this,arguments)};
+window.endDex115=function(){const s=seen();const known=END115.filter(x=>s.has(x[0])).length;const extra=[...s].filter(t=>!END115.some(x=>x[0]===t));
+ return`<div class=cd><h3>結局圖鑑　${s.size}/${END115.length}</h3><div class=m style="margin-bottom:6px">每一局的結局都會記下。沒見過的只留剪影與一句提示。</div>`+END115.map(x=>s.has(x[0])?`<div class=k>🏆 <b>${x[0]}</b>　<span class=m>${x[1]}</span></div>`:`<div class=k style="opacity:.5">🔒 <b>？？？</b>　<span class=m>提示：${x[1].slice(0,6)}…</span></div>`).join('')+(extra.length?`<div class=k>另有：${extra.join('、')}</div>`:'')+'</div>'};
+const _ap=achPanel;achPanel=function(){let h=_ap.apply(this,arguments);try{h+=endDex115()}catch(e){}return h};
+/* ---------- 新手引導 ---------- */
+const CK='hg_coach115';
+const CO=[['先看懂這一個月','每月你有數次「行動」。先挑兩三件：獻藝邀寵、巴結皇后、結交宮人最穩。行動用完，或按「自動過一季」，時間才會往前走。'],
+ ['三個數字決定你的路','聖寵＝皇上多喜歡你，心機＝你防人與算人的本事，銀兩＝打點一切的本錢。聖寵太低會被冷落，太高又招人嫉妒，要平衡。'],
+ ['別只盯著皇上','「後宮」分頁可以看每位妃嬪，點頭像能放大。多結盟、少樹敵；宮裡她們自己也會鬥，你選擇站哪邊很重要。'],
+ ['有了方向再玩','看頂端「下一個目標」，它會告訴你下一步往哪走。想先自己摸索，隨時可以關掉這些提示。']];
+function coachDone(){return stg.get(CK)==='done'}
+window.coachBox115=function(){try{if(coachDone()||!S||!S.me||S.over||S.t>8)return'';const i=Math.min(3,Math.floor(S.t/2));const c=CO[i];return`<div class=cd id=coach115 style="border-left:4px solid #e0566a"><h3>新手提示　${i+1}/4</h3><div class=m style="color:inherit"><b>${c[0]}</b><br>${c[1]}</div><div class=g style="margin-top:8px"><button class=s onclick="coach115('x')">不再提示</button><button onclick="coach115('n')">知道了</button></div></div>`}catch(e){return''}};
+window.coach115=function(a){try{if(a==='x'){stg.set(CK,'done')}else{S.t=S.t;(S.c115=S.c115||{})[Math.min(3,Math.floor(S.t/2))]=1}const e=document.getElementById('coach115');if(e)e.remove()}catch(x){}};
+function injectCoach(){try{if(TAB!==0)return;const m=document.querySelector('main');if(!m||document.getElementById('coach115'))return;const i=Math.min(3,Math.floor((S&&S.t||0)/2));if(S&&S.c115&&S.c115[i])return;const h=coachBox115();if(!h)return;const first=m.querySelector('.cd');const w=document.createElement('div');w.innerHTML=h;if(first)m.insertBefore(w.firstChild,first);else m.appendChild(w.firstChild)}catch(e){}}
+const _r115=render;render=function(){const r=_r115.apply(this,arguments);try{injectCoach()}catch(e){}return r};
+/* ---------- 出身／天賦專屬劇情 ---------- */
+const AR={
+ 武:{g:[20,21],t:['將門虎女','武藝傍身','鐵血手腕','膽識過人']},文:{g:[6,18,22],t:['才情出眾','知書達理','過目不忘','清冷孤高']},
+ 商:{g:[5,7],t:['家財萬貫','善於斂財']},藝:{g:[8,23],t:['能歌善舞','繡藝絕倫','天生媚骨']},醫:{g:[19],t:['通曉醫理','醫毒雙絕']},異:{g:[9,10,11,12,13,14],t:[]}};
+function archs(){const o=[];try{const tn=TS[S.me.g][0];for(const k in AR){if(AR[k].g.includes(G)||AR[k].t.includes(tn))o.push(k)}}catch(e){}return o}
+function ap(s){const m=S.me;if(!s)return;s.split(',').forEach(p=>{const[k,v]=p.split(':');const n=+v;if(k==='silver')m.silver=Math.max(0,m.silver+n);else if(k==='hp')m.hp=cl(m.hp+n,0,100);else if(k==='favor')m.favor=cl(m.favor+n,0,100);else if(k==='fam'){m.fam.forEach&&m.fam.forEach(f=>{f.lo=cl((f.lo||50)+n,0,100)})}else m[k]=(m[k]||0)+n})}
+const SX=(o)=>o.silver&&S.me.silver<o.silver;
+const EVX={
+ 武:[
+  {t:'秋獵之日，皇上興起，命眾妃嬪中有誰擅騎射的上場一試。所有人的目光都落在你身上。',o:[['策馬下場，一箭中的','favor:10,scand:1','你一箭中的，皇上撫掌大笑，席間卻有人暗暗記下了你的鋒芒。','favor:2,scheme:1','你手滑了半分，雖未丟臉，卻也沒贏得滿堂彩。',.65],['謙稱不擅，推給別人','favor:1','你笑著推辭，人人都當你知進退。']]},
+  {t:'夜裡，宮苑深處有黑影掠過，宮女嚇得噤聲。你多年習武的直覺告訴你，這不是野貓。',o:[['親自追上去','favor:8,hp:-10','你攔下了那名可疑之人，雖受了輕傷，皇上聽聞後對你另眼相看。','hp:-18,favor:-2','你追丟了人，還在黑暗裡扭傷了腳。',.6],['喊來侍衛處理','favor:2','侍衛搜了一夜，捉到一個混進來的小賊。']]},
+  {t:'邊關一位老將軍曾是你家舊部，託人遞話，想請你在皇上面前為他的兵餉說句話。',o:[['替舊部開口','scheme:1,fam:6,favor:-3','你為舊部說了話，母家的人脈穩了些，皇上卻看了你很久。'],['婉言謝絕','fam:-4,favor:2','你沒有插手前朝的事，舊部有些失望。']]}],
+ 文:[
+  {t:'宮宴上，皇上興致高昂，命眾人以今日景致即興題詩，你的名字被點到。',o:[['提筆賦詩，一氣呵成','favor:9,scheme:1','你一首詩寫成，滿座皆驚，皇上當場賞了你一方好墨。','favor:2','你寫得中規中矩，沒出錯，也沒出彩。',.7],['讓給別人，自己斟酒','favor:1','你笑著把風頭讓出，沒人記住你，也沒人記恨你。']]},
+  {t:'太后讓你主持編一冊《宮訓》，要你把後宮規矩寫得明白，既是臉面，也是考驗。',o:[['用心編寫，不辭辛苦','favor:3,scheme:2,hp:-6','你熬了幾個月編成，太后翻了一遍，點了點頭。'],['交給下人代筆','silver:-10','你省了力，卻被太后看出了敷衍。','']]},
+  {t:'你的詩作不知怎麼傳到了宮外，幾位文人投詩唱和，一時間京城都在議論你的才名。',o:[['低調處理，不予回應','favor:2,scheme:1','你一概不理，反倒落了個「守拙」的名聲。'],['回贈一首，結個善緣','favor:3,scand:2','你回了詩，名聲更響，也有人說你過問宮外之事。']]}],
+ 商:[
+  {t:'內務府的賬目一團亂，總管急得團團轉，聽說你出身商家，悄悄來求你看一眼。',o:[['替他理清賬目','silver:60,favor:2','你三天理清了賬，內務府總管感激不盡，悄悄送來一份謝禮。'],['推說不懂','','你推說不懂，他只得另想辦法。']]},
+  {t:'母家的商隊北上，在半路遇上了馬匪，管事託人遞信，問你要不要出銀子贖貨。',o:[['出銀贖回貨物','silver:-50,fam:8','你出了銀子，商隊平安回來，母家人記著你的好。'],['讓他們自行處置','fam:-6','你沒有出手，母家的人有些心寒。']]},
+  {t:'你在宮外的鋪子被地方官吏找了麻煩，索要「孝敬」，否則就要查封。',o:[['花銀子打點','silver:-40,scheme:1','你打點了官吏，鋪子保住了，人情也記下了。'],['託人遞話施壓','favor:-2,fam:4,scand:2','你借勢施壓，事情壓下去了，卻也留下了話柄。',.7]]}],
+ 藝:[
+  {t:'宮宴上缺一支壓軸的曲子，司樂的女官緊張地望向你：聽說你最擅此道。',o:[['登台獻藝','favor:10','你一曲終了，滿座靜默片刻，隨即掌聲雷動，皇上看你的眼神不同了。','favor:2','你今日氣息略亂，雖不出錯，卻不夠驚艷。',.65],['婉拒，推薦別人','favor:1','你把機會讓給了別人，換來一份人情。']]},
+  {t:'教坊一位老樂師聽過你的曲子，想拜你為師，請你指點一二。',o:[['收下這個徒弟','scheme:1,favor:2','你傳了他幾手絕活，日後宮宴上總有人替你造勢。'],['謝絕，說自己不配','','你謙辭了，老樂師悻悻而去。']]},
+  {t:'太后壽辰將至，皇上命你排一支新舞獻上，既是榮寵，也有人等著看你出醜。',o:[['盡心編排','favor:7,silver:-20','你熬了數夜編排，壽辰當日太后連聲稱好。'],['請教坊代勞','silver:-30','你花銀子請教坊代勞，雖不出彩，倒也穩妥。']]}],
+ 醫:[
+  {t:'一名小宮女突然昏厥在廊下，太醫還沒到。你一眼看出是急症，周圍人都望著你。',o:[['當場施救','scheme:2,favor:3','你出手救回了她，在場的人都記住了你的本事。','scand:2,hp:-4','施救未盡全功，旁人議論你多管閒事。',.7],['等太醫來','','你守在一旁，直到太醫趕到。']]},
+  {t:'某位皇子高燒不退，太醫們束手無策，太后命人來問你可有法子。',o:[['開方施治','favor:6,scheme:2','你開了方子，皇子竟退了燒，太后對你刮目相看。','favor:-5,scand:3','藥效不彰，有人暗指你別有用心。',.55],['舉薦太醫院的老手','favor:2','你舉薦了老手，穩妥地把這份責任推了出去。']]},
+  {t:'你的一張方子被宮人傳出去，宮外的百姓竟說有效，連藥鋪都在照著抄。',o:[['任其傳播，積德行善','favor:2,scand:1','你的名聲傳開了，有人說你醫者仁心。'],['悄悄壓下','scheme:1','你讓人把消息按下，免得惹來閒話。']]}],
+ 異:[
+  {t:'故國的使團入京朝賀，你遠遠望見那熟悉的服飾與旗幟，心中五味雜陳。',o:[['請求與使臣見面','favor:-2,fam:5','你見到了故國來人，捎回了幾句鄉音，也被皇上多看了一眼。'],['按禮數遠遠行禮','favor:2','你守著規矩，只遠遠望了一眼，沒有踰矩。']]},
+  {t:'故國遣人來請求皇上出兵相助，皇上在你面前提起此事，似有意無意地問你的看法。',o:[['替故國說話','fam:8,favor:-5','你替故國說了話，皇上沒有表態，卻明顯冷了幾分。'],['以大局為重，勸皇上慎重','favor:5,fam:-5','你勸皇上以大局為重，皇上讚你識大體，故國的人卻有些寒心。']]},
+  {t:'節日裡，你穿起了故國的盛裝出席，滿座宮裝中格外顯眼，議論紛紛。',o:[['坦然自若','favor:4,scand:1','你笑著說這是家鄉的禮，竟引得幾位妃嬪好奇討教。'],['換回宮裝','favor:1','你悄悄換回宮裝，免得招人閒話。']]}]
+};
+function runO(o){const lab=o[0];const a1=o[1]||'',t1=o[2]||'',a2=o[3],t2=o[4],p=o[5];
+ return()=>{try{ if(a1.includes('silver:-')){const c=-(+a1.match(/silver:(-\d+)/)[1]);if(S.me.silver<c)return J('我','銀兩不足，你只得作罷。')}
+  let ok=true;if(a2!==undefined&&p!==undefined)ok=Math.random()<p;if(ok){ap(a1);return J('我',t1)}else{ap(a2);return J('我',t2)}}catch(e){return'事情不了了之。'}}}
+function pickEv(){const as=archs();if(!as.length)return null;const st=S.ar115=S.ar115||{};for(const k of as){const l=EVX[k];const i=(st[k]||0);if(i<l.length&&S.t>=18+i*20+as.indexOf(k)*5)return[k,i,l[i]]}return null}
+/* ---------- 皇上的私下故事 ---------- */
+function emp(){try{return empName()||'皇上'}catch(e){return'皇上'}}
+const EMP=[
+ {c:s=>S.t>=14,t:()=>`夜裡，${emp()}獨自坐在殿中，忽然提起一位早逝的故人，說那是他年少時唯一真心待過的人。他望著燈火，像在說給你聽，又像說給自己。`,o:[['靜靜陪著，不多言','favor:5,tr:1','你沒有打斷，只是替他添了盞燈。他後來說，這是許久來最安靜的一夜。'],['說幾句寬慰的話','favor:3,tr:1','你輕聲勸了幾句，他苦笑著點頭，神色鬆了些。'],['好奇地追問那人是誰','favor:-3','他沉默片刻，只說「不必知道」，這一夜不歡而散。']]},
+ {c:s=>S.t>=34&&(S.em115&&S.em115.n>=1),t:()=>`${emp()}在案前翻出一封舊信，是多年前兄弟寫給他的。他說：「那時候，我們還能一起騎馬。」說完便不再開口。`,o:[['勸他寫封信去','favor:4,tr:1','你勸他放下身段寫封信，他看了你許久，第二天真的提筆了。'],['勸他以大局為重','favor:2','你說皇家無私事，他點點頭，卻把信收進了匣子深處。'],['裝作沒看見，替他研墨','favor:3,tr:1','你只替他研墨，什麼也沒問。']]},
+ {c:s=>S.t>=58&&(S.em115&&S.em115.n>=2),t:()=>`${emp()}忽然問起你：「若你來定，這江山該傳給嫡子、長子，還是最賢能的那一個？」你知道，這個答案沒有對錯，卻會被他記很久。`,o:[['嫡子，名正言順','favor:3,tr:1,h:1','你答「名正言順」，他點頭，說這話合他的心。'],['長子，順序為先','favor:3,tr:1,h:2','你答「長幼有序」，他沉吟了很久。'],['賢能者，江山為重','favor:4,tr:1,h:3','你答「江山為重」，他眼中閃過一絲讚許，也閃過一絲警惕。']]},
+ {c:s=>S.t>=84&&(S.em115&&S.em115.n>=3)&&(S.em115.tr>=3),t:()=>`${emp()}從枕下取出一枚小小的私印，放在你掌心。「朕把這個交給你，不為別的，只因這宮裡，朕能說真話的人不多。」`,o:[['鄭重收下，絕不外傳','favor:8,scheme:3,tr:2','你收下私印，從此在他眼中不再只是妃嬪。'],['推辭，說自己不配','favor:5,tr:1','你推辭了，他卻笑著把印塞回你手中。']]}
+];
+function empEv(){S.em115=S.em115||{n:0,tr:0,h:0,last:-99};const st=S.em115;if(st.n>=EMP.length||S.t-st.last<10)return null;const e=EMP[st.n];if(!e.c(S))return null;if(S.me.favor<35)return null;return e}
+function mk(txt,opts,after){return{story:1,t:txt,o:opts.map(o=>{const lab=o[0],a=o[1],t=o[2];return[lab,()=>{try{ap(a.replace(/tr:\d+,?/,'').replace(/h:\d+,?/,'').replace(/,$/,''));const mt=a.match(/tr:(\d+)/);if(mt&&S.em115)S.em115.tr+=+mt[1];const mh=a.match(/h:(\d+)/);if(mh&&S.em115)S.em115.h=+mh[1];if(after)after();return J('我',t)}catch(e){return'此事過去了。'}}]})}}
+const _md=mend;mend=function(){const r=_md.apply(this,arguments);try{if(S&&S.me&&!S.over&&!S.reg&&!S.scn&&S.q&&S.t-(S.l115||-99)>=5&&Math.random()<.25){
+ let done=0;const ee=Math.random()<.5?empEv():null;if(ee){const st=S.em115;S.l115=S.t;st.last=S.t;const n=st.n;S.q.push(mk(ee.t(),ee.o,()=>{}));st.n=n+1;done=1}
+ if(!done){const p=pickEv();if(p){const[k,i,e]=p;S.ar115[k]=i+1;S.l115=S.t;S.q.push({story:1,t:e.t,o:e.o.map(o=>[o[0],runO(o)])})}}}}catch(e){console.log('r115',e)}return r};
+window.__r115={EV:EVX,EMP,archs,AR,END115};
+})();
 
 deco();intro();
 
