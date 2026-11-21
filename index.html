@@ -7723,7 +7723,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V251';const ERR92=[];
+const VER92='V252';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -8860,6 +8860,51 @@ const _md=mend;mend=function(){const r=_md.apply(this,arguments);try{if(S&&S.me&
  let done=0;const ee=Math.random()<.5?empEv():null;if(ee){const st=S.em115;S.l115=S.t;st.last=S.t;const n=st.n;S.q.push(mk(ee.t(),ee.o,()=>{}));st.n=n+1;done=1;evSee('帝'+n)}
  if(!done){const p=pickEv();if(p){const[k,i,e]=p;S.ar115[k]=i+1;S.l115=S.t;evSee(k+i);S.q.push({story:1,t:e.t,o:e.o.map(o=>[o[0],runO(o)])})}}}}catch(e){console.log('r115',e)}return r};
 window.__r115={EV:EVX,EMP,archs,AR,END115};
+})();
+
+/* ===== V252：外邦公主妃嬪 ===== */
+(function(){
+const NM={暹羅:['娑娜','帕莎','蘭娜'],高麗:['金瑞妍','朴智淑','李書賢'],蒙古:['烏蘭','阿古拉','其其格'],吐蕃:['卓瑪','德吉','央金'],安南:['阮玉','黎芳','陳蓮'],準噶爾:['策楞','烏尼','賽音']};
+const LAND={暹羅:'象牙與香料',高麗:'人蔘與書卷',蒙古:'良駒與皮毛',吐蕃:'氆氌與佛像',安南:'沉香與稻米',準噶爾:'玉石與戰馬'};
+const J=(w,t)=>{try{jot('宮',w,t)}catch(e){}return t};
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const bad=s=>typeof s!=='string';
+function assign(){if(!S||!S.npcs||S.pr116)return;S.pr116=1;
+ let pool=S.npcs.filter(n=>!n.st&&n.rank>=1&&n.rank<=5);if(pool.length<2)pool=S.npcs.filter(n=>!n.st&&n.rank<7);if(pool.length<2)return;
+ const cnt=Math.random()<.5?1:2;let nat=NAT6.slice().sort(()=>Math.random()-.5);
+ if(S.me&&S.me.fo&&NAT6.includes(S.me.fo)&&Math.random()<.5)nat=[S.me.fo].concat(nat.filter(x=>x!==S.me.fo));
+ pool.sort(()=>Math.random()-.5).slice(0,cnt).forEach((n,i)=>{const k=nat[i];n.fo116=k;n.b116=0;n.n=k+'·'+pick(NM[k]);try{n.favor=cl(n.favor+4)}catch(e){}})}
+const _st=start;start=function(){const r=_st.apply(this,arguments);try{assign()}catch(e){}return r};
+const prs=()=>(S&&S.npcs?S.npcs.filter(n=>n.fo116&&!n.st):[]);
+const rel=k=>ntr()[k];const mv=(k,d)=>{const r=ntr();r[k]=cl(r[k]+d)};
+const NB=(n,a)=>{try{n.favor=cl(n.favor+(a.f||0));n.al=cl((n.al||0)+(a.a||0));n.host=cl((n.host||0)+(a.h||0))}catch(e){}};
+const SM=(s)=>{const m=S.me;s.split(',').forEach(p=>{const[k,v]=p.split(':');const x=+v;if(k==='favor')m.favor=cl(m.favor+x);else if(k==='silver')m.silver=Math.max(0,m.silver+x);else if(k==='scand')m.scand=Math.max(0,(m.scand||0)+x);else if(k==='ally'||k==='scheme')m[k]=(m[k]||0)+x})};
+const mine=n=>S.me&&S.me.fo&&S.me.fo===n.fo116;
+const BEATS=[
+ {c:(n)=>S.t>=8,t:n=>`${n.n}被分到偏僻的小院，宮人私下笑她口音古怪，飯菜也被刻意怠慢。她在廊下望著北方出神${mine(n)?'，一見到你，眼眶就紅了——同鄉人，在這深宮裡比什麼都珍貴':''}。`,
+  o:n=>[['替她出頭，要宮人守規矩',()=>{SM('favor:-1,ally:3');NB(n,{f:3,a:12});mv(n.fo116,4);return J('我',`你當眾訓斥怠慢她的宮人。${n.n}深深一拜，說這份情會記在心裡。`)}],
+        ['私下送些衣食過去',()=>{SM('silver:-6,ally:2');NB(n,{a:8});mv(n.fo116,2);return J('我',`你悄悄命人送了衣食。${n.n}沒有多話，只在窗前點了一盞燈等你。`)}],
+        ['裝作沒看見',()=>{mv(n.fo116,-2);NB(n,{a:-4});return J('我','你沒有插手。她默默吞下了這份冷落。')}],
+        ['跟著旁人取笑她',()=>{SM('scheme:2,scand:3');NB(n,{a:-14,h:12});mv(n.fo116,-5);return J('我',`你附和了幾句玩笑。${n.n}聽懂了，抬頭看了你一眼，再沒說話。`)}]]},
+ {c:(n)=>S.t>=28,t:n=>`${n.fo116}的使團進京朝見，帶來${LAND[n.fo116]}。${n.n}求你代為在皇上面前說句話，讓她能見使臣一面。宮裡已有人在傳：「外邦公主私會使臣，只怕沒好事。」`,
+  o:n=>[['替她說情，安排一次見面',()=>{if(Math.random()<.65){SM('favor:2,ally:3');NB(n,{f:4,a:14});mv(n.fo116,6);return J('我',`皇上准了，只許隔簾說話。${n.n}得見故人，哭著謝了你。使臣回國後，對朝廷的態度也軟了幾分。`)}SM('favor:-4,scand:4');NB(n,{a:6});mv(n.fo116,-3);return J('我',`見面被人撞見，傳成了「私通外邦」。皇上不悅，你也受了牽連。`)}],
+        ['勸她避嫌，由你代傳口信',()=>{SM('ally:2');NB(n,{a:6});mv(n.fo116,2);return J('我',`你把她的思鄉之言轉給使臣。不算周全，但誰也挑不出錯。`)}],
+        ['揭發此事，向皇上邀功',()=>{SM('favor:4,scand:2');NB(n,{a:-18,h:20,f:-6});mv(n.fo116,-9);return J('我',`你將使團之事稟告皇上，皇上讚你謹慎。${n.n}被禁足，故國那邊也有了怨言。`)}]]},
+ {c:(n)=>S.t>=50,t:n=>rel(n.fo116)<40?`邊報傳來，${n.fo116}近來頻頻異動。朝中有人上奏：「宮中的${n.n}，恐是故國耳目。」皇上沉默許久，目光落在你身上。`:`${n.fo116}與朝廷關係正好，${n.n}想請你幫忙：她想為故國商人求一份通商文書，說是回報皇上的恩典。`,
+  o:n=>rel(n.fo116)<40?
+   [['為她作保，擔保她無二心',()=>{if(Math.random()<.55){SM('favor:3,ally:5');NB(n,{f:5,a:20});mv(n.fo116,8);return J('我',`皇上信了你的擔保，沒有追究。${n.n}說，她這條命以後是你的。`)}SM('favor:-6,scand:6,ally:-2');NB(n,{a:10});mv(n.fo116,-4);return J('我','擔保反被人抓住話柄，皇上對你也起了疑。')}],
+    ['保持距離，靜觀其變',()=>{NB(n,{a:-8});mv(n.fo116,-3);return J('我',`你沒有表態。數日後${n.n}被召去問話，回來後瘦了一圈。`)}],
+    ['落井下石，把她當替罪羊',()=>{SM('favor:5,scheme:3,scand:5');NB(n,{a:-30,h:35,f:-12});mv(n.fo116,-14);return J('我',`${n.n}被幽禁。皇上對你多了幾分倚重，但${n.fo116}那邊，怕是記下了這筆賬。`)}]]:
+   [['替她遞話，促成通商',()=>{SM('favor:3,silver:20,ally:3');NB(n,{f:3,a:12});mv(n.fo116,6);return J('我',`通商文書批了下來。商隊往來頻繁，連你的私房也跟著進賬。`)}],
+    ['婉拒，說後宮不宜干政',()=>{SM('favor:2');NB(n,{a:-4});return J('我',`你以後宮不得干政為由婉拒。皇上聽說後，微微點頭。`)}],
+    ['答應，卻從中抽取好處',()=>{if(Math.random()<.5){SM('silver:40,scand:3');NB(n,{a:2});mv(n.fo116,1);return J('我','這筆好處你收得神不知鬼不覺。')}SM('favor:-5,scand:8');NB(n,{a:-12,h:12});mv(n.fo116,-6);return J('我',`消息走漏，成了「宮妃收受外邦賄賂」的醜聞。`)}]]}
+];
+function beat116(){const L=prs().filter(n=>n.b116<BEATS.length&&BEATS[n.b116].c(n));if(!L.length)return null;L.sort((a,b)=>a.b116-b.b116);return L[0]}
+const _m=mend;mend=function(){const r=_m.apply(this,arguments);try{if(S&&S.me&&!S.over&&!S.reg&&!S.scn&&S.q&&S.fo116done!==1){
+ prs().forEach(n=>{const d=(rel(n.fo116)-50)/40;n.favor=cl(n.favor+d)});
+ if(S.t-(S.l116||-99)>=6&&Math.random()<.22){const n=beat116();if(n){const b=BEATS[n.b116];n.b116++;S.l116=S.t;try{window.evSee115&&window.evSee115('邦'+n.fo116+n.b116)}catch(e){}
+  S.q.push({story:1,t:b.t(n),o:b.o(n)})}}}}catch(e){console.log('r116',e)}return r};
+window.__r116={BEATS,prs,assign,NM};
 })();
 
 deco();intro();
