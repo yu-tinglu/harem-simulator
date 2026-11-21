@@ -7723,7 +7723,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V255';const ERR92=[];
+const VER92='V256';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -8949,12 +8949,12 @@ window.__r117={tagOf,rumor,epi,TG,EASY,HARD};
 const TIP=['難以迷惑，穩紮穩打、少耍小聰明。','容易被枕邊風左右，聖寵升得快，但國力會衰。','失寵時處罰更重，少結黨、少張揚。','處罰較輕，犯錯的容錯率高。','愛排場愛面子，獻藝與賀禮特別討好。','耳根子軟，誰先開口誰佔便宜。','喜怒無常，千萬別在他盛怒時進言。'];
 const E=s=>(typeof ESC==='function'?ESC(s):String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])));
 const when=t=>`第${Math.floor(t/12)+1}年${t%12+1}月`;
-function paper(){try{if(!S||!S.chr)return[];return S.chr.filter(x=>x.k==='宮'&&x.w!=='我'&&x.x&&!/你/.test(x.x)).slice(0,8)}catch(e){return[]}}
+function paper(){try{if(!S||!S.chr)return[];return S.chr.filter(x=>x.k==='宮'&&x.w!=='我'&&x.x&&!/你/.test(x.x)&&!/閒聊時說/.test(x.x)).slice(0,8)}catch(e){return[]}}
 function wind(){const o={fe:[],pa:[],fc:[]};try{const st=S.nr112||{f:{},p:{}};Object.entries(st.f||{}).forEach(([k,f])=>{if(f.on){const[a,b]=k.split('|');if(S.npcs.some(n=>n.n===a&&!n.st)&&S.npcs.some(n=>n.n===b&&!n.st))o.fe.push([a,b,f.lv||1])}});
  Object.entries(st.p||{}).forEach(([k,f])=>{if(f.on){const[a,b]=k.split('|');if(S.npcs.some(n=>n.n===a&&!n.st)&&S.npcs.some(n=>n.n===b&&!n.st))o.pa.push([a,b])}});
  const g={};S.npcs.forEach((n,i)=>{if(n.st||n.fac<0||i===S.qi)return;(g[n.fac]=g[n.fac]||[]).push(n)});
  Object.keys(g).forEach(k=>{const m=g[k].sort((a,b)=>b.rank-a.rank);if(m.length>=2)o.fc.push([(typeof FAC!=='undefined'&&FAC[k])||'派系',m.length,m.slice(0,3).map(n=>n.n)])})}catch(e){}return o}
-function cardHTML(){const p=paper(),w=wind();if(!p.length&&!w.fe.length&&!w.pa.length&&!w.fc.length)return'';
+function cardHTML(){const p=paper(),w=wind();if(!p.length&&!w.fe.length&&!w.pa.length&&!w.fc.length&&!(S.rm118&&S.rm118.length))return'';
  const hd=p.find(x=>!/閒聊時說/.test(x.x))||p[0];const head=p.length?E(hd.x).slice(0,22)+'…':'後宮暫時平靜';
  let h=`<details class="cd np118"><summary><b>宮中小報</b>　<span class=m>${head}</span></summary>`;
  if(p.length)h+='<div style="margin:6px 0">'+p.map(x=>`<div class=k><span class=m>${when(x.t)}</span>　${E(x.x)}</div>`).join('')+'</div>';
@@ -8962,13 +8962,28 @@ function cardHTML(){const p=paper(),w=wind();if(!p.length&&!w.fe.length&&!w.pa.l
   if(w.fe.length)h+=w.fe.map(f=>`<div class=k>⚔ ${E(f[0])} 與 ${E(f[1])}　鬥爭第 ${f[2]} 回</div>`).join('');
   if(w.pa.length)h+=w.pa.map(f=>`<div class=k>🤝 ${E(f[0])} 與 ${E(f[1])}　結為同盟</div>`).join('');
   if(w.fc.length)h+=w.fc.map(f=>`<div class=k>${E(f[0])}一系：${f[2].map(E).join('、')}${f[1]>3?'等'+f[1]+'人':''}</div>`).join('')}
- return h+'</details>'}
+ return h+rumHTML()+'</details>'}
 function inject(){try{if(TAB!==1||!S||S.over||S.scn)return;const mn=document.querySelector('#app main')||document.querySelector('main');if(!mn)return;const old=mn.querySelector('.np118');if(old)old.remove();const h=cardHTML();if(!h)return;const w=document.createElement('div');w.innerHTML=h;const first=mn.querySelector('.pg97b');if(first&&first.nextSibling)mn.insertBefore(w.firstChild,first.nextSibling);else mn.insertBefore(w.firstChild,mn.firstChild)}catch(e){console.log('np118',e)}}
 const _r=render;render=function(){const r=_r.apply(this,arguments);try{inject()}catch(e){}return r};
 /* 皇上性情：身分卡＋開局提示 */
 const _rt=window.rt111;window.rt111=function(ix){const r=_rt.apply(this,arguments);try{const x=(window._rt111||[])[ix];if(x&&x[0]==='emp'&&typeof EPS!=='undefined'&&EPS[S.ep]){const p=document.querySelector('#rt111m p');if(p)p.innerHTML+='<br>性情：'+E(EPS[S.ep][0])+'<br><i style="color:#a8573f">'+E(EPS[S.ep][1])+'。相處之道：'+E(TIP[S.ep]||'')+'</i>'}}catch(e){}return r};
 const _m=mend;mend=function(){const r=_m.apply(this,arguments);try{if(S&&S.me&&!S.over&&!S.eh118&&S.t>=2&&typeof EPS!=='undefined'&&EPS[S.ep]){S.eh118=1;let en='皇上';try{en=empName()||'皇上'}catch(e){}const t=`宮人私下議論：當今${en}${EPS[S.ep][0]}，${EPS[S.ep][1]}。`;L(t);try{jot('帝','皇上',t)}catch(e){}}}catch(e){}return r};
-window.__r118={paper,wind,cardHTML,inject};
+
+/* 傳聞：真假混合 */
+const live=()=>S.npcs.map((n,i)=>[n,i]).filter(([n,i])=>!n.st&&i!==S.qi).map(x=>x[0]);
+const isP=(a,b)=>{const st=S.nr112||{p:{}};const f=(st.p||{})[a+'|'+b]||(st.p||{})[b+'|'+a];return !!(f&&f.on)};
+const isF=(a,b)=>{const st=S.nr112||{f:{}};const f=(st.f||{})[a+'|'+b]||(st.f||{})[b+'|'+a];return !!(f&&f.on)};
+function mkRumor(){const L=live();if(L.length<3)return null;const want=Math.random()<.5;const pk=a=>a[Math.floor(Math.random()*a.length)];const ty=pk(['fav','preg','pact','feud']);
+ if(ty==='fav'){const c=L.filter(n=>(n.favor<35)===want);if(!c.length)return null;const n=pk(c);return{txt:`聽說${n.n}最近快要失寵了。`,truth:n.favor<35,t:S.t}}
+ if(ty==='preg'){const c=L.filter(n=>((n.preg||0)>0)===want);if(!c.length)return null;const n=pk(c);return{txt:`聽說${n.n}身子有喜了，只是還沒聲張。`,truth:(n.preg||0)>0,t:S.t}}
+ const pairs=[];for(let i=0;i<L.length;i++)for(let j=i+1;j<L.length;j++){const a=L[i].n,b=L[j].n;const v=ty==='pact'?isP(a,b):isF(a,b);if(v===want)pairs.push([a,b])}
+ if(!pairs.length)return null;const q=pk(pairs.slice(0,60));
+ return ty==='pact'?{txt:`聽說${q[0]}與${q[1]}私下走得很近，像是結了盟。`,truth:isP(q[0],q[1]),t:S.t}:{txt:`聽說${q[0]}與${q[1]}暗地裡鬥得厲害。`,truth:isF(q[0],q[1]),t:S.t}}
+function rumHTML(){const a=S.rm118||[];if(!a.length)return'';
+ return '<div class=m style="margin-top:8px"><b>宮外傳聞</b>　<span class=m>真假難辨，可花 8 兩銀子查證，過幾個月也會水落石出</span></div>'+a.slice(0,4).map((r,i)=>{const done=r.ck||S.t-r.t>=8;const tag=done?(r.truth?'<span style="color:#2e7d4f">〔屬實〕</span>':'<span style="color:#a8573f">〔謠言〕</span>'):`<button class=s style="padding:2px 8px;font-size:11px" onclick="chk118(${i})">查證</button>`;return`<div class=k>❓ ${E(r.txt)}　${tag}</div>`}).join('')}
+window.chk118=function(i){try{const r=(S.rm118||[])[i];if(!r||r.ck)return;if(S.me.silver<8){L('銀兩不足，查證不了這則傳聞。');render();return}S.me.silver-=8;r.ck=1;if(r.truth)S.me.scheme=(S.me.scheme||0)+1;L(r.truth?'你打聽之後確認：傳聞屬實，心機＋1。':'你打聽之後確認：這只是一則謠言。');render()}catch(e){console.log('np118',e)}};
+const _m2=mend;mend=function(){const r=_m2.apply(this,arguments);try{if(S&&S.me&&!S.over&&!S.reg&&S.t-(S.rl118||-9)>=4&&Math.random()<.5){const x=mkRumor();if(x){S.rl118=S.t;(S.rm118=S.rm118||[]).unshift(x);S.rm118.length=Math.min(S.rm118.length,12)}}}catch(e){console.log('np118',e)}return r};
+window.__r118={paper,wind,cardHTML,inject,mkRumor};
 })();
 
 deco();intro();
