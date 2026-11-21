@@ -7723,7 +7723,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V253';const ERR92=[];
+const VER92='V254';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -8845,7 +8845,7 @@ const EVX={
 function runO(o){const lab=o[0];const a1=o[1]||'',t1=o[2]||'',a2=o[3],t2=o[4],p=o[5];
  return()=>{try{ if(a1.includes('silver:-')){const c=-(+a1.match(/silver:(-\d+)/)[1]);if(S.me.silver<c)return J('我','銀兩不足，你只得作罷。')}
   let ok=true;if(a2!==undefined&&p!==undefined)ok=Math.random()<p;if(ok){ap(a1);return J('我',t1)}else{ap(a2);return J('我',t2)}}catch(e){return'事情不了了之。'}}}
-function pickEv(){const as=archs();if(!as.length)return null;const st=S.ar115=S.ar115||{};for(const k of as){const l=EVX[k];const i=(st[k]||0);if(i<l.length&&S.t>=18+i*20+as.indexOf(k)*5)return[k,i,l[i]]}return null}
+function pickEv(){const as=archs();if(!as.length)return null;const st=S.ar115=S.ar115||{};const od=S.ao115=S.ao115||{};for(const k of as){const l=EVX[k];const i=(st[k]||0);const o=od[k]||(od[k]=[0,1,2].sort(()=>Math.random()-.5));if(i<l.length&&S.t>=18+i*20+as.indexOf(k)*5)return[k,i,l[o[i]],o[i]]}return null}
 /* ---------- 皇上的私下故事 ---------- */
 function emp(){try{return empName()||'皇上'}catch(e){return'皇上'}}
 const EMP=[
@@ -8858,7 +8858,7 @@ function empEv(){S.em115=S.em115||{n:0,tr:0,h:0,last:-99};const st=S.em115;if(st
 function mk(txt,opts,after){return{story:1,t:txt,o:opts.map(o=>{const lab=o[0],a=o[1],t=o[2];return[lab,()=>{try{ap(a.replace(/tr:\d+,?/,'').replace(/h:\d+,?/,'').replace(/,$/,''));const mt=a.match(/tr:(\d+)/);if(mt&&S.em115)S.em115.tr+=+mt[1];const mh=a.match(/h:(\d+)/);if(mh&&S.em115)S.em115.h=+mh[1];if(after)after();return J('我',t)}catch(e){return'此事過去了。'}}]})}}
 const _md=mend;mend=function(){const r=_md.apply(this,arguments);try{if(S&&S.me&&!S.over&&!S.reg&&!S.scn&&S.q&&S.t-(S.l115||-99)>=5&&Math.random()<.25){
  let done=0;const ee=Math.random()<.5?empEv():null;if(ee){const st=S.em115;S.l115=S.t;st.last=S.t;const n=st.n;S.q.push(mk(ee.t(),ee.o,()=>{}));st.n=n+1;done=1;evSee('帝'+n)}
- if(!done){const p=pickEv();if(p){const[k,i,e]=p;S.ar115[k]=i+1;S.l115=S.t;evSee(k+i);S.q.push({story:1,t:e.t,o:e.o.map(o=>[o[0],runO(o)])})}}}}catch(e){console.log('r115',e)}return r};
+ if(!done){const p=pickEv();if(p){const[k,i,e,ix]=p;S.ar115[k]=i+1;S.l115=S.t;evSee(k+ix);S.q.push({story:1,t:e.t,o:e.o.map(o=>[o[0],runO(o)])})}}}}catch(e){console.log('r115',e)}return r};
 window.__r115={EV:EVX,EMP,archs,AR,END115};
 })();
 
@@ -8905,6 +8905,43 @@ const _m=mend;mend=function(){const r=_m.apply(this,arguments);try{if(S&&S.me&&!
  if(S.t-(S.l116||-99)>=6&&Math.random()<.22){const n=beat116();if(n){const b=BEATS[n.b116];n.b116++;S.l116=S.t;try{window.evSee115&&window.evSee115('邦'+n.fo116+n.b116)}catch(e){}
   S.q.push({story:1,t:b.t(n),o:b.o(n)})}}}}catch(e){console.log('r116',e)}return r};
 window.__r116={BEATS,prs,assign,NM};
+})();
+
+/* ===== V254：新手推薦・前朝傳聞・妃子性格・史官評語 ===== */
+(function(){
+const J=(w,t)=>{try{jot('宮',w,t)}catch(e){}return t};
+const pk=a=>a[Math.floor(Math.random()*a.length)];
+/* A 新手推薦 */
+const EASY=[0,17,11,1],HARD=[4,15,23];
+function badge(){try{if(typeof GS==='undefined')return;document.querySelectorAll('button').forEach(b=>{if(b.dataset.bd117)return;const t=(b.firstChild&&b.firstChild.nodeType===3?b.firstChild.textContent:'').trim();const gi=GS.findIndex(g=>g[0]===t);if(gi<0)return;const k=EASY.includes(gi)?['新手推薦','#c8415a']:HARD.includes(gi)?['高難度','#6b5a8a']:null;if(!k)return;b.dataset.bd117=1;const e=document.createElement('em');e.textContent=k[0];e.style.cssText='font-style:normal;font-size:10px;color:#fff;background:'+k[1]+';border-radius:8px;padding:1px 6px;margin-left:4px;vertical-align:middle';b.insertBefore(e,b.firstChild.nextSibling)})}catch(e){}}
+const _in=intro;intro=function(){const r=_in.apply(this,arguments);try{badge();setTimeout(badge,0)}catch(e){}return r};
+window.badge117=badge;
+/* B 前朝傳聞（跨局） */
+const PK='hg_prev117';
+const _em=endMark;endMark=function(t){try{if(t&&S&&S.me&&S.me.n){stg.set(PK,JSON.stringify({n:S.me.n,rk:RK[S.me.rank],t}))}}catch(e){}return _em.apply(this,arguments)};
+function prev(){try{return JSON.parse(stg.get(PK)||'null')}catch(e){return null}}
+function rumor(){const p=prev();if(!p||!p.n)return null;
+ return{story:1,t:`老宮人在廊下閒話：「聽說前朝有位${p.n}，曾做到${p.rk}，最後落得『${p.t}』。這宮裡啊，每個人都以為自己會是例外。」`,
+  o:[['細細打聽她的故事',()=>{S.me.scheme+=1;S.me.ally+=1;return J('我',`你向老宮人問了許久，把${p.n}的得失暗暗記在心裡。`)}],
+     ['一笑置之，不放在心上',()=>{return J('我','你笑了笑，只當是一段閒話。')}],
+     ['引以為戒，格外小心',()=>{S.me.scheme+=2;S.me.favor=Math.max(0,S.me.favor-1);return J('我',`你把${p.n}的結局當作一面鏡子，行事比往常更謹慎了。`)}]]}}
+/* C 妃子性格標語 */
+const TG=[['心思深沉','話說三分，留七分。'],['娘家勢大','我們家，從來不看人臉色。'],['盛寵不衰','皇上昨兒又說，只想聽我彈琴。'],['體弱多病','咳……不礙事。'],['愛告狀','這事兒，我可得跟娘娘說一聲。'],['愛看戲','你們繼續，我就看看。'],['老實人','我笨嘴拙舌的，姐姐別笑我。'],['愛攀比','那匹緞子，我也有一模一樣的。'],['直腸子','有話就直說，我最不愛繞彎。'],['愛拉攏人','來來來，一起喝杯茶。'],['嘴甜心苦','妹妹這身衣裳真好看，哪兒做的？'],['淡泊','清靜些才好。']];
+function hs(s){let h=0;for(const c of String(s))h=(h*31+c.charCodeAt(0))>>>0;return h}
+const FT=['異鄉人','我們那兒的月亮，比這兒圓。'];function tagOf(n){if(n.tg117!==undefined)return n.tg117<0?FT:(TG[n.tg117]||TG[6]);let i;
+ if(n.fo116)i=-1;else if((n.sc||0)>=65)i=0;else if((n.pow||0)>=60)i=1;else if((n.favor||0)>=72)i=2;else if((n.hp||100)<=45)i=3;else i=4+hs(n.n)%8;n.tg117=i;return i<0?FT:TG[i]}
+const _st=start;start=function(){const r=_st.apply(this,arguments);try{S.npcs.forEach(tagOf)}catch(e){}return r};
+const _rt=window.rt111;window.rt111=function(ix){const r=_rt.apply(this,arguments);try{const x=(window._rt111||[])[ix];const w=x&&x[0];if(w&&typeof w==='object'){const g=tagOf(w);const p=document.querySelector('#rt111m p');if(p)p.innerHTML+='<br>性格：'+g[0]+'<br><i style="color:#a8573f">「'+g[1]+'」</i>'}}catch(e){}return r};
+/* D 閒聊 + 傳聞事件掛入 mend */
+const _m=mend;mend=function(){const r=_m.apply(this,arguments);try{if(S&&S.me&&!S.over&&!S.reg&&S.q){
+ if(!S.pv117&&S.t>=6){S.pv117=1;const e=rumor();if(e)S.q.push(e)}
+ else if(Math.random()<.18&&S.t-(S.g117||-9)>=2){const a=S.npcs.filter(n=>!n.st);if(a.length){const n=pk(a);S.g117=S.t;J(n.n,`${n.n}（${tagOf(n)[0]}）閒聊時說：「${tagOf(n)[1]}」`)}}}}catch(e){console.log('r117',e)}return r};
+/* E 史官評語 */
+function epi(){try{const m=S.me,t=(S.over&&S.over.t)||'';const tr=[];if(m.scheme>=70)tr.push('城府極深');if(m.ally>=60)tr.push('廣結人緣');if((m.scand||0)>=30)tr.push('是非纏身');if(m.silver>=300)tr.push('家底豐厚');if(m.kids&&m.kids.length>=3)tr.push('子嗣繁盛');if(m.favor>=80)tr.push('聖眷優渥');if(!tr.length)tr.push('為人低調');
+ const v=/太后|女皇|登基|奪位|臨朝/.test(t)?'運籌帷幄，終掌乾坤':/冷宮|廢|賜死|毒|伏誅|白綾|病/.test(t)?'成敗只在一念之間':'一生榮辱，後人自有公論';
+ return`<div class=m style="margin:8px 0;padding:8px 10px;border-left:3px solid #c8415a;background:rgba(200,65,90,.06)"><b>《${m.n}傳》</b><br>${m.n}，終位${RK[m.rank]}${t?'，終局「'+t+'」':''}。${tr.join('、')}。<br><i>史官曰：「${v}。」</i></div>`}catch(e){return''}}
+const _ec=endCard;endCard=function(){const r=_ec.apply(this,arguments);try{return epi()+r}catch(e){return r}};
+window.__r117={tagOf,rumor,epi,TG,EASY,HARD};
 })();
 
 deco();intro();
