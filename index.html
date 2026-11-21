@@ -7723,7 +7723,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V250';const ERR92=[];
+const VER92='V251';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -8791,8 +8791,12 @@ const END115=[['壽終正寢','平安老去，子孫滿堂。'],['兒孫繞膝',
 const EK='hg_ends115';
 function seen(){try{return new Set(JSON.parse(stg.get(EK)||'[]'))}catch(e){return new Set()}}
 const _em=endMark;endMark=function(t){try{if(t){const s=seen();s.add(t);stg.set(EK,JSON.stringify([...s]))}}catch(e){}return _em.apply(this,arguments)};
+const EVK='hg_evs115';
+function evSet(){try{return new Set(JSON.parse(stg.get(EVK)||'[]'))}catch(e){return new Set()}}
+function evSee(id){try{const s=evSet();if(!s.has(id)){s.add(id);stg.set(EVK,JSON.stringify([...s]))}}catch(e){}}
+window.evSee115=evSee;
 window.endDex115=function(){const s=seen();const known=END115.filter(x=>s.has(x[0])).length;const extra=[...s].filter(t=>!END115.some(x=>x[0]===t));
- return`<div class=cd><h3>結局圖鑑　${s.size}/${END115.length}</h3><div class=m style="margin-bottom:6px">每一局的結局都會記下。沒見過的只留剪影與一句提示。</div>`+END115.map(x=>s.has(x[0])?`<div class=k>🏆 <b>${x[0]}</b>　<span class=m>${x[1]}</span></div>`:`<div class=k style="opacity:.5">🔒 <b>？？？</b>　<span class=m>提示：${x[1].slice(0,6)}…</span></div>`).join('')+(extra.length?`<div class=k>另有：${extra.join('、')}</div>`:'')+'</div>'};
+ return`<div class=cd><h3>結局圖鑑　${s.size}/${END115.length}</h3><div class=m style="margin-bottom:6px">每一局的結局都會記下。沒見過的只留剪影與一句提示。</div>`+END115.map(x=>s.has(x[0])?`<div class=k>🏆 <b>${x[0]}</b>　<span class=m>${x[1]}</span></div>`:`<div class=k style="opacity:.5">🔒 <b>？？？</b>　<span class=m>提示：${x[1].slice(0,6)}…</span></div>`).join('')+(extra.length?`<div class=k>另有：${extra.join('、')}</div>`:'')+(()=>{const e=evSet();const tot=Object.keys(EVX).length*3+EMP.length;return`<div class=k style="margin-top:6px">📜 遇過的專屬／皇帝事件　<b>${e.size}/${tot}</b></div>`})()+'</div>'};
 const _ap=achPanel;achPanel=function(){let h=_ap.apply(this,arguments);try{h+=endDex115()}catch(e){}return h};
 /* ---------- 新手引導 ---------- */
 const CK='hg_coach115';
@@ -8853,8 +8857,8 @@ const EMP=[
 function empEv(){S.em115=S.em115||{n:0,tr:0,h:0,last:-99};const st=S.em115;if(st.n>=EMP.length||S.t-st.last<10)return null;const e=EMP[st.n];if(!e.c(S))return null;if(S.me.favor<35)return null;return e}
 function mk(txt,opts,after){return{story:1,t:txt,o:opts.map(o=>{const lab=o[0],a=o[1],t=o[2];return[lab,()=>{try{ap(a.replace(/tr:\d+,?/,'').replace(/h:\d+,?/,'').replace(/,$/,''));const mt=a.match(/tr:(\d+)/);if(mt&&S.em115)S.em115.tr+=+mt[1];const mh=a.match(/h:(\d+)/);if(mh&&S.em115)S.em115.h=+mh[1];if(after)after();return J('我',t)}catch(e){return'此事過去了。'}}]})}}
 const _md=mend;mend=function(){const r=_md.apply(this,arguments);try{if(S&&S.me&&!S.over&&!S.reg&&!S.scn&&S.q&&S.t-(S.l115||-99)>=5&&Math.random()<.25){
- let done=0;const ee=Math.random()<.5?empEv():null;if(ee){const st=S.em115;S.l115=S.t;st.last=S.t;const n=st.n;S.q.push(mk(ee.t(),ee.o,()=>{}));st.n=n+1;done=1}
- if(!done){const p=pickEv();if(p){const[k,i,e]=p;S.ar115[k]=i+1;S.l115=S.t;S.q.push({story:1,t:e.t,o:e.o.map(o=>[o[0],runO(o)])})}}}}catch(e){console.log('r115',e)}return r};
+ let done=0;const ee=Math.random()<.5?empEv():null;if(ee){const st=S.em115;S.l115=S.t;st.last=S.t;const n=st.n;S.q.push(mk(ee.t(),ee.o,()=>{}));st.n=n+1;done=1;evSee('帝'+n)}
+ if(!done){const p=pickEv();if(p){const[k,i,e]=p;S.ar115[k]=i+1;S.l115=S.t;evSee(k+i);S.q.push({story:1,t:e.t,o:e.o.map(o=>[o[0],runO(o)])})}}}}catch(e){console.log('r115',e)}return r};
 window.__r115={EV:EVX,EMP,archs,AR,END115};
 })();
 
