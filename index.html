@@ -579,7 +579,7 @@ const PE=[()=>qo()&&{t:'皇后賜你一盞參茶，氣味似乎有些怪。',o:[
 ()=>({t:'皇上忽然問起朝政，似乎想聽聽後宮的看法。',o:[['直言進諫',()=>{if(P(.4+S.me.scheme/200)){S.me.favor+=8;return'皇上驚於你的見識，對你另眼相看。'}S.me.favor-=8;return'皇上嫌你干政，臉色沉了下來。'}],['溫言迴避',()=>{S.me.favor+=2;return'皇上笑你識大體。'}]]}),
 ()=>({t:'你忽然病倒，高燒不退。',o:[['請太醫診治（耗銀20）',()=>{if(!pay(20)){S.me.hp-=8;return'銀兩不足，只得熬著。'}S.me.hp+=5;return'太醫用藥及時，不日痊癒。'}],['硬撐著不聲張',()=>{S.me.hp-=(tf('bear')?5:12);return'你咬牙挺過，元氣大傷。'}],['託人向皇上遞話',()=>{if(P(.5+S.me.favor/200)){S.me.favor+=8;S.me.hp+=8;return'皇上親自來探，賞了藥材。'}S.me.favor-=2;return'皇上政務繁忙，沒有露面。'}]]}),
 ()=>({t:'夜半宮中傳來陣陣怪響，有人在裝神弄鬼嚇唬你。',o:[['請高僧做法事（耗銀20）',()=>{if(!pay(20))return'銀兩不足。';S.me.hp+=3;return'法事過後，怪響不再。'}],['設下埋伏抓人',()=>{if(P(.4+S.me.scheme/200+tf('insight')*.2)){S.me.scheme+=3;const i=rn();S.evid[i]=(S.evid[i]||0)+1;return`你抓住了裝鬼之人，順藤摸瓜牽出了${S.npcs[i].n}。`}S.me.hp-=3;return'人影一閃就不見了。'}],['置之不理',()=>{S.me.hp-=4;return'你數夜難眠，精神不濟。'}]]}),
-()=>{const i=rn(),n=S.npcs[i];return{t:`${n.n}遣人送來厚禮，希望與你結為同盟。`,o:[['收下並結盟',()=>{n.al+=25;n.host-=15;S.me.ally+=3;return`你與${n.n}結成同盟。`}],['收禮不表態',()=>{S.me.silver+=15;n.al+=5;return'你收了禮，兩邊都不得罪。'}],['拒收並告知中宮',()=>{if(S.qi==='me')return'你身為中宮，此舉只是立了威。';S.me.emp+=8;n.host+=18;return`${n.n}自此視你為眼中釘。`}]]}},
+()=>{const i=rn(),n=S.npcs[i];return{t:`${n.n}遣人送來厚禮，希望與你結為同盟。`,o:[['收下並結盟',()=>{n.al+=25;n.host-=15;S.me.ally+=3;return`你與${n.n}結成同盟。`}],['收禮不表態',()=>{S.me.silver+=15;n.al+=5;return'你收了禮，兩邊都不得罪。'}],[S.qi==='me'?'拒收，順勢立個威':'拒收並告知中宮',()=>{if(S.qi==='me')return'你身為中宮，此舉只是立了威。';S.me.emp+=8;n.host+=18;return`${n.n}自此視你為眼中釘。`}]]}},
 ()=>S.mood<26&&{t:'皇上今日龍顏震怒，朝堂與後宮都人人自危。',o:[['上前溫言勸慰',()=>{if(P(.4+S.me.favor/200+tf('perf')/2)){S.mood+=15;S.me.favor+=8;return'你的軟語化解了皇上的怒氣，皇上對你格外依賴。'}S.me.favor-=10;S.me.hp-=3;return'你撞在槍口上，被遷怒了。'}],['避而不見，閉門自守',()=>{S.me.ally+=1;return'風頭過後，你毫髮無傷。'}],['趁機在皇上面前進讒',()=>{const n=S.npcs[rn()];if(P(.45+S.me.scheme/250)){n.favor-=15;n.rank=Math.max(0,n.rank-1);S.me.scheme+=2;return`皇上盛怒之下降了${n.n}的位份。`}S.me.favor-=12;return'皇上嫌你挑撥是非。'}]]},
 ()=>S.mood>80&&{t:'皇上今日龍心大悅，問你想要什麼恩典。',o:[['求晉位',()=>{if(S.me.rank<TOP&&P(.6)){if(!rkRoom(S.me.rank+1,S.me))return rkFull(S.me.rank+1);S.me.rank++;return`皇上准了，你晉為${RK[S.me.rank]}！`}S.me.favor+=6;return'皇上讚你知足，賞了不少東西。'}],['為母家求官職',()=>{const f=pf();f.pw+=14;f.lo+=3;return`皇上擢升了你的${f.rel}。`}],['求皇上赦免冷宮中人',()=>{const d=S.npcs.find(n=>n.st=='廢后');if(d){d.st='';d.rank=Math.max(0,rkFit(3,d));d.favor=20;d.al+=30;return`${d.n}被赦出冷宮，對你感激涕零。`}S.me.silver+=40;return'皇上笑你心善，另賞了銀兩。'}]]},
 ()=>S.me.preg&&S.me.preg<8&&{t:'你孕吐得厲害，連飯也吃不下，卻還有宮務與請安要應付。',o:[['稱病靜養，推掉請安',()=>{S.me.hp+=6;S.me.emp-=3;return'你養足了精神，胎象平穩。'}],['強撐著照常行事',()=>{S.me.hp-=8;S.me.emp+=2;return'你硬撐過來，卻累得臉色蒼白。'}],['藉孕向皇上撒嬌，討個恩典',()=>{S.me.favor+=6;S.me.silver+=20;return'皇上憐惜你辛苦，賞了不少東西。'}]]},
@@ -4416,7 +4416,7 @@ const V={
   ['鼓起勇氣，獻上一首燈謎詩',()=>{if(P(.4+m_().at.iq/300)){m_().favor+=6;m_().fame=(m_().fame||0)+2;return'你的詩句清新，皇上多看了你兩眼，連連稱好。'}m_().favor-=1;return'你緊張得念錯了詞，引來幾聲輕笑。'}],
   ['向前輩嬪妃請安，結個善緣',()=>{m_().ally+=3;m_().emp+=2;return'幾位前輩見你知禮，隨口提點了你不少宮中規矩。'}],
   ['安靜站著看燈，不惹事',()=>{m_().hp=Math.min(100,m_().hp+1);return'你看了一晚上的燈，什麼事也沒發生，倒也自在。'}]])],
- [()=>fav()>=70||rk()>=5,'fav',E('元宵夜，皇上特意命你與他同乘燈船，惹得六宮側目。',[
+ [()=>(fav()>=70||rk()>=5)&&S.qi!=='me','fav',E('元宵夜，皇上特意命你與他同乘燈船，惹得六宮側目。',[
   ['大方陪駕，坦然受寵',()=>{m_().favor+=4;hostUp(3,4);return'燈船緩緩划過湖面，皇上心情大好，只是別宮的目光像針一樣扎人。'}],
   ['婉言推讓，請皇上先陪皇后',()=>{m_().emp+=6;m_().favor-=1;hostUp(3,-2);return'你識大體的舉動讓皇后頗為受用，皇上也笑你「太小心」。'}],
   ['趁機替家人美言幾句',()=>{m_().fam.forEach(x=>x.pw+=3);m_().favor+=1;return'皇上隨口應了幾句，母家第二天就收到了賞賜。'}]])],
@@ -6278,7 +6278,7 @@ const ST=[
   ['說「有什麼事，儘管來找我」',()=>{if(c.f.c===1){AF(c.p,c.k,14);S.me.ally+=2;return`她笑著點頭，從此成了你最可靠的耳目。（盟友度＋14、人脈＋2）`}AF(c.p,c.k,4);return`她輕輕道了謝，卻沒再多說。（盟友度＋4）`}],
   ['送她一個新的宮女作伴',()=>{AF(c.p,c.k,6);return`她收下了，眼眶有些紅。（盟友度＋6）`}]]})]},
 {id:'野心',title:'她想要的更多',kinds:['npc','cb'],cond:(p,k)=>k==='npc'?(p.sc||0)>45:/心機|強勢/.test(p.tr||''),acts:[
- c=>({t:`${c.n}近日常來你宮中請安，話裡話外總在探聽皇后（中宮）的事，還「無意間」說起：「若是姐姐坐在那個位置上，才是名正言順。」`,o:[
+ c=>({t:S.qi==='me'?`${c.n}近日常來你宮中請安，話裡話外總在打聽你的喜好與動向，還「無意間」說起：「姐姐這個位置，六宮裡誰不眼紅？」`:`${c.n}近日常來你宮中請安，話裡話外總在探聽皇后（中宮）的事，還「無意間」說起：「若是姐姐坐在那個位置上，才是名正言順。」`,o:[
   ['順著她說，把話題引開',()=>{AF(c.p,c.k,2);return`她看你沒表態，笑了笑，不再提。`},'a',1],
   ['明確表態：「這種話不要再說」',()=>{AF(c.p,c.k,-4);S.me.ally+=1;return`她臉色微變，連忙賠禮。（盟友度－4）`},'a',0],
   ['試探她：「你想要什麼？」',()=>{AF(c.p,c.k,1);return`她直視著你，緩緩說：「我想要一個孩子能站得住的位置。」`},'a',2]]}),
@@ -7726,7 +7726,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V262';const ERR92=[];
+const VER92='V263';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -8799,7 +8799,7 @@ function evSet(){try{return new Set(JSON.parse(stg.get(EVK)||'[]'))}catch(e){ret
 function evSee(id){try{const s=evSet();if(!s.has(id)){s.add(id);stg.set(EVK,JSON.stringify([...s]))}}catch(e){}}
 window.evSee115=evSee;
 window.endDex115=function(){const s=seen();const known=END115.filter(x=>s.has(x[0])).length;const extra=[...s].filter(t=>!END115.some(x=>x[0]===t));
- return`<div class=cd><h3>結局圖鑑　${s.size}/${END115.length}</h3><div class=m style="margin-bottom:6px">每一局的結局都會記下。沒見過的只留剪影與一句提示。</div>`+END115.map(x=>s.has(x[0])?`<div class=k>🏆 <b>${x[0]}</b>　<span class=m>${x[1]}</span></div>`:`<div class=k style="opacity:.5">🔒 <b>？？？</b>　<span class=m>提示：${x[1].slice(0,6)}…</span></div>`).join('')+(extra.length?`<div class=k>另有：${extra.join('、')}</div>`:'')+(()=>{const e=evSet();const tot=Object.keys(EVX).length*3+EMP.length;return`<div class=k style="margin-top:6px">📜 遇過的專屬／皇帝事件　<b>${e.size}/${tot}</b></div>`})()+'</div>'};
+ return`<div class=cd><h3>結局圖鑑　${s.size}/${END115.length}</h3><div class=m style="margin-bottom:6px">每一局的結局都會記下。沒見過的只留剪影與一句提示。</div>`+END115.map(x=>s.has(x[0])?`<div class=k>🏆 <b>${x[0]}</b>　<span class=m>${x[1]}</span></div>`:`<div class=k style="opacity:.5">🔒 <b>？？？</b>　<span class=m>提示：${x[1].slice(0,6)}…</span></div>`).join('')+(extra.length?`<div class=k>另有：${extra.join('、')}</div>`:'')+(()=>{const e=evSet();const tot=Object.values(EVX).reduce((s,a)=>s+a.length,0)+EMP.length;return`<div class=k style="margin-top:6px">📜 遇過的專屬／皇帝事件　<b>${e.size}/${tot}</b></div>`})()+'</div>'};
 const _ap=achPanel;achPanel=function(){let h=_ap.apply(this,arguments);try{h+=endDex115()}catch(e){}return h};
 /* ---------- 新手引導 ---------- */
 const CK='hg_coach115';
@@ -8848,7 +8848,7 @@ const EVX={
 function runO(o){const lab=o[0];const a1=o[1]||'',t1=o[2]||'',a2=o[3],t2=o[4],p=o[5];
  return()=>{try{ if(a1.includes('silver:-')){const c=-(+a1.match(/silver:(-\d+)/)[1]);if(S.me.silver<c)return J('我','銀兩不足，你只得作罷。')}
   let ok=true;if(a2!==undefined&&p!==undefined)ok=Math.random()<p;if(ok){ap(a1);return J('我',t1)}else{ap(a2);return J('我',t2)}}catch(e){return'事情不了了之。'}}}
-function pickEv(){const as=archs();if(!as.length)return null;const st=S.ar115=S.ar115||{};const od=S.ao115=S.ao115||{};for(const k of as){const l=EVX[k];const i=(st[k]||0);const o=od[k]||(od[k]=[0,1,2].sort(()=>Math.random()-.5));if(i<l.length&&S.t>=18+i*20+as.indexOf(k)*5)return[k,i,l[o[i]],o[i]]}return null}
+function pickEv(){const as=archs();if(!as.length)return null;const st=S.ar115=S.ar115||{};const od=S.ao115=S.ao115||{};for(const k of as){const l=EVX[k];const i=(st[k]||0);const o=od[k]||(od[k]=Array.from({length:l.length},(_,x)=>x).sort(()=>Math.random()-.5));if(i<Math.min(l.length,4)&&S.t>=18+i*20+as.indexOf(k)*5)return[k,i,l[o[i]],o[i]]}return null}
 /* ---------- 皇上的私下故事 ---------- */
 function emp(){try{return empName()||'皇上'}catch(e){return'皇上'}}
 const EMP=[
@@ -9034,6 +9034,51 @@ window.__r120={fix,MAP};
 
 /* V261：目標列固定單行排版，不再被拆成多欄 */
 (function(){const s=document.createElement('style');s.textContent='html body .goal82{display:flex!important;flex-wrap:nowrap!important;align-items:center;gap:8px}html body .goal82 .g82t{display:block!important;flex:1 1 auto!important;min-width:0;line-height:1.5}html body .goal82 .g82t b,html body .goal82 .g82t small{display:inline!important;white-space:normal}html body .goal82 .g82go{flex:none!important;white-space:nowrap}';document.head.appendChild(s)})();
+/* ===== V263：修行女冠沒有血親——不再憑空冒出母親叔父，省親改回道觀還願 ===== */
+(function(){
+try{const h=OUT109.find(x=>x.id==='home');if(h){const M=()=>S.me,fm=v=>M().fam.forEach(x=>x.pw=cl(x.pw+v)),E=(t,o)=>({t,o});
+ const NUN=[
+ a=>E('皇上准你回觀中還願。鳳輦停在山門外，觀主率眾道姑在門前迎候，鐘磬聲裡，往日的清淨撲面而來。',[
+  ['按宮中儀制，端坐受禮',()=>{fm(2);M().ally+=1;return'觀主合十行禮，眼底卻有一絲說不清的情緒。'}],
+  ['不拘禮數，先向師父叩首',()=>{M().clan+=2;a.f.warm=1;return'你伏地叩首，師父扶你起來，連聲說「痴兒」。同門都說你沒忘本。'}],
+  ['只匆匆上香，不願多留',()=>{M().clan-=2;return'你上完香便離去。觀中人嘴上不說，心裡不免失落。'}]]),
+ a=>E('夜裡，觀主屏退左右，說起觀中年久失修缺銀，又有權貴想買下後山的地，拿不定主意，想聽聽你的意思。',[
+  ['捐銀修繕（耗銀60）',()=>{if(!pay(60))return'銀兩不足，只能先捐一部分。';a.f.paid=1;M().clan+=3;return'你拿出體己銀修了山門。觀主雙手合十，說你這份功德，三清都記得。'}],
+  ['答應在皇上面前提一提（冒險）',()=>{if(P(cl(.35+M().favor/250,.15,.7))){a.f.word=1;M().favor-=1;fm(3);return'你尋了個機會輕輕提了一句，皇上沒有追究，權貴識趣地收了手。'}M().favor-=4;return'皇上聽出你在為道觀說項，面色微沉。'}],
+  ['勸觀主婉拒，守住清淨',()=>{M().clan-=1;a.f.strict=1;fm(-2);return'觀主點點頭，只說了一句「也好」。你知道觀中從此要清苦些，卻也不得不如此。'}]]),
+ a=>E('臨行前，一位年長的師姐把你拉到一旁，塞給你一枚舊平安符：「宮裡不比山中，萬事要小心。」',[
+  ['收下，貼身帶著',()=>{M().hp=Math.min(100,M().hp+5);return'你把平安符貼身帶著。往後在宮裡難熬的夜裡，摸一摸它，心裡就踏實幾分。'}],
+  ['留給師姐，讓她留個念想',()=>{M().clan+=1;return'師姐把平安符又塞了回來，你們推讓了半天，最終各自留下一半的心意。'}],
+  ['叮囑觀中低調行事，莫給自己添麻煩',()=>{fm(-1);M().favor+=1;return'你鄭重交代了幾句。觀中眾人一路送到山門，人人噤聲。'}]])];
+ h.beats=h.beats.map((b,i)=>[b[0],b[1],a=>(typeof G!=='undefined'&&G===24&&NUN[i])?NUN[i](a):b[2](a)])}}catch(e){console.log('r121',e)}
+const _fi=famInit;famInit=function(o){if(o===(S&&S.me)&&typeof G!=='undefined'&&G===24&&!o.fx){o.fx=1;try{o.fam.forEach(x=>{if(x.sx)return;x.sx='女';x.bt=S.t-((pAge()+R(2,9))*12+R(0,11));x.nm=fnm((o.n||'沈')[0],'女')})}catch(e){}return}return _fi.apply(this,arguments)};
+})();
+
+/* V263：窄螢幕頂列不再把「存」擠到第二行 */
+(function(){const s=document.createElement('style');s.textContent='@media(max-width:400px){html body .top{flex-wrap:nowrap!important;gap:5px!important}html body .top .brand{display:none!important}html body .top .mini{width:36px!important;height:36px!important;min-width:0!important;min-height:0!important;padding:0!important;margin:0!important;flex:none}html body .top .date,html body .top .chipm{flex:none}}';document.head.appendChild(s)})();
+/* ===== V263：專屬事件每類增至 5 件（每局最多抽 4 件，順序隨機） ===== */
+(function(){try{const E=window.__r115&&window.__r115.EV;if(!E)return;
+const add=(k,a)=>{if(E[k]&&E[k].length<5)a.forEach(x=>E[k].push(x))};
+add('武',[
+ {t:'宮中新來的侍衛統領是你舊識，行禮時多看了你一眼，旁人已經開始竊竊私語。',o:[['坦蕩相待，當眾見禮','favor:2,scheme:1','你大方受禮，反倒讓閒話無從下手。'],['避而不見','favor:1,fam:-2','你避開了他，閒話果然少了，只是舊人的情分淡了些。']]},
+ {t:'一名小宮女被內侍欺負，哭著跪在你面前。你自小習武，最看不得這個。',o:[['出手教訓內侍','ally:3,scand:2,favor:-1','你三兩下制住了內侍，宮人都服你，只是管事嬤嬤皺了眉。'],['記下名字，稟報管事','ally:2,scheme:1','你沒動手，只讓管事處置了他，宮人對你多了份敬重。']]}]);
+add('文',[
+ {t:'御花園的牆上不知被誰題了一首影射某位嬪妃的詩，傳得人盡皆知，大家都猜是出自文人之手。',o:[['出面澄清，說不是你寫的','scheme:1,favor:1','你一番話條理分明，眾人信了你，也看出你不好欺負。'],['一笑置之，任人猜測','scand:2,scheme:2','你不置可否，反倒有人暗暗忌憚你的筆鋒。']]},
+ {t:'皇子的啟蒙先生告假，皇上讓你代為指點功課一日。',o:[['認真講解','favor:4,ally:2','皇子聽得入神，皇上聽說後讚你有學問。'],['敷衍了事','favor:-1','你匆匆教完，皇子卻在父皇面前說你講得無趣。']]}]);
+add('商',[
+ {t:'內庫銀兩吃緊，有人暗示你「出身商家，不妨想想辦法」，言下之意是想讓你出一筆。',o:[['捐出一筆銀子（耗銀50）','silver:-50,favor:5,ally:2','你捐了銀子，皇上當面誇你識大體，太后也記住了你。'],['說自己的體己不多','scheme:1','你婉言推託，雖沒得罪人，也錯過了一次露臉的機會。']]},
+ {t:'一名外藩商人想託你在宮中銷些貨品，願意事後分你三成。',o:[['答應下來，小賺一筆','silver:45,scand:2','你賺了一筆，只是宮裡開始有人議論你「不忘本行」。'],['拒絕，怕惹麻煩','favor:1','你婉拒了，保住了名聲。']]}]);
+add('藝',[
+ {t:'宮宴上，有人故意在你獻藝前弄壞了樂器的弦。',o:[['臨場換琴，穩住場面','favor:7,scheme:1','你從容換了琴，一曲彈完，滿座反倒更讚嘆你的鎮定。','favor:-2,scand:1','你有些亂了，雖勉強彈完，卻被人看了笑話。',.65],['請司樂女官出面處理','scheme:2','你讓司樂女官去查，事後揪出了弄壞琴弦的人。']]},
+ {t:'宮中樂師想把你譜的新曲收入教坊曲集，署名卻想用他自己的。',o:[['堅持署上自己的名','favor:3,scheme:1','你寸步不讓，新曲署了你的名，在宮裡傳唱開來。'],['讓他署名，換個人情','ally:3','你讓了名，換來樂師們的人情，往後宮宴上多了幾位幫手。']]}]);
+add('醫',[
+ {t:'太后近來睡不安穩，太醫的方子吃了不見好，太后問起你有沒有調理的法子。',o:[['獻上安神的藥膳方','favor:6,ally:2','你用藥膳調理了半個月，太后睡得安穩了，對你格外親近。','favor:-3,scand:2','藥膳不對太后的口味，有人說你賣弄醫術。',.7],['建議請太醫會診','favor:1','你穩妥地把事交給了太醫，沒出差錯，也沒出彩。']]},
+ {t:'皇上的舊疾在換季時發作，隨侍太監私下問你能不能先開個緩解的方子。',o:[['小心開方緩解','favor:5,scheme:1,hp:-2','你謹慎開了方子，皇上緩過了勁，卻也承擔了不小的風險。'],['堅持請太醫院處理','favor:2','你堅持請太醫院診治，皇上聽說後說你知進退。']]}]);
+add('異',[
+ {t:'宮人笑你口音，私下學你說話取樂，被你撞見了。',o:[['當場用漢話回敬，不卑不亢','ally:2,favor:2','你一番話不卑不亢，宮人臊紅了臉，從此再不敢造次。'],['裝作沒聽見','scheme:1','你一笑置之，只在心裡記下了這筆賬。']]},
+ {t:'節慶那日，你想按故國的習俗佈置宮室，管事嬤嬤卻說不合宮規。',o:[['請皇上准許','favor:3,scand:1','皇上笑著准了，說多些異域風情也好，只是有人暗中不滿。','favor:-2','皇上說了一句「入鄉隨俗」，你的請求被駁回了。',.6],['按宮規辦，只在心裡過節','scheme:1,hp:1','你默默按宮規辦了，夜裡獨自對著故國的方向敬了一杯。']]}])
+}catch(e){console.log('r122',e)}})();
+
 deco();intro();
 
 
