@@ -7725,7 +7725,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V259';const ERR92=[];
+const VER92='V260';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -8255,13 +8255,13 @@ function tick(ts){raf=requestAnimationFrame(tick);if(document.hidden||!on)return
   if(p.x>W+12)p.x=-12;if(p.x<-12)p.x=W+12;
   if(p.t==='glow'){const a=.3+(Math.sin(p.ph*1.2)*.5+.5)*.4;cx.globalAlpha=a}else cx.globalAlpha=1;draw(p)}
  cx.globalAlpha=1}
-function start(){if(reduce||raf)return;mount();season=seasonOf();reseed();raf=requestAnimationFrame(tick)}
+function start(){return;if(reduce||raf)return;mount();season=seasonOf();reseed();raf=requestAnimationFrame(tick)}
 window.ATM105={force(s,n){forced=s?{season:s,night:!!n}:null;mount();if(!raf)raf=requestAnimationFrame(tick)},set(v){on=!!v;try{localStorage.setItem(KEY,on?'on':'off')}catch(e){}if(cv){cv.style.display=on?'':'none';vg.style.display=on?'':'none'}},isOn:()=>on};
 const _r=render;render=function(){const r=_r.apply(this,arguments);try{if(S&&S.me&&!S.over){start()}else if(cv){cv.style.display='none';vg.style.display='none'}if(S&&S.me&&!S.over&&cv&&on){cv.style.display='';vg.style.display=''}}catch(e){}return r};
 })();
 
 function atmToggle105(){try{window.ATM105.set(!window.ATM105.isOn())}catch(e){}try{render()}catch(e){}}
-const _ap105=avPanel;avPanel=function(){let on='開';try{on=window.ATM105.isOn()?'開':'關'}catch(e){}return _ap105.apply(this,arguments)+`<div class=cd><h3>氣氛效果</h3><div class=m>依季節飄雪、落花、流螢、落葉；夜晚事件會有暖光暈染。很淡，不影響操作；覺得干擾或手機吃力可以關掉。</div><p><button class=s onclick="atmToggle105()">氣氛效果：${on}</button></p></div>`};
+/* V260：氣氛效果已移除（背景圖本身就有落花） */
 
 /* ===== V232：子女人生線（夭折後的追思、抓周、成年禮、孫輩請安、兒女祝壽、母子疏離） ===== */
 const KE106=[
@@ -9018,6 +9018,17 @@ const _u=uiPost;uiPost=function(){const r=_u.apply(this,arguments);try{upd();req
 addEventListener('resize',upd);addEventListener('orientationchange',()=>setTimeout(upd,300));
 try{if(window.visualViewport)visualViewport.addEventListener('resize',upd)}catch(e){}
 try{if(window.ResizeObserver){const ro=new ResizeObserver(upd);const n=document.querySelector('nav.tabs');if(n)ro.observe(n);ro.observe(document.documentElement)}}catch(e){}
+})();
+
+/* ===== V260：修行女冠出身——「娘家／母家」改稱道觀 ===== */
+(function(){
+const MAP=[['族中一位長輩','觀中一位師長'],['資助家人，增母族勢力','供奉香火，增道觀聲望'],['資助母家','供奉道觀'],['勸家人謹慎行事','勸師門謹慎行事'],['娘家','道觀'],['母家','道觀'],['母族','道觀'],['家人','師門']];
+const isNun=()=>{try{return typeof G!=='undefined'&&G===24&&S&&S.me}catch(e){return false}};
+function fix(root){try{if(!isNun())return;const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode(n){const p=n.parentNode;if(!p||/^(SCRIPT|STYLE|TEXTAREA|OPTION|TITLE)$/.test(p.nodeName))return NodeFilter.FILTER_REJECT;return /娘家|母家|母族|家人/.test(n.nodeValue)?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT}});const a=[];while(w.nextNode())a.push(w.currentNode);a.forEach(n=>{let t=n.nodeValue;MAP.forEach(m=>{t=t.split(m[0]).join(m[1])});if(t!==n.nodeValue)n.nodeValue=t})}catch(e){}}
+let busy=0;
+try{const mo=new MutationObserver(ms=>{if(busy||!isNun())return;busy=1;try{ms.forEach(m=>{if(m.type==='childList')m.addedNodes.forEach(x=>{if(x.nodeType===1)fix(x);else if(x.nodeType===3&&x.parentNode)fix(x.parentNode)});else if(m.type==='characterData'&&m.target.parentNode)fix(m.target.parentNode)})}finally{busy=0}});
+ const go=()=>mo.observe(document.body,{childList:true,subtree:true,characterData:true});if(document.body)go();else addEventListener('DOMContentLoaded',go)}catch(e){}
+window.__r120={fix,MAP};
 })();
 
 deco();intro();
