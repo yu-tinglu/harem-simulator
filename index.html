@@ -944,7 +944,7 @@ const ARCN=[
 [4,16,c=>{c.n.favor-=3;return`${c.n.n}入宮前似有一位舊識，近來常有陌生身影在宮牆外徘徊，她神思恍惚。`}],
 [6,14,c=>`${c.n.n}近來行跡可疑。`,c=>sEv(`你在假山後撞見${c.n.n}與一名年輕侍衛低聲相談，兩人神色慌張，那侍衛竟是她入宮前的青梅竹馬。你要如何？`,[
 ['裝作沒看見，賣她一個人情',()=>{c.A.f.keep=1;c.n.al+=15;S.me.ally+=1;return`你悄悄走開，${c.n.n}事後得知，對你感激涕零。`}],
-[(S.qi==='me'?'設局當場拆穿，依宮規處置（看心機）':'設局當場拆穿，告知皇后（看心機）'),()=>{if(ckp(.35+S.me.scheme/200)){c.A.f.expose=1;S.evid[c.i]=(S.evid[c.i]||0)+5;c.n.host+=20;return`你設局讓人撞破，${c.n.n}私會侍衛的罪證落在了你手上。`}c.n.host+=20;return`你的設局被她識破，${c.n.n}從此對你恨之入骨。`}],
+[(S.qi==='me'?'設局當場拆穿，依宮規處置（看心機）':c.i===S.qi?'設局當場拆穿，稟告皇上（看心機）':'設局當場拆穿，告知皇后（看心機）'),()=>{if(ckp(.35+S.me.scheme/200)){c.A.f.expose=1;S.evid[c.i]=(S.evid[c.i]||0)+5;c.n.host+=20;return`你設局讓人撞破，${c.n.n}私會侍衛的罪證落在了你手上。`}c.n.host+=20;return`你的設局被她識破，${c.n.n}從此對你恨之入骨。`}],
 ['私下勸她斷了念想（看口才與氣質）',()=>{if(ckp(.4+(S.me.at.qi-50)/200+(S.me.at.iq-50)/300)){c.A.f.quit=1;c.n.al+=10;return`${c.n.n}聽進了你的話，含淚與侍衛一刀兩斷。`}return`${c.n.n}冷笑道：「你不懂。」顯然沒聽進去。`}]],c.n.n)],
 [8,18,c=>{const f=c.A.f,n=c.n;if(f.expose){n.favor=Math.max(0,n.favor-25);n.host+=10;return`私會之事終於傳開，${n.n}被人當場撞破，宮中譁然。`}if(f.quit){n.favor+=8;return`${n.n}日漸安分，竟因此重新得了皇上的眼。`}n.host+=5;return`${n.n}與侍衛暗中往來未斷，風聲愈傳愈烈。`}],
 [6,16,c=>{const f=c.A.f,n=c.n;if(f.expose){if(P(.6)&&c.i!==S.qi){kill(c.i,'因與侍衛私通被賜死');return`${n.n}私通一案查實，被賜白綾，那名侍衛亦被處死。`}n.favor=0;n.rank=Math.max(0,n.rank-2);return`${n.n}被貶為${RKN(n)}，打入冷宮，終身不得面聖。`}if(f.quit){n.favor+=6;return`${n.n}斷了舊情，一心侍奉聖駕，倒比從前得寵。`}if(f.keep){n.al+=10;S.me.ally+=2;n.hp-=10;return`那名侍衛請調出京，${n.n}臨別託你照拂她的家人，視你為知己。`}n.hp-=10;return`${n.n}與侍衛的往事不了了之，只是她從此鬱鬱寡歡。`}]]},
@@ -953,7 +953,7 @@ const ARCN=[
 [6,14,c=>`${c.n.n}託人向你求助。`,c=>sEv(`${c.n.n}託人帶話給你：「只要你肯替家父遞一句話，此恩必報。」`,[
 ['替她遞話並打點（耗銀50）',()=>{if(!pay(50))return'銀兩不足，只能作罷。';if(ckp(.4+S.me.ally/250+S.me.favor/400)){c.A.f.help=1;c.n.al+=25;return`你託人遞了話，皇上命刑部複查此案。`}c.n.al+=8;return'你花了銀子，話卻沒遞到御前。'}],
 ['袖手旁觀，此事與你無關',()=>{c.A.f.cold=1;c.n.al-=8;return`你婉拒了${c.n.n}，她默默垂淚而去。`}],
-[(S.qi==='me'?'趁機落井下石，以中宮之名揭發她家「確有不軌」':'趁機落井下石，向皇后揭發她家「確有不軌」'),()=>{if(ckp(.4+S.me.scheme/250)){c.A.f.hit=1;c.n.fam.forEach(x=>x.pw=cl(x.pw-10));c.n.host+=25;S.evid[c.i]=(S.evid[c.i]||0)+3;return`你的「揭發」讓${c.n.n}的處境雪上加霜，罪證也落進了你手。`}c.n.host+=25;return'你的告發沒人理會，反叫她記恨。'}]],c.n.n)],
+[(S.qi==='me'?'趁機落井下石，以中宮之名揭發她家「確有不軌」':c.i===S.qi?'趁機落井下石，向皇上揭發她家「確有不軌」':'趁機落井下石，向皇后揭發她家「確有不軌」'),()=>{if(ckp(.4+S.me.scheme/250)){c.A.f.hit=1;c.n.fam.forEach(x=>x.pw=cl(x.pw-10));c.n.host+=25;S.evid[c.i]=(S.evid[c.i]||0)+3;return`你的「揭發」讓${c.n.n}的處境雪上加霜，罪證也落進了你手。`}c.n.host+=25;return'你的告發沒人理會，反叫她記恨。'}]],c.n.n)],
 [6,14,c=>{const f=c.A.f,n=c.n;if(f.help&&P(.6)){n.fam.forEach(x=>x.pw=cl(x.pw+15));n.favor+=8;f.clear=1;return`${n.n}之父冤案昭雪，官復原職，她含淚向你道謝。`}if(f.hit||P(.5)){n.fam.forEach(x=>x.pw=cl(x.pw-15));n.favor-=8;return`${n.n}之父被判流放三千里，母家一蹶不振。`}f.clear=1;n.fam.forEach(x=>x.pw=cl(x.pw+8));return`${n.n}之父雖未獲罪，卻被降了官職。`}],
 [8,20,c=>{const f=c.A.f,n=c.n;if(f.clear){n.rank=Math.min(7,n.rank+1);n.favor+=8;if(f.help)n.al+=20;return`皇上為補償${n.n}，晉她為${RKN(n)}。${f.help?'她始終記得你的恩情。':''}`}n.favor=Math.max(3,n.favor-10);return`${n.n}心灰意冷，閉門不出，宮中漸漸沒人提起她。`}]]},
 {k:'凰位之爭',st:[
@@ -7723,7 +7723,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V252';const ERR92=[];
+const VER92='V253';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
