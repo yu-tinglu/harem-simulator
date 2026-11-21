@@ -1285,6 +1285,7 @@ const MXE=[
 function mxYear(){const rel=ntr();kidsOf().forEach(([k,o])=>{const s=k.sp;if(!s||s.end||s.ty==='出家')return;s.hap=cl(s.hap+(s.q-50)/20+R(-4,4));if(s.nt)rel[s.nt]=cl(rel[s.nt]+(s.hap-50)/12);if(s.hap>38&&s.gk<6&&P(.35)){s.gk++;if(o==='me'&&!S.reg)L(`${k.n}喜得貴子，你又添了一個孫輩。`)}});
 NAT6.forEach(n=>{rel[n]=cl(rel[n]+(50-rel[n])*.05+R(-4,4));if(rel[n]<25){S.nat.mil-=1;S.nat.stab-=.5}else if(rel[n]>75)S.nat.eco+=1})}
 function borderEv(){const rel=ntr(),n=NAT6.slice().sort((a,b)=>rel[a]-rel[b])[0];if(rel[n]>=36)return null;
+if(!(S.reg||S.qi==='me'))return{t:`聽說${n}與朝廷的關係降到了「${relT(n)}」，邊境屢有摩擦，皇上為此煩心。這是朝堂上的事，輪不到你拿主意。`,o:[['在皇上身邊寬慰幾句',()=>{if(P(.6)){S.me.favor=cl(S.me.favor+3);return'皇上疲憊地笑了笑，說有你在身邊清靜些。'}return'你說了幾句寬心話，皇上只是點點頭。'}],['謹守本分，不聞不問',()=>'後宮不得干政，你只當沒聽見。']]};
 const dau=kidsOf().filter(([k,o])=>spOK(k)&&k.sex=='女'&&(o==='me'||S.reg));
 const o=[[`出兵震懾${n}`,()=>{if(ckp(.3+S.nat.mil/180+(S.reg?S.reg.pw/500:S.me.scheme/500))){rel[n]=cl(rel[n]+16);S.nat.mil+=3;return`大軍陳兵邊境，${n}被迫收斂，邦交回暖。`}S.nat.mil-=5;S.nat.eco-=3;rel[n]=cl(rel[n]-5);return`出兵不利，${n}反而更囂張了。`}],
 [`遣使送禮議和（耗銀30）`,()=>{if(!pd(S.reg?'me':'me',30))return'銀兩不足。';rel[n]=cl(rel[n]+14);return`使臣攜重禮出使，${n}態度軟化。`}]];
@@ -1292,6 +1293,7 @@ if(dau.length)o.push([`以公主和親安撫（${dau[0][0].n}）`,()=>{const r=h
 o.push(['置之不理',()=>{rel[n]=cl(rel[n]-6);S.nat.stab-=2;return`${n}得寸進尺，邊境更不安寧。`}]);
 return{t:`${n}與大朝的關係已降至「${relT(n)}」，邊境屢有摩擦，朝臣爭論是戰是和。`,o}}
 function tributeEv(){const rel=ntr(),n=NAT6.slice().sort((a,b)=>rel[b]-rel[a])[0];if(rel[n]<64)return null;
+if(!(S.reg||S.qi==='me'))return{t:`${n}遣使入貢，宮裡也沾了光，皇上賞下幾件貢品給各宮。`,o:[['謝恩收下，留著自用',()=>{S.me.silver+=12;return'你收下了賞賜，宮人都說你有福氣。'}],['挑一件獻給太后',()=>{S.me.dw=cl(S.me.dw+4);return'太后見了很歡喜，誇你有孝心。'}]]};
 return{t:`${n}（${NTR[n][0]}）遣使入貢，獻上珍禽異寶，並請求加深邦誼。`,o:[
 ['厚賞使臣，設宴款待（耗銀25）',()=>{if(!pd('me',25))return'銀兩不足，只能草草款待。';rel[n]=cl(rel[n]+6);S.nat.eco+=2;return`${n}使臣盡興而歸，兩國通商更加繁榮。`}],
 ['開放互市，抽取關稅',()=>{S.nat.eco+=4;rel[n]=cl(rel[n]+2);return'互市開通，國庫多了一筆進項。'}],
@@ -7723,7 +7725,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V257';const ERR92=[];
+const VER92='V258';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
