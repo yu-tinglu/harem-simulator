@@ -7726,7 +7726,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V266';const ERR92=[];
+const VER92='V267';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -8617,11 +8617,12 @@ const _md110=mend;mend=function(){const r=_md110.apply(this,arguments);try{if(S&
 const _nar110=nar108;nar108=function(){let t=_nar110.apply(this,arguments);try{const c=S.rom110;if(c&&c.nm){const j=ROM110.TY[c.ty].j,m={cut:`你曾與${j}${c.nm}有過一段未及展開的情分，你親手斬斷了它。`,rest:`你與${j}${c.nm}之間，什麼都沒有發生，卻也從未真正結束。`,secret:`你與${j}${c.nm}有過一個無人知曉的夜晚，你把它帶進了歲月深處。`,exposed:`你與${j}${c.nm}的往事終究被人揭開，你為此付出了不小的代價。`,safe:`你與${j}${c.nm}的往來引過流言，最終被你壓了下去。`};if(m[c.end])t=t.replace(/(你的一生.*?)$/,'$1')+(m[c.end]||'')}}catch(e){}return t};
 
 /* ===== V238：妃嬪頭像（106 張內建畫像，臉部置中裁切；依位階／年齡／性情配圖；你上傳的照片優先） ===== */
-const PORT111=Array.from({length:106},(_,i)=>'images/t'+String(i).padStart(3,'0')+'.jpg');
+const PORT111=Array.from({length:126},(_,i)=>'images/t'+String(i).padStart(3,'0')+'.jpg');const NATIMG={吐蕃:[106,107,108,109],安南:[110,111,112,113],高麗:[114,115,116,117],準噶爾:[118,119,120,121],蒙古:[122,123,124,125]};
 const PT_ME=95;const PT_TAL=[4, 5, 14, 22, 25, 26, 32, 52, 62, 68, 72, 81, 98, 97, 104, 105, 31, 39, 99],PT_WARM=[1, 2, 3, 7, 16, 17, 23, 24, 33, 59, 61, 66, 70, 40, 43, 46, 47, 50, 53, 63, 64],PT_LIVE=[10, 11, 18, 19, 27, 29, 36, 37, 12, 84, 93, 101, 35],PT_ALL=[51, 69, 75, 76, 79, 82, 83, 86, 87, 88, 89, 90, 91, 92, 78],PT_SAD=[0, 6, 8, 13, 28, 30, 41, 56, 57, 71, 21],PT_HERO=[34, 44, 48, 95, 65, 55, 38];const PT_REG=[42, 69, 80, 87, 89, 91, 92, 102, 103, 85, 90, 96],PT_COLD=[39, 44, 48, 54, 55, 56, 57, 65, 71, 74, 75, 76, 77, 79, 82, 86, 88, 95, 97, 98, 105, 99, 100],PT_MAT=[34, 58, 96, 57, 90, 91, 103, 56];
-function ptIdx111(n){try{if(!S)return -1;const m=S.pm111=S.pm111||{};if(m[n.n]!==undefined&&m[n.n]<PORT111.length)return m[n.n];
+function ptIdx111(n){try{if(!S)return -1;const m=S.pm111=S.pm111||{};if(n.fo116&&NATIMG[n.fo116]&&m[n.n]!==undefined&&m[n.n]<106)delete m[n.n];if(m[n.n]!==undefined&&m[n.n]<PORT111.length)return m[n.n];
  const used=new Set(Object.values(m));used.add(PT_ME);let age=0;try{age=(S.t-n.bt)/12}catch(e){}
- const all=PORT111.map((_,i)=>i);const free=a=>a.filter(i=>!used.has(i));
+ const all=PORT111.slice(0,106).map((_,i)=>i);const free=a=>a.filter(i=>!used.has(i));
+ try{const L=n.fo116&&NATIMG[n.fo116];if(L){const mine=L.filter(i=>!used.has(i));const p=mine.length?mine:L;const i=p[Math.floor(Math.random()*p.length)];m[n.n]=i;return i}}catch(e){}
  let pref=(n.rank>=7)?PT_REG:(age>=32?PT_MAT:((n.host>=45)?PT_COLD:[]));
  if(!pref.length){let sty=null;try{const sk=(n.at&&n.at.sk)||[];let bi=0;sk.forEach((v,i)=>{if(v>sk[bi])bi=i});
   if((n.hp|0)<55)sty=PT_SAD;else if([0,1,2,3,4,8,13].includes(bi))sty=PT_TAL;else if([12,9,10].includes(bi))sty=PT_WARM;else if([6,7].includes(bi))sty=PT_HERO;else if([5,11].includes(bi))sty=Math.random()<.5?PT_ALL:PT_LIVE;else if((n.sc|0)>=60)sty=PT_ALL}catch(e){}
