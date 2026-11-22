@@ -7726,7 +7726,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V277';const ERR92=[];
+const VER92='V278';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -9127,10 +9127,10 @@ const css=document.createElement('style');css.textContent='.cg269{display:block;
 const _ec=endCard;endCard=function(){let r=_ec.apply(this,arguments);try{const t=S.over&&S.over.t,n=EMAP[t];if(n)r=`<img class=cg269 src="${CGIMG[n-1]}" alt="${CAP[n]}">`+r}catch(e){}return r};
 function show(n,line){try{if(document.getElementById('cgpop269'))return;const d=document.createElement('div');d.id='cgpop269';d.innerHTML=`<div class=fr><div><img src="${CGIMG[n-1]}" alt=""></div></div><b>${CAP[n]}</b><span>${line||''}（點一下關閉）</span>`;d.onclick=()=>d.remove();document.body.appendChild(d)}catch(e){}}
 function quiet(){return !document.querySelector('.scrim,#cgpop269,#pt111big')&&!(S&&(S.ch||S.ev))}
-function onceQ(k,n,line){try{if(!S||S.over||S.cg269&&S.cg269[k])return;S.cg269=S.cg269||{};S.cg269[k]=1;let tries=0;const go=()=>{try{if(!S||S.over)return;if(quiet()){show(n,line);return}if(++tries<60)setTimeout(go,500)}catch(e){}};setTimeout(go,900)}catch(e){}}
+function onceQ(k,n,line){try{if(!S||S.over||S.cg269&&S.cg269[k])return;S.cg269=S.cg269||{};const g=k.split(':')[0];if(g!==k){S.cg269['n_'+g]=(S.cg269['n_'+g]||0)+1;if(S.cg269['n_'+g]>2)return}S.cg269[k]=1;let tries=0;const go=()=>{try{if(!S||S.over)return;if(quiet()){show(n,line);return}if(++tries<60)setTimeout(go,500)}catch(e){}};setTimeout(go,900)}catch(e){}}
 function once(k,n,line){try{if(!S||S.over||S.cg269&&S.cg269[k])return;S.cg269=S.cg269||{};const g=k.split(':')[0];if(g!==k){S.cg269['n_'+g]=(S.cg269['n_'+g]||0)+1;if(S.cg269['n_'+g]>3)return}S.cg269[k]=1;setTimeout(()=>show(n,line),700)}catch(e){}}
 const _b=birth;birth=function(arr,mom){const r=_b.apply(this,arguments);try{if(mom==='me'){const kk=arr[arr.length-1];onceQ('birth',7,kk?('「'+kk.n+'」降生了。'):'')}}catch(e){}return r};
-const _r=render;render=function(){const r=_r.apply(this,arguments);try{if(S&&S.me&&S.ch&&typeof S.ch.t==='string'){const t=S.ch.t;if(/宮宴|家宴|守歲|賞月|中秋夜/.test(t))once('feast:'+(S.t/12|0),8,'宮中設宴。');else if(/使團|使臣|外邦|朝貢|入貢|通商/.test(t))once('envoy:'+(S.t/12|0),4,'外邦來朝。')}if(S&&S.me){const pr=S.cgr269;S.cgr269=S.me.rank;if(pr!==undefined&&pr<8&&S.me.rank>=8&&!S.over)onceQ('empress',3,'')}}catch(e){}return r};
+const _r=render;render=function(){const r=_r.apply(this,arguments);try{if(S&&S.me&&S.ch&&typeof S.ch.t==='string'){const t=S.ch.t;if(/宮宴|家宴|守歲|賞月|中秋夜/.test(t))once('feast:'+(S.t/12|0),8,'宮中設宴。');else if(/使團|使臣|外邦|朝貢|入貢|通商/.test(t))once('envoy:'+(S.t/12|0),4,'外邦來朝。')}if(S&&S.me&&!S.over){const pv=S.cgp270;S.cgp270={rk:S.me.rank,hp:S.me.hp,reg:!!S.reg};if(pv){if(S.me.rank<pv.rk&&!S.reg)onceQ('demote:'+Math.min(2,(S.cg269&&S.cg269.n_demote||0)),10,'位份被降，封號被褫奪。');if(pv.hp>25&&S.me.hp<=25)onceQ('ill',9,'你病倒了，臥床不起。');if(!pv.reg&&S.reg)onceQ('regent',2,'你臨朝聽政。')}}if(S&&S.me){const pr=S.cgr269;S.cgr269=S.me.rank;if(pr!==undefined&&pr<8&&S.me.rank>=8&&!S.over)onceQ('empress',3,'')}}catch(e){}return r};
 })();
 
 
@@ -9158,6 +9158,16 @@ const _a=avSvg;avSvg=function(n,sz){try{if(isKid(n)&&!mineK(n)&&pidOf(n)){const 
 /* ===== V275：點頭像放大——背景加深模糊，細雙層金框，與 CG 彈窗一致 ===== */
 (function(){
 const st=document.createElement('style');st.textContent='html body #pt111big{background:radial-gradient(circle at 50% 42%,rgba(40,14,20,.96),rgba(8,2,4,.98))!important;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);animation:cgin269 .35s ease}html body #pt111big img{width:min(86vw,420px)!important;height:min(86vw,420px)!important;border-radius:3px!important;padding:6px;background:#1c0d10;box-sizing:border-box;border:1px solid #c9a35e!important;box-shadow:0 0 0 5px #6b4a22,0 0 0 6px #d9b872,0 16px 44px rgba(0,0,0,.65)!important}';document.head.appendChild(st);
+})();
+
+
+/* ===== V278：同一次晉升只留一則通知（恭喜晉位＋母族勢力上升合併，封號另列） ===== */
+(function(){
+const strip=t=>String(t).replace(/<[^>]+>/g,'');
+const _n=ntfAdd;ntfAdd=function(t,k){try{const s=strip(t);
+ if(/^你晉封.{1,6}，母族勢力上升/.test(s)&&(S.nt||[]).some(n=>/恭喜/.test(strip(n.t))&&/晉為/.test(strip(n.t))))return;
+ if(/恭喜/.test(s)&&/晉為/.test(s))S.nt=(S.nt||[]).filter(n=>!/^你晉封.{1,6}，母族勢力上升/.test(strip(n.t)))}catch(e){}
+ return _n.apply(this,arguments)};
 })();
 
 deco();intro();
