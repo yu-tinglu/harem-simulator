@@ -3724,7 +3724,7 @@ function lateTick(){if(!S||!S.me||S.over||S.reg||S.dying)return;
  if(!S.lt){if(S.t<120||S.t<(S.ltn||0)||(S.lh||[]).length>=3||S.gcd>0||!P(.18))return;const ok=Object.keys(LATE).filter(k=>!(S.lh||[]).includes(k)&&LATE[k].cond());if(!ok.length)return;S.lt={id:pk(ok),st:0,nx:S.t+R(2,5),f:{}};ntfAdd('新的大事浮上檯面：「'+LATE[S.lt.id].n+'」','ti');return}
  if(S.t>=S.lt.nx&&!S.ev&&S.q.length<2){const e=lateEv();if(e)infPush(e)}}
 const _mt16=mend;mend=function(){const r=_mt16.apply(this,arguments);try{lateTick()}catch(e){console.log('late',e)}return r};
-function lateCard(){const lt=S.lt;if(!lt)return'';const A=LATE[lt.id];return`<div class="cd lcard"><h3>終局大計：「${A.n}」</h3><div class=m>${A.d}</div><div class=m style="margin-top:4px">${A.a.map((x,i)=>i<lt.st?'✔'+x:i==lt.st?'▶'+x:'・'+x).join('　')}</div></div>`}
+function lateCard(){const lt=S.lt;if(!lt)return'';const A=LATE[lt.id];return`<div class="cd lcard"><h3>終局大計：「${A.n}」</h3><div class=m>${A.d}</div><div class=m style="margin-top:4px">${A.a.map((x,i)=>i<lt.st?'✔'+x:i==lt.st?'▶︎'+x:'・'+x).join('　')}</div></div>`}
 const _up16b=uiPost;uiPost=function(){const r=_up16b.apply(this,arguments);try{if(TAB==0&&S&&S.me&&!S.over&&!S.reg&&!S.scn&&S.lt){const main=document.querySelector('main');if(main&&!main.querySelector('.lcard')){const t=[...main.children].find(e=>/^主線劇情/.test((e.innerText||'').trim()));if(t)t.insertAdjacentHTML('afterend',lateCard());else{const s=[...main.children].find(e=>e.classList&&e.classList.contains('sec13')&&/行動/.test(e.textContent));if(s)s.insertAdjacentHTML('afterend',lateCard())}}}}catch(e){console.log('ui16b',e)}return r};
 const _ec16=evCritical;evCritical=function(e){return !!(e&&e.late)||_ec16(e)};
 HELP.push(['終局大計','玩到第十年以後，若條件成立，會出現「垂簾之路」「外戚之憂」「六宮之主」「青史留名」之一的後期主線，是多段式的長篇，過程中每一步都要你做抉擇，結局會影響評分。一次只有一條，一局最多三條。']);
@@ -4264,7 +4264,7 @@ const _u36=uiPost;uiPost=function(){const r=_u36.apply(this,arguments);try{const
  if(S&&!S.over&&!S.scn&&!S.ch&&!S.ev&&typeof autoRun==='function'){const nav=document.querySelector('nav.tabs');const nb=nav?Math.round(nav.getBoundingClientRect().height):0;
   const d=document.createElement('div');d.className='ac31';
   d.style.cssText='position:fixed;left:0;right:0;bottom:'+nb+'px;z-index:40;display:flex;gap:8px;justify-content:center;padding:6px max(16px,env(safe-area-inset-left,0px));pointer-events:none';document.body.style.setProperty('--acb','52px');
-  d.innerHTML='<button class=go style="flex:1;max-width:220px;min-height:0;height:40px;padding:0 10px;font-size:15px;letter-spacing:0;pointer-events:auto;box-shadow:0 2px 10px rgba(0,0,0,.25)" onclick="autoRun(3)">▶ 自動過一季</button><button class=s style="flex:1;max-width:220px;min-height:0;height:40px;padding:0 10px;font-size:15px;letter-spacing:0;background:var(--bg,#fff8ee);pointer-events:auto;box-shadow:0 2px 10px rgba(0,0,0,.25)" onclick="autoRun(12)">⏩ 自動過一年</button>';
+  d.innerHTML='<button class=go style="flex:1;max-width:220px;min-height:0;height:40px;padding:0 10px;font-size:15px;letter-spacing:0;pointer-events:auto;box-shadow:0 2px 10px rgba(0,0,0,.25)" onclick="autoRun(3)"><svg viewBox="0 0 10 10" width="12" height="12" style="vertical-align:-1px;margin-right:6px;fill:currentColor"><path d="M2 1l7 4-7 4z"/></svg>自動過一季</button><button class=s style="flex:1;max-width:220px;min-height:0;height:40px;padding:0 10px;font-size:15px;letter-spacing:0;background:var(--bg,#fff8ee);pointer-events:auto;box-shadow:0 2px 10px rgba(0,0,0,.25)" onclick="autoRun(12)"><svg viewBox="0 0 16 10" width="18" height="12" style="vertical-align:-1px;margin-right:6px;fill:currentColor"><path d="M1 1l6 4-6 4zM8 1l6 4-6 4z"/></svg>自動過一年</button>';
   document.body.appendChild(d);const m=document.querySelector('#app main');if(m)m.style.paddingBottom='calc(52px + '+(parseInt(getComputedStyle(m).paddingBottom)||0)+'px)'}}catch(x){console.log('r36',x)}return r};
 })();
 
@@ -4298,8 +4298,8 @@ const gs=k=>{try{return localStorage.getItem(k)}catch(e){return null}},ss=(k,v)=
 const css=document.createElement('style');css.textContent='@keyframes pl31{0%,100%{box-shadow:0 0 0 0 rgba(214,70,90,.55)}50%{box-shadow:0 0 0 10px rgba(214,70,90,0)}}.ac31 .pulse31{animation:pl31 1.4s infinite}.ob31{position:fixed;top:calc(env(safe-area-inset-top,0px) + 64px);left:50%;transform:translateX(-50%);width:min(92vw,420px);z-index:41;background:#4a2a3a;color:#fff;border-radius:14px;padding:10px 34px 10px 14px;font-size:13.5px;line-height:1.5;box-shadow:0 4px 16px rgba(0,0,0,.35)}.ob31 b{color:#ffd9a0}.ob31 .x{position:absolute;right:8px;top:6px;background:none;border:0;color:#fff;font-size:17px;min-height:0;padding:2px 6px}.ys31 .scroll p{margin:6px 0}.ev31s{cursor:pointer}.ev31s u{color:var(--accent,#c0394f);text-decoration:none;white-space:nowrap}';css.textContent+='html body:has(.scrim:not(.ys31)) #ntf.ntf14{display:none!important}';document.head.appendChild(css);
 /* 1 新手引導 */
 function ob(){const old=document.querySelector('.ob31');const bar=document.querySelector('.ac31');if(!bar||!S||S.over){if(old)old.remove();return}const st=gs('hg_ob31')||'0';if(st==='2'){if(old)old.remove();return}
- let msg='';if(st==='0'&&S.t<1){msg='<b>第一次玩？</b>先按「▶ 自動過一季」，系統會幫你處理。想自己決定，就點上面導覽的「行動」。';const b=bar.querySelector('button.go');if(b)b.classList.add('pulse31')}
- else if(st==='0'&&S.t>=1){ss('hg_ob31','1');msg='<b>玩完一個月了！</b>之後可以按「⏩ 自動過一年」，或到「行動」分頁自己選。';setTimeout(()=>{ss('hg_ob31','2');const o=document.querySelector('.ob31');if(o)o.remove()},9000)}
+ let msg='';if(st==='0'&&S.t<1){msg='<b>第一次玩？</b>先按「▶︎ 自動過一季」，系統會幫你處理。想自己決定，就點上面導覽的「行動」。';const b=bar.querySelector('button.go');if(b)b.classList.add('pulse31')}
+ else if(st==='0'&&S.t>=1){ss('hg_ob31','1');msg='<b>玩完一個月了！</b>之後可以按「自動過一年」，或到「行動」分頁自己選。';setTimeout(()=>{ss('hg_ob31','2');const o=document.querySelector('.ob31');if(o)o.remove()},9000)}
  else if(st==='1'){ss('hg_ob31','2');return}
  if(!msg){if(old)old.remove();return}if(old&&old.dataset.k===msg)return;if(old)old.remove();const d=document.createElement('div');d.className='ob31';d.dataset.k=msg;d.innerHTML=msg+'<button class=x onclick="this.parentNode.remove();try{localStorage.setItem(\'hg_ob31\',\'2\')}catch(e){}">×</button>';document.body.appendChild(d)}
 /* 2 年度小結 */
@@ -7726,7 +7726,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V275';const ERR92=[];
+const VER92='V276';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
