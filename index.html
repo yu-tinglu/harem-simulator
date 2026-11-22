@@ -7726,7 +7726,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V278';const ERR92=[];
+const VER92='V279';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -9170,6 +9170,13 @@ const _n=ntfAdd;ntfAdd=function(t,k){try{const s=strip(t);
  return _n.apply(this,arguments)};
 })();
 
+/* ===== V279: 皇帝開局保護 + 自動過月不再被連環小故事頻繁打斷 ===== */
+(function(){try{
+const _et=emTick;emTick=function(){try{if(S&&S.me&&!S.over&&!S.reg&&!S.dying){if(S.t<36&&!S.ill)S.illCd=Math.max(S.illCd||0,2);if(S.t<48&&S.ehp<35)S.ehp=35}}catch(e){}return _et.apply(this,arguments)};
+const _ed=edeath;edeath=function(){try{if(S&&S.t<60)return 0}catch(e){}return _ed.apply(this,arguments)};
+const BIG=/逼宮|駕崩|禪位|宮變|賜死|廢|立儲|儲君|謀逆|徹查|召你問話|病危|薨|遺詔|和親|冊封|立后|臨終|求婚|婚事|選妃|繼位|攝政|母國.*(政變|併吞)/;
+const _ec=evCritical;evCritical=function(e){try{if(e&&e.p84&&(e.story||e.keep)&&!e.late){const t=String(e.t||'').replace(/<[^>]*>/g,'');return BIG.test(t)||/^宿敵的求饒/.test(t)}}catch(x){}return _ec.apply(this,arguments)};
+}catch(e){console.log('v279',e)}})();
 deco();intro();
 
 
