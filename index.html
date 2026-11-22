@@ -7726,7 +7726,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V274';const ERR92=[];
+const VER92='V275';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -9150,6 +9150,12 @@ function img(k,sz){let a=0;try{a=Math.max(0,Math.floor((S.t-k.b)/12))}catch(e){}
  return`<img class=pt111 loading=lazy decoding=async data-pi="${i}" src="${PORT111[i]}" alt="" style="width:${sz}px;height:${sz}px;object-fit:cover;border-radius:50%;display:block">`}
 const _f=face83;face83=function(w,sz){try{if(isKid(w)&&!mineK(w)&&pidOf(w)){const h=img(w,sz);if(h)return`<span class=f83 style="width:${sz}px;height:${sz}px">${h}</span>`}}catch(e){}return _f.apply(this,arguments)};
 const _a=avSvg;avSvg=function(n,sz){try{if(isKid(n)&&!mineK(n)&&pidOf(n)){const h=img(n,sz);if(h)return h}}catch(e){}return _a.apply(this,arguments)};
+})();
+
+
+/* ===== V275：點頭像放大——背景加深模糊，細雙層金框，與 CG 彈窗一致 ===== */
+(function(){
+const st=document.createElement('style');st.textContent='html body #pt111big{background:radial-gradient(circle at 50% 42%,rgba(40,14,20,.96),rgba(8,2,4,.98))!important;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);animation:cgin269 .35s ease}html body #pt111big img{width:min(86vw,420px)!important;height:min(86vw,420px)!important;border-radius:3px!important;padding:6px;background:#1c0d10;box-sizing:border-box;border:1px solid #c9a35e!important;box-shadow:0 0 0 5px #6b4a22,0 0 0 6px #d9b872,0 16px 44px rgba(0,0,0,.65)!important}';document.head.appendChild(st);
 })();
 
 deco();intro();
