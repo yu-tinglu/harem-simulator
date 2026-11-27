@@ -7726,7 +7726,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V279';const ERR92=[];
+const VER92='V280';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -9177,6 +9177,58 @@ const _ed=edeath;edeath=function(){try{if(S&&S.t<60)return 0}catch(e){}return _e
 const BIG=/逼宮|駕崩|禪位|宮變|賜死|廢|立儲|儲君|謀逆|徹查|召你問話|病危|薨|遺詔|和親|冊封|立后|臨終|求婚|婚事|選妃|繼位|攝政|母國.*(政變|併吞)/;
 const _ec=evCritical;evCritical=function(e){try{if(e&&e.p84&&(e.story||e.keep)&&!e.late){const t=String(e.t||'').replace(/<[^>]*>/g,'');return BIG.test(t)||/^宿敵的求饒/.test(t)}}catch(x){}return _ec.apply(this,arguments)};
 }catch(e){console.log('v279',e)}})();
+/* ===== V280: 開局選人生目標、停滯代價、中期危機、舊事回響 ===== */
+(function(){try{
+const strip=t=>String(t==null?'':t).replace(/<[^>]*>/g,'');
+const lim=(v,a,b)=>Math.max(a,Math.min(b,v));
+/* 1. 開局挑人生目標 */
+window.gp280=function(){try{if(!S||!S.me||S.over||S.goal||document.getElementById('gp280'))return;
+ const ids=[1,2,3,4,5,6,7,8,9].sort(()=>Math.random()-.5).slice(0,4);
+ const d=document.createElement('div');d.id='gp280';d.style.cssText='position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:16px';
+ d.innerHTML='<div class="cd" style="max-width:420px;width:100%;max-height:90vh;overflow:auto"><h3>這一世，你想要什麼？</h3><div class=m style="margin-bottom:8px">挑一個志向，達成有獎勵，結局也會計分。可隨時在「史冊」查看進度。</div><div class=g>'+ids.map(i=>'<button onclick="gpSet280('+i+')">'+GOALS[i][0]+'<small>'+GOALS[i][1]+'</small></button>').join('')+'<button class=s onclick="gpSet280(0)">隨緣，不設目標<small>自由遊玩</small></button></div></div>';
+ document.body.appendChild(d)}catch(e){console.log('gp280',e)}};
+window.gpSet280=function(i){try{const d=document.getElementById('gp280');if(d)d.remove();if(S&&S.me){S.goal=i;S.gdone=0;if(i)ntfAdd('你的志向：「'+GOALS[i][0]+'」——'+GOALS[i][1],'ti');render()}}catch(e){}};
+const _st=start;start=function(){const r=_st.apply(this,arguments);try{if(!GOAL&&!DLY&&!navigator.webdriver&&S&&S.me&&!S.goal)setTimeout(window.gp280,350)}catch(e){}return r};
+/* 2. 停滯代價 */
+const _me=mend;mend=function(){const r=_me.apply(this,arguments);try{const m=S&&S.me;if(!m||S.over||S.reg||S.dying)return r;
+ const k=S.rk280=S.rk280||{r:m.rank,t:S.t};if(m.rank!==k.r){k.r=m.rank;k.t=S.t}
+ if(m.rank<8&&S.t-k.t>=36&&S.t%12===0){m.favor=lim(m.favor-3,0,100);m.ally=Math.max(0,m.ally-1);ntfAdd('你已多年未得晉升，聖眷漸淡，新人頻頻得寵。想要翻身，總得冒些險。','ti')}
+ /* 3. 中期危機 */
+ if(S.t>=36&&S.t>=(S.cr280==null?36:S.cr280)&&!S.ev&&!S.ch&&!S.scn&&(S.q||[]).length===0){S.cr280=S.t+R(40,60);const e=CR280();if(e)infPush(e)}
+ /* 4. 舊事回響 */
+ const mm=S.mem280||[];if(mm.length&&S.t>=(S.cb280||0)&&!S.ev&&!S.ch&&!S.scn&&(S.q||[]).length===0&&P(.15)){const i=mm.findIndex(x=>S.t-x.t>=18);if(i>=0){const x=mm.splice(i,1)[0];S.cb280=S.t+12;const e=CB280(x);if(e)infPush(e)}}
+ }catch(e){console.log('v280',e)}return r};
+const CR280=()=>{const m=S.me,pk2=a=>a[Math.floor(Math.random()*a.length)];const C=[
+()=>({p84:1,t:'京中疫病蔓延，傳聞已有宮人染上。太醫院人手吃緊，六宮人心惶惶。',o:[
+ ['捐銀施藥，安撫宮人（耗銀300）',()=>{if(!pay(300))return'銀兩不足，只能多囑咐宮人小心。';m.fame=(m.fame||0)+8;m.ally+=2;return'你的善舉傳開，宮人都念你的好。'}],
+ ['閉門謝客，自保為上',()=>{m.fame=(m.fame||0)-2;return'你緊閉宮門，平安無事，卻也落了個冷漠的名聲。'}],
+ ['請旨協理防疫（冒險）',()=>{if(ckp(.4+m.ally/300)){m.fame=(m.fame||0)+12;m.favor=lim(m.favor+6,0,100);return'你調度得當，疫情很快控制住，皇上對你刮目相看。'}m.hp=lim(m.hp-12,0,100);m.favor=lim(m.favor-4,0,100);return'你辛苦奔走卻沒能壓住疫情，自己也病了一場。'}]]}),
+()=>({p84:1,t:'前朝兩派大臣爭得不可開交，連後宮也被牽扯，皇上這幾日心情極差。',o:[
+ ['靜觀其變，不沾半點是非',()=>{m.favor=lim(m.favor-1,0,100);return'你誰也不幫，倒也沒惹上麻煩。'}],
+ ['委婉勸皇上息怒',()=>{if(P(.6)){m.favor=lim(m.favor+4,0,100);return'皇上聽進了你的話，心情緩和不少。'}m.favor=lim(m.favor-3,0,100);return'皇上嫌你多嘴，臉色更沉。'}],
+ ['傳話母家，押注一方（冒險）',()=>{if(ckp(.4+m.scheme/250)){m.ally+=6;m.silver+=200;return'你押對了，母家借勢更上一層。'}m.dsus=lim((m.dsus||0)+10,0,100);m.favor=lim(m.favor-6,0,100);return'你押錯了邊，皇上對你的疑心加重。'}]]}),
+()=>({p84:1,t:'皇上準備南巡，只打算帶兩三位嬪妃隨行，六宮都在暗暗較勁。',o:[
+ ['備下厚禮，請求隨駕（耗銀200）',()=>{if(!pay(200))return'銀兩不足，只得作罷。';m.favor=lim(m.favor+6,0,100);return'你在途中陪伴御前，聖眷更濃。'}],
+ ['稱病留守，暗中經營',()=>{m.scheme+=3;m.ally+=2;return'御駕離宮的日子裡，你悄悄拉攏了不少人。'}],
+ ['毛遂自薦，搶這個名額（冒險）',()=>{if(ckp(.35+m.favor/250)){m.favor=lim(m.favor+9,0,100);m.fame=(m.fame||0)+3;return'皇上笑你有膽識，點了你的名。'}m.favor=lim(m.favor-5,0,100);return'皇上覺得你太過急切，反而冷了幾分。'}]]}),
+()=>({p84:1,t:'邊關告急，國庫吃緊，皇上下旨六宮節用，各宮都在看誰先表態。',o:[
+ ['帶頭捐出份例（耗銀150）',()=>{if(!pay(150))return'銀兩不足，只能減了自己的用度。';m.fame=(m.fame||0)+6;m.favor=lim(m.favor+3,0,100);return'皇上聽說你帶頭節用，龍心大悅。'}],
+ ['照章辦事，不多不少',()=>{return'你照著旨意辦，無功無過。'}],
+ ['私下囤貨牟利（冒險）',()=>{if(ckp(.5)){m.silver+=400;return'你趁亂低價囤貨，賺了一筆。'}m.scand=lim((m.scand||0)+15,0,100);m.favor=lim(m.favor-5,0,100);return'此事被人告發，你落了個貪利的名聲。'}]]})];
+ return pk2(C)()};
+const _V=V;V=function(i){let rec=null;try{const e=S&&S.ev;if(S&&S.me&&e&&e.o&&e.o[i]&&!e.p84){const lab=String(e.o[i][0]),ti=strip(e.t).replace(/[「」『』（）()]/g,'').slice(0,14);
+ if(/救|幫|助|饒|賑|相助|庇護|出手|扶|成全/.test(lab)&&!/不|拒|拒絕/.test(lab.slice(0,3)))rec={t:S.t,ti,k:'p'};
+ else if(/拒|不理|見死|擊垮|懲|冷眼|揭發|陷害|趕走|嚴懲/.test(lab))rec={t:S.t,ti,k:'n'}}}catch(x){}
+ const r=_V.apply(this,arguments);try{if(rec&&S&&S.me&&!S.over){const a=S.mem280=S.mem280||[];a.push(rec);if(a.length>12)a.shift()}}catch(x){}return r};
+const CB280=x=>{const m=S.me;if(x.k==='p')return{t:`當年你在「${x.ti}」一事上伸出過援手，那個人一直記著。今日託人捎來一份心意。`,o:[
+ ['收下謝禮',()=>{m.silver+=150;m.ally+=3;return'你收下了謝禮，也多了一份人情。'}],
+ ['婉拒，只受一句謝',()=>{m.fame=(m.fame||0)+4;m.ally+=2;return'你的不貪名聲傳了出去。'}],
+ ['請她幫個小忙',()=>{m.ally+=4;m.scheme+=1;return'她爽快應下，往後你多了一雙眼睛。'}]]};
+ return{t:`宮裡有人翻起「${x.ti}」的舊事，話裡帶刺——當年你的做法，有人一直記恨到今天。`,o:[
+ ['主動登門賠禮（耗銀100）',()=>{if(!pay(100))return'銀兩不足，只好改日再說。';m.ally+=2;return'對方態度緩和了，舊怨淡了幾分。'}],
+ ['置之不理',()=>{if(P(.5)){m.dsus=lim((m.dsus||0)+6,0,100);m.favor=lim(m.favor-3,0,100);return'流言越傳越廣，你多少受了些影響。'}return'風頭過去，沒掀起什麼浪。'}],
+ ['先下手為強（冒險）',()=>{if(ckp(.4+m.scheme/250)){m.ally+=3;return'你搶先一步堵住了她的嘴。'}m.scand=lim((m.scand||0)+12,0,100);return'你的動作被人看在眼裡，反倒落了把柄。'}]]}};
+}catch(e){console.log('v280init',e)}})();
 deco();intro();
 
 
