@@ -7726,7 +7726,7 @@ function lab91(){try{const sc=document.querySelector('.scrim .scroll');if(!sc||s
 const _r91=render;render=function(){const r=_r91.apply(this,arguments);try{lab91();setTimeout(lab91,60)}catch(e){}return r};
 
 /* ===== V209: 一鍵回報（不需帳號，複製後貼給作者） ===== */
-const VER92='V280';const ERR92=[];
+const VER92='V281';const ERR92=[];
 try{window.addEventListener('error',e=>{ERR92.push(String(e.message||e).slice(0,160));if(ERR92.length>8)ERR92.shift()});const _cl=console.log;console.log=function(){try{const a=[].slice.call(arguments).join(' ');if(/^r\d\d/.test(a)){ERR92.push(a.slice(0,160));if(ERR92.length>8)ERR92.shift()}}catch(e){}return _cl.apply(console,arguments)}}catch(e){}
 (function(){const st=document.createElement('style');st.id='st92';st.textContent=`
 #fb92{position:fixed;inset:0;z-index:130;background:rgba(40,16,12,.55);display:flex;align-items:center;justify-content:center;padding:14px}
@@ -8804,14 +8804,12 @@ window.endDex115=function(){const s=seen();const known=END115.filter(x=>s.has(x[
 const _ap=achPanel;achPanel=function(){let h=_ap.apply(this,arguments);try{h+=endDex115()}catch(e){}return h};
 /* ---------- 新手引導 ---------- */
 const CK='hg_coach115';
-const CO=[['先看懂這一個月','每月你有數次「行動」。先挑兩三件：獻藝邀寵、巴結皇后、結交宮人最穩。行動用完，或按「自動過一季」，時間才會往前走。'],
- ['三個數字決定你的路','聖寵＝皇上多喜歡你，心機＝你防人與算人的本事，銀兩＝打點一切的本錢。聖寵太低會被冷落，太高又招人嫉妒，要平衡。'],
- ['別只盯著皇上','「後宮」分頁可以看每位妃嬪，點頭像能放大。多結盟、少樹敵；宮裡她們自己也會鬥，你選擇站哪邊很重要。'],
- ['有了方向再玩','看頂端「下一個目標」，它會告訴你下一步往哪走。想先自己摸索，隨時可以關掉這些提示。']];
+const CO=[['先看懂這一個月','每月有數次「行動」，先挑獻藝邀寵、巴結皇后、結交宮人最穩。行動用完或按「自動過一季」，時間才會往前。'],
+ ['記住三個數字','聖寵＝皇上多喜歡你，心機＝防人算人的本事，銀兩＝打點的本錢。多結盟、少樹敵；看頂端「下一個目標」就知道往哪走。']];
 function coachDone(){return stg.get(CK)==='done'}
-window.coachBox115=function(){try{if(coachDone()||!S||!S.me||S.over||S.t>8)return'';const i=Math.min(3,Math.floor(S.t/2));const c=CO[i];return`<div class=cd id=coach115 style="border-left:4px solid #e0566a"><h3>新手提示　${i+1}/4</h3><div class=m style="color:inherit"><b>${c[0]}</b><br>${c[1]}</div><div class=g style="margin-top:8px"><button class=s onclick="coach115('x')">不再提示</button><button onclick="coach115('n')">知道了</button></div></div>`}catch(e){return''}};
-window.coach115=function(a){try{if(a==='x'){stg.set(CK,'done')}else{S.t=S.t;(S.c115=S.c115||{})[Math.min(3,Math.floor(S.t/2))]=1}const e=document.getElementById('coach115');if(e)e.remove()}catch(x){}};
-function injectCoach(){try{if(TAB!==0)return;const m=document.querySelector('main');if(!m||document.getElementById('coach115'))return;const i=Math.min(3,Math.floor((S&&S.t||0)/2));if(S&&S.c115&&S.c115[i])return;const h=coachBox115();if(!h)return;const first=m.querySelector('.cd');const w=document.createElement('div');w.innerHTML=h;if(first)m.insertBefore(w.firstChild,first);else m.appendChild(w.firstChild)}catch(e){}}
+window.coachBox115=function(){try{if(coachDone()||!S||!S.me||S.over||S.t>5)return'';const i=Math.min(1,Math.floor(S.t/3));const c=CO[i];return`<div class=cd id=coach115 style="border-left:4px solid #e0566a"><h3>新手提示　${i+1}/2</h3><div class=m style="color:inherit"><b>${c[0]}</b><br>${c[1]}</div><div class=g style="margin-top:8px"><button class=s onclick="coach115('x')">不再提示</button><button onclick="coach115('n')">知道了</button></div></div>`}catch(e){return''}};
+window.coach115=function(a){try{if(a==='x'){stg.set(CK,'done')}else{S.t=S.t;(S.c115=S.c115||{})[Math.min(1,Math.floor(S.t/3))]=1}const e=document.getElementById('coach115');if(e)e.remove()}catch(x){}};
+function injectCoach(){try{if(TAB!==0)return;const m=document.querySelector('main');if(!m||document.getElementById('coach115'))return;const i=Math.min(1,Math.floor((S&&S.t||0)/3));if(S&&S.c115&&S.c115[i])return;const h=coachBox115();if(!h)return;const first=m.querySelector('.cd');const w=document.createElement('div');w.innerHTML=h;if(first)m.insertBefore(w.firstChild,first);else m.appendChild(w.firstChild)}catch(e){}}
 const _r115=render;render=function(){const r=_r115.apply(this,arguments);try{injectCoach()}catch(e){}return r};
 /* ---------- 出身／天賦專屬劇情 ---------- */
 const AR={
